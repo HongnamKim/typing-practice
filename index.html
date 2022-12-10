@@ -8,11 +8,47 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <canvas class="canvas-window" id="canvasWindow">Temporal Window</canvas>
     <div id="container">
+      <div class="timer" id="timer">0</div>
+      <div class="difficulty" id="difficulty">
+        <span>속도 채점 난이도</span>
+        <div class="difficulty-wpm-btn">
+          <input type="radio" name="difficulty-wpm-btn" id="wpmEasy" />
+          <label for="easy">쉬움</label>
+          <input type="radio" name="difficulty-wpm-btn" id="wpmNormal" />
+          <label for="normal">보통</label>
+          <input type="radio" name="difficulty-wpm-btn" id="wpmHard" />
+          <label for="hard">어려움</label>
+        </div>
+      </div>
+      <div class="difficulty" id="difficulty">
+        <span>정확도 채점 난이도</span>
+        <div class="difficulty-acc-btn">
+          <input type="radio" name="difficulty-acc-btn" id="accEasy" />
+          <label for="easy">쉬움</label>
+          <input type="radio" name="difficulty-acc-btn" id="accNormal" />
+          <label for="normal">보통</label>
+          <input type="radio" name="difficulty-acc-btn" id="accHard" />
+          <label for="hard">어려움</label>
+        </div>
+      </div>
+      <div class="typing-info" id="typingInfo">
+        <span class="typing-info-WPM" id="wpm">WPM</span>
+        <span class="typing-info-ACC" id="acc">ACC</span>
+        <span class="typing-info-CNT" id="cnt">CNT</span>
+      </div>
       <div class="quote-display" id="quoteDisplay">Temporal quote</div>
       <div class="qutoe-author" id="quoteAuthor">Temporal author</div>
-      <textarea class="quote-input" id="quoteInput"></textarea>
+      <textarea
+        class="quote-input"
+        id="quoteInput"
+        placeholder="위 문장을 정확하게 입력하세요."
+        autofocus
+        autocomplete="off"
+      ></textarea>
     </div>
-    <script src="sentences.js"></script>
+    <script src="sentence.js"></script>
+    <script src="main.js"></script>
   </body>
 </html>
