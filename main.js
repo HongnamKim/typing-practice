@@ -21,9 +21,14 @@ let typingWpm,
   typingAcc,
   typingCnt = 0;
 
+let wpmList = [];
+let accList = [];
+
 //0 = easy, 1 = normal, 2 = hard
 let accDifficulty = 0;
 let wpmDifficulty = 0;
+
+let quoteLength = 0;
 
 let loadQuote = () => {
   quoteDisplay.innerText = "";
@@ -31,6 +36,8 @@ let loadQuote = () => {
 
   const quoteIndex = Math.floor(Math.random() * krs.length);
   const quote = krs[quoteIndex][0];
+  quoteLength = quote.length;
+  console.log(quoteLength);
 
   quote.split("").forEach((character) => {
     const characterSpan = document.createElement("span");
@@ -39,31 +46,33 @@ let loadQuote = () => {
     quoteDisplay.appendChild(characterSpan);
   });
 
-  quoteAuthor.innerText = krs[quoteIndex][1];
+  quoteAuthor.innerText = `-${krs[quoteIndex][1]}-`;
 
   return quoteIndex;
 };
 
-let correct = true;
 let timerSet = true;
 let startTime;
+let currentTime;
+let timerInterval;
 
-let timerStart = (timerSet) => {
-  startTime = new Date();
-  if (timerSet) {
-    setInterval(() => {
-      timer.innerText = getTimerTime();
-    }, 1000);
-  } else {
+const timerStart = (timerSet) => {
+  if (!timerSet) {
     return;
+  } else {
+    startTime = new Date();
+    timerInterval = setInterval(getTimerTime, 100);
   }
 };
 
-function getTimerTime() {
-  return Math.floor((new Date() - startTime) / 1000);
-}
+const getTimerTime = () => {
+  currentTime = (new Date() - startTime) / 1000;
+  timer.innerText = currentTime;
+};
 
-let onInputChange = (event) => {
+let correct = true;
+
+const onInputChange = (event) => {
   timerStart(timerSet);
   timerSet = false;
 
@@ -79,7 +88,7 @@ let onInputChange = (event) => {
       characterSpan.classList.add("none");
       correct = false;
     }
-    //input 되고, 올바르게 입력했는지 확인
+    //input 되고, 올바르게 입력
     else if (character === characterSpan.innerText) {
       characterSpan.classList.add("correct");
       characterSpan.classList.remove("none");
@@ -96,12 +105,18 @@ let onInputChange = (event) => {
   });
   if (correct) {
     //타이머 정지
-    //타이머 재시작되도록 key 설정
+    clearInterval(timerInterval);
     //WPM 계산해서 화면에 출력
+    typingWpm = quoteLength / (currentTime / 60);
+    wpmList.push(typingWpm);
+    console.log(currentTime);
+    console.log(wpmList);
     //ACC 계산해서 화면에 출력
+    timerSet = true;
     typingCnt++;
     infoCnt.innerText = `Count : ${typingCnt}`;
-    loadQuote();
+    timer.innerText = "0";
+    nowIndex = loadQuote();
   }
 };
 
