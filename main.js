@@ -31,13 +31,13 @@ let wpmDifficulty = 0;
 let quoteLength = 0;
 
 let loadQuote = () => {
+  correct = false;
   quoteDisplay.innerText = "";
   quoteInput.value = null;
 
   const quoteIndex = Math.floor(Math.random() * krs.length);
   const quote = krs[quoteIndex][0];
   quoteLength = quote.length;
-  console.log(quoteLength);
 
   quote.split("").forEach((character) => {
     const characterSpan = document.createElement("span");
@@ -57,11 +57,11 @@ let currentTime;
 let timerInterval;
 
 const timerStart = (timerSet) => {
-  if (!timerSet) {
-    return;
-  } else {
+  if (timerSet) {
     startTime = new Date();
     timerInterval = setInterval(getTimerTime, 100);
+  } else {
+    return;
   }
 };
 
@@ -70,52 +70,84 @@ const getTimerTime = () => {
   timer.innerText = currentTime;
 };
 
-let correct = true;
+const clearTimerTime = () => {
+  clearInterval(timerInterval);
+  timerSet = true;
+  timer.innerText = "0";
+};
+
+let correct = false;
+let totalChar = 0;
+let currentChar = 0;
+let currentLength = 0;
 
 const onInputChange = (event) => {
+  //타이머 시작
   timerStart(timerSet);
+  //타이머 리셋 방지
   timerSet = false;
 
+  //주어진 문장 span element Array
   const arrayQuote = quoteDisplay.querySelectorAll("span");
+  //입력 문장 글자별 분리
   let userInput = event.target.value.split("");
-  userInput.pop();
-  arrayQuote.forEach((characterSpan, index) => {
-    const character = userInput[index];
-    //input이 되지 않은 부분은 검은 글씨
+
+  if (userInput.length === 0) {
+    clearTimerTime();
+  }
+  /*
+  currentChar++;
+  if (userInput.length > currentLength) {
+    totalChar += currentChar;
+    currentChar = 0;
+    currentLength++;
+  }
+  console.log(currentChar, totalChar);
+  */
+
+  for (let i = 0; i < arrayQuote.length; i++) {
+    if (i === userInput.length - 1) {
+      //글 수정으로 인해 이미 정답처리 되었던 글자가 마지막 글자가 된 경우 확인 패스
+      //classlist에 correct가 있으면 continue 없으면 정답체크하도록
+      if (Array.from(arrayQuote[i].classList).includes("correct")) {
+        continue;
+      } else {
+        arrayQuote[i].classList.remove("correct");
+        arrayQuote[i].classList.remove("incorrect");
+        arrayQuote[i].classList.add("none");
+        correct = false;
+        continue;
+      }
+    }
+    const character = userInput[i];
+
     if (character == null) {
-      characterSpan.classList.remove("correct");
-      characterSpan.classList.remove("incorrect");
-      characterSpan.classList.add("none");
+      arrayQuote[i].classList.remove("correct");
+      arrayQuote[i].classList.remove("incorrect");
+      arrayQuote[i].classList.add("none");
       correct = false;
-    }
-    //input 되고, 올바르게 입력
-    else if (character === characterSpan.innerText) {
-      characterSpan.classList.add("correct");
-      characterSpan.classList.remove("none");
-      characterSpan.classList.remove("incorrect");
+    } else if (character === arrayQuote[i].innerText) {
+      arrayQuote[i].classList.remove("incorrect");
+      arrayQuote[i].classList.remove("none");
+      arrayQuote[i].classList.add("correct");
       correct = true;
-    }
-    //input 되고, 틀렸을 때
-    else {
-      characterSpan.classList.remove("correct");
-      characterSpan.classList.remove("none");
-      characterSpan.classList.add("incorrect");
+    } else {
+      arrayQuote[i].classList.remove("correct");
+      arrayQuote[i].classList.remove("none");
+      arrayQuote[i].classList.add("incorrect");
       correct = false;
     }
-  });
+  }
   if (correct) {
     //타이머 정지
-    clearInterval(timerInterval);
+    clearTimerTime();
     //WPM 계산해서 화면에 출력
     typingWpm = quoteLength / (currentTime / 60);
     wpmList.push(typingWpm);
-    console.log(currentTime);
     console.log(wpmList);
     //ACC 계산해서 화면에 출력
-    timerSet = true;
     typingCnt++;
     infoCnt.innerText = `Count : ${typingCnt}`;
-    timer.innerText = "0";
     nowIndex = loadQuote();
   }
 };
