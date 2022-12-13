@@ -81,6 +81,25 @@ let totalChar = 0;
 let currentChar = 0;
 let currentLength = 0;
 
+const onESC = (event) => {
+  if (event.keyCode === 27) {
+    clearTimerTime();
+    quoteInput.value = null;
+    correctCnt = 0;
+    incorrectCnt = 0;
+
+    const arrayQuote = quoteDisplay.querySelectorAll("span");
+    arrayQuote.forEach((quoteChar) => {
+      quoteChar.classList.remove("correct");
+      quoteChar.classList.remove("incorrect");
+      quoteChar.classList.add("none");
+    });
+  }
+};
+
+let correctCnt = 0;
+let incorrectCnt = 0;
+
 const onInputChange = (event) => {
   //타이머 시작
   timerStart(timerSet);
@@ -130,21 +149,26 @@ const onInputChange = (event) => {
       arrayQuote[i].classList.remove("incorrect");
       arrayQuote[i].classList.remove("none");
       arrayQuote[i].classList.add("correct");
+      correctCnt++;
       correct = true;
     } else {
       arrayQuote[i].classList.remove("correct");
       arrayQuote[i].classList.remove("none");
       arrayQuote[i].classList.add("incorrect");
+      incorrectCnt++;
       correct = false;
     }
   }
+
   if (correct) {
     //타이머 정지
     clearTimerTime();
     //WPM 계산해서 화면에 출력
-    typingWpm = quoteLength / (currentTime / 60);
+    typingWpm = totalChar / (currentTime / 60);
     wpmList.push(typingWpm);
     console.log(wpmList);
+    const acc = (correctCnt / (correctCnt + incorrectCnt)) * 100;
+    console.log(acc);
     //ACC 계산해서 화면에 출력
     typingCnt++;
     infoCnt.innerText = `Count : ${typingCnt}`;
@@ -178,6 +202,7 @@ function onWpmHardClick() {
   wpmDifficulty = 2;
 }
 
+quoteInput.addEventListener("keydown", onESC);
 quoteInput.addEventListener("input", onInputChange);
 
 accEasy.addEventListener("click", onAccEasyClick);
