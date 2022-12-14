@@ -35,6 +35,9 @@ let loadQuote = () => {
   quoteDisplay.innerText = "";
   quoteInput.value = null;
 
+  correctCnt = 0;
+  incorrectCnt = 0;
+
   const quoteIndex = Math.floor(Math.random() * krs.length);
   const quote = krs[quoteIndex][0];
   quoteLength = quote.length;
@@ -76,10 +79,15 @@ const clearTimerTime = () => {
   timer.innerText = "0";
 };
 
+const average = (list) => {
+  let sum = 0;
+  list.forEach((item) => {
+    sum += item;
+  });
+  return sum / list.length;
+};
+
 let correct = false;
-let totalChar = 0;
-let currentChar = 0;
-let currentLength = 0;
 
 const onESC = (event) => {
   if (event.keyCode === 27) {
@@ -103,56 +111,26 @@ let incorrectCnt = 0;
 const onInputChange = (event) => {
   //타이머 시작
   timerStart(timerSet);
-  //타이머 리셋 방지
   timerSet = false;
 
   //주어진 문장 span element Array
   const arrayQuote = quoteDisplay.querySelectorAll("span");
-  //입력 문장 글자별 분리
   let userInput = event.target.value.split("");
 
   if (userInput.length === 0) {
     clearTimerTime();
   }
-  /*
-  currentChar++;
-  if (userInput.length > currentLength) {
-    totalChar += currentChar;
-    currentChar = 0;
-    currentLength++;
-  }
-  console.log(currentChar, totalChar);
-  */
 
-  for (let i = 0; i < arrayQuote.length; i++) {
-    if (i === userInput.length - 1) {
-      //글 수정으로 인해 이미 정답처리 되었던 글자가 마지막 글자가 된 경우 확인 패스
-      //classlist에 correct가 있으면 continue 없으면 정답체크하도록
-      if (Array.from(arrayQuote[i].classList).includes("correct")) {
-        continue;
-      } else {
-        arrayQuote[i].classList.remove("correct");
-        arrayQuote[i].classList.remove("incorrect");
-        arrayQuote[i].classList.add("none");
-        correct = false;
-        continue;
-      }
+  for (let i = 0; i < userInput.length - 1; i++) {
+    if (Array.from(arrayQuote[i].classList).includes("correct")) {
+      continue;
     }
-    const character = userInput[i];
-
-    if (character == null) {
-      arrayQuote[i].classList.remove("correct");
-      arrayQuote[i].classList.remove("incorrect");
-      arrayQuote[i].classList.add("none");
-      correct = false;
-    } else if (character === arrayQuote[i].innerText) {
-      arrayQuote[i].classList.remove("incorrect");
+    if (userInput[i] === arrayQuote[i].innerText) {
       arrayQuote[i].classList.remove("none");
       arrayQuote[i].classList.add("correct");
       correctCnt++;
       correct = true;
     } else {
-      arrayQuote[i].classList.remove("correct");
       arrayQuote[i].classList.remove("none");
       arrayQuote[i].classList.add("incorrect");
       incorrectCnt++;
@@ -160,14 +138,23 @@ const onInputChange = (event) => {
     }
   }
 
+  for (let i = userInput.length; i < arrayQuote.length; i++) {
+    arrayQuote[i].classList.remove("correct");
+    arrayQuote[i].classList.remove("incorrect");
+    arrayQuote[i].classList.add("none");
+    correct = false;
+  }
+
   if (correct) {
     //타이머 정지
     clearTimerTime();
     //WPM 계산해서 화면에 출력
-    typingWpm = totalChar / (currentTime / 60);
+    typingWpm = quoteLength / (currentTime / 60);
     wpmList.push(typingWpm);
-    console.log(wpmList);
+    console.log(average(wpmList));
     const acc = (correctCnt / (correctCnt + incorrectCnt)) * 100;
+    console.log(quoteLength);
+    console.log(correctCnt, incorrectCnt);
     console.log(acc);
     //ACC 계산해서 화면에 출력
     typingCnt++;
@@ -203,6 +190,7 @@ function onWpmHardClick() {
 }
 
 quoteInput.addEventListener("keydown", onESC);
+
 quoteInput.addEventListener("input", onInputChange);
 
 accEasy.addEventListener("click", onAccEasyClick);
