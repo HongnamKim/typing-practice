@@ -1,4 +1,4 @@
-//krs = sentence.js에 있는 문장 모음
+"use strict";
 
 const timer = document.getElementById("timer");
 const quoteDisplay = document.getElementById("quoteDisplay");
@@ -17,11 +17,8 @@ const infoWpm = document.getElementById("wpm");
 const infoAcc = document.getElementById("acc");
 const infoCnt = document.getElementById("cnt");
 
-let typingWpm,
-  typingAcc,
-  typingCnt = 0;
-
 let wpmList = [];
+let cpmList = [];
 let accList = [];
 
 //0 = easy, 1 = normal, 2 = hard
@@ -35,10 +32,12 @@ let loadQuote = () => {
   quoteDisplay.innerText = "";
   quoteInput.value = null;
 
+  typedChar = 0;
   correctCnt = 0;
   incorrectCnt = 0;
 
   const quoteIndex = Math.floor(Math.random() * krs.length);
+  //krs = sentence.js에 있는 문장 모음
   const quote = krs[quoteIndex][0];
   quoteLength = quote.length;
 
@@ -70,7 +69,8 @@ const timerStart = (timerSet) => {
 
 const getTimerTime = () => {
   currentTime = (new Date() - startTime) / 1000;
-  timer.innerText = currentTime;
+  //timer.innerText = currentTime;
+  timer.innerText = (typedChar * 60) / currentTime;
 };
 
 const clearTimerTime = () => {
@@ -95,6 +95,7 @@ const onESC = (event) => {
     quoteInput.value = null;
     correctCnt = 0;
     incorrectCnt = 0;
+    typedChar = 0;
 
     const arrayQuote = quoteDisplay.querySelectorAll("span");
     arrayQuote.forEach((quoteChar) => {
@@ -105,8 +106,12 @@ const onESC = (event) => {
   }
 };
 
+let typingCnt = 0;
+
 let correctCnt = 0;
 let incorrectCnt = 0;
+
+let typedChar = 0;
 
 const onInputChange = (event) => {
   //타이머 시작
@@ -117,17 +122,29 @@ const onInputChange = (event) => {
   const arrayQuote = quoteDisplay.querySelectorAll("span");
   let userInput = event.target.value.split("");
 
-  if (userInput.length === 0) {
-    clearTimerTime();
+  if (userInput[userInput.length - 1] !== " ") {
+    typedChar++;
   }
 
-  for (let i = 0; i < userInput.length - 1; i++) {
-    if (Array.from(arrayQuote[i].classList).includes("correct")) {
+  if (userInput.length === 0) {
+    clearTimerTime();
+    correctCnt = 0;
+    incorrectCnt = 0;
+    typedChar = 0;
+  }
+
+  let checklength = userInput.length - 1;
+  for (let i = 0; i < checklength; i++) {
+    if (
+      Array.from(arrayQuote[i].classList).includes("correct") ||
+      Array.from(arrayQuote[i].classList).includes("incorrect")
+    ) {
       continue;
     }
     if (userInput[i] === arrayQuote[i].innerText) {
       arrayQuote[i].classList.remove("none");
       arrayQuote[i].classList.add("correct");
+
       correctCnt++;
       correct = true;
     } else {
@@ -138,6 +155,7 @@ const onInputChange = (event) => {
     }
   }
 
+  //미입력 글자 none 처리
   for (let i = userInput.length; i < arrayQuote.length; i++) {
     arrayQuote[i].classList.remove("correct");
     arrayQuote[i].classList.remove("incorrect");
@@ -145,20 +163,25 @@ const onInputChange = (event) => {
     correct = false;
   }
 
-  if (correct) {
-    //타이머 정지
+  //입력 완료 시 속도, 정확도 계산 후 다음 문장 출력
+  if (quoteLength < userInput.length) {
     clearTimerTime();
-    //WPM 계산해서 화면에 출력
-    typingWpm = quoteLength / (currentTime / 60);
+
+    const typingWpm = quoteLength / (currentTime / 60);
+    const typingCpm = typedChar / (currentTime / 60);
     wpmList.push(typingWpm);
-    console.log(average(wpmList));
-    const acc = (correctCnt / (correctCnt + incorrectCnt)) * 100;
-    console.log(quoteLength);
+    cpmList.push(typingCpm);
+    console.log(`average speed ${average(cpmList)}`);
+
+    const typingAcc = (correctCnt / (correctCnt + incorrectCnt)) * 100;
+    accList.push(typingAcc);
+    console.log(`quote length: ${quoteLength}`);
     console.log(correctCnt, incorrectCnt);
-    console.log(acc);
-    //ACC 계산해서 화면에 출력
+    console.log(typingAcc);
+
     typingCnt++;
     infoCnt.innerText = `Count : ${typingCnt}`;
+
     nowIndex = loadQuote();
   }
 };
