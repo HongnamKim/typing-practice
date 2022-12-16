@@ -26,25 +26,128 @@ let accDifficulty = 0;
 let wpmDifficulty = 0;
 
 let quoteLength = 0;
+let quoteChar = [];
+
+const koreanSeparator = (character) => {
+  const firstChar = [
+    "ㄱ",
+    "ㄲ",
+    "ㄴ",
+    "ㄷ",
+    "ㄸ",
+    "ㄹ",
+    "ㅁ",
+    "ㅂ",
+    "ㅃ",
+    "ㅅ",
+    "ㅆ",
+    "ㅇ",
+    "ㅈ",
+    "ㅉ",
+    "ㅊ",
+    "ㅋ",
+    "ㅌ",
+    "ㅍ",
+    "ㅎ",
+  ];
+
+  const midChar = [
+    "ㅏ",
+    "ㅐ",
+    "ㅑ",
+    "ㅒ",
+    "ㅓ",
+    "ㅔ",
+    "ㅕ",
+    "ㅖ",
+    "ㅗ",
+    "ㅘ",
+    "ㅙ",
+    "ㅚ",
+    "ㅛ",
+    "ㅜ",
+    "ㅝ",
+    "ㅞ",
+    "ㅟ",
+    "ㅠ",
+    "ㅡ",
+    "ㅢ",
+    "ㅣ",
+  ];
+
+  const lastChar = [
+    "",
+    "ㄱ",
+    "ㄲ",
+    "ㄳ",
+    "ㄴ",
+    "ㄵ",
+    "ㄶ",
+    "ㄷ",
+    "ㄹ",
+    "ㄺ",
+    "ㄻ",
+    "ㄼ",
+    "ㄽ",
+    "ㄾ",
+    "ㄿ",
+    "ㅀ",
+    "ㅁ",
+    "ㅂ",
+    "ㅄ",
+    "ㅅ",
+    "ㅆ",
+    "ㅇ",
+    "ㅈ",
+    "ㅊ",
+    "ㅋ",
+    "ㅌ",
+    "ㅍ",
+    "ㅎ",
+  ];
+
+  const koreanStart = 44032;
+  const koreanEnd = 55203;
+
+  const charCode = character.charCodeAt(0);
+
+  //숫자 or 영어는 그대로 반환
+  if (charCode < koreanStart || charCode > koreanEnd) {
+    return [character];
+  }
+
+  const relativeCode = charCode - koreanStart;
+
+  const firstIndex = parseInt(relativeCode / 588);
+  const midIndex = parseInt((relativeCode - firstIndex * 588) / 28);
+  const lastIndex = parseInt(relativeCode % 28);
+
+  if (lastChar[lastIndex]) {
+    return [firstChar[firstIndex], midChar[midIndex], lastChar[lastIndex]];
+  }
+  return [firstChar[firstIndex], midChar[midIndex]];
+};
 
 let loadQuote = () => {
-  correct = false;
   quoteDisplay.innerText = "";
   quoteInput.value = null;
 
-  typedChar = 0;
+  typedChar = [];
   correctCnt = 0;
   incorrectCnt = 0;
+  inputLength = 0;
 
   const quoteIndex = Math.floor(Math.random() * krs.length);
   //krs = sentence.js에 있는 문장 모음
   const quote = krs[quoteIndex][0];
   quoteLength = quote.length;
+  typedArray = [];
 
   quote.split("").forEach((character) => {
     const characterSpan = document.createElement("span");
     characterSpan.classList.add("none");
     characterSpan.innerText = character;
+    quoteChar.push(koreanSeparator(character));
     quoteDisplay.appendChild(characterSpan);
   });
 
@@ -58,6 +161,18 @@ let startTime;
 let currentTime;
 let timerInterval;
 
+const sum = (list) => {
+  let result = 0;
+  list.forEach((item) => {
+    result += item;
+  });
+  return result;
+};
+
+const average = (list) => {
+  return sum(list) / list.length;
+};
+
 const timerStart = (timerSet) => {
   if (timerSet) {
     startTime = new Date();
@@ -70,7 +185,7 @@ const timerStart = (timerSet) => {
 const getTimerTime = () => {
   currentTime = (new Date() - startTime) / 1000;
   //timer.innerText = currentTime;
-  timer.innerText = (typedChar * 60) / currentTime;
+  timer.innerText = (sum(typedChar) * 60) / currentTime;
 };
 
 const clearTimerTime = () => {
@@ -79,39 +194,32 @@ const clearTimerTime = () => {
   timer.innerText = "0";
 };
 
-const average = (list) => {
-  let sum = 0;
-  list.forEach((item) => {
-    sum += item;
-  });
-  return sum / list.length;
-};
-
-let correct = false;
-
 const onESC = (event) => {
   if (event.keyCode === 27) {
     clearTimerTime();
     quoteInput.value = null;
     correctCnt = 0;
     incorrectCnt = 0;
-    typedChar = 0;
+    typedChar = [];
 
     const arrayQuote = quoteDisplay.querySelectorAll("span");
-    arrayQuote.forEach((quoteChar) => {
-      quoteChar.classList.remove("correct");
-      quoteChar.classList.remove("incorrect");
-      quoteChar.classList.add("none");
+    arrayQuote.forEach((quoteCharacter) => {
+      quoteCharacter.classList.remove("correct");
+      quoteCharacter.classList.remove("incorrect");
+      quoteCharacter.classList.add("none");
     });
   }
 };
 
-let typingCnt = 0;
+let typedQuoteCnt = 0;
 
 let correctCnt = 0;
 let incorrectCnt = 0;
 
-let typedChar = 0;
+let typedChar = [];
+let typedArray = [];
+
+let inputLength = 0;
 
 const onInputChange = (event) => {
   //타이머 시작
@@ -122,15 +230,32 @@ const onInputChange = (event) => {
   const arrayQuote = quoteDisplay.querySelectorAll("span");
   let userInput = event.target.value.split("");
 
-  if (userInput[userInput.length - 1] !== " ") {
-    typedChar++;
+  if (inputLength < userInput.length) {
+    inputLength = userInput.length;
+  } else if (inputLength > userInput.length) {
+    console.log("deleted!");
   }
+
+  for (let i = 0; i < userInput.length; i++) {
+    typedArray[i] = koreanSeparator(userInput[i]);
+  }
+
+  typedArray.splice(userInput.length, quoteLength);
+
+  //글자별 타이핑 횟수 계산
+  for (let i = 0; i < typedArray.length; i++) {
+    typedChar[i] = typedArray[i].length;
+  }
+
+  typedChar.splice(userInput.length, quoteLength);
+
+  console.log(typedChar);
 
   if (userInput.length === 0) {
     clearTimerTime();
     correctCnt = 0;
     incorrectCnt = 0;
-    typedChar = 0;
+    typedChar = [];
   }
 
   let checklength = userInput.length - 1;
@@ -146,12 +271,10 @@ const onInputChange = (event) => {
       arrayQuote[i].classList.add("correct");
 
       correctCnt++;
-      correct = true;
     } else {
       arrayQuote[i].classList.remove("none");
       arrayQuote[i].classList.add("incorrect");
       incorrectCnt++;
-      correct = false;
     }
   }
 
@@ -160,7 +283,6 @@ const onInputChange = (event) => {
     arrayQuote[i].classList.remove("correct");
     arrayQuote[i].classList.remove("incorrect");
     arrayQuote[i].classList.add("none");
-    correct = false;
   }
 
   //입력 완료 시 속도, 정확도 계산 후 다음 문장 출력
@@ -168,7 +290,7 @@ const onInputChange = (event) => {
     clearTimerTime();
 
     const typingWpm = quoteLength / (currentTime / 60);
-    const typingCpm = typedChar / (currentTime / 60);
+    const typingCpm = sum(typedChar) / (currentTime / 60);
     wpmList.push(typingWpm);
     cpmList.push(typingCpm);
     console.log(`average speed ${average(cpmList)}`);
@@ -179,8 +301,8 @@ const onInputChange = (event) => {
     console.log(correctCnt, incorrectCnt);
     console.log(typingAcc);
 
-    typingCnt++;
-    infoCnt.innerText = `Count : ${typingCnt}`;
+    typedQuoteCnt++;
+    infoCnt.innerText = `Count : ${typedQuoteCnt}`;
 
     nowIndex = loadQuote();
   }
