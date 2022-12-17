@@ -25,87 +25,19 @@ let accList = [];
 let accDifficulty = 0;
 let wpmDifficulty = 0;
 
-let quoteLength = 0;
-let quoteChar = [];
+const sum = (list) => {
+  let result = 0;
+  list.forEach((item) => {
+    result += item;
+  });
+  return result;
+};
+
+const average = (list) => {
+  return sum(list) / list.length;
+};
 
 const koreanSeparator = (character) => {
-  const firstChar = [
-    "ㄱ",
-    "ㄲ",
-    "ㄴ",
-    "ㄷ",
-    "ㄸ",
-    "ㄹ",
-    "ㅁ",
-    "ㅂ",
-    "ㅃ",
-    "ㅅ",
-    "ㅆ",
-    "ㅇ",
-    "ㅈ",
-    "ㅉ",
-    "ㅊ",
-    "ㅋ",
-    "ㅌ",
-    "ㅍ",
-    "ㅎ",
-  ];
-
-  const midChar = [
-    "ㅏ",
-    "ㅐ",
-    "ㅑ",
-    "ㅒ",
-    "ㅓ",
-    "ㅔ",
-    "ㅕ",
-    "ㅖ",
-    "ㅗ",
-    "ㅘ",
-    "ㅙ",
-    "ㅚ",
-    "ㅛ",
-    "ㅜ",
-    "ㅝ",
-    "ㅞ",
-    "ㅟ",
-    "ㅠ",
-    "ㅡ",
-    "ㅢ",
-    "ㅣ",
-  ];
-
-  const lastChar = [
-    "",
-    "ㄱ",
-    "ㄲ",
-    "ㄳ",
-    "ㄴ",
-    "ㄵ",
-    "ㄶ",
-    "ㄷ",
-    "ㄹ",
-    "ㄺ",
-    "ㄻ",
-    "ㄼ",
-    "ㄽ",
-    "ㄾ",
-    "ㄿ",
-    "ㅀ",
-    "ㅁ",
-    "ㅂ",
-    "ㅄ",
-    "ㅅ",
-    "ㅆ",
-    "ㅇ",
-    "ㅈ",
-    "ㅊ",
-    "ㅋ",
-    "ㅌ",
-    "ㅍ",
-    "ㅎ",
-  ];
-
   const koreanStart = 44032;
   const koreanEnd = 55203;
 
@@ -128,79 +60,68 @@ const koreanSeparator = (character) => {
   return [firstChar[firstIndex], midChar[midIndex]];
 };
 
+const clearTypingVariables = () => {
+  typedArray = [];
+  typedCharCount = [];
+  correctCnt = 0;
+  incorrectCnt = 0;
+};
+
+let quoteLength = 0;
+let quoteArray = [];
+
 let loadQuote = () => {
+  const quoteIndex = Math.floor(Math.random() * krs.length);
+  const quote = krs[quoteIndex][0];
+  quoteLength = quote.length;
+
   quoteDisplay.innerText = "";
   quoteInput.value = null;
 
-  typedChar = [];
-  correctCnt = 0;
-  incorrectCnt = 0;
-  inputLength = 0;
-
-  const quoteIndex = Math.floor(Math.random() * krs.length);
-  //krs = sentence.js에 있는 문장 모음
-  const quote = krs[quoteIndex][0];
-  quoteLength = quote.length;
-  typedArray = [];
+  clearTypingVariables();
 
   quote.split("").forEach((character) => {
     const characterSpan = document.createElement("span");
     characterSpan.classList.add("none");
     characterSpan.innerText = character;
-    quoteChar.push(koreanSeparator(character));
+    quoteArray.push(koreanSeparator(character));
     quoteDisplay.appendChild(characterSpan);
   });
 
   quoteAuthor.innerText = `-${krs[quoteIndex][1]}-`;
-
-  return quoteIndex;
 };
 
-let timerSet = true;
+let speedCheckSet = true;
+let speedInterval;
 let startTime;
 let currentTime;
-let timerInterval;
 
-const sum = (list) => {
-  let result = 0;
-  list.forEach((item) => {
-    result += item;
-  });
-  return result;
-};
-
-const average = (list) => {
-  return sum(list) / list.length;
-};
-
-const timerStart = (timerSet) => {
-  if (timerSet) {
+const speedCheckStart = (speedCheckSet) => {
+  if (speedCheckSet) {
     startTime = new Date();
-    timerInterval = setInterval(getTimerTime, 100);
+    speedInterval = setInterval(getSpeed, 100);
   } else {
     return;
   }
 };
 
-const getTimerTime = () => {
+const getSpeed = () => {
   currentTime = (new Date() - startTime) / 1000;
   //timer.innerText = currentTime;
-  timer.innerText = (sum(typedChar) * 60) / currentTime;
+  timer.innerText = (sum(typedCharCount) * 60) / currentTime;
 };
 
-const clearTimerTime = () => {
-  clearInterval(timerInterval);
-  timerSet = true;
+const clearSpeedCheck = () => {
+  clearInterval(speedInterval);
+  speedCheckSet = true;
   timer.innerText = "0";
 };
 
 const onESC = (event) => {
   if (event.keyCode === 27) {
-    clearTimerTime();
+    clearSpeedCheck();
     quoteInput.value = null;
-    correctCnt = 0;
-    incorrectCnt = 0;
-    typedChar = [];
+    clearTypingVariables();
 
     const arrayQuote = quoteDisplay.querySelectorAll("span");
     arrayQuote.forEach((quoteCharacter) => {
@@ -216,49 +137,41 @@ let typedQuoteCnt = 0;
 let correctCnt = 0;
 let incorrectCnt = 0;
 
-let typedChar = [];
+let typedCharCount = [];
 let typedArray = [];
-
-let inputLength = 0;
 
 const onInputChange = (event) => {
   //타이머 시작
-  timerStart(timerSet);
-  timerSet = false;
+  speedCheckStart(speedCheckSet);
+  speedCheckSet = false;
 
   //주어진 문장 span element Array
   const arrayQuote = quoteDisplay.querySelectorAll("span");
   let userInput = event.target.value.split("");
 
-  if (inputLength < userInput.length) {
-    inputLength = userInput.length;
-  } else if (inputLength > userInput.length) {
-    console.log("deleted!");
-  }
-
+  //입력값 자모 분리
   for (let i = 0; i < userInput.length; i++) {
     typedArray[i] = koreanSeparator(userInput[i]);
   }
 
+  //수정하여 글을 지웠을 경우, 지운 글자의 자모 array 지우기
   typedArray.splice(userInput.length, quoteLength);
 
   //글자별 타이핑 횟수 계산
   for (let i = 0; i < typedArray.length; i++) {
-    typedChar[i] = typedArray[i].length;
+    typedCharCount[i] = typedArray[i].length;
   }
 
-  typedChar.splice(userInput.length, quoteLength);
+  //수정하여 글을 지웠을 경우, 지운 글자의 타이핑 횟수 지우기
+  typedCharCount.splice(userInput.length, quoteLength);
 
-  console.log(typedChar);
-
+  //사용자가 모든 값을 지웠을 경우 초기화
   if (userInput.length === 0) {
-    clearTimerTime();
-    correctCnt = 0;
-    incorrectCnt = 0;
-    typedChar = [];
+    clearSpeedCheck();
+    clearTypingVariables();
   }
 
-  let checklength = userInput.length - 1;
+  const checklength = userInput.length - 1;
   for (let i = 0; i < checklength; i++) {
     if (
       Array.from(arrayQuote[i].classList).includes("correct") ||
@@ -269,7 +182,6 @@ const onInputChange = (event) => {
     if (userInput[i] === arrayQuote[i].innerText) {
       arrayQuote[i].classList.remove("none");
       arrayQuote[i].classList.add("correct");
-
       correctCnt++;
     } else {
       arrayQuote[i].classList.remove("none");
@@ -287,10 +199,11 @@ const onInputChange = (event) => {
 
   //입력 완료 시 속도, 정확도 계산 후 다음 문장 출력
   if (quoteLength < userInput.length) {
-    clearTimerTime();
+    console.log(typedArray);
+    clearSpeedCheck();
 
     const typingWpm = quoteLength / (currentTime / 60);
-    const typingCpm = sum(typedChar) / (currentTime / 60);
+    const typingCpm = sum(typedCharCount) / (currentTime / 60);
     wpmList.push(typingWpm);
     cpmList.push(typingCpm);
     console.log(`average speed ${average(cpmList)}`);
@@ -304,11 +217,11 @@ const onInputChange = (event) => {
     typedQuoteCnt++;
     infoCnt.innerText = `Count : ${typedQuoteCnt}`;
 
-    nowIndex = loadQuote();
+    loadQuote();
   }
 };
 
-let nowIndex = loadQuote();
+loadQuote();
 
 function onAccEasyClick() {
   accDifficulty = 0;
