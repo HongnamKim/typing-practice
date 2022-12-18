@@ -147,7 +147,7 @@ const onInputChange = (event) => {
 
   //주어진 문장 span element Array
   const arrayQuote = quoteDisplay.querySelectorAll("span");
-  let userInput = event.target.value.split("");
+  const userInput = event.target.value.split("");
 
   //입력값 자모 분리
   for (let i = 0; i < userInput.length; i++) {
@@ -218,6 +218,11 @@ const onInputChange = (event) => {
     infoCnt.innerText = `Count : ${typedQuoteCnt}`;
 
     loadQuote();
+  } else if (userInput[userInput.length - 1] === "\n") {
+    event.target.value = event.target.value.slice(
+      0,
+      event.target.value.length - 1
+    );
   }
 };
 
