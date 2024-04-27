@@ -39,7 +39,7 @@ body {
 }
 
 .speed-check {
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
 #speedCheck {
@@ -55,7 +55,7 @@ body {
 }
 
 .typing-info > div > span {
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .typing-info-value {
@@ -75,11 +75,11 @@ body {
 }
 
 .quote-display {
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
 .qutoe-author {
-  font-size: 2rem;
+  font-size: 1.5rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
@@ -93,5 +93,5 @@ body {
 
   resize: none;
   outline: none;
-  font-size: 3rem;
+  font-size: 2rem;
 }
