@@ -14,7 +14,8 @@ const infoCnt = document.getElementById("cnt");
 
 const contact = document.getElementById("contact");
 
-contact.textContent = "Contact - ghdskawkd@naver.com";
+contact.textContent = "Contact - 카카오톡 오픈 프로필";
+contact.setAttribute("href", "https://open.kakao.com/o/sMHDrAog");
 
 const wpmList = [];
 const cpmList = [];
