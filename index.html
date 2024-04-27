@@ -8,7 +8,10 @@
     <link rel="stylesheet" href="style.css" />
     <script defer src="sentence.js"></script>
     <script defer src="koreanChar.js"></script>
+    <script defer src="utils.js"></script>
+    <script defer src="dark.js"></script>
     <script defer src="main.js"></script>
+
     <script>
       window.va =
         window.va ||
@@ -18,15 +21,29 @@
     </script>
     <script defer src="/_vercel/insights/script.js"></script>
   </head>
-  <body>
-    <div class="container">
-      <div class="upper-container">
-        <div class="speed-check-container">
-          <span class="speed-check">Current CPM</span>
+  <body id="body">
+    <div class="title">
+      <div class="title-left">
+        <h1 class="title-title">Typing Practice</h1>
+      </div>
+
+      <div class="title-right">
+        <input type="checkbox" id="dark-mode" />
+        <label for="dark-mode" class="dark-mode-text">다크 모드</label>
+      </div>
+    </div>
+
+    <div class="container upper-container">
+      <div class="speed-check-container">
+        <input type="checkbox" id="currentCPM" checked />
+        <label for="currentCPM" class="currentCPM-text">실시간 타자 속도</label>
+        <div>
+          <span class="speed-check" id="speed-check-text">Current CPM</span>
           <span class="speed-check" id="speedCheck">0</span>
         </div>
+      </div>
 
-        <!-- <div class="difficulty" id="difficulty">
+      <!-- <div class="difficulty" id="difficulty">
         <span>속도 채점 난이도</span>
         <div class="difficulty-wpm-btn">
           <input type="radio" name="difficulty-wpm-btn" id="wpmEasy" />
@@ -38,7 +55,7 @@
         </div>
       </div> -->
 
-        <!-- <div class="difficulty" id="difficulty">
+      <!-- <div class="difficulty" id="difficulty">
         <span>정확도 채점 난이도</span>
         <div class="difficulty-acc-btn">
           <input type="radio" name="difficulty-acc-btn" id="accEasy" />
@@ -49,36 +66,44 @@
           <label for="hard">어려움</label>
         </div>
       </div> -->
-        <div class="typing-info" id="typingInfo">
-          <div>
-            <span class="typing-info-CPM">CPM</span>
-            <span class="typing-info-CPM typing-info-value" id="cpm">-</span>
-          </div>
+      <div class="typing-info" id="typingInfo">
+        <div>
+          <span class="typing-info-CPM">CPM</span>
+          <span class="typing-info-CPM typing-info-value" id="cpm">-</span>
+        </div>
 
-          <div>
-            <span class="typing-info-ACC">ACC</span>
-            <span class="typing-info-ACC typing-info-value" id="acc">-</span>
-          </div>
+        <div>
+          <span class="typing-info-ACC">ACC</span>
+          <span class="typing-info-ACC typing-info-value" id="acc">-</span>
+        </div>
 
-          <div>
-            <span class="typing-info-CNT">CNT</span>
-            <span class="typing-info-CNT typing-info-value" id="cnt">-</span>
-          </div>
+        <div>
+          <span class="typing-info-CNT">CNT</span>
+          <span class="typing-info-CNT typing-info-value" id="cnt">-</span>
         </div>
       </div>
+    </div>
+
+    <div class="container bottom-container">
       <div id="quote-container">
         <div class="quote-display" id="quoteDisplay">Temporal quote</div>
-        <div class="qutoe-author" id="quoteAuthor">Temporal author</div>
+        <div class="qutoe-author">
+          <span class="qutoe-author-text" id="quoteAuthor"
+            >Temporal author</span
+          >
+        </div>
       </div>
       <textarea
         class="quote-input"
         id="quoteInput"
-        placeholder="위 문장을 정확하게 입력하세요."
+        placeholder="위 문장을 입력하세요."
         autofocus
         autocomplete="off"
         rows="1"
         cols="30"
       ></textarea>
     </div>
+    <div class="spacer"></div>
+    <span class="contact" id="contact"></span>
   </body>
 </html>

@@ -5,60 +5,20 @@ const quoteDisplay = document.getElementById("quoteDisplay");
 const quoteAuthor = document.getElementById("quoteAuthor");
 const quoteInput = document.getElementById("quoteInput");
 
-// const accEasy = document.getElementById("accEasy");
-// const accNormal = document.getElementById("accNormal");
-// const accHard = document.getElementById("accHard");
-
-// const wpmEasy = document.getElementById("wpmEasy");
-// const wpmNormal = document.getElementById("wpmNormal");
-// const wpmHard = document.getElementById("wpmHard");
+const currentCpm = document.getElementById("currentCPM");
+const currentCpmText = document.getElementById("speed-check-text");
 
 const infoCpm = document.getElementById("cpm");
 const infoAcc = document.getElementById("acc");
 const infoCnt = document.getElementById("cnt");
 
-let wpmList = [];
-let cpmList = [];
-let accList = [];
+const contact = document.getElementById("contact");
 
-//0 = easy, 1 = normal, 2 = hard
-let accDifficulty = 0;
-let wpmDifficulty = 0;
+contact.textContent = "Contact - ghdskawkd@naver.com";
 
-const sum = (list) => {
-  let result = 0;
-  list.forEach((item) => {
-    result += item;
-  });
-  return result;
-};
-
-const average = (list) => {
-  return sum(list) / list.length;
-};
-
-const koreanSeparator = (character) => {
-  const koreanStart = 44032;
-  const koreanEnd = 55203;
-
-  const charCode = character.charCodeAt(0);
-
-  //숫자 or 영어는 그대로 반환
-  if (charCode < koreanStart || charCode > koreanEnd) {
-    return [character];
-  }
-
-  const relativeCode = charCode - koreanStart;
-
-  const firstIndex = parseInt(relativeCode / 588);
-  const midIndex = parseInt((relativeCode - firstIndex * 588) / 28);
-  const lastIndex = parseInt(relativeCode % 28);
-
-  if (lastChar[lastIndex]) {
-    return [firstChar[firstIndex], midChar[midIndex], lastChar[lastIndex]];
-  }
-  return [firstChar[firstIndex], midChar[midIndex]];
-};
+const wpmList = [];
+const cpmList = [];
+const accList = [];
 
 const clearTypingVariables = () => {
   typedArray = [];
@@ -75,6 +35,7 @@ let quoteArray = [];
 const loadQuote = () => {
   const quoteIndex = Math.floor(Math.random() * sentences.length);
   const quote = sentences[quoteIndex][0];
+  //quoteInput.placeholder = quote;
   quoteLength = quote.length;
 
   quoteDisplay.innerText = "";
@@ -85,6 +46,10 @@ const loadQuote = () => {
   quote.split("").forEach((character) => {
     const characterSpan = document.createElement("span");
     characterSpan.classList.add("none");
+    if (darkModeButton.checked) {
+      characterSpan.classList.add("dark");
+    }
+
     characterSpan.innerText = character;
     quoteArray.push(koreanSeparator(character));
     quoteDisplay.appendChild(characterSpan);
@@ -95,21 +60,26 @@ const loadQuote = () => {
 
 let speedCheckSet = true;
 let speedInterval;
+let showCurrentCpm = currentCpm.checked;
 let startTime;
 let currentTime;
 
 const speedCheckStart = (speedCheckSet) => {
-  if (speedCheckSet) {
-    startTime = new Date();
-    speedInterval = setInterval(getSpeed, 100);
-  } else {
+  if (!speedCheckSet) {
     return;
   }
+
+  startTime = new Date();
+  speedInterval = setInterval(getSpeed, 100);
 };
 
 const getSpeed = () => {
   currentTime = (new Date() - startTime) / 1000;
   //speedCheck.innerText = currentTime;
+
+  if (!showCurrentCpm) {
+    return;
+  }
   speedCheck.innerText = Math.round((sum(typedCharCount) * 60) / currentTime);
 };
 
@@ -119,7 +89,14 @@ const clearSpeedCheck = () => {
   speedCheck.innerText = "0";
 };
 
-const onESC = (event) => {
+const onKeyDown = (event) => {
+  // 방향키 입력
+  if (37 <= event.keyCode && event.keyCode <= 40) {
+    loadQuote();
+    return;
+  }
+
+  // ESC 입력
   if (event.keyCode === 27) {
     clearSpeedCheck();
     quoteInput.value = null;
@@ -130,6 +107,9 @@ const onESC = (event) => {
       quoteCharacter.classList.remove("correct");
       quoteCharacter.classList.remove("incorrect");
       quoteCharacter.classList.add("none");
+      if (darkModeButton.checked) {
+        arrayQuote[i].classList.add("dark");
+      }
     });
   }
 };
@@ -142,13 +122,10 @@ let incorrectCnt = 0;
 let typedCharCount = [];
 let typedArray = [];
 
-//console.log(quoteInput.rows);
-
 let initialInputHeight = quoteInput.scrollHeight;
 
-//quoteInput.rows = 2;
-
 const onInputChange = (event) => {
+  // textarea row 변경
   if (quoteInput.scrollHeight > initialInputHeight) {
     initialInputHeight = quoteInput.scrollHeight;
     quoteInput.rows++;
@@ -194,11 +171,27 @@ const onInputChange = (event) => {
     }
     if (userInput[i] === arrayQuote[i].innerText) {
       arrayQuote[i].classList.remove("none");
+
+      if (darkModeButton.checked) {
+        arrayQuote[i].classList.remove("dark");
+      }
+
       arrayQuote[i].classList.add("correct");
+
+      if (darkModeButton.checked) {
+        arrayQuote[i].classList.add("dark");
+      }
+
       correctCnt++;
     } else {
       arrayQuote[i].classList.remove("none");
+      if (darkModeButton.checked) {
+        arrayQuote[i].classList.remove("dark");
+      }
       arrayQuote[i].classList.add("incorrect");
+      if (darkModeButton.checked) {
+        arrayQuote[i].classList.add("dark");
+      }
       // console.log("wrong");
       // console.log(typedCharCount[i]);
       incorrectCnt++;
@@ -210,6 +203,9 @@ const onInputChange = (event) => {
     arrayQuote[i].classList.remove("correct");
     arrayQuote[i].classList.remove("incorrect");
     arrayQuote[i].classList.add("none");
+    if (darkModeButton.checked) {
+      arrayQuote[i].classList.add("dark");
+    }
   }
 
   //입력 완료 시 속도, 정확도 계산 후 다음 문장 출력
@@ -247,33 +243,52 @@ const onInputChange = (event) => {
 
 loadQuote();
 
-function onAccEasyClick() {
-  accDifficulty = 0;
-}
+const c = () => {
+  showCurrentCpm = !showCurrentCpm;
 
-function onAccNormalClick() {
-  accDifficulty = 1;
-}
+  if (showCurrentCpm) {
+    currentCpmText.textContent = "Current CPM";
+  } else {
+    currentCpmText.textContent = "Last CPM";
+  }
+};
 
-function onAccHardClick() {
-  accDifficulty = 2;
-}
+currentCpm.addEventListener("change", c);
 
-function onWpmEasyClick() {
-  wpmDifficulty = 0;
-}
-
-function onWpmNormalClick() {
-  wpmDifficulty = 1;
-}
-
-function onWpmHardClick() {
-  wpmDifficulty = 2;
-}
-
-quoteInput.addEventListener("keydown", onESC);
+quoteInput.addEventListener("keydown", onKeyDown);
 
 quoteInput.addEventListener("input", onInputChange);
+
+// const accEasy = document.getElementById("accEasy");
+// const accNormal = document.getElementById("accNormal");
+// const accHard = document.getElementById("accHard");
+
+// const wpmEasy = document.getElementById("wpmEasy");
+// const wpmNormal = document.getElementById("wpmNormal");
+// const wpmHard = document.getElementById("wpmHard");
+
+//0 = easy, 1 = normal, 2 = hard
+//let accDifficulty = 0;
+//let wpmDifficulty = 0;
+
+// function onAccEasyClick() {
+//   accDifficulty = 0;
+// }
+// function onAccNormalClick() {
+//   accDifficulty = 1;
+// }
+// function onAccHardClick() {
+//   accDifficulty = 2;
+// }
+// function onWpmEasyClick() {
+//   wpmDifficulty = 0;
+// }
+// function onWpmNormalClick() {
+//   wpmDifficulty = 1;
+// }
+// function onWpmHardClick() {
+//   wpmDifficulty = 2;
+// }
 
 // accEasy.addEventListener("click", onAccEasyClick);
 // accNormal.addEventListener("click", onAccNormalClick);

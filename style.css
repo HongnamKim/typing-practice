@@ -16,21 +16,66 @@
 
 body {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
   width: 100vw;
   overflow-y: hidden;
+  background-color: white;
+}
+
+.spacer {
+  height: 25vh;
+}
+
+body.dark {
+  background-color: #18181b;
+}
+
+.title {
+  width: 80%;
+  max-width: 1000px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title-title {
+  font-size: 3rem;
+  color: #6d28d9;
+}
+
+.title-right {
+  display: flex;
+  align-items: center;
+}
+
+.dark-mode-text {
+  font-size: 1.4rem;
+}
+
+.dark-mode-text.dark {
+  color: white;
 }
 
 .container {
-  border: 1px solid black;
+  /*border: 1px solid black;*/
   width: 80%;
+  border-radius: 1rem;
 
   max-width: 1000px;
   display: flex;
   flex-direction: column;
-  padding: 15px;
+  padding: 1rem;
+  /*padding-bottom: 2rem;*/
+  margin-bottom: 2rem;
+  background-color: #e4e4e7;
+}
+
+.container.dark {
+  background-color: #27272a;
 }
 
 .upper-container {
@@ -38,8 +83,16 @@ body {
   margin: 1rem;
 }
 
+.currentCPM-text.dark {
+  color: white;
+}
+
 .speed-check {
   font-size: 2rem;
+}
+
+.speed-check.dark {
+  color: white;
 }
 
 #speedCheck {
@@ -51,11 +104,16 @@ body {
   justify-content: space-around;
   /* border: 1px solid blue; */
   margin-top: 1rem;
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
 }
 
 .typing-info > div > span {
   font-size: 1.5rem;
+}
+
+.typing-info > div > span.dark {
+  font-size: 1.5rem;
+  color: white;
 }
 
 .typing-info-value {
@@ -66,12 +124,27 @@ body {
   color: gray;
 }
 
+.none.dark {
+  color: #71717a;
+}
+
 .correct {
   color: black;
 }
 
+.correct.dark {
+  color: white;
+}
+
 .incorrect {
-  color: red;
+  color: #ef4444;
+}
+
+.incorrect.dark {
+}
+
+.bottom-container {
+  padding: 2rem;
 }
 
 .quote-display {
@@ -79,14 +152,21 @@ body {
 }
 
 .qutoe-author {
-  font-size: 1.5rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
 
+.qutoe-author-text {
+  font-size: 1.5rem;
+}
+
+.qutoe-author-text.dark {
+  color: #a1a1aa;
+}
+
 .quote-input {
   border: none;
-  border-bottom: 1px solid black;
+  border-bottom: 0.2rem solid #6d28d9;
   width: 100%;
 
   overflow-y: hidden;
@@ -94,4 +174,22 @@ body {
   resize: none;
   outline: none;
   font-size: 2rem;
+  background-color: #e4e4e7;
+}
+
+.quote-input.dark {
+  background-color: #27272a;
+  color: white;
+}
+
+.quote-input::placeholder {
+  color: #a1a1aa;
+}
+
+.contact {
+  color: black;
+}
+
+.contact.dark {
+  color: white;
 }
