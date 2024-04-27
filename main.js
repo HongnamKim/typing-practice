@@ -66,12 +66,13 @@ const clearTypingVariables = () => {
   correctCnt = 0;
   incorrectCnt = 0;
   quoteInput.rows = 1;
+  initialInputHeight = quoteInput.scrollHeight;
 };
 
 let quoteLength = 0;
 let quoteArray = [];
 
-let loadQuote = () => {
+const loadQuote = () => {
   const quoteIndex = Math.floor(Math.random() * sentences.length);
   const quote = sentences[quoteIndex][0];
   quoteLength = quote.length;
@@ -148,7 +149,6 @@ let initialInputHeight = quoteInput.scrollHeight;
 //quoteInput.rows = 2;
 
 const onInputChange = (event) => {
-  console.log(`${quoteInput.scrollHeight} ${initialInputHeight}`);
   if (quoteInput.scrollHeight > initialInputHeight) {
     initialInputHeight = quoteInput.scrollHeight;
     quoteInput.rows++;
@@ -199,8 +199,8 @@ const onInputChange = (event) => {
     } else {
       arrayQuote[i].classList.remove("none");
       arrayQuote[i].classList.add("incorrect");
-      console.log("wrong");
-      console.log(typedCharCount[i]);
+      // console.log("wrong");
+      // console.log(typedCharCount[i]);
       incorrectCnt++;
     }
   }
@@ -220,16 +220,16 @@ const onInputChange = (event) => {
     const typingCpm = sum(typedCharCount) / (currentTime / 60);
     wpmList.push(typingWpm);
     cpmList.push(typingCpm);
-    console.log(`average speed ${average(cpmList)}`);
+    // console.log(`average speed ${average(cpmList)}`);
 
     speedCheck.textContent = Math.round(typingCpm);
     infoCpm.textContent = `${Math.round(average(cpmList))}`;
 
     const typingAcc = (correctCnt / (correctCnt + incorrectCnt)) * 100;
     accList.push(typingAcc);
-    console.log(`quote length: ${quoteLength}`);
-    console.log(correctCnt, incorrectCnt);
-    console.log(typingAcc);
+    //console.log(`quote length: ${quoteLength}`);
+    //console.log(correctCnt, incorrectCnt);
+    //console.log(typingAcc);
     infoAcc.textContent = `${Math.round(average(accList))}`;
 
     typedQuoteCnt++;
