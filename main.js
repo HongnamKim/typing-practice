@@ -65,6 +65,7 @@ const clearTypingVariables = () => {
   typedCharCount = [];
   correctCnt = 0;
   incorrectCnt = 0;
+  quoteInput.rows = 1;
 };
 
 let quoteLength = 0;
@@ -142,13 +143,15 @@ let typedArray = [];
 
 //console.log(quoteInput.rows);
 
-const initialInputHeight = quoteInput.scrollHeight;
+let initialInputHeight = quoteInput.scrollHeight;
 
 //quoteInput.rows = 2;
 
 const onInputChange = (event) => {
+  console.log(`${quoteInput.scrollHeight} ${initialInputHeight}`);
   if (quoteInput.scrollHeight > initialInputHeight) {
-    quoteInput.rows = 2;
+    initialInputHeight = quoteInput.scrollHeight;
+    quoteInput.rows++;
   }
 
   //타이머 시작

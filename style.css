@@ -27,7 +27,7 @@ body {
   border: 1px solid black;
   width: 80%;
 
-  /*max-width: 1000px;*/
+  max-width: 1000px;
   display: flex;
   flex-direction: column;
   padding: 15px;
@@ -55,7 +55,7 @@ body {
 }
 
 .typing-info > div > span {
-  font-size: 1.5rem;
+  font-size: rem;
 }
 
 .typing-info-value {
