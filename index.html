@@ -11,8 +11,8 @@
     <script defer src="main.js"></script>
   </head>
   <body>
-    <div id="container">
-      <div class="timer" id="timer">0</div>
+    <div class="container">
+      <div class="speed-check" id="speedCheck">0</div>
       <div class="difficulty" id="difficulty">
         <span>속도 채점 난이도</span>
         <div class="difficulty-wpm-btn">
@@ -40,8 +40,10 @@
         <span class="typing-info-ACC" id="acc">ACC</span>
         <span class="typing-info-CNT" id="cnt">CNT</span>
       </div>
-      <div class="quote-display" id="quoteDisplay">Temporal quote</div>
-      <div class="qutoe-author" id="quoteAuthor">Temporal author</div>
+      <div id="quote-container">
+        <div class="quote-display" id="quoteDisplay">Temporal quote</div>
+        <div class="qutoe-author" id="quoteAuthor">Temporal author</div>
+      </div>
       <textarea
         class="quote-input"
         id="quoteInput"

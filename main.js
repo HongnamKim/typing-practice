@@ -1,6 +1,6 @@
 "use strict";
 
-const timer = document.getElementById("timer");
+const speedCheck = document.getElementById("speedCheck");
 const quoteDisplay = document.getElementById("quoteDisplay");
 const quoteAuthor = document.getElementById("quoteAuthor");
 const quoteInput = document.getElementById("quoteInput");
@@ -107,14 +107,14 @@ const speedCheckStart = (speedCheckSet) => {
 
 const getSpeed = () => {
   currentTime = (new Date() - startTime) / 1000;
-  //timer.innerText = currentTime;
-  timer.innerText = (sum(typedCharCount) * 60) / currentTime;
+  //speedCheck.innerText = currentTime;
+  speedCheck.innerText = Math.round((sum(typedCharCount) * 60) / currentTime);
 };
 
 const clearSpeedCheck = () => {
   clearInterval(speedInterval);
   speedCheckSet = true;
-  timer.innerText = "0";
+  speedCheck.innerText = "0";
 };
 
 const onESC = (event) => {
@@ -186,6 +186,8 @@ const onInputChange = (event) => {
     } else {
       arrayQuote[i].classList.remove("none");
       arrayQuote[i].classList.add("incorrect");
+      console.log("wrong");
+      console.log(typedCharCount[i]);
       incorrectCnt++;
     }
   }
@@ -199,7 +201,6 @@ const onInputChange = (event) => {
 
   //입력 완료 시 속도, 정확도 계산 후 다음 문장 출력
   if (quoteLength < userInput.length) {
-    console.log(typedArray);
     clearSpeedCheck();
 
     const typingWpm = quoteLength / (currentTime / 60);
