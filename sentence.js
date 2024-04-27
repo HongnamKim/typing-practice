@@ -1,6 +1,6 @@
-let krs;
+let sentences;
 
-krs = [
+sentences = [
   [
     "우리는 우물이 마르기 전까지 물의 중요성을 결코 알지 못한다.",
     "토마스 풀러",

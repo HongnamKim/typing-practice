@@ -20,16 +20,46 @@ body {
   align-items: center;
   height: 100vh;
   width: 100vw;
+  overflow-y: hidden;
 }
 
 .container {
-  border: 1px solid red;
-  width: 75%;
+  border: 1px solid black;
+  width: 80%;
 
-  max-width: 1000px;
+  /*max-width: 1000px;*/
   display: flex;
   flex-direction: column;
   padding: 15px;
+}
+
+.upper-container {
+  /* border: 1px solid green; */
+  margin: 1rem;
+}
+
+.speed-check {
+  font-size: 3rem;
+}
+
+#speedCheck {
+  margin-left: 3rem;
+}
+
+.typing-info {
+  display: flex;
+  justify-content: space-around;
+  /* border: 1px solid blue; */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.typing-info > div > span {
+  font-size: 2rem;
+}
+
+.typing-info-value {
+  margin-left: 2rem;
 }
 
 .none {
@@ -45,7 +75,13 @@ body {
 }
 
 .quote-display {
-  font-size: 25px;
+  font-size: 3rem;
+}
+
+.qutoe-author {
+  font-size: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .quote-input {
@@ -53,7 +89,9 @@ body {
   border-bottom: 1px solid black;
   width: 100%;
 
+  overflow-y: hidden;
+
   resize: none;
   outline: none;
-  font-size: 25px;
+  font-size: 3rem;
 }

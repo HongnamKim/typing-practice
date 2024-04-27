@@ -5,15 +5,15 @@ const quoteDisplay = document.getElementById("quoteDisplay");
 const quoteAuthor = document.getElementById("quoteAuthor");
 const quoteInput = document.getElementById("quoteInput");
 
-const accEasy = document.getElementById("accEasy");
-const accNormal = document.getElementById("accNormal");
-const accHard = document.getElementById("accHard");
+// const accEasy = document.getElementById("accEasy");
+// const accNormal = document.getElementById("accNormal");
+// const accHard = document.getElementById("accHard");
 
-const wpmEasy = document.getElementById("wpmEasy");
-const wpmNormal = document.getElementById("wpmNormal");
-const wpmHard = document.getElementById("wpmHard");
+// const wpmEasy = document.getElementById("wpmEasy");
+// const wpmNormal = document.getElementById("wpmNormal");
+// const wpmHard = document.getElementById("wpmHard");
 
-const infoWpm = document.getElementById("wpm");
+const infoCpm = document.getElementById("cpm");
 const infoAcc = document.getElementById("acc");
 const infoCnt = document.getElementById("cnt");
 
@@ -71,8 +71,8 @@ let quoteLength = 0;
 let quoteArray = [];
 
 let loadQuote = () => {
-  const quoteIndex = Math.floor(Math.random() * krs.length);
-  const quote = krs[quoteIndex][0];
+  const quoteIndex = Math.floor(Math.random() * sentences.length);
+  const quote = sentences[quoteIndex][0];
   quoteLength = quote.length;
 
   quoteDisplay.innerText = "";
@@ -88,7 +88,7 @@ let loadQuote = () => {
     quoteDisplay.appendChild(characterSpan);
   });
 
-  quoteAuthor.innerText = `-${krs[quoteIndex][1]}-`;
+  quoteAuthor.innerText = `-${sentences[quoteIndex][1]}-`;
 };
 
 let speedCheckSet = true;
@@ -140,7 +140,17 @@ let incorrectCnt = 0;
 let typedCharCount = [];
 let typedArray = [];
 
+//console.log(quoteInput.rows);
+
+const initialInputHeight = quoteInput.scrollHeight;
+
+//quoteInput.rows = 2;
+
 const onInputChange = (event) => {
+  if (quoteInput.scrollHeight > initialInputHeight) {
+    quoteInput.rows = 2;
+  }
+
   //타이머 시작
   speedCheckStart(speedCheckSet);
   speedCheckSet = false;
@@ -209,15 +219,20 @@ const onInputChange = (event) => {
     cpmList.push(typingCpm);
     console.log(`average speed ${average(cpmList)}`);
 
+    speedCheck.textContent = Math.round(typingCpm);
+    infoCpm.textContent = `${Math.round(average(cpmList))}`;
+
     const typingAcc = (correctCnt / (correctCnt + incorrectCnt)) * 100;
     accList.push(typingAcc);
     console.log(`quote length: ${quoteLength}`);
     console.log(correctCnt, incorrectCnt);
     console.log(typingAcc);
+    infoAcc.textContent = `${Math.round(average(accList))}`;
 
     typedQuoteCnt++;
-    infoCnt.innerText = `Count : ${typedQuoteCnt}`;
+    infoCnt.innerText = `${typedQuoteCnt}`;
 
+    quoteInput.rows = 1;
     loadQuote();
   } else if (userInput[userInput.length - 1] === "\n") {
     event.target.value = event.target.value.slice(
@@ -257,10 +272,10 @@ quoteInput.addEventListener("keydown", onESC);
 
 quoteInput.addEventListener("input", onInputChange);
 
-accEasy.addEventListener("click", onAccEasyClick);
-accNormal.addEventListener("click", onAccNormalClick);
-accHard.addEventListener("click", onAccHardClick);
+// accEasy.addEventListener("click", onAccEasyClick);
+// accNormal.addEventListener("click", onAccNormalClick);
+// accHard.addEventListener("click", onAccHardClick);
 
-wpmEasy.addEventListener("click", onWpmEasyClick);
-wpmNormal.addEventListener("click", onWpmNormalClick);
-wpmHard.addEventListener("click", onWpmHardClick);
+// wpmEasy.addEventListener("click", onWpmEasyClick);
+// wpmNormal.addEventListener("click", onWpmNormalClick);
+// wpmHard.addEventListener("click", onWpmHardClick);

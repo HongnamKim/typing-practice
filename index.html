@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -12,8 +12,13 @@
   </head>
   <body>
     <div class="container">
-      <div class="speed-check" id="speedCheck">0</div>
-      <div class="difficulty" id="difficulty">
+      <div class="upper-container">
+        <div class="speed-check-container">
+          <span class="speed-check">Current CPM</span>
+          <span class="speed-check" id="speedCheck">0</span>
+        </div>
+
+        <!-- <div class="difficulty" id="difficulty">
         <span>속도 채점 난이도</span>
         <div class="difficulty-wpm-btn">
           <input type="radio" name="difficulty-wpm-btn" id="wpmEasy" />
@@ -23,8 +28,9 @@
           <input type="radio" name="difficulty-wpm-btn" id="wpmHard" />
           <label for="hard">어려움</label>
         </div>
-      </div>
-      <div class="difficulty" id="difficulty">
+      </div> -->
+
+        <!-- <div class="difficulty" id="difficulty">
         <span>정확도 채점 난이도</span>
         <div class="difficulty-acc-btn">
           <input type="radio" name="difficulty-acc-btn" id="accEasy" />
@@ -34,11 +40,23 @@
           <input type="radio" name="difficulty-acc-btn" id="accHard" />
           <label for="hard">어려움</label>
         </div>
-      </div>
-      <div class="typing-info" id="typingInfo">
-        <span class="typing-info-WPM" id="wpm">WPM</span>
-        <span class="typing-info-ACC" id="acc">ACC</span>
-        <span class="typing-info-CNT" id="cnt">CNT</span>
+      </div> -->
+        <div class="typing-info" id="typingInfo">
+          <div>
+            <span class="typing-info-CPM">CPM</span>
+            <span class="typing-info-CPM typing-info-value" id="cpm">-</span>
+          </div>
+
+          <div>
+            <span class="typing-info-ACC">ACC</span>
+            <span class="typing-info-ACC typing-info-value" id="acc">-</span>
+          </div>
+
+          <div>
+            <span class="typing-info-CNT">CNT</span>
+            <span class="typing-info-CNT typing-info-value" id="cnt">-</span>
+          </div>
+        </div>
       </div>
       <div id="quote-container">
         <div class="quote-display" id="quoteDisplay">Temporal quote</div>
