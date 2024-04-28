@@ -33,10 +33,25 @@ const clearTypingVariables = () => {
 let quoteLength = 0;
 let quoteArray = [];
 
-const loadQuote = () => {
-  const quoteIndex = Math.floor(Math.random() * sentences.length);
-  const quote = sentences[quoteIndex][0];
-  //quoteInput.placeholder = quote;
+const shuffledSentences = sentences.sort(() => Math.random() - 0.5);
+
+let shuffledSentencesIndex = Math.floor(
+  Math.random() * shuffledSentences.length
+);
+
+const loadQuote = (arrowInput) => {
+  // 방향키 입력
+  if (arrowInput) {
+    if (arrowInput > 38) {
+      shuffledSentencesIndex++;
+    } else {
+      shuffledSentencesIndex--;
+    }
+  }
+
+  //const quoteIndex = Math.floor(Math.random() * sentences.length);
+  //const quote = sentences[quoteIndex][0];
+  const quote = shuffledSentences[shuffledSentencesIndex][0];
   quoteLength = quote.length;
 
   quoteDisplay.innerText = "";
@@ -56,7 +71,7 @@ const loadQuote = () => {
     quoteDisplay.appendChild(characterSpan);
   });
 
-  quoteAuthor.innerText = `-${sentences[quoteIndex][1]}-`;
+  quoteAuthor.innerText = `-${shuffledSentences[shuffledSentencesIndex][1]}-`;
 };
 
 let speedCheckSet = true;
@@ -93,7 +108,12 @@ const clearSpeedCheck = () => {
 const onKeyDown = (event) => {
   // 방향키 입력
   if (37 <= event.keyCode && event.keyCode <= 40) {
-    loadQuote();
+    // 위 : 38
+    // 아래 : 40
+    // 좌 : 37
+    // 우 : 39
+
+    loadQuote(event.keyCode);
     return;
   }
 
@@ -109,7 +129,7 @@ const onKeyDown = (event) => {
       quoteCharacter.classList.remove("incorrect");
       quoteCharacter.classList.add("none");
       if (darkModeButton.checked) {
-        arrayQuote[i].classList.add("dark");
+        quoteCharacter.classList.add("dark");
       }
     });
   }
@@ -233,6 +253,7 @@ const onInputChange = (event) => {
     infoCnt.innerText = `${typedQuoteCnt}`;
 
     quoteInput.rows = 1;
+    shuffledSentencesIndex++;
     loadQuote();
   } else if (userInput[userInput.length - 1] === "\n") {
     event.target.value = event.target.value.slice(
@@ -244,7 +265,7 @@ const onInputChange = (event) => {
 
 loadQuote();
 
-const c = () => {
+const toggleCurrentCpm = () => {
   showCurrentCpm = !showCurrentCpm;
 
   if (showCurrentCpm) {
@@ -254,11 +275,16 @@ const c = () => {
   }
 };
 
-currentCpm.addEventListener("change", c);
+currentCpm.addEventListener("change", toggleCurrentCpm);
 
 quoteInput.addEventListener("keydown", onKeyDown);
 
 quoteInput.addEventListener("input", onInputChange);
+
+// 붙여넣기 방지
+quoteInput.addEventListener("paste", (event) => {
+  event.preventDefault();
+});
 
 // const accEasy = document.getElementById("accEasy");
 // const accNormal = document.getElementById("accNormal");
