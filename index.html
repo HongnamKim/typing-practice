@@ -7,10 +7,16 @@
     <meta name="keyword" content="typing-practice, 타자연습, 짧은문장" />
     <meta name="description" content="짧은 문장 타자 연습" />
     <title>Typing Practice</title>
-    <link rel="stylesheet" href="style.css" />
+
     <link rel="icon" href="TPfavi.png" type="image/x-icon" />
 
+    <script
+      src="https://kit.fontawesome.com/d6d812d2c1.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="style.css" />
     <script defer src="koreanChar.js"></script>
+    <script defer src="ConfigConstant.js"></script>
     <script defer src="utils.js"></script>
     <script defer src="dark.js"></script>
     <script defer src="sentence.js"></script>
@@ -32,8 +38,8 @@
       </div>
 
       <div class="title-right">
-        <input type="checkbox" id="dark-mode" />
-        <label for="dark-mode" class="dark-mode-text">다크 모드</label>
+        <i class="fa-regular fa-sun fa-xl dark-mode-icon" id="icon-sun"></i>
+        <i class="fa-regular fa-moon fa-xl dark-mode-icon" id="icon-moon"></i>
       </div>
     </div>
 
@@ -41,35 +47,18 @@
       <div class="speed-check-container">
         <input type="checkbox" id="currentCPM" checked />
         <label for="currentCPM" class="currentCPM-text">실시간 타자 속도</label>
-        <div>
-          <span class="speed-check" id="speed-check-text">Current CPM</span>
-          <span class="speed-check" id="speedCheck">0</span>
+        <div class="CPM-container">
+          <div>
+            <span class="speed-check" id="speed-check-text">Current CPM</span>
+            <span class="speed-check" id="speedCheck">0</span>
+          </div>
+          <div>
+            <span class="speed-check" id="max-speed-text">Highest CPM</span>
+            <span class="speed-check" id="maxSpeed">0</span>
+          </div>
         </div>
       </div>
 
-      <!-- <div class="difficulty" id="difficulty">
-        <span>속도 채점 난이도</span>
-        <div class="difficulty-wpm-btn">
-          <input type="radio" name="difficulty-wpm-btn" id="wpmEasy" />
-          <label for="easy">쉬움</label>
-          <input type="radio" name="difficulty-wpm-btn" id="wpmNormal" />
-          <label for="normal">보통</label>
-          <input type="radio" name="difficulty-wpm-btn" id="wpmHard" />
-          <label for="hard">어려움</label>
-        </div>
-      </div> -->
-
-      <!-- <div class="difficulty" id="difficulty">
-        <span>정확도 채점 난이도</span>
-        <div class="difficulty-acc-btn">
-          <input type="radio" name="difficulty-acc-btn" id="accEasy" />
-          <label for="easy">쉬움</label>
-          <input type="radio" name="difficulty-acc-btn" id="accNormal" />
-          <label for="normal">보통</label>
-          <input type="radio" name="difficulty-acc-btn" id="accHard" />
-          <label for="hard">어려움</label>
-        </div>
-      </div> -->
       <div class="typing-info" id="typingInfo">
         <div>
           <span class="typing-info-CPM">CPM</span>

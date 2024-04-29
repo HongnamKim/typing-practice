@@ -52,6 +52,19 @@ body.dark {
   align-items: center;
 }
 
+.dark-mode-icon {
+  /* width: 2rem; */
+  color: black;
+}
+
+.dark-mode-icon.dark {
+  color: white;
+}
+
+.display-none {
+  display: none;
+}
+
 .dark-mode-text {
   font-size: 1.4rem;
 }
@@ -71,7 +84,7 @@ body.dark {
   padding: 1rem;
   /*padding-bottom: 2rem;*/
   margin-bottom: 2rem;
-  background-color: #e4e4e7;
+  background-color: #f4f4f5;
 }
 
 .container.dark {
@@ -81,6 +94,11 @@ body.dark {
 .upper-container {
   /* border: 1px solid green; */
   margin: 1rem;
+}
+
+.CPM-container {
+  display: flex;
+  justify-content: space-between;
 }
 
 .currentCPM-text.dark {
@@ -96,6 +114,10 @@ body.dark {
 }
 
 #speedCheck {
+  margin-left: 3rem;
+}
+
+#maxSpeed {
   margin-left: 3rem;
 }
 
@@ -165,13 +187,14 @@ body.dark {
   border: none;
   border-bottom: 0.2rem solid #6d28d9;
   width: 100%;
+  padding: 0%;
 
   overflow-y: hidden;
 
   resize: none;
   outline: none;
   font-size: 2rem;
-  background-color: #e4e4e7;
+  background-color: #f4f4f5;
 }
 
 .quote-input.dark {

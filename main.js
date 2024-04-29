@@ -1,6 +1,7 @@
 "use strict";
 
 const speedCheck = document.getElementById("speedCheck");
+const maxSpeed = document.getElementById("maxSpeed");
 const quoteDisplay = document.getElementById("quoteDisplay");
 const quoteAuthor = document.getElementById("quoteAuthor");
 const quoteInput = document.getElementById("quoteInput");
@@ -62,7 +63,7 @@ const loadQuote = (arrowInput) => {
   quote.split("").forEach((character) => {
     const characterSpan = document.createElement("span");
     characterSpan.classList.add("none");
-    if (darkModeButton.checked) {
+    if (isDarkMode) {
       characterSpan.classList.add("dark");
     }
 
@@ -76,9 +77,27 @@ const loadQuote = (arrowInput) => {
 
 let speedCheckSet = true;
 let speedInterval;
-let showCurrentCpm = currentCpm.checked;
+let showCurrentCpm;
 let startTime;
 let currentTime;
+
+const checkCurrentCpmConfig = () => {
+  const storageCurrentCpm = storage.getItem(Storage_Current_Cpm);
+
+  // 기존 설정 값 없을 경우
+  if (storageCurrentCpm === null) {
+    showCurrentCpm = true;
+    storage.setItem(Storage_Current_Cpm, "true");
+  } else {
+    // 기존 설정 값 있을 경우
+    showCurrentCpm = storageCurrentCpm === "true";
+    currentCpm.checked = showCurrentCpm;
+
+    currentCpmText.textContent = showCurrentCpm ? "Current CPM" : "Last CPM";
+  }
+};
+
+checkCurrentCpmConfig();
 
 const speedCheckStart = (speedCheckSet) => {
   if (!speedCheckSet) {
@@ -128,7 +147,7 @@ const onKeyDown = (event) => {
       quoteCharacter.classList.remove("correct");
       quoteCharacter.classList.remove("incorrect");
       quoteCharacter.classList.add("none");
-      if (darkModeButton.checked) {
+      if (isDarkMode) {
         quoteCharacter.classList.add("dark");
       }
     });
@@ -193,24 +212,24 @@ const onInputChange = (event) => {
     if (userInput[i] === arrayQuote[i].innerText) {
       arrayQuote[i].classList.remove("none");
 
-      if (darkModeButton.checked) {
+      if (isDarkMode) {
         arrayQuote[i].classList.remove("dark");
       }
 
       arrayQuote[i].classList.add("correct");
 
-      if (darkModeButton.checked) {
+      if (isDarkMode) {
         arrayQuote[i].classList.add("dark");
       }
 
       correctCnt++;
     } else {
       arrayQuote[i].classList.remove("none");
-      if (darkModeButton.checked) {
+      if (isDarkMode) {
         arrayQuote[i].classList.remove("dark");
       }
       arrayQuote[i].classList.add("incorrect");
-      if (darkModeButton.checked) {
+      if (isDarkMode) {
         arrayQuote[i].classList.add("dark");
       }
       // console.log("wrong");
@@ -224,7 +243,7 @@ const onInputChange = (event) => {
     arrayQuote[i].classList.remove("correct");
     arrayQuote[i].classList.remove("incorrect");
     arrayQuote[i].classList.add("none");
-    if (darkModeButton.checked) {
+    if (isDarkMode) {
       arrayQuote[i].classList.add("dark");
     }
   }
@@ -241,6 +260,8 @@ const onInputChange = (event) => {
 
     speedCheck.textContent = Math.round(typingCpm);
     infoCpm.textContent = `${Math.round(average(cpmList))}`;
+
+    maxSpeed.textContent = `${Math.round(max(cpmList))}`;
 
     const typingAcc = (correctCnt / (correctCnt + incorrectCnt)) * 100;
     accList.push(typingAcc);
@@ -270,8 +291,10 @@ const toggleCurrentCpm = () => {
 
   if (showCurrentCpm) {
     currentCpmText.textContent = "Current CPM";
+    storage.setItem(Storage_Current_Cpm, "true");
   } else {
     currentCpmText.textContent = "Last CPM";
+    storage.setItem(Storage_Current_Cpm, "false");
   }
 };
 
@@ -285,42 +308,3 @@ quoteInput.addEventListener("input", onInputChange);
 quoteInput.addEventListener("paste", (event) => {
   event.preventDefault();
 });
-
-// const accEasy = document.getElementById("accEasy");
-// const accNormal = document.getElementById("accNormal");
-// const accHard = document.getElementById("accHard");
-
-// const wpmEasy = document.getElementById("wpmEasy");
-// const wpmNormal = document.getElementById("wpmNormal");
-// const wpmHard = document.getElementById("wpmHard");
-
-//0 = easy, 1 = normal, 2 = hard
-//let accDifficulty = 0;
-//let wpmDifficulty = 0;
-
-// function onAccEasyClick() {
-//   accDifficulty = 0;
-// }
-// function onAccNormalClick() {
-//   accDifficulty = 1;
-// }
-// function onAccHardClick() {
-//   accDifficulty = 2;
-// }
-// function onWpmEasyClick() {
-//   wpmDifficulty = 0;
-// }
-// function onWpmNormalClick() {
-//   wpmDifficulty = 1;
-// }
-// function onWpmHardClick() {
-//   wpmDifficulty = 2;
-// }
-
-// accEasy.addEventListener("click", onAccEasyClick);
-// accNormal.addEventListener("click", onAccNormalClick);
-// accHard.addEventListener("click", onAccHardClick);
-
-// wpmEasy.addEventListener("click", onWpmEasyClick);
-// wpmNormal.addEventListener("click", onWpmNormalClick);
-// wpmHard.addEventListener("click", onWpmHardClick);
