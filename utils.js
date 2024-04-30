@@ -10,6 +10,17 @@ const average = (list) => {
   return sum(list) / list.length;
 };
 
+const max = (list) => {
+  let maxValue = 0;
+  list.forEach((item) => {
+    if (item > maxValue) {
+      maxValue = item;
+    }
+  });
+
+  return maxValue;
+};
+
 const koreanSeparator = (character) => {
   const koreanStart = 44032;
   const koreanEnd = 55203;
