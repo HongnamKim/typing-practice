@@ -20,6 +20,7 @@
     <script defer src="utils.js"></script>
     <script defer src="dark.js"></script>
     <script defer src="sentence.js"></script>
+    <script defer src="popup.js"></script>
     <script defer src="main.js"></script>
 
     <script>
@@ -32,6 +33,25 @@
     <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body id="body">
+    <div class="pop-up-background display-none" id="pop-up-background"></div>
+    <div class="pop-up display-none" id="pop-up">
+      <h1 class="pop-up-title">Typing Practice</h1>
+      <div class="pop-up-info pop-up-avg-cpm">
+        <span>Avg CPM</span>
+        <span id="pop-up-avg-cpm">0</span>
+      </div>
+      <div class="pop-up-info pop-up-max-cpm">
+        <span>Max CPM</span>
+        <span id="pop-up-max-cpm">0</span>
+      </div>
+      <div class="pop-up-info pop-up-acc">
+        <span>ACC</span>
+        <span id="pop-up-acc">0</span>
+      </div>
+      <div class="pop-up-close">
+        <span>press ESC to continue</span>
+      </div>
+    </div>
     <div class="title">
       <div class="title-left">
         <h1 class="title-title">Typing Practice</h1>
@@ -45,8 +65,25 @@
 
     <div class="container upper-container">
       <div class="speed-check-container">
-        <input type="checkbox" id="currentCPM" checked />
-        <label for="currentCPM" class="currentCPM-text">실시간 타자 속도</label>
+        <div class="typing-info-settings">
+          <div>
+            <input type="checkbox" id="currentCPM" checked />
+            <label for="currentCPM" class="currentCPM-text"
+              >실시간 타자 속도</label
+            >
+          </div>
+
+          <div class="result-period-container" id="result-period-container">
+            <button class="result-period-btn" id="result-period-btn-down">
+              <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <span class="result-period-value" id="result-period-value">5</span>
+            <button class="result-period-btn" id="result-period-btn-up">
+              <i class="fa-solid fa-chevron-up"></i>
+            </button>
+          </div>
+        </div>
+
         <div class="CPM-container">
           <div>
             <span class="speed-check" id="speed-check-text">Current CPM</span>

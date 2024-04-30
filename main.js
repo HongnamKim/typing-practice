@@ -9,6 +9,10 @@ const quoteInput = document.getElementById("quoteInput");
 const currentCpm = document.getElementById("currentCPM");
 const currentCpmText = document.getElementById("speed-check-text");
 
+const resultPeriodDown = document.getElementById("result-period-btn-down");
+const resultPeriodUp = document.getElementById("result-period-btn-up");
+const resultPeriodValue = document.getElementById("result-period-value");
+
 const infoCpm = document.getElementById("cpm");
 const infoAcc = document.getElementById("acc");
 const infoCnt = document.getElementById("cnt");
@@ -138,6 +142,11 @@ const onKeyDown = (event) => {
 
   // ESC 입력
   if (event.keyCode === 27) {
+    if (showPopUp) {
+      closePopUp();
+      return;
+    }
+
     clearSpeedCheck();
     quoteInput.value = null;
     clearTypingVariables();
@@ -165,6 +174,11 @@ let typedArray = [];
 let initialInputHeight = quoteInput.scrollHeight;
 
 const onInputChange = (event) => {
+  // 팝업 노출 시 input 받지 않음
+  if (showPopUp) {
+    return;
+  }
+
   // textarea row 변경
   if (quoteInput.scrollHeight > initialInputHeight) {
     initialInputHeight = quoteInput.scrollHeight;
@@ -276,6 +290,21 @@ const onInputChange = (event) => {
     quoteInput.rows = 1;
     shuffledSentencesIndex++;
     loadQuote();
+
+    if (resultPeriodIndex === resultPeriods.length - 1) {
+      return;
+    }
+
+    // result 주기에 도달
+    if (typedQuoteCnt % resultPeriods[resultPeriodIndex] === 0) {
+      const resultCpm = cpmList.slice(
+        cpmList.length - resultPeriods[resultPeriodIndex]
+      );
+      const resultAcc = accList.slice(
+        accList.length - resultPeriods[resultPeriodIndex]
+      );
+      openPopUp(resultCpm, resultAcc);
+    }
   } else if (userInput[userInput.length - 1] === "\n") {
     event.target.value = event.target.value.slice(
       0,
@@ -285,6 +314,9 @@ const onInputChange = (event) => {
 };
 
 loadQuote();
+
+// Test
+//openPopUp();
 
 const toggleCurrentCpm = () => {
   showCurrentCpm = !showCurrentCpm;
@@ -298,11 +330,53 @@ const toggleCurrentCpm = () => {
   }
 };
 
+const resultPeriods = [5, 10, 15, Infinity];
+let resultPeriodIndex =
+  storage.getItem(Storage_Result_Period) === null
+    ? 0
+    : parseInt(storage.getItem(Storage_Result_Period));
+
+resultPeriodValue.textContent =
+  resultPeriodIndex === resultPeriods.length - 1
+    ? "∞"
+    : resultPeriods[resultPeriodIndex];
+
+const resultPeriodValueChange = (event) => {
+  if (event.target.classList.contains("fa-chevron-up")) {
+    console.log("up");
+    resultPeriodIndex++;
+    if (resultPeriodIndex === resultPeriods.length) {
+      resultPeriodIndex -= resultPeriods.length;
+    }
+
+    storage.setItem(Storage_Result_Period, resultPeriodIndex);
+
+    resultPeriodValue.textContent =
+      resultPeriodIndex === resultPeriods.length - 1
+        ? "∞"
+        : resultPeriods[resultPeriodIndex];
+  } else {
+    console.log("down");
+    resultPeriodIndex--;
+    if (resultPeriodIndex < 0) {
+      resultPeriodIndex += resultPeriods.length;
+    }
+    storage.setItem(Storage_Result_Period, resultPeriodIndex);
+    resultPeriodValue.textContent =
+      resultPeriodIndex === resultPeriods.length - 1
+        ? "∞"
+        : resultPeriods[resultPeriodIndex];
+  }
+};
+
 currentCpm.addEventListener("change", toggleCurrentCpm);
 
 quoteInput.addEventListener("keydown", onKeyDown);
 
 quoteInput.addEventListener("input", onInputChange);
+
+resultPeriodDown.addEventListener("click", resultPeriodValueChange);
+resultPeriodUp.addEventListener("click", resultPeriodValueChange);
 
 // 붙여넣기 방지
 quoteInput.addEventListener("paste", (event) => {

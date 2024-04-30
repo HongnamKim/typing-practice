@@ -1,20 +1,41 @@
-const body = document.getElementById("body");
+const popUpBg = document.getElementById("pop-up-background");
 const popUp = document.getElementById("pop-up");
 
-let showPopUp = true;
+const popUpAvgCpm = document.getElementById("pop-up-avg-cpm");
+const popUpMaxCpm = document.getElementById("pop-up-max-cpm");
+const popUpAcc = document.getElementById("pop-up-acc");
 
-const closePopUp = (event) => {
-  console.dir(event);
+let showPopUp = false;
+
+const openPopUp = (resultCpm, resultAcc) => {
+  //console.log("pop up");
+  showPopUp = true;
+
+  popUpAvgCpm.textContent = `${Math.round(average(resultCpm))}`;
+  popUpMaxCpm.textContent = `${Math.round(max(resultCpm))}`;
+  popUpAcc.textContent = `${Math.round(average(resultAcc))}`;
+
+  //console.log(`cpm ${average(resultCpm)}`);
+  //console.log(`highest ${max(resultCpm)}`);
+  //console.log(`acc ${average(resultAcc)}`);
+
+  popUp.classList.remove("display-none");
+  popUpBg.classList.remove("display-none");
+};
+
+const closePopUp = () => {
+  //console.dir(event);
   //console.log(event.target.tagName);
 
-  if (event.type === "click") {
-    if (event.target.tagName === "BODY" && showPopUp) {
-      console.log("closePopUp");
-      popUp.classList.add("display-none");
-    } else {
-      console.log("refuse closePopUp");
-    }
+  if (showPopUp) {
+    console.log("closePopUp");
+    popUp.classList.add("display-none");
+    popUpBg.classList.add("display-none");
+    showPopUp = false;
+  } else {
+    console.log("refuse closePopUp");
   }
 };
 
-body.addEventListener("click", closePopUp);
+popUpBg.addEventListener("click", closePopUp);
+//popUpBg.addEventListener("keydown", closePopUp);
