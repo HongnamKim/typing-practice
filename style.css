@@ -21,8 +21,62 @@ body {
   align-items: center;
   height: 100vh;
   width: 100vw;
+  overflow-x: hidden;
   overflow-y: hidden;
+  margin: 0;
   background-color: white;
+}
+
+.pop-up-background {
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 70%;
+}
+
+.pop-up {
+  position: absolute;
+  background-color: white;
+  width: 25rem;
+  height: 25rem;
+  border-radius: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.pop-up.dark {
+  background-color: #18181b;
+}
+
+.pop-up-title {
+  font-size: 2rem;
+  color: #6d28d9;
+  margin-bottom: 3rem;
+}
+
+.pop-up-info {
+  display: flex;
+  justify-content: space-between;
+
+  margin-bottom: 2rem;
+  font-size: 1.7rem;
+}
+
+.pop-up-info.dark {
+  color: white;
+}
+
+.pop-up-close {
+  margin-top: 2rem;
+}
+
+.pop-up-close.dark {
+  color: white;
 }
 
 .spacer {
@@ -94,6 +148,43 @@ body.dark {
 .upper-container {
   /* border: 1px solid green; */
   margin: 1rem;
+}
+
+.typing-info-settings {
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.result-period-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.result-period-btn {
+  border: none;
+  background: none;
+  color: black;
+}
+
+.result-period-btn:hover {
+  cursor: pointer;
+}
+
+.result-period-btn.dark {
+  color: white;
+}
+
+.result-period-value {
+  font-size: 2rem;
+}
+
+.result-period-value.dark {
+  color: white;
 }
 
 .CPM-container {
