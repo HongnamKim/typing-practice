@@ -19,7 +19,7 @@ const infoCnt = document.getElementById("cnt");
 
 const contact = document.getElementById("contact");
 
-contact.textContent = "Contact - 카카오톡 오픈 프로필";
+contact.textContent = "Contact";
 contact.setAttribute("href", "https://open.kakao.com/o/sMHDrAog");
 
 const wpmList = [];
@@ -32,7 +32,8 @@ const clearTypingVariables = () => {
   correctCnt = 0;
   incorrectCnt = 0;
   quoteInput.rows = 1;
-  initialInputHeight = quoteInput.scrollHeight;
+  //initialInputHeight = quoteInput.scrollHeight;
+  initializeQuoteInput(quoteInput);
 };
 
 let quoteLength = 0;
@@ -119,7 +120,7 @@ const getSpeed = () => {
   if (!showCurrentCpm) {
     return;
   }
-  speedCheck.innerText = Math.round((sum(typedCharCount) * 60) / currentTime);
+  speedCheck.innerText = Math.round((sum(typedCharCount) * 60) / currentTime).toString();
 };
 
 const clearSpeedCheck = () => {
@@ -171,7 +172,33 @@ let incorrectCnt = 0;
 let typedCharCount = [];
 let typedArray = [];
 
-let initialInputHeight = quoteInput.scrollHeight;
+//let initialInputHeight = quoteInput.scrollHeight;
+
+const  initializeQuoteInput = (quoteInput) => {
+  quoteInput.baseScrollHeight = quoteInput.scrollHeight;
+  quoteInput.rows = 1;
+  //console.log(window.getComputedStyle(quoteInput).lineHeight);
+  //quoteInput.lineHeight = parseInt(window.getComputedStyle(quoteInput).lineHeight, 10);
+}
+
+initializeQuoteInput(quoteInput);
+
+const adjustQuoteInputRows = (quoteInput) => {
+  quoteInput.rows = 1;
+  //console.log(`base height: ${quoteInput.baseScrollHeight}`);
+  //console.log(`scroll height: ${quoteInput.scrollHeight}`);
+  //console.log(`line height: ${quoteInput}`);
+  //console.dir(quoteInput);
+
+  const userAgent = navigator.userAgent.toLowerCase();
+  //console.log(userAgent.indexOf('firefox'));
+  //console.log(userAgent.indexOf('chrome'));
+
+  const rows = quoteInput.scrollHeight / quoteInput.baseScrollHeight
+
+  quoteInput.rows = userAgent.indexOf('firefox') > -1 ? Math.floor(rows) : Math.ceil(rows)
+
+}
 
 const onInputChange = (event) => {
   // 팝업 노출 시 input 받지 않음
@@ -179,11 +206,6 @@ const onInputChange = (event) => {
     return;
   }
 
-  // textarea row 변경
-  if (quoteInput.scrollHeight > initialInputHeight) {
-    initialInputHeight = quoteInput.scrollHeight;
-    quoteInput.rows++;
-  }
 
   //타이머 시작
   speedCheckStart(speedCheckSet);
@@ -215,8 +237,8 @@ const onInputChange = (event) => {
     clearTypingVariables();
   }
 
-  const checklength = userInput.length - 1;
-  for (let i = 0; i < checklength; i++) {
+  const checkLength = userInput.length - 1;
+  for (let i = 0; i < checkLength; i++) {
     if (
       Array.from(arrayQuote[i].classList).includes("correct") ||
       Array.from(arrayQuote[i].classList).includes("incorrect")
@@ -261,6 +283,8 @@ const onInputChange = (event) => {
       arrayQuote[i].classList.add("dark");
     }
   }
+
+  adjustQuoteInputRows(quoteInput);
 
   //입력 완료 시 속도, 정확도 계산 후 다음 문장 출력
   if (quoteLength < userInput.length) {
@@ -315,9 +339,6 @@ const onInputChange = (event) => {
 
 loadQuote();
 
-// Test
-//openPopUp();
-
 const toggleCurrentCpm = () => {
   showCurrentCpm = !showCurrentCpm;
 
@@ -343,7 +364,7 @@ resultPeriodValue.textContent =
 
 const resultPeriodValueChange = (event) => {
   if (event.target.classList.contains("fa-chevron-up")) {
-    console.log("up");
+    //console.log("up");
     resultPeriodIndex++;
     if (resultPeriodIndex === resultPeriods.length) {
       resultPeriodIndex -= resultPeriods.length;
@@ -356,7 +377,7 @@ const resultPeriodValueChange = (event) => {
         ? "∞"
         : resultPeriods[resultPeriodIndex];
   } else {
-    console.log("down");
+    //console.log("down");
     resultPeriodIndex--;
     if (resultPeriodIndex < 0) {
       resultPeriodIndex += resultPeriods.length;

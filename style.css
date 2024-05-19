@@ -90,6 +90,7 @@ body.dark {
 .title {
   width: 80%;
   max-width: 1000px;
+  min-width: 600px;
 
   display: flex;
   align-items: center;
@@ -133,6 +134,7 @@ body.dark {
   border-radius: 1rem;
 
   max-width: 1000px;
+  min-width: 600px;
   display: flex;
   flex-direction: column;
   padding: 1rem;
@@ -180,7 +182,7 @@ body.dark {
 }
 
 .result-period-value {
-  font-size: 2rem;
+  font-size: 1.8rem;
 }
 
 .result-period-value.dark {
@@ -197,7 +199,7 @@ body.dark {
 }
 
 .speed-check {
-  font-size: 2rem;
+  font-size: 1.6rem;
 }
 
 .speed-check.dark {
@@ -221,11 +223,11 @@ body.dark {
 }
 
 .typing-info > div > span {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 }
 
 .typing-info > div > span.dark {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   color: white;
 }
 
@@ -258,7 +260,9 @@ body.dark {
 }
 
 .quote-display {
-  font-size: 2rem;
+  font-size: 1.6rem;
+
+  margin-bottom: 1.5rem;
 }
 
 .qutoe-author {
@@ -267,7 +271,7 @@ body.dark {
 }
 
 .qutoe-author-text {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 }
 
 .qutoe-author-text.dark {
@@ -278,13 +282,14 @@ body.dark {
   border: none;
   border-bottom: 0.2rem solid #6d28d9;
   width: 100%;
+
   padding: 0%;
 
   overflow-y: hidden;
 
   resize: none;
   outline: none;
-  font-size: 2rem;
+  font-size: 1.6rem;
   background-color: #f4f4f5;
 }
 
