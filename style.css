@@ -257,17 +257,19 @@ body.dark {
 
 .bottom-container {
   padding: 2rem;
+  padding-top: 1rem;
 }
 
 .quote-display {
   font-size: 1.6rem;
-
   margin-bottom: 1.5rem;
 }
 
 .qutoe-author {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  /* margin-top: 1rem; */
+  margin-bottom: 0.5rem;
+  display: flex;
+  flex-direction: row-reverse;
 }
 
 .qutoe-author-text {
