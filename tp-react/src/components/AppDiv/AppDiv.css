@@ -1,0 +1,16 @@
+.background {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    margin: 0;
+    background-color: white;
+}
+
+.dark {
+    background-color: #18181b;
+}

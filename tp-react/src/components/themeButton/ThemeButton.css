@@ -1,0 +1,17 @@
+.dark-icon {
+    color: white;
+    background-color: black;
+}
+
+.light-icon {
+    color: black;
+
+}
+
+.theme-icon {
+font-size: 1rem;
+}
+
+.theme-icon:hover {
+    cursor: pointer;
+}
