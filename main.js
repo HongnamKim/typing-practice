@@ -1,5 +1,7 @@
 "use strict";
 
+console.log("commit test");
+
 const speedCheck = document.getElementById("speedCheck");
 const maxSpeed = document.getElementById("maxSpeed");
 const quoteDisplay = document.getElementById("quoteDisplay");
@@ -42,7 +44,7 @@ let quoteArray = [];
 const shuffledSentences = sentences.sort(() => Math.random() - 0.5);
 
 let shuffledSentencesIndex = Math.floor(
-  Math.random() * shuffledSentences.length
+  Math.random() * shuffledSentences.length,
 );
 
 const loadQuote = (arrowInput) => {
@@ -120,7 +122,9 @@ const getSpeed = () => {
   if (!showCurrentCpm) {
     return;
   }
-  speedCheck.innerText = Math.round((sum(typedCharCount) * 60) / currentTime).toString();
+  speedCheck.innerText = Math.round(
+    (sum(typedCharCount) * 60) / currentTime,
+  ).toString();
 };
 
 const clearSpeedCheck = () => {
@@ -174,12 +178,12 @@ let typedArray = [];
 
 //let initialInputHeight = quoteInput.scrollHeight;
 
-const  initializeQuoteInput = (quoteInput) => {
+const initializeQuoteInput = (quoteInput) => {
   quoteInput.baseScrollHeight = quoteInput.scrollHeight;
   quoteInput.rows = 1;
   //console.log(window.getComputedStyle(quoteInput).lineHeight);
   //quoteInput.lineHeight = parseInt(window.getComputedStyle(quoteInput).lineHeight, 10);
-}
+};
 
 initializeQuoteInput(quoteInput);
 
@@ -194,18 +198,17 @@ const adjustQuoteInputRows = (quoteInput) => {
   //console.log(userAgent.indexOf('firefox'));
   //console.log(userAgent.indexOf('chrome'));
 
-  const rows = quoteInput.scrollHeight / quoteInput.baseScrollHeight
+  const rows = quoteInput.scrollHeight / quoteInput.baseScrollHeight;
 
-  quoteInput.rows = userAgent.indexOf('firefox') > -1 ? Math.floor(rows) : Math.ceil(rows)
-
-}
+  quoteInput.rows =
+    userAgent.indexOf("firefox") > -1 ? Math.floor(rows) : Math.ceil(rows);
+};
 
 const onInputChange = (event) => {
   // 팝업 노출 시 input 받지 않음
   if (showPopUp) {
     return;
   }
-
 
   //타이머 시작
   speedCheckStart(speedCheckSet);
@@ -322,17 +325,17 @@ const onInputChange = (event) => {
     // result 주기에 도달
     if (typedQuoteCnt % resultPeriods[resultPeriodIndex] === 0) {
       const resultCpm = cpmList.slice(
-        cpmList.length - resultPeriods[resultPeriodIndex]
+        cpmList.length - resultPeriods[resultPeriodIndex],
       );
       const resultAcc = accList.slice(
-        accList.length - resultPeriods[resultPeriodIndex]
+        accList.length - resultPeriods[resultPeriodIndex],
       );
       openPopUp(resultCpm, resultAcc);
     }
   } else if (userInput[userInput.length - 1] === "\n") {
     event.target.value = event.target.value.slice(
       0,
-      event.target.value.length - 1
+      event.target.value.length - 1,
     );
   }
 };
