@@ -1,15 +1,15 @@
-.dark-icon {
+.theme-icon-dark {
     color: white;
-    background-color: black;
+
 }
 
-.light-icon {
+.theme-icon-light {
     color: black;
-
 }
 
 .theme-icon {
-font-size: 1rem;
+    font-size: 1rem;
+    background: none;
 }
 
 .theme-icon:hover {

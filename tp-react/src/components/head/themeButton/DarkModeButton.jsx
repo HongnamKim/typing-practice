@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { ThemeContext } from "../../Context/ThemeContext";
+import { ThemeContext } from "../../../Context/ThemeContext";
 import "./ThemeButton.css";
 import { FaRegSun, FaRegMoon } from "react-icons/fa";
-import { Storage_Dark_Mode } from "../../utils/ConfigConstant";
+import { Storage_Dark_Mode } from "../../../utils/ConfigConstant";
 
 const DarkModeButton = () => {
   const { isDark, setIsDark } = useContext(ThemeContext);
@@ -14,9 +14,15 @@ const DarkModeButton = () => {
   };
 
   return isDark ? (
-    <FaRegMoon onClick={handleDarkMode} className={"theme-icon dark-icon"} />
+    <FaRegMoon
+      onClick={handleDarkMode}
+      className={"theme-icon theme-icon-dark"}
+    />
   ) : (
-    <FaRegSun onClick={handleDarkMode} className={"theme-icon light-icon"} />
+    <FaRegSun
+      onClick={handleDarkMode}
+      className={"theme-icon theme-icon-light"}
+    />
   );
 };
 

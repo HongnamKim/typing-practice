@@ -1,16 +1,19 @@
 import { useContext } from "react";
 import { SettingContext } from "../../../Context/SettingContext";
-import { Storage_Current_Cpm } from "../../../utils/ConfigConstant";
+import { Storage_Display_Cpm } from "../../../utils/ConfigConstant";
 import { ThemeContext } from "../../../Context/ThemeContext";
-import "./ToggleCurrentCpm.css";
+import "./ToggleDisplayCpm.css";
 
-const ToggleCurrentCpm = () => {
-  const { currentCPM, setCurrentCPM } = useContext(SettingContext);
+const ToggleDisplayCpm = () => {
+  const { displayCpm, setDisplayCpm } = useContext(SettingContext);
   const { isDark } = useContext(ThemeContext);
 
   const handleCurrentCPM = () => {
-    localStorage.setItem(Storage_Current_Cpm, (!currentCPM).toString());
-    setCurrentCPM((prev) => !prev);
+    localStorage.setItem(
+      Storage_Display_Cpm,
+      displayCpm === "current" ? "last" : "current",
+    );
+    setDisplayCpm((prev) => (prev === "current" ? "last" : "current"));
   };
 
   return (
@@ -19,7 +22,7 @@ const ToggleCurrentCpm = () => {
         type={"checkbox"}
         onChange={handleCurrentCPM}
         id="currentCPM"
-        checked={!!currentCPM}
+        checked={displayCpm === "current"}
       />
       <label
         htmlFor={"currentCPM"}
@@ -31,4 +34,4 @@ const ToggleCurrentCpm = () => {
   );
 };
 
-export default ToggleCurrentCpm;
+export default ToggleDisplayCpm;

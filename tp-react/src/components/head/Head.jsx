@@ -1,5 +1,5 @@
-import Title from "../title/Title";
-import DarkModeButton from "../themeButton/DarkModeButton";
+import Title from "./title/Title";
+import DarkModeButton from "./themeButton/DarkModeButton";
 import "./Head.css";
 
 const Head = () => {

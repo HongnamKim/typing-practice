@@ -1,0 +1,22 @@
+.result-period-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.result-period-button {
+    border: none;
+    background: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.result-period-text {
+    color: black;
+    font-size: 1.2rem;
+}
+
+.result-period-dark {
+    color: white;
+    background: none;
+}

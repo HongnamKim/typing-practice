@@ -23,10 +23,22 @@
 
 .info-settings {
  width: 100%;
-border: 1px solid red;
  display: flex;
  justify-content: space-between;
  align-items: center;
  margin-bottom: 0.5rem;
+}
+
+.info-CPMs {
+ display: flex;
+ justify-content: space-between;
+}
+
+.info-averages {
+ display: flex;
+ justify-content: space-around;
+ /* border: 1px solid blue; */
+ margin-top: 1rem;
+ /* margin-bottom: 1rem; */
 }
 

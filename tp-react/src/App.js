@@ -1,11 +1,13 @@
 import "./App.css";
 
-import TestComp from "./TestComp";
 import { ThemeContextProvider } from "./Context/ThemeContext";
 import Head from "./components/head/Head";
 import AppDiv from "./components/AppDiv/AppDiv";
 import Info from "./components/Info/Info";
 import { SettingContextProvider } from "./Context/SettingContext";
+import { ScoreContextProvider } from "./Context/ScoreContext";
+import QuoteInput from "./components/QuoteInput/QuoteInput";
+import Contact from "./components/Contact/Contact";
 
 function App() {
   return (
@@ -14,9 +16,12 @@ function App() {
         <AppDiv>
           <Head />
           <SettingContextProvider>
-            <Info />
-            <TestComp />
+            <ScoreContextProvider>
+              <Info />
+              <QuoteInput />
+            </ScoreContextProvider>
           </SettingContextProvider>
+          <Contact />
         </AppDiv>
       </ThemeContextProvider>
     </div>
