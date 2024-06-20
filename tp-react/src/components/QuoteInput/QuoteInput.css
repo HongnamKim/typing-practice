@@ -1,0 +1,16 @@
+.container {
+    width: 80%;
+    border-radius: 1rem;
+
+    max-width: 1000px;
+    min-width: 600px;
+    display: flex;
+    flex-direction: column;
+
+    /*padding-bottom: 2rem;*/
+    margin-bottom: 2rem;
+    background-color: #f4f4f5;
+
+    padding: 2rem;
+    padding-top: 1rem;
+}

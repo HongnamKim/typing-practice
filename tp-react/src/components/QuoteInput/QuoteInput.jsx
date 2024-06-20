@@ -1,5 +1,11 @@
+import "./QuoteInput.css";
+
 const QuoteInput = () => {
-  return <span>QuoteInput</span>;
+  return (
+    <div className={"container"}>
+      <span>QuoteInput</span>
+    </div>
+  );
 };
 
 export default QuoteInput;
