@@ -1,0 +1,21 @@
+.character-container {
+    border: 1px solid blue;
+    margin-bottom: 1.5rem;
+}
+
+.character {
+    color: #808080;
+    font-size: 1.6rem;
+}
+
+.character-dark {
+    color: #71717a;
+}
+
+.character-incorrect {
+    color: #ef4444;
+}
+
+.character-correct {
+    color: #000000;
+}

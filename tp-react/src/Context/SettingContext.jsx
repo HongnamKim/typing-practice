@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import {
   Storage_Display_Cpm,
   Storage_Result_Period,
-} from "../utils/ConfigConstant";
+} from "../const/config.const";
 
 export const SettingContext = createContext(null);
 

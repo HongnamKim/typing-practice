@@ -236,7 +236,7 @@ body.dark {
 }
 
 .none {
-  color: gray;
+  color: #808080;
 }
 
 .none.dark {
@@ -285,7 +285,7 @@ body.dark {
   border-bottom: 0.2rem solid #6d28d9;
   width: 100%;
 
-  padding: 0%;
+  padding: 0;
 
   overflow-y: hidden;
 

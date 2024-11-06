@@ -1,8 +1,7 @@
 import { useContext } from "react";
-import { Storage_Result_Period } from "../../../utils/ConfigConstant";
+import { Storage_Result_Period } from "../../../const/config.const";
 import {
   resultPeriodDisplaySet,
-  resultPeriodSet,
   SettingContext,
 } from "../../../Context/SettingContext";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
@@ -25,7 +24,7 @@ const ResultPeriod = () => {
       );
     } else {
       setResultPeriod((prev) => {
-        if (prev === 0) return (prev += 3);
+        if (prev === 0) return prev + 3;
         return prev - 1;
       });
 

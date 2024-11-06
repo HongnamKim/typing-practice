@@ -4,8 +4,34 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2fa57e01-d047-42f8-955a-729f4ee5833b" name="Changes" comment="react migration dev branch">
-      <change beforePath="$PROJECT_DIR$/tp-react/src/components/QuoteInput/QuoteInput.css" beforeDir="false" afterPath="$PROJECT_DIR$/tp-react/src/components/QuoteInput/QuoteInput.css" afterDir="false" />
+    <list default="true" id="2fa57e01-d047-42f8-955a-729f4ee5833b" name="Changes" comment="리액트 전환 - 문장 입력&#10;1. 문장 입력 기능&#10;2. 엔터키 입력 (줄바꿈) 방지&#10;3. 복사 붙여넣기 방지&#10;4. 문장 입력 완료 시 새로운 문장 불러오기">
+      <change afterPath="$PROJECT_DIR$/tp-react/public/TPfavi.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tp-react/src/Context/QuoteContext.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tp-react/src/components/Quote/Author/Author.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tp-react/src/components/Quote/Author/Author.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tp-react/src/components/Quote/Input/Input.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tp-react/src/components/Quote/Input/Input.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tp-react/src/components/Quote/Sentence/Sentence.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tp-react/src/components/Quote/Sentence/Sentence.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tp-react/src/const/colors.const.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tp-react/src/const/default-quotes.const.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tp-react/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/tp-react/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tp-react/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/tp-react/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tp-react/src/Context/SettingContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tp-react/src/Context/SettingContext.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tp-react/src/Context/ThemeContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tp-react/src/Context/ThemeContext.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tp-react/src/components/AppDiv/AppDiv.css" beforeDir="false" afterPath="$PROJECT_DIR$/tp-react/src/components/AppDiv/AppDiv.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tp-react/src/components/AppDiv/AppDiv.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tp-react/src/components/AppDiv/AppDiv.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tp-react/src/components/Head/themeButton/DarkModeButton.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tp-react/src/components/Head/themeButton/DarkModeButton.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tp-react/src/components/Info/Info.css" beforeDir="false" afterPath="$PROJECT_DIR$/tp-react/src/components/Info/Info.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tp-react/src/components/Info/ResultPeriod/ResultPeriod.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tp-react/src/components/Info/ResultPeriod/ResultPeriod.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tp-react/src/components/Info/ToggleDisplayCpm/ToggleDisplayCpm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tp-react/src/components/Info/ToggleDisplayCpm/ToggleDisplayCpm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tp-react/src/components/Quote/Quote.css" beforeDir="false" afterPath="$PROJECT_DIR$/tp-react/src/components/Quote/Quote.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tp-react/src/components/Quote/Quote.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/tp-react/src/components/Quote/Quote.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tp-react/src/utils/ConfigConstant.js" beforeDir="false" afterPath="$PROJECT_DIR$/tp-react/src/const/config.const.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tp-react/src/utils/koreanChar.js" beforeDir="false" afterPath="$PROJECT_DIR$/tp-react/src/const/korean-char.const.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tp-react/src/utils/sentences.js" beforeDir="false" afterPath="$PROJECT_DIR$/tp-react/src/utils/sentences.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,8 +41,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JavaScript File" />
         <option value="CSS File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -32,7 +58,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2i1p9YsWk4j48kFvyx18s7db122" />
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -46,8 +72,9 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "react-migration-quote-input",
     "js.last.introduce.type": "CONST",
-    "last_opened_file_path": "/Users/hongnamkim/Desktop/Frontend/typing-practice/typing-practice/typing-practice",
+    "last_opened_file_path": "/Users/hongnamkim/Project/typing-practice/tp-react/public",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -60,12 +87,28 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tp-react/public" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tp-react/src/const" />
       <recent name="$PROJECT_DIR$/tp-react/src/components/head" />
       <recent name="$PROJECT_DIR$/tp-react/src/components/Info" />
       <recent name="$PROJECT_DIR$/tp-react/src/components/ThemeButton" />
       <recent name="$PROJECT_DIR$/tp-react/src/components" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="start" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/tp-react/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -131,6 +174,7 @@
     <MESSAGE value="typing-practice 리액트 마이그레이션&#10;타이틀, 다크모드 설정, currentCPM 설정" />
     <MESSAGE value="react migration info&#10;info 파트 완료&#10;TODO 입력칸, 정답체크 로직" />
     <MESSAGE value="react migration dev branch" />
-    <option name="LAST_COMMIT_MESSAGE" value="react migration dev branch" />
+    <MESSAGE value="리액트 전환 - 문장 입력&#10;1. 문장 입력 기능&#10;2. 엔터키 입력 (줄바꿈) 방지&#10;3. 복사 붙여넣기 방지&#10;4. 문장 입력 완료 시 새로운 문장 불러오기" />
+    <option name="LAST_COMMIT_MESSAGE" value="리액트 전환 - 문장 입력&#10;1. 문장 입력 기능&#10;2. 엔터키 입력 (줄바꿈) 방지&#10;3. 복사 붙여넣기 방지&#10;4. 문장 입력 완료 시 새로운 문장 불러오기" />
   </component>
 </project>

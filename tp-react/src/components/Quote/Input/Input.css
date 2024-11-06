@@ -1,0 +1,23 @@
+.input{
+    border: none;
+    border-bottom: 0.2rem solid #6d28d9;
+    width: 100%;
+
+    padding: 0;
+
+    overflow-y: hidden;
+
+    resize: none;
+    outline: none;
+    font-size: 1.6rem;
+    background-color: #f4f4f5;
+}
+
+.input-dark {
+    background-color: #27272a;
+    color: white;
+}
+
+.input::placeholder{
+    color: #a1a1aa;
+}
