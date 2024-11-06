@@ -3,8 +3,8 @@ import { ScoreContext } from "../../../Context/ScoreContext";
 import "./AverageScore.css";
 
 /**
- * 평균 점수 디스플레이
- * @param type totalScore 의 key 중 하나
+ * 전체 평균 점수 디스플레이
+ * @param type totalScore 의 key 중 하나 (cpms, accs, cnt)
  * @constructor
  */
 const AverageScore = ({ type }) => {

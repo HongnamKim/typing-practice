@@ -1,5 +1,7 @@
 import { useContext } from "react";
+import { Storage_Result_Period } from "../../../utils/ConfigConstant";
 import {
+  resultPeriodDisplaySet,
   resultPeriodSet,
   SettingContext,
 } from "../../../Context/SettingContext";
@@ -16,16 +18,27 @@ const ResultPeriod = () => {
       setResultPeriod((prev) => {
         return (prev + 1) % 4;
       });
+
+      localStorage.setItem(
+        Storage_Result_Period,
+        ((resultPeriod + 1) % 4).toString(),
+      );
     } else {
       setResultPeriod((prev) => {
         if (prev === 0) return (prev += 3);
         return prev - 1;
       });
+
+      localStorage.setItem(
+        Storage_Result_Period,
+        ((resultPeriod - 1) % 4).toString(),
+      );
     }
   };
 
   return (
     <div className={"result-period-container"}>
+      {/*감소 버튼*/}
       <button
         onClick={handleResultPeriod}
         id={"result-period-down"}
@@ -36,6 +49,7 @@ const ResultPeriod = () => {
           className={isDark ? "result-period-dark" : ""}
         />
       </button>
+      {/*결과 주기 디스플레이*/}
       <span
         className={
           isDark
@@ -43,8 +57,9 @@ const ResultPeriod = () => {
             : "result-period-text"
         }
       >
-        {resultPeriod === 3 ? "∞" : resultPeriodSet[resultPeriod]}
+        {resultPeriodDisplaySet[resultPeriod]}
       </span>
+      {/*증가 버튼*/}
       <button
         onClick={handleResultPeriod}
         id={"result-period-up"}

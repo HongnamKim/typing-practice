@@ -9,7 +9,6 @@ const DarkModeButton = () => {
 
   const handleDarkMode = () => {
     localStorage.setItem(Storage_Dark_Mode, (!isDark).toString());
-
     setIsDark((prev) => !prev);
   };
 

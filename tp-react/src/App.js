@@ -1,12 +1,12 @@
 import "./App.css";
 
 import { ThemeContextProvider } from "./Context/ThemeContext";
-import Head from "./components/head/Head";
+import Head from "./components/Head/Head";
 import AppDiv from "./components/AppDiv/AppDiv";
 import Info from "./components/Info/Info";
 import { SettingContextProvider } from "./Context/SettingContext";
 import { ScoreContextProvider } from "./Context/ScoreContext";
-import QuoteInput from "./components/QuoteInput/QuoteInput";
+import Quote from "./components/Quote/Quote";
 import Contact from "./components/Contact/Contact";
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
           <SettingContextProvider>
             <ScoreContextProvider>
               <Info />
-              <QuoteInput />
+              <Quote />
             </ScoreContextProvider>
           </SettingContextProvider>
           <Contact />

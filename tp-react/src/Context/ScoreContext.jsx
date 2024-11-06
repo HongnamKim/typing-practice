@@ -2,7 +2,7 @@ import { createContext, useState } from "react";
 
 export const ScoreContext = createContext();
 
-const initAverageScore = {
+const initResultScore = {
   avgCpm: 0,
   avgAcc: 0,
   cnt: 0,
@@ -17,7 +17,7 @@ const initTotalScore = {
 export const ScoreContextProvider = ({ children }) => {
   const [currentCpm, setCurrentCpm] = useState(0);
   const [lastCpm, setLastCpm] = useState(0);
-  const [averageScore, setAverageScore] = useState(initAverageScore);
+  const [resultScore, setResultScore] = useState(initResultScore);
   const [totalScore, setTotalScore] = useState(initTotalScore);
 
   return (
@@ -27,8 +27,8 @@ export const ScoreContextProvider = ({ children }) => {
         setCurrentCpm,
         lastCpm,
         setLastCpm,
-        averageScore,
-        setAverageScore,
+        resultScore,
+        setResultScore,
         totalScore,
         setTotalScore,
       }}
