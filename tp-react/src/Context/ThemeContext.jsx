@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { Storage_Dark_Mode } from "../utils/ConfigConstant";
+import { Storage_Dark_Mode } from "../const/config.const";
 
 export const ThemeContext = createContext();
 export const ThemeContextProvider = ({ children }) => {

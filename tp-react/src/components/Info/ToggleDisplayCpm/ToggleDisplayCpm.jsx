@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { SettingContext } from "../../../Context/SettingContext";
-import { Storage_Display_Cpm } from "../../../utils/ConfigConstant";
+import { Storage_Display_Cpm } from "../../../const/config.const";
 import { ThemeContext } from "../../../Context/ThemeContext";
 import "./ToggleDisplayCpm.css";
 

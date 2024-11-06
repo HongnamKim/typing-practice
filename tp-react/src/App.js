@@ -8,6 +8,7 @@ import { SettingContextProvider } from "./Context/SettingContext";
 import { ScoreContextProvider } from "./Context/ScoreContext";
 import Quote from "./components/Quote/Quote";
 import Contact from "./components/Contact/Contact";
+import { QuoteContextProvider } from "./Context/QuoteContext";
 
 function App() {
   return (
@@ -18,7 +19,9 @@ function App() {
           <SettingContextProvider>
             <ScoreContextProvider>
               <Info />
-              <Quote />
+              <QuoteContextProvider>
+                <Quote />
+              </QuoteContextProvider>
             </ScoreContextProvider>
           </SettingContextProvider>
           <Contact />
