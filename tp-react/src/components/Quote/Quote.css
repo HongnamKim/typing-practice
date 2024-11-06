@@ -1,0 +1,31 @@
+.quote-container {
+    width: 80%;
+    border-radius: 1rem;
+
+    max-width: 1000px;
+    min-width: 600px;
+    display: flex;
+    flex-direction: column;
+
+    /*padding-bottom: 2rem;*/
+    margin-bottom: 2rem;
+    background-color: #f4f4f5;
+
+    padding: 1rem 2rem 2rem;
+}
+
+.quote-dark {
+    background-color: #27272a;
+}
+
+.quote-container-upper {
+    border: 1px solid red;
+}
+
+.author-container {
+    margin-bottom: 0.5rem;
+    display: flex;
+    flex-direction: row-reverse;
+    /*background-color: #f4f4f5;*/
+}
+

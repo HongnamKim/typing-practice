@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { ScoreContext } from "../../../Context/ScoreContext";
+import "./Cpms.css";
 
 const HighestCpm = () => {
   const { totalScore } = useContext(ScoreContext);
@@ -15,8 +16,8 @@ const HighestCpm = () => {
 
   return (
     <div>
-      <span>Highest CPM</span>
-      <span>{highestCpm === 0 ? "-" : highestCpm}</span>
+      <span className={"speed-check"}>Highest CPM</span>
+      <span className={"speed-check speed-check-num"}>{highestCpm}</span>
     </div>
   );
 };

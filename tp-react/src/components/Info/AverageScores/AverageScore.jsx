@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { ScoreContext } from "../../../Context/ScoreContext";
+import "./AverageScore.css";
 
 /**
- * 평균 점수 디스플레이
- * @param type totalScore 의 key 중 하나
+ * 전체 평균 점수 디스플레이
+ * @param type totalScore 의 key 중 하나 (cpms, accs, cnt)
  * @constructor
  */
 const AverageScore = ({ type }) => {
@@ -22,7 +23,14 @@ const AverageScore = ({ type }) => {
   useEffect(() => {}, [totalScore.cnt]);
 
   return (
-    <span>{`${type.toUpperCase().slice(0, 3)} ${avgScore === 0 ? "-" : avgScore} `}</span>
+    <div className={"average-info"}>
+      <span className={"average-info-title"}>
+        {type.toUpperCase().slice(0, 3)}
+      </span>
+      <span className={"average-info-num"}>
+        {avgScore === 0 ? "-" : avgScore}
+      </span>
+    </div>
   );
 };
 
