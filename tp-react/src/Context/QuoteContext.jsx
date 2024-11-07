@@ -1,12 +1,13 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { defaultQuotes } from "../const/default-quotes.const";
+import { ScoreContext } from "./ScoreContext";
 
 export const QuoteContext = createContext();
 
-//export const useQuoteContext = useContext(QuoteContext);
-
 export const QuoteContextProvider = ({ children }) => {
-  const [quotes, setQuotes] = useState(null);
+  const { inputCheck, setInputCheck } = useContext(ScoreContext);
+
+  const [quotes, setQuotes] = useState(defaultQuotes);
   const [quotesIndex, setQuotesIndex] = useState(0);
   const [sentence, setSentence] = useState("");
   const [author, setAuthor] = useState("");
@@ -17,6 +18,7 @@ export const QuoteContextProvider = ({ children }) => {
     const initQuotes = defaultQuotes.sort(() => Math.random() - 0.5);
 
     const initQuotesIndex = Math.floor(Math.random() * initQuotes.length);
+    //console.log(initQuotesIndex);
 
     setQuotes(initQuotes);
     setQuotesIndex(initQuotesIndex);
@@ -25,12 +27,28 @@ export const QuoteContextProvider = ({ children }) => {
     setAuthor(initQuotes[initQuotesIndex].author);
   }, []);
 
-  console.log(quotesIndex);
-
   useEffect(() => {
-    if (quotesIndex) {
-      setSentence(quotes[quotesIndex].sentence);
-      setAuthor(quotes[quotesIndex].author);
+    if (quotesIndex < 0) {
+      setQuotesIndex(quotes.length - 1);
+    } else if (quotesIndex >= quotes.length) {
+      setQuotesIndex(0);
+    } else {
+      /*if (!quotes[quotesIndex]) {
+        return;
+      }*/
+
+      setInputCheck(() => {
+        const sentence = quotes[quotesIndex].sentence;
+
+        return new Array(sentence.length).fill("none");
+      });
+
+      setSentence(() => {
+        return quotes[quotesIndex].sentence;
+      });
+      setAuthor(() => {
+        return quotes[quotesIndex].author;
+      });
     }
   }, [quotesIndex]);
 

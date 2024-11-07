@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { ThemeContext } from "../../Context/ThemeContext";
 import "./Info.css";
-import ToggleDisplayCpm from "./ToggleDisplayCpm/ToggleDisplayCpm";
+import ToggleDisplayCurrentCpm from "./ToggleDisplayCpm/ToggleDisplayCurrentCpm";
 import ResultPeriod from "./ResultPeriod/ResultPeriod";
 import CurrentLastCpm from "./Cpms/CurrentLastCpm";
 import HighestCpm from "./Cpms/HighestCpm";
@@ -15,7 +15,7 @@ const Info = () => {
   return (
     <div className={isDark ? "info-background info-dark" : "info-background"}>
       <div className={"info-settings"}>
-        <ToggleDisplayCpm />
+        <ToggleDisplayCurrentCpm />
         <ResultPeriod />
       </div>
       <div className={"info-CPMs"}>

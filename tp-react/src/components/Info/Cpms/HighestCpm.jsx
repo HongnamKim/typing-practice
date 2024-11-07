@@ -11,6 +11,11 @@ const HighestCpm = () => {
       setHighestCpm(0);
       return;
     }
+
+    if (totalScore.cpms.length === 0) {
+      return;
+    }
+
     setHighestCpm(() => Math.max(...totalScore.cpms));
   }, [totalScore.cnt]);
 
