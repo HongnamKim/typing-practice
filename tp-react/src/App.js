@@ -12,22 +12,20 @@ import { QuoteContextProvider } from "./Context/QuoteContext";
 
 function App() {
   return (
-    <div>
-      <ThemeContextProvider>
-        <AppDiv>
-          <Head />
-          <SettingContextProvider>
-            <ScoreContextProvider>
-              <Info />
-              <QuoteContextProvider>
-                <Quote />
-              </QuoteContextProvider>
-            </ScoreContextProvider>
-          </SettingContextProvider>
-          <Contact />
-        </AppDiv>
-      </ThemeContextProvider>
-    </div>
+    <ThemeContextProvider>
+      <AppDiv>
+        <Head />
+        <SettingContextProvider>
+          <ScoreContextProvider>
+            <Info />
+            <QuoteContextProvider>
+              <Quote />
+            </QuoteContextProvider>
+          </ScoreContextProvider>
+        </SettingContextProvider>
+        <Contact />
+      </AppDiv>
+    </ThemeContextProvider>
   );
 }
 

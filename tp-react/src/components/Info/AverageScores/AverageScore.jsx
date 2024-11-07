@@ -9,18 +9,26 @@ import "./AverageScore.css";
  */
 const AverageScore = ({ type }) => {
   const { totalScore } = useContext(ScoreContext);
-  const [avgScore, setAvgScore] = useState(() => {
-    if (totalScore === "cpms") {
-      return totalScore.cpms;
-    } else if (totalScore === "accs") {
-      return totalScore.accs;
-    } else {
-      return totalScore.cnt;
-    }
-  });
+  const [avgScore, setAvgScore] = useState(0);
+
+  totalScore.cpms.reduce((total, curr) => total + curr, 0);
 
   // count 바뀔 때마다 평균 값 계산
-  useEffect(() => {}, [totalScore.cnt]);
+  useEffect(() => {
+    if (type === "cnt") {
+      setAvgScore(totalScore.cnt);
+      return;
+    }
+    setAvgScore(() => {
+      if (totalScore.cnt === 0) {
+        return 0;
+      }
+      return Math.round(
+        totalScore[type].reduce((prev, curr) => prev + curr, 0) /
+          totalScore.cnt,
+      );
+    });
+  }, [totalScore]);
 
   return (
     <div className={"average-info"}>

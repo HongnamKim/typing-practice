@@ -4,7 +4,7 @@ import { Storage_Display_Cpm } from "../../../const/config.const";
 import { ThemeContext } from "../../../Context/ThemeContext";
 import "./ToggleDisplayCpm.css";
 
-const ToggleDisplayCpm = () => {
+const ToggleDisplayCurrentCpm = () => {
   const { displayCurrentCpm, setDisplayCurrentCpm } =
     useContext(SettingContext);
   const { isDark } = useContext(ThemeContext);
@@ -32,4 +32,4 @@ const ToggleDisplayCpm = () => {
   );
 };
 
-export default ToggleDisplayCpm;
+export default ToggleDisplayCurrentCpm;
