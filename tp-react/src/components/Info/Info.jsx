@@ -23,9 +23,10 @@ const Info = () => {
         <HighestCpm />
       </div>
       <div className={"info-averages"}>
-        {Object.keys(totalScore).map((value, index) => (
-          <AverageScore type={value} key={index} />
-        ))}
+        {Object.keys(totalScore).map(
+          (value, index) =>
+            value !== "highestCpm" && <AverageScore type={value} key={index} />,
+        )}
       </div>
     </div>
   );

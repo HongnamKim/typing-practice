@@ -9,6 +9,7 @@ import { ScoreContextProvider } from "./Context/ScoreContext";
 import Quote from "./components/Quote/Quote";
 import Contact from "./components/Contact/Contact";
 import { QuoteContextProvider } from "./Context/QuoteContext";
+import AverageScorePopUp from "./components/AverageScorePopUp/AverageScorePopUp";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Head />
         <SettingContextProvider>
           <ScoreContextProvider>
+            <AverageScorePopUp />
             <Info />
             <QuoteContextProvider>
               <Quote />

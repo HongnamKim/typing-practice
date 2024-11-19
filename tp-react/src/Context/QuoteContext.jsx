@@ -5,7 +5,7 @@ import { ScoreContext } from "./ScoreContext";
 export const QuoteContext = createContext();
 
 export const QuoteContextProvider = ({ children }) => {
-  const { inputCheck, setInputCheck } = useContext(ScoreContext);
+  const { setInputCheck } = useContext(ScoreContext);
 
   const [quotes, setQuotes] = useState(defaultQuotes);
   const [quotesIndex, setQuotesIndex] = useState(0);
