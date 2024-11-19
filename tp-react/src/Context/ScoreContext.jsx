@@ -3,18 +3,20 @@ import { createContext, useState } from "react";
 export const ScoreContext = createContext();
 
 const initResultScore = {
-  avgCpm: 0,
-  avgAcc: 0,
+  totalCpm: 0,
+  totalAcc: 0,
   cnt: 0,
 };
 
 const initTotalScore = {
-  cpms: [],
-  accs: [],
+  highestCpm: 0,
+  cpms: 0,
+  accs: 0,
   cnt: 0,
 };
 
 export const ScoreContextProvider = ({ children }) => {
+  const [speedCheck, setSpeedCheck] = useState(true);
   const [currentCpm, setCurrentCpm] = useState(0);
   const [lastCpm, setLastCpm] = useState(0);
   const [resultScore, setResultScore] = useState(initResultScore);
@@ -26,6 +28,10 @@ export const ScoreContextProvider = ({ children }) => {
   return (
     <ScoreContext.Provider
       value={{
+        // 타자 속도 계산 여부
+        speedCheck,
+        setSpeedCheck,
+
         // 현재 타자 속도
         currentCpm,
         setCurrentCpm,

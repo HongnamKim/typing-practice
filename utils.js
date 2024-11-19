@@ -30,7 +30,7 @@ const koreanSeparator = (character) => {
   //숫자 or 영어는 그대로 반환
   if (charCode < koreanStart || charCode > koreanEnd) {
     return [character];
-  }₩
+  }
 
   const relativeCode = charCode - koreanStart;
 
