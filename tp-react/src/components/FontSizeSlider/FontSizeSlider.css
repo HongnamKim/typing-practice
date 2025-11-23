@@ -1,0 +1,62 @@
+.font-size-slider-container {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 100;
+}
+
+.font-size-label {
+    font-size: 0.9rem;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.2s;
+    user-select: none;
+}
+
+.font-size-label:hover {
+    color: #333;
+}
+
+.font-size-label.dark {
+    color: #999;
+}
+
+.font-size-label.dark:hover {
+    color: #e5e7eb;
+}
+
+.font-size-slider {
+    width: 100px;
+    height: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #e5e7eb;
+    outline: none;
+    border-radius: 2px;
+}
+
+.font-size-slider.dark {
+    background: #3f3f46;
+}
+
+.font-size-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #6d28d9;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.font-size-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #6d28d9;
+    cursor: pointer;
+    border-radius: 50%;
+    border: none;
+}

@@ -3,6 +3,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { ThemeContext } from "../../../Context/ThemeContext";
 import { QuoteContext } from "../../../Context/QuoteContext";
 import { ScoreContext } from "../../../Context/ScoreContext";
+import { SettingContext, resultPeriodSet } from "../../../Context/SettingContext";
 import {
   KEY_ARROW_DOWN,
   KEY_ARROW_LEFT,
@@ -13,7 +14,7 @@ import {
 } from "../../../const/key.const";
 import { koreanSeparator } from "../../../utils/koreanSeparator";
 
-const Input = () => {
+const Input = ({ onInputChange: onInputChangeCallback }) => {
   const { isDark } = useContext(ThemeContext);
   const {
     speedCheck, // 타이핑 지속 시간 측정 트리거
@@ -28,8 +29,16 @@ const Input = () => {
     setCorrectCount, //
     incorrectCount, // 타이핑 중 틀린 횟수
     setIncorrectCount,
+    cpmList,
+    setCpmList,
+    accList,
+    setAccList,
+    showPopup,
+    setShowPopup,
+    setPopupData,
   } = useContext(ScoreContext);
   const { sentence, setQuotesIndex } = useContext(QuoteContext); // 예문, 예문의 인덱스
+  const { resultPeriod, fontSize } = useContext(SettingContext);
   const [input, setInput] = useState(""); // 사용자 입력값
   const speedInterval = useRef(null); // setInterval 을 참조하기 위함
   const startTime = useRef(null); // 타이핑 시작 시간
@@ -77,6 +86,11 @@ const Input = () => {
     // 입력 초기화
     setInput("");
     separatedInput.current = [];
+    
+    // 상위 컴포넌트의 inputValue도 초기화
+    if (onInputChangeCallback) {
+      onInputChangeCallback("");
+    }
 
     // 정확도 초기화
     setCorrectCount(0);
@@ -104,24 +118,33 @@ const Input = () => {
     }
 
     if (e.key === KEY_ESC) {
-      // TODO 타자 속도 계산 초기화 로직
+      // 팝업이 열려있으면 팝업 닫기
+      if (showPopup) {
+        setShowPopup(false);
+        return;
+      }
 
       clearInput();
       return;
     }
 
     if (e.key === KEY_ARROW_UP || e.key === KEY_ARROW_RIGHT) {
-      setQuotesIndex((prev) => prev + 1);
-      // TODO 타자 속도 계산 초기화 로직
-
+      // 먼저 입력 초기화
       clearInput();
+      // 상태 업데이트 후 문장 변경
+      setTimeout(() => {
+        setQuotesIndex((prev) => prev + 1);
+      }, 0);
       return;
     }
 
     if (e.key === KEY_ARROW_DOWN || e.key === KEY_ARROW_LEFT) {
-      setQuotesIndex((prev) => prev - 1);
-      // TODO 타자 속도 계산 초기화 로직
+      // 먼저 입력 초기화
       clearInput();
+      // 상태 업데이트 후 문장 변경
+      setTimeout(() => {
+        setQuotesIndex((prev) => prev - 1);
+      }, 0);
     }
   };
 
@@ -140,12 +163,40 @@ const Input = () => {
 
     setLastCpm(currentCpm);
 
-    setTotalScore((prev) => ({
-      highestCpm: prev.highestCpm < currentCpm ? currentCpm : prev.highestCpm,
-      cpms: prev.cpms + currentCpm,
-      accs: prev.accs + newAcc,
-      cnt: prev.cnt + 1,
-    }));
+    // CPM, ACC 리스트에 추가
+    const newCpmList = [...cpmList, currentCpm];
+    const newAccList = [...accList, newAcc];
+    setCpmList(newCpmList);
+    setAccList(newAccList);
+
+    setTotalScore((prev) => {
+      const newCnt = prev.cnt + 1;
+
+      // 결과 주기 확인 및 팝업 표시
+      if (
+        resultPeriod !== null &&
+        resultPeriod < resultPeriodSet.length - 1 &&
+        newCnt % resultPeriodSet[resultPeriod] === 0
+      ) {
+        const period = resultPeriodSet[resultPeriod];
+        const recentCpmList = newCpmList.slice(-period);
+        const recentAccList = newAccList.slice(-period);
+
+        setPopupData({
+          avgCpm: Math.round(average(recentCpmList)),
+          maxCpm: Math.round(max(recentCpmList)),
+          acc: Math.round(average(recentAccList)),
+        });
+        setShowPopup(true);
+      }
+
+      return {
+        highestCpm: prev.highestCpm < currentCpm ? currentCpm : prev.highestCpm,
+        cpms: prev.cpms + currentCpm,
+        accs: prev.accs + newAcc,
+        cnt: newCnt,
+      };
+    });
 
     clearInterval(speedInterval.current);
     setSpeedCheck(true);
@@ -154,12 +205,22 @@ const Input = () => {
   };
 
   const onInputChange = (e) => {
+    // 팝업이 열려있으면 입력 무시
+    if (showPopup) {
+      return;
+    }
+
     if (speedCheck) {
       speedCheckStart();
       setSpeedCheck(false);
     }
 
     const newValue = e.target.value;
+
+    // 상위 컴포넌트로 값 전달
+    if (onInputChangeCallback) {
+      onInputChangeCallback(newValue);
+    }
 
     if (newValue.length === 0) {
       clearInput();
@@ -183,6 +244,27 @@ const Input = () => {
     if (newValue[newValue.length - 1] === "\n") {
       return;
     }
+    
+    // 입력 길이가 문장 길이와 같아지면 더 이상 입력 불가
+    if (newValue.length === sentence.length) {
+      // 마지막 글자까지 입력했으므로 입력값 설정은 하되
+      // 추가 입력은 막음
+      setInput(newValue);
+      
+      // 입력값 자모 분리
+      for (let i = 0; i < newValue.length; i++) {
+        separatedInput.current[i] = koreanSeparator(newValue[i]);
+      }
+
+      typedCharCount.current = separatedInput.current.map((char) => {
+        return char.length;
+      });
+
+      // 채점 로직 실행
+      performGrading(newValue);
+      
+      return;
+    }
 
     setInput(newValue);
 
@@ -195,57 +277,106 @@ const Input = () => {
       return char.length;
     });
 
-    // 채점 로직
+    // 채점 로직 실행
+    performGrading(newValue);
+  };
+  
+  // 채점 로직을 별도 함수로 분리
+  const performGrading = (newValue) => {
     setInputCheck((prevCheck) => {
       const lastCharIndex = newValue.length - 1;
 
-      // 채점되지 않고 다음 글자로 넘어간 경우 "틀림" 처리
+      // 이전 글자 재채점 (다음 글자로 넘어갔을 때 최종 확정)
       if (lastCharIndex > 0) {
-        const isChecked = prevCheck[lastCharIndex - 1] !== "none";
+        const prevCharIndex = lastCharIndex - 1;
+        const prevInputSeparated = separatedInput.current[prevCharIndex];
+        const prevSentenceSeparated = separatedSentence.current[prevCharIndex];
+        const isChecked = prevCheck[prevCharIndex] !== "none";
 
         if (!isChecked) {
-          prevCheck[lastCharIndex - 1] = "incorrect";
+          // 채점되지 않은 경우 오답 처리
+          prevCheck[prevCharIndex] = "incorrect";
+          setIncorrectCount((prev) => prev + 1);
+        } else {
+          // 이미 채점된 경우 재채점 (받침 변화 등으로 인한 최종 확정)
+          let isFinalCorrect = false;
+          
+          // 길이가 같고 모든 자모가 일치하는지 확인
+          if (prevInputSeparated.length === prevSentenceSeparated.length) {
+            isFinalCorrect = true;
+            for (let i = 0; i < prevSentenceSeparated.length; i++) {
+              if (prevInputSeparated[i] !== prevSentenceSeparated[i]) {
+                isFinalCorrect = false;
+                break;
+              }
+            }
+          }
+          
+          // 이전에 정답이었는데 최종적으로 오답인 경우
+          if (prevCheck[prevCharIndex] === "correct" && !isFinalCorrect) {
+            prevCheck[prevCharIndex] = "incorrect";
+            setCorrectCount((prev) => prev - 1);
+            setIncorrectCount((prev) => prev + 1);
+          }
+          // 이전에 오답이었는데 최종적으로 정답인 경우 (거의 없지만 안전장치)
+          else if (prevCheck[prevCharIndex] === "incorrect" && isFinalCorrect) {
+            prevCheck[prevCharIndex] = "correct";
+            setCorrectCount((prev) => prev + 1);
+            setIncorrectCount((prev) => prev - 1);
+          }
         }
       }
 
       // 현재 입력 글자 채점
-      // 입력한 값이 예문보다 길 경우
-      if (
-        separatedInput.current[lastCharIndex].length >=
-        separatedSentence.current[lastCharIndex].length
-      ) {
-        for (
-          let i = 0;
-          i < separatedSentence.current[lastCharIndex].length;
-          i++
-        ) {
-          if (
-            separatedInput.current[lastCharIndex][i] !==
-            separatedSentence.current[lastCharIndex][i]
-          ) {
-            prevCheck[lastCharIndex] = "incorrect";
-            setIncorrectCount((prev) => prev + 1);
+      const currentInputSeparated = separatedInput.current[lastCharIndex];
+      const currentSentenceSeparated = separatedSentence.current[lastCharIndex];
+      
+      // 입력한 자모 수가 예문의 자모 수와 같거나 많을 경우 (글자 완성)
+      if (currentInputSeparated.length >= currentSentenceSeparated.length) {
+        let isCorrect = true;
+        
+        // 모든 자모가 일치하는지 확인
+        for (let i = 0; i < currentSentenceSeparated.length; i++) {
+          if (currentInputSeparated[i] !== currentSentenceSeparated[i]) {
+            isCorrect = false;
             break;
           }
-          if (i === separatedSentence.current[lastCharIndex].length - 1) {
+        }
+        
+        if (isCorrect) {
+          // 정답으로 채점 (단, 다음 글자로 넘어갈 때 재확인됨)
+          if (prevCheck[lastCharIndex] !== "correct") {
             prevCheck[lastCharIndex] = "correct";
-
             setCorrectCount((prev) => prev + 1);
+          }
+        } else {
+          // 오답으로 채점
+          if (prevCheck[lastCharIndex] !== "incorrect") {
+            prevCheck[lastCharIndex] = "incorrect";
+            setIncorrectCount((prev) => prev + 1);
           }
         }
       } else {
-        // 입력한 값이 예문보다 짧을 경우
-        for (let i = 0; i < separatedInput.current[lastCharIndex].length; i++) {
-          if (
-            separatedInput.current[lastCharIndex][i] !==
-            separatedSentence.current[lastCharIndex][i]
-          ) {
+        // 입력한 자모 수가 예문보다 적을 경우 (글자 입력 중)
+        let isPartialCorrect = true;
+        
+        // 지금까지 입력한 자모가 모두 맞는지 확인
+        for (let i = 0; i < currentInputSeparated.length; i++) {
+          if (currentInputSeparated[i] !== currentSentenceSeparated[i]) {
+            isPartialCorrect = false;
+            break;
+          }
+        }
+        
+        if (!isPartialCorrect) {
+          // 중간 과정이지만 이미 틀렸으면 오답 처리
+          if (prevCheck[lastCharIndex] !== "incorrect") {
             prevCheck[lastCharIndex] = "incorrect";
             setIncorrectCount((prev) => prev + 1);
-            break;
-          } else {
-            prevCheck[lastCharIndex] = "none";
           }
+        } else {
+          // 중간 과정이고 지금까지는 맞음 -> "none" 유지 (아직 채점 안 함)
+          prevCheck[lastCharIndex] = "none";
         }
       }
 
@@ -267,7 +398,7 @@ const Input = () => {
     <textarea
       ref={textareaRef}
       className={`input ${isDark ? "input-dark" : ""}`}
-      placeholder={"위 문장을 입력하세요."}
+      // placeholder={"위 문장을 입력하세요."}
       autoFocus={true}
       autoComplete={"off"}
       spellCheck={false}
@@ -279,6 +410,7 @@ const Input = () => {
       onPaste={preventPaste}
       onDrop={preventPaste}
       onContextMenu={(e) => e.preventDefault()}
+      style={{ fontSize: `${fontSize}rem` }}
     />
   );
 };
@@ -293,4 +425,14 @@ const calculateAccuracy = (isCorrect, correctCount, incorrectCount) => {
 
 const sum = (array) => {
   return array.reduce((prev, curr) => prev + curr, 0);
+};
+
+const average = (array) => {
+  if (array.length === 0) return 0;
+  return sum(array) / array.length;
+};
+
+const max = (array) => {
+  if (array.length === 0) return 0;
+  return Math.max(...array);
 };

@@ -1,27 +1,44 @@
-import { useContext, useEffect, useState } from "react";
-import "./Sentence.css";
+import { useContext } from "react";
 import { ThemeContext } from "../../../Context/ThemeContext";
 import { QuoteContext } from "../../../Context/QuoteContext";
-import { ScoreContext } from "../../../Context/ScoreContext";
+import { SettingContext } from "../../../Context/SettingContext";
+import "./Sentence.css";
 
-const Sentence = () => {
+const Sentence = ({ inputLength, inputValue }) => {
   const { isDark } = useContext(ThemeContext);
-  const { inputCheck } = useContext(ScoreContext);
   const { sentence } = useContext(QuoteContext);
-  const [characters, setCharacters] = useState(sentence.split(""));
+  const { fontSize } = useContext(SettingContext);
 
-  useEffect(() => {
-    setCharacters(sentence.split(""));
-  }, [sentence]);
+  // 입력값에 맞춰 문장을 조정
+  const getDisplaySentence = () => {
+    if (!sentence) {
+      return "";
+    }
+    
+    if (!inputValue || inputValue.length === 0) {
+      return sentence;
+    }
 
-  //const characters = sentence.split("");
+    // 입력된 부분(inputValue) + 남은 원본 문장 부분
+    const remainingSentence = sentence.slice(inputLength);
+    return inputValue + remainingSentence;
+  };
+
+  const displaySentence = getDisplaySentence();
+
+  if (!displaySentence) {
+    return null;
+  }
 
   return (
     <div className={"character-container"}>
-      {characters.map((character, index) => (
+      {displaySentence.split("").map((character, index) => (
         <span
-          className={`character ${isDark ? "character-dark" : ""} ${inputCheck[index] === "correct" ? "character-correct" : inputCheck[index] === "incorrect" ? "character-incorrect" : ""}`}
+          className={`character ${isDark ? "character-dark" : ""} ${
+            index < inputLength ? "character-typed" : ""
+          }`}
           key={index}
+          style={{ fontSize: `${fontSize}rem` }}
         >
           {character}
         </span>

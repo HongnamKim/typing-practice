@@ -1,8 +1,8 @@
 .author-text {
- font-size: 1.2rem;
+ font-size: 0.95rem;
+ color: #999;
 }
 
 .author-dark {
- /*background-color: transparent;*/
- color: #a1a1aa;
+ color: #71717a;
 }

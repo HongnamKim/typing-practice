@@ -24,7 +24,7 @@ const ToggleDisplayCurrentCpm = () => {
       />
       <label
         htmlFor={"currentCPM"}
-        className={isDark ? "toggle-current-cpm-dark" : ""}
+        className={isDark ? "toggle-current-cpm-dark" : "toggle-current-cpm"}
       >
         실시간 타자 속도
       </label>

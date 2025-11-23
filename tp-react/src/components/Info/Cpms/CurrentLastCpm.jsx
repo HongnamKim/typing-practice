@@ -1,27 +1,40 @@
 import { useContext } from "react";
 import { SettingContext } from "../../../Context/SettingContext";
 import { ScoreContext } from "../../../Context/ScoreContext";
+import { ThemeContext } from "../../../Context/ThemeContext";
+import { Storage_Display_Cpm } from "../../../const/config.const";
 import "./Cpms.css";
 
 /**
  * 현재 or 마지막 타자 속도 디스플레이
+ * 클릭하여 Current CPM / Last CPM 전환
  * 모든 점수 관리는 ScoreContext 에서 진행, 이 컴포넌트는 디스플레이만 집중
  * @return {JSX.Element}
  * @constructor
  */
 const CurrentLastCpm = () => {
-  const { displayCurrentCpm } = useContext(SettingContext);
+  const { displayCurrentCpm, setDisplayCurrentCpm } = useContext(SettingContext);
   const { currentCpm, lastCpm } = useContext(ScoreContext);
+  const { isDark } = useContext(ThemeContext);
+
+  const handleToggle = () => {
+    localStorage.setItem(Storage_Display_Cpm, (!displayCurrentCpm).toString());
+    setDisplayCurrentCpm((prev) => !prev);
+  };
 
   return (
-    <div>
+    <div
+      onClick={handleToggle}
+      style={{ cursor: 'pointer', userSelect: 'none' }}
+      title="Click to toggle between Current and Last CPM"
+    >
       <span className={"speed-check"}>
         {displayCurrentCpm ? `Current CPM` : `Last CPM`}
       </span>
       {displayCurrentCpm ? (
-        <span className={"speed-check speed-check-num"}>{currentCpm}</span>
+        <span className={isDark ? "speed-check speed-check-num dark" : "speed-check speed-check-num"}>{currentCpm}</span>
       ) : (
-        <span className={"speed-check speed-check-num"}>{lastCpm}</span>
+        <span className={isDark ? "speed-check speed-check-num dark" : "speed-check speed-check-num"}>{lastCpm}</span>
       )}
     </div>
   );

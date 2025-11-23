@@ -23,34 +23,39 @@ export const QuoteContextProvider = ({ children }) => {
     setQuotes(initQuotes);
     setQuotesIndex(initQuotesIndex);
 
-    setSentence(initQuotes[initQuotesIndex].sentence);
-    setAuthor(initQuotes[initQuotesIndex].author);
-  }, []);
+    const initialQuote = initQuotes[initQuotesIndex];
+    
+    if (initialQuote && initialQuote.sentence) {
+      setSentence(initialQuote.sentence);
+      setAuthor(initialQuote.author);
+      setInputCheck(new Array(initialQuote.sentence.length).fill("none"));
+    }
+  }, [setInputCheck]);
 
   useEffect(() => {
     if (quotesIndex < 0) {
       setQuotesIndex(quotes.length - 1);
-    } else if (quotesIndex >= quotes.length) {
+      return;
+    } 
+    
+    if (quotesIndex >= quotes.length) {
       setQuotesIndex(0);
-    } else {
-      /*if (!quotes[quotesIndex]) {
-        return;
-      }*/
-
-      setInputCheck(() => {
-        const sentence = quotes[quotesIndex].sentence;
-
-        return new Array(sentence.length).fill("none");
-      });
-
-      setSentence(() => {
-        return quotes[quotesIndex].sentence;
-      });
-      setAuthor(() => {
-        return quotes[quotesIndex].author;
-      });
+      return;
     }
-  }, [quotesIndex]);
+    
+    const currentQuote = quotes[quotesIndex];
+    
+    if (!currentQuote || !currentQuote.sentence) {
+      return;
+    }
+
+    setInputCheck(() => {
+      return new Array(currentQuote.sentence.length).fill("none");
+    });
+
+    setSentence(currentQuote.sentence);
+    setAuthor(currentQuote.author);
+  }, [quotesIndex, quotes, setInputCheck]);
 
   return (
     <QuoteContext.Provider

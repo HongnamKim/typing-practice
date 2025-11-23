@@ -2,9 +2,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /*width: 15%;*/
+}
+
+.toggle-current-cpm {
+    color: #666;
 }
 
 .toggle-current-cpm-dark {
-    color: white;
+    color: #999;
 }

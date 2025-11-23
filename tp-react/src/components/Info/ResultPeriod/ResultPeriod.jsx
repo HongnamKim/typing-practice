@@ -41,7 +41,7 @@ const ResultPeriod = () => {
       <button
         onClick={handleResultPeriod}
         id={"result-period-down"}
-        className={"result-period-button"}
+        className={isDark ? "result-period-button dark" : "result-period-button"}
       >
         <FaChevronDown
           id={"result-period-down"}
@@ -62,7 +62,7 @@ const ResultPeriod = () => {
       <button
         onClick={handleResultPeriod}
         id={"result-period-up"}
-        className={"result-period-button"}
+        className={isDark ? "result-period-button dark" : "result-period-button"}
       >
         <FaChevronUp
           id={"result-period-up"}
