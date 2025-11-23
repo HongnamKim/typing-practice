@@ -288,7 +288,7 @@ export const defaultQuotes = [
         "author": "속담"
     },
     {
-        "sentence": "산 입에 거미줄 치랴",
+        "sentence": "산 입에 거미줄 치랴.",
         "author": "속담"
     },
     {
@@ -800,7 +800,7 @@ export const defaultQuotes = [
         "author": "카네기"
     },
     {
-        "sentence": "당신이 정말로 뭔가를 원한다면 기다리지 마라. 견디지 못하는 법을 스스로 가르쳐라",
+        "sentence": "당신이 정말로 뭔가를 원한다면 기다리지 마라. 견디지 못하는 법을 스스로 가르쳐라.",
         "author": "구르박쉬 차할"
     },
     {
@@ -2716,7 +2716,7 @@ export const defaultQuotes = [
         "author": "프란시스 톰슨"
     },
     {
-        "sentence": "내 비장의 무기는 아직 손 안에 있다. 그것은 희망이다",
+        "sentence": "내 비장의 무기는 아직 손 안에 있다. 그것은 희망이다.",
         "author": "보나파르트 나폴레옹"
     },
     {
@@ -2772,7 +2772,7 @@ export const defaultQuotes = [
         "author": "디오게네스"
     },
     {
-        "sentence": "곡선은 신의 선이고, 직선은 인간의 선이다",
+        "sentence": "곡선은 신의 선이고, 직선은 인간의 선이다.",
         "author": "안토니 가우디"
     },
     {
@@ -2992,7 +2992,7 @@ export const defaultQuotes = [
         "author": "정지용"
     },
     {
-        "sentence": "격의 없이 터놓은 관계라도 기본 예는 갖춤이 옳거니",
+        "sentence": "격의 없이 터놓은 관계라도 기본 예는 갖춤이 옳거니.",
         "author": "2008년 9월"
     },
     {
@@ -3004,7 +3004,7 @@ export const defaultQuotes = [
         "author": "법정"
     },
     {
-        "sentence": "젊을 때 배움을 소홀히 하면 미래가 없다",
+        "sentence": "젊을 때 배움을 소홀히 하면 미래가 없다.",
         "author": "2009년 6월"
     },
     {
@@ -3052,7 +3052,7 @@ export const defaultQuotes = [
         "author": "2011년 7월"
     },
     {
-        "sentence": "세월이 흘러도 어머니의 마음은 늙지 않았습니다",
+        "sentence": "세월이 흘러도 어머니의 마음은 늙지 않았습니다.",
         "author": "2011년 9월"
     },
     {
@@ -3076,7 +3076,7 @@ export const defaultQuotes = [
         "author": "이해인"
     },
     {
-        "sentence": "꽃은 젖어도 향기는 젖지 않는다",
+        "sentence": "꽃은 젖어도 향기는 젖지 않는다.",
         "author": "도종환"
     },
     {
@@ -3084,7 +3084,7 @@ export const defaultQuotes = [
         "author": "패닉"
     },
     {
-        "sentence": "많이 사랑하고 더 나중까지 지켜주는 이 됩시다",
+        "sentence": "많이 사랑하고 더 나중까지 지켜주는 이 됩시다.",
         "author": "김남조"
     },
     {
@@ -3096,15 +3096,15 @@ export const defaultQuotes = [
         "author": "이해인"
     },
     {
-        "sentence": "하루가 힘들어도 미래를 위해 꿈을 꾼다",
+        "sentence": "하루가 힘들어도 미래를 위해 꿈을 꾼다.",
         "author": "2012년 9월"
     },
     {
-        "sentence": "삶의 울타리에 평안함이 가득하다는 것이다",
+        "sentence": "삶의 울타리에 평안함이 가득하다는 것이다.",
         "author": "용혜원"
     },
     {
-        "sentence": "썰물이 훑고 간 갯바닥의 나문재들은 더욱 붉었다",
+        "sentence": "썰물이 훑고 간 갯바닥의 나문재들은 더욱 붉었다.",
         "author": "2012년 10월"
     },
     {
@@ -3116,7 +3116,7 @@ export const defaultQuotes = [
         "author": "정한모"
     },
     {
-        "sentence": "밝고 환한 빛으로 들꽃처럼 웃었지요",
+        "sentence": "밝고 환한 빛으로 들꽃처럼 웃었지요.",
         "author": "김용택"
     },
     {
@@ -3124,7 +3124,7 @@ export const defaultQuotes = [
         "author": "2013년 4월"
     },
     {
-        "sentence": "햇빛이 선명하게 나뭇잎을 핥고 있었다",
+        "sentence": "햇빛이 선명하게 나뭇잎을 핥고 있었다.",
         "author": "한수산"
     },
     {
@@ -3136,7 +3136,7 @@ export const defaultQuotes = [
         "author": "곽재구"
     },
     {
-        "sentence": "신선한 물고기가 튀는 빛의 꼬리를 물고 쏟아진다",
+        "sentence": "신선한 물고기가 튀는 빛의 꼬리를 물고 쏟아진다.",
         "author": "전봉건"
     },
     {
@@ -3176,11 +3176,11 @@ export const defaultQuotes = [
         "author": "이성선"
     },
     {
-        "sentence": "눈꽃의 화음에 귀를 적신다",
+        "sentence": "눈꽃의 화음에 귀를 적신다.",
         "author": "곽재구"
     },
     {
-        "sentence": "나중 난 뿔이 우뚝하다",
+        "sentence": "나중 난 뿔이 우뚝하다.",
         "author": "속담"
     },
     {
@@ -3192,7 +3192,7 @@ export const defaultQuotes = [
         "author": "신동엽"
     },
     {
-        "sentence": "깊고 넓은 감정의 바다가 있다",
+        "sentence": "깊고 넓은 감정의 바다가 있다.",
         "author": "김춘수"
     },
     {
@@ -3200,7 +3200,7 @@ export const defaultQuotes = [
         "author": "2015년 6월"
     },
     {
-        "sentence": "깊은 숲 속에서 나오니 유월의 햇빛이 밝다",
+        "sentence": "깊은 숲 속에서 나오니 유월의 햇빛이 밝다.",
         "author": "김달진"
     },
     {
@@ -3268,7 +3268,7 @@ export const defaultQuotes = [
         "author": "이성선"
     },
     {
-        "sentence": "넌 머지않아 예쁜 꽃이 될 테니까",
+        "sentence": "넌 머지않아 예쁜 꽃이 될 테니까.",
         "author": "박치성"
     },
     {
@@ -3396,7 +3396,7 @@ export const defaultQuotes = [
         "author": "성찬경"
     },
     {
-        "sentence": "내게 오는 모든 것은 다 축복이었다",
+        "sentence": "내게 오는 모든 것은 다 축복이었다.",
         "author": "도종환"
     },
     {
@@ -3640,7 +3640,7 @@ export const defaultQuotes = [
         "author": "토머스 듀어"
     },
     {
-        "sentence": "기쁨을 나눴더니 질투가 되고 슬픔을 나눴더니 약점이 되더라",
+        "sentence": "기쁨을 나눴더니 질투가 되고 슬픔을 나눴더니 약점이 되더라.",
         "author": "작자미상"
     },
     {
@@ -3656,7 +3656,7 @@ export const defaultQuotes = [
         "author": "김은주"
     },
     {
-        "sentence": "홍시여 이 사실을 잊지 말게. 너도 젊었을 때는 무척 떫었다는 걸",
+        "sentence": "홍시여 이 사실을 잊지 말게. 너도 젊었을 때는 무척 떫었다는 걸.",
         "author": "나쓰메 소세키"
     },
     {
@@ -3688,7 +3688,7 @@ export const defaultQuotes = [
         "author": "틱 낙한 스님"
     },
     {
-        "sentence": "내 것이라고 생각하면 우산 위의 눈도 가볍게 느껴지네",
+        "sentence": "내 것이라고 생각하면 우산 위의 눈도 가볍게 느껴지네.",
         "author": "기가쿠"
     },
     {
@@ -4124,7 +4124,7 @@ export const defaultQuotes = [
         "author": "월플라워"
     },
     {
-        "sentence": "자기 자신을 존중하되 자만하지 말라. 자신의 능력을 키우되 과신하지 말라",
+        "sentence": "자기 자신을 존중하되 자만하지 말라. 자신의 능력을 키우되 과신하지 말라.",
         "author": "탈무드"
     },
     {
