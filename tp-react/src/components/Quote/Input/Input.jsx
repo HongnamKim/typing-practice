@@ -49,15 +49,14 @@ const Input = ({ onInputChange: onInputChangeCallback }) => {
 
   const textareaRef = useRef(null); // DOM 요소 접근용
 
-  // textarea rows 조절
+  // textarea 높이 자동 조절
   useEffect(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;
 
-    // 초기 높이 설정
-    textarea.rows = 1;
-    textarea.rows = Math.floor(textarea.scrollHeight / textarea.clientHeight);
-  }, [input]);
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  }, [input, fontSize]);
 
   useEffect(() => {
     separatedSentence.current = sentence.split("").map((character) => {
@@ -113,6 +112,21 @@ const Input = ({ onInputChange: onInputChangeCallback }) => {
   };
 
   const handleKeyDown = (e) => {
+    // 엔터키 처리
+    if (e.key === "Enter") {
+      e.preventDefault();
+      
+      // 문장 입력이 완료된 경우 제출
+      if (input.length === sentence.length) {
+        const submitValue = input + " "; // 스페이스 추가하여 제출 형식 맞춤
+        submitInput(submitValue);
+        setQuotesIndex((prev) => prev + 1);
+        clearInput(true);
+      }
+      // 문장 입력 중에는 엔터키 무시
+      return;
+    }
+
     if (!KEY_COMMANDS.includes(e.key)) {
       return;
     }
@@ -236,12 +250,6 @@ const Input = ({ onInputChange: onInputChangeCallback }) => {
       // 입력 초기화
       clearInput(true);
 
-      return;
-    }
-
-    // 입력값 길이가 문장보다 짧을 경우
-    // 엔터키 입력 무시
-    if (newValue[newValue.length - 1] === "\n") {
       return;
     }
     
@@ -398,19 +406,19 @@ const Input = ({ onInputChange: onInputChangeCallback }) => {
     <textarea
       ref={textareaRef}
       className={`input ${isDark ? "input-dark" : ""}`}
-      // placeholder={"위 문장을 입력하세요."}
       autoFocus={true}
       autoComplete={"off"}
       spellCheck={false}
-      rows={1}
-      cols={30}
       value={input}
       onInput={onInputChange}
       onKeyDown={handleKeyDown}
       onPaste={preventPaste}
       onDrop={preventPaste}
       onContextMenu={(e) => e.preventDefault()}
-      style={{ fontSize: `${fontSize}rem` }}
+      style={{ 
+        fontSize: `${fontSize}rem`,
+        lineHeight: 1.8
+      }}
     />
   );
 };

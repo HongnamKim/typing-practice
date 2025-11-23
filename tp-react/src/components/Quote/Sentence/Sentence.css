@@ -9,12 +9,11 @@
 
 .character {
     color: #999;
-    font-size: 1.5rem;
     line-height: 1.8;
 }
 
 .character-dark {
-    color: #555;
+    color: #a8a8a8;
 }
 
 .character-typed {

@@ -11,6 +11,7 @@ import Contact from "./components/Contact/Contact";
 import { QuoteContextProvider } from "./Context/QuoteContext";
 import AverageScorePopUp from "./components/AverageScorePopUp/AverageScorePopUp";
 import FontSizeSlider from "./components/FontSizeSlider/FontSizeSlider";
+import {Analytics} from "@vercel/analytics/react";
 
 function App() {
   return (
@@ -28,8 +29,10 @@ function App() {
           </ScoreContextProvider>
         </SettingContextProvider>
         <Contact />
+          <Analytics/>
       </AppDiv>
     </ThemeContextProvider>
+
   );
 }
 

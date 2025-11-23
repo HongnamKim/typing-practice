@@ -3,12 +3,13 @@
     top: 0;
     left: 0;
     width: 100%;
-    font-size: 1.5rem;
     line-height: 1.8;
     z-index: 10;
     pointer-events: none;
     white-space: pre-wrap;
     word-wrap: break-word;
+    word-break: normal;
+    overflow-wrap: break-word;
 }
 
 .input-char-correct {
@@ -16,7 +17,7 @@
 }
 
 .input-char-correct.dark {
-    color: #e5e7eb;
+    color: #ffffff;
 }
 
 .input-char-incorrect {
@@ -28,5 +29,5 @@
 }
 
 .input-char-none.dark {
-    color: #999;
+    color: #d4d4d4;
 }
