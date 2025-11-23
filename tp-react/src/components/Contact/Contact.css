@@ -1,10 +1,21 @@
 .contact {
+    position: fixed;
+    bottom: 15rem;
     text-decoration: none;
-    color: black;
+    color: #666;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+}
+
+.contact:hover {
+    color: #333;
 }
 
 .dark {
     text-decoration: none;
-    color:white;
+    color: #999;
 }
 
+.dark:hover {
+    color: #e5e7eb;
+}

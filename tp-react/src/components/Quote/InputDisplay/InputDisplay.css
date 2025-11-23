@@ -1,0 +1,32 @@
+.input-display {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    font-size: 1.5rem;
+    line-height: 1.8;
+    z-index: 10;
+    pointer-events: none;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.input-char-correct {
+    color: #333;
+}
+
+.input-char-correct.dark {
+    color: #e5e7eb;
+}
+
+.input-char-incorrect {
+    color: #dc2626;
+}
+
+.input-char-none {
+    color: #666;
+}
+
+.input-char-none.dark {
+    color: #999;
+}

@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Practice - 디자인 프로토타입</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            font-family:
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Oxygen,
+                Ubuntu,
+                Cantarell,
+                "Open Sans",
+                "Helvetica Neue",
+                sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            margin: 0;
+            background-color: #fafafa;
+            color: #333;
+        }
+
+        .pop-up-background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            opacity: 40%;
+        }
+
+        .pop-up {
+            position: absolute;
+            background-color: white;
+            width: 25rem;
+            height: 25rem;
+            border-radius: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        .pop-up.dark {
+            background-color: #1f1f1f;
+            border: 1px solid #3f3f46;
+        }
+
+        .pop-up-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 3rem;
+            font-weight: 600;
+        }
+
+        .pop-up-title.dark {
+            color: #e5e7eb;
+        }
+
+        .pop-up-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+            color: #555;
+        }
+
+        .pop-up-info.dark {
+            color: #d4d4d8;
+        }
+
+        .pop-up-close {
+            margin-top: 2rem;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .pop-up-close.dark {
+            color: #71717a;
+        }
+
+        .spacer {
+            height: 25vh;
+        }
+
+        body.dark {
+            background-color: #0f0f0f;
+            color: #e5e7eb;
+        }
+
+        .title {
+            width: 80%;
+            max-width: 1000px;
+            min-width: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+        }
+
+        .title-title {
+            font-size: 2rem;
+            color: #333;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .title-title.dark {
+            color: #e5e7eb;
+        }
+
+        .title-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .dark-mode-icon {
+            color: #666;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .dark-mode-icon:hover {
+            color: #333;
+        }
+
+        .dark-mode-icon.dark {
+            color: #999;
+        }
+
+        .dark-mode-icon.dark:hover {
+            color: #e5e7eb;
+        }
+
+        .display-none {
+            display: none;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 1000px;
+            min-width: 600px;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .container.dark {
+        }
+
+        .upper-container {
+            margin: 1rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .upper-container.dark {
+            border-bottom: 1px solid #27272a;
+        }
+
+        .typing-info-settings {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            color: #666;
+        }
+
+        .typing-info-settings.dark {
+            color: #999;
+        }
+
+        .result-period-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .result-period-btn {
+            border: none;
+            background: none;
+            color: #666;
+            padding: 0.25rem;
+        }
+
+        .result-period-btn:hover {
+            cursor: pointer;
+            color: #333;
+        }
+
+        .result-period-btn.dark {
+            color: #999;
+        }
+
+        .result-period-btn.dark:hover {
+            color: #e5e7eb;
+        }
+
+        .result-period-value {
+            font-size: 1.3rem;
+            color: #333;
+            min-width: 2rem;
+            text-align: center;
+        }
+
+        .result-period-value.dark {
+            color: #e5e7eb;
+        }
+
+        .CPM-container {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        .CPM-container.dark {
+            color: #d4d4d8;
+        }
+
+        .currentCPM-text {
+            color: #666;
+        }
+
+        .currentCPM-text.dark {
+            color: #999;
+        }
+
+        .speed-check {
+            font-size: 1.3rem;
+        }
+
+        .speed-check.dark {
+            color: #d4d4d8;
+        }
+
+        #speedCheck {
+            margin-left: 2rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        body.dark #speedCheck {
+            color: #ffffff;
+        }
+
+        #maxSpeed {
+            margin-left: 2rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        body.dark #maxSpeed {
+            color: #ffffff;
+        }
+
+        .typing-info {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #f5f5f5;
+        }
+
+        .typing-info.dark {
+            border-top: 1px solid #1f1f1f;
+        }
+
+        .typing-info > div > span {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .typing-info > div > span.dark {
+            font-size: 1.1rem;
+            color: #999;
+        }
+
+        .typing-info-value {
+            margin-left: 1.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .typing-info-value.dark {
+            color: #e5e7eb;
+        }
+
+        .none {
+            color: #999;
+        }
+
+        .none.dark {
+            color: #555;
+        }
+
+        .correct {
+            color: #333;
+        }
+
+        .correct.dark {
+            color: #e5e7eb;
+        }
+
+        .incorrect {
+            color: #dc2626;
+        }
+
+        .bottom-container {
+            padding: 2rem;
+            padding-top: 1rem;
+        }
+
+        .quote-display {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .quote-display.dark {
+            color: #e5e7eb;
+        }
+
+        .qutoe-author {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: row-reverse;
+        }
+
+        .qutoe-author-text {
+            font-size: 0.95rem;
+            color: #999;
+        }
+
+        .qutoe-author-text.dark {
+            color: #71717a;
+        }
+
+        .quote-input {
+            border: none;
+            border-bottom: 2px solid #6d28d9;
+            width: 100%;
+            padding: 0;
+            padding-bottom: 0.5rem;
+            overflow-y: hidden;
+            resize: none;
+            outline: none;
+            font-size: 1.5rem;
+            background-color: transparent;
+            color: #333;
+            transition: border-color 0.2s;
+        }
+
+        .quote-input:focus {
+            border-bottom-color: #8b5cf6;
+        }
+
+        .quote-input.dark {
+            background-color: transparent;
+            color: #e5e7eb;
+            border-bottom-color: #6d28d9;
+        }
+
+        .quote-input.dark:focus {
+            border-bottom-color: #8b5cf6;
+        }
+
+        .quote-input::placeholder {
+            color: #bbb;
+        }
+
+        .quote-input.dark::placeholder {
+            color: #555;
+        }
+
+        .contact {
+            text-decoration: none;
+            color: #666;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .contact:hover {
+            color: #333;
+        }
+
+        .contact.dark {
+            color: #999;
+        }
+
+        .contact.dark:hover {
+            color: #e5e7eb;
+        }
+    </style>
+</head>
+<body id="body">
+    <div class="pop-up-background display-none" id="pop-up-background"></div>
+    <div class="pop-up display-none" id="pop-up">
+        <h1 class="pop-up-title">Typing Practice</h1>
+        <div class="pop-up-info pop-up-avg-cpm">
+            <span>Avg CPM</span>
+            <span id="pop-up-avg-cpm">245</span>
+        </div>
+        <div class="pop-up-info pop-up-max-cpm">
+            <span>Max CPM</span>
+            <span id="pop-up-max-cpm">312</span>
+        </div>
+        <div class="pop-up-info pop-up-acc">
+            <span>ACC</span>
+            <span id="pop-up-acc">96%</span>
+        </div>
+        <div class="pop-up-close">
+            <span>press ESC to continue</span>
+        </div>
+    </div>
+
+    <div class="title">
+        <div class="title-left">
+            <h1 class="title-title">Typing Practice</h1>
+        </div>
+        <div class="title-right">
+            <i class="fa-regular fa-sun fa-xl dark-mode-icon" id="icon-sun" onclick="toggleTheme()"></i>
+            <i class="fa-regular fa-moon fa-xl dark-mode-icon display-none" id="icon-moon" onclick="toggleTheme()"></i>
+        </div>
+    </div>
+
+    <div class="container upper-container">
+        <div class="speed-check-container">
+            <div class="typing-info-settings">
+                <div>
+                    <input type="checkbox" id="currentCPM" checked />
+                    <label for="currentCPM" class="currentCPM-text">실시간 타자 속도</label>
+                </div>
+
+                <div class="result-period-container" id="result-period-container">
+                    <button class="result-period-btn" id="result-period-btn-down">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <span class="result-period-value" id="result-period-value">5</span>
+                    <button class="result-period-btn" id="result-period-btn-up">
+                        <i class="fa-solid fa-chevron-up"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="CPM-container">
+                <div>
+                    <span class="speed-check" id="speed-check-text">Current CPM</span>
+                    <span class="speed-check" id="speedCheck">245</span>
+                </div>
+                <div>
+                    <span class="speed-check" id="max-speed-text">Highest CPM</span>
+                    <span class="speed-check" id="maxSpeed">312</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="typing-info" id="typingInfo">
+            <div>
+                <span class="typing-info-CPM">CPM</span>
+                <span class="typing-info-CPM typing-info-value" id="cpm">278</span>
+            </div>
+
+            <div>
+                <span class="typing-info-ACC">ACC</span>
+                <span class="typing-info-ACC typing-info-value" id="acc">96%</span>
+            </div>
+
+            <div>
+                <span class="typing-info-CNT">CNT</span>
+                <span class="typing-info-CNT typing-info-value" id="cnt">15</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container bottom-container">
+        <div id="quote-container">
+            <div class="qutoe-author">
+                <span class="qutoe-author-text" id="quoteAuthor">토마스 풀러</span>
+            </div>
+            <div class="quote-display" id="quoteDisplay">
+                <span class="correct">우리는 우물이 마르기 </span><span class="incorrect">전</span><span class="none">까지 물의 중요성을 결코 알지 못한다.</span>
+            </div>
+        </div>
+        <textarea
+            class="quote-input"
+            id="quoteInput"
+            placeholder="위 문장을 입력하세요."
+            autofocus
+            autocomplete="off"
+            spellcheck="false"
+            rows="1"
+            cols="30"
+        >우리는 우물이 마르기 전</textarea>
+    </div>
+
+    <div class="spacer"></div>
+    <a class="contact" id="contact" href="#">Contact</a>
+
+    <script>
+        function toggleTheme() {
+            const body = document.getElementById('body');
+            const sunIcon = document.getElementById('icon-sun');
+            const moonIcon = document.getElementById('icon-moon');
+            const popup = document.querySelector('.pop-up');
+            const popupTitle = document.querySelector('.pop-up-title');
+            const popupInfos = document.querySelectorAll('.pop-up-info');
+            const popupClose = document.querySelector('.pop-up-close');
+            const containers = document.querySelectorAll('.container');
+            const upperContainer = document.querySelector('.upper-container');
+            const titleTitle = document.querySelector('.title-title');
+            const darkModeIcon = document.querySelectorAll('.dark-mode-icon');
+            const resultPeriodBtns = document.querySelectorAll('.result-period-btn');
+            const resultPeriodValue = document.querySelector('.result-period-value');
+            const typingInfoSettings = document.querySelector('.typing-info-settings');
+            const cpmContainer = document.querySelector('.CPM-container');
+            const currentCPMText = document.querySelector('.currentCPM-text');
+            const speedChecks = document.querySelectorAll('.speed-check');
+            const speedCheck = document.getElementById('speedCheck');
+            const maxSpeed = document.getElementById('maxSpeed');
+            const typingInfo = document.querySelector('.typing-info');
+            const typingInfoSpans = document.querySelectorAll('.typing-info > div > span');
+            const typingInfoValues = document.querySelectorAll('.typing-info-value');
+            const quoteDisplay = document.querySelector('.quote-display');
+            const quoteAuthorText = document.querySelector('.qutoe-author-text');
+            const quoteInput = document.querySelector('.quote-input');
+            const contact = document.querySelector('.contact');
+            const noneSpans = document.querySelectorAll('.none');
+            const correctSpans = document.querySelectorAll('.correct');
+
+            body.classList.toggle('dark');
+            sunIcon.classList.toggle('display-none');
+            moonIcon.classList.toggle('display-none');
+
+            if (popup) popup.classList.toggle('dark');
+            if (popupTitle) popupTitle.classList.toggle('dark');
+            popupInfos.forEach(info => info.classList.toggle('dark'));
+            if (popupClose) popupClose.classList.toggle('dark');
+
+            containers.forEach(container => container.classList.toggle('dark'));
+            if (upperContainer) upperContainer.classList.toggle('dark');
+            if (titleTitle) titleTitle.classList.toggle('dark');
+            darkModeIcon.forEach(icon => icon.classList.toggle('dark'));
+            resultPeriodBtns.forEach(btn => btn.classList.toggle('dark'));
+            if (resultPeriodValue) resultPeriodValue.classList.toggle('dark');
+            if (typingInfoSettings) typingInfoSettings.classList.toggle('dark');
+            if (cpmContainer) cpmContainer.classList.toggle('dark');
+            if (currentCPMText) currentCPMText.classList.toggle('dark');
+            speedChecks.forEach(check => check.classList.toggle('dark'));
+            if (speedCheck) speedCheck.classList.toggle('dark');
+            if (maxSpeed) maxSpeed.classList.toggle('dark');
+            if (typingInfo) typingInfo.classList.toggle('dark');
+            typingInfoSpans.forEach(span => span.classList.toggle('dark'));
+            typingInfoValues.forEach(value => value.classList.toggle('dark'));
+            if (quoteDisplay) quoteDisplay.classList.toggle('dark');
+            if (quoteAuthorText) quoteAuthorText.classList.toggle('dark');
+            if (quoteInput) quoteInput.classList.toggle('dark');
+            if (contact) contact.classList.toggle('dark');
+            noneSpans.forEach(span => span.classList.toggle('dark'));
+            correctSpans.forEach(span => span.classList.toggle('dark'));
+        }
+
+        // Textarea 자동 높이 조절
+        const textarea = document.querySelector('.quote-input');
+        if (textarea) {
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            });
+        }
+    </script>
+</body>
+</html>

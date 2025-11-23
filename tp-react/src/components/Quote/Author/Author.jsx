@@ -7,7 +7,8 @@ const Author = ({ author }) => {
 
   return (
     <span className={`author-text ${isDark ? "author-dark" : ""}`}>
-      {"- " + author + " -"}
+      {/*{"- " + author + " -"}*/}
+        {"- " + author}
     </span>
   );
 };

@@ -1,43 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="TPfavi.png" type="image/x-icon"/>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+    <meta name="theme-color" content="#6d28d9" />
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>Typing Practice</title>
+    <!-- Primary Meta Tags -->
+    <title>타자연습 | 타이핑 연습 - Typing Practice</title>
+    <meta name="title" content="타자연습 | 타이핑 연습 - Typing Practice" />
+    <meta name="description" content="무료 타자연습 사이트. 실시간 타자 속도 측정, 정확도 분석, 명언으로 배우는 타이핑. CPM(분당 타자수) 및 정확도를 확인하며 타자 실력을 향상시키세요." />
+    <meta name="keywords" content="타자연습, 타이핑 연습, 타자 속도, CPM, 타자 게임, 무료 타자연습, typing practice, 타이핑" />
+    <meta name="author" content="Typing Practice" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://typing-practice-omega.vercel.app" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://typing-practice-omega.vercel.app" />
+    <meta property="og:title" content="타자연습 | 타이핑 연습 - Typing Practice" />
+    <meta property="og:description" content="무료 타자연습 사이트. 실시간 타자 속도 측정, 정확도 분석으로 타이핑 실력을 향상시키세요." />
+    <meta property="og:image" content="%PUBLIC_URL%/TPfavi.png" />
+    <meta property="og:locale" content="ko_KR" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://typing-practice-omega.vercel.app" />
+    <meta property="twitter:title" content="타자연습 | 타이핑 연습 - Typing Practice" />
+    <meta property="twitter:description" content="무료 타자연습 사이트. 실시간 타자 속도 측정, 정확도 분석으로 타이핑 실력을 향상시키세요." />
+    <meta property="twitter:image" content="%PUBLIC_URL%/TPfavi.png" />
+
+    <!-- Kakao / Naver -->
+    <meta property="og:site_name" content="타자연습 - Typing Practice" />
+    <meta property="og:image:width" content="800" />
+    <meta property="og:image:height" content="400" />
+
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "타자연습 - Typing Practice",
+      "description": "무료 타자연습 사이트. 실시간 타자 속도 측정 및 정확도 분석",
+      "url": "https://typing-practice-omega.vercel.app",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "KRW"
+      },
+      "featureList": [
+        "실시간 타자 속도 측정",
+        "정확도 분석",
+        "CPM (분당 타자수) 계산",
+        "다크 모드 지원",
+        "명언 기반 연습 문장"
+      ],
+      "inLanguage": "ko",
+      "browserRequirements": "Requires JavaScript"
+    }
+    </script>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>이 앱을 실행하려면 JavaScript를 활성화해야 합니다.</noscript>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>

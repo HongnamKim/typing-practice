@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { ScoreContext } from "../../../Context/ScoreContext";
+import { ThemeContext } from "../../../Context/ThemeContext";
 import "./AverageScore.css";
 
 /**
@@ -9,6 +10,7 @@ import "./AverageScore.css";
  */
 const AverageScore = ({ type }) => {
   const { totalScore } = useContext(ScoreContext);
+  const { isDark } = useContext(ThemeContext);
   const [avgScore, setAvgScore] = useState(0);
 
   // count 바뀔 때마다 평균 값 계산
@@ -27,14 +29,14 @@ const AverageScore = ({ type }) => {
         });
         break;
     }
-  }, [totalScore]);
+  }, [totalScore, type]);
 
   return (
     <div className={"average-info"}>
-      <span className={"average-info-title"}>
+      <span className={isDark ? "average-info-title dark" : "average-info-title"}>
         {type.toUpperCase().slice(0, 3)}
       </span>
-      <span className={"average-info-num"}>
+      <span className={isDark ? "average-info-num dark" : "average-info-num"}>
         {avgScore === 0 ? "-" : avgScore}
       </span>
     </div>

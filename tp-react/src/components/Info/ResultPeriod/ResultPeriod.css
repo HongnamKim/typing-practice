@@ -2,6 +2,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 0.15rem;
 }
 .result-period-button {
     border: none;
@@ -9,14 +10,35 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    color: #666;
+    padding: 0.25rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.result-period-button:hover {
+    color: #333;
+}
+
+.result-period-button.dark {
+    color: #999;
+}
+
+.result-period-button.dark:hover {
+    color: #e5e7eb;
 }
 
 .result-period-text {
-    color: black;
-    font-size: 1.2rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    color: #333;
+    font-size: 1.3rem;
+    min-width: 4rem;
+    text-align: center;
+    display: inline-block;
 }
 
 .result-period-dark {
-    color: white;
+    color: #e5e7eb;
     background: none;
 }

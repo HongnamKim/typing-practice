@@ -12,6 +12,7 @@ export const resultPeriodDisplaySet = ["5", "10", "15", "∞"];
 export const SettingContextProvider = ({ children }) => {
   const [displayCurrentCpm, setDisplayCurrentCpm] = useState(null);
   const [resultPeriod, setResultPeriod] = useState(null);
+  const [fontSize, setFontSize] = useState(2.0);
 
   useEffect(() => {
     // 실시간 타자 속도 설정 불러오기
@@ -37,6 +38,17 @@ export const SettingContextProvider = ({ children }) => {
         return 0;
       }
     });
+
+    // 폰트 크기 설정 불러오기
+    setFontSize(() => {
+      const savedFontSize = localStorage.getItem("fontSize");
+      if (savedFontSize) {
+        return parseFloat(savedFontSize);
+      } else {
+        localStorage.setItem("fontSize", "2.0");
+        return 2.0;
+      }
+    });
   }, []);
 
   return (
@@ -46,6 +58,8 @@ export const SettingContextProvider = ({ children }) => {
         setDisplayCurrentCpm,
         resultPeriod,
         setResultPeriod,
+        fontSize,
+        setFontSize,
       }}
     >
       {children}

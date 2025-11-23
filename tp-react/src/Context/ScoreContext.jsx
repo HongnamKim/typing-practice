@@ -25,6 +25,14 @@ export const ScoreContextProvider = ({ children }) => {
   const [correctCount, setCorrectCount] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
 
+  // 팝업 관련 상태
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupData, setPopupData] = useState({ avgCpm: 0, maxCpm: 0, acc: 0 });
+
+  // 각 문장별 CPM, ACC 리스트
+  const [cpmList, setCpmList] = useState([]);
+  const [accList, setAccList] = useState([]);
+
   return (
     <ScoreContext.Provider
       value={{
@@ -57,6 +65,18 @@ export const ScoreContextProvider = ({ children }) => {
         setCorrectCount,
         incorrectCount,
         setIncorrectCount,
+
+        // 팝업 관련
+        showPopup,
+        setShowPopup,
+        popupData,
+        setPopupData,
+
+        // 각 문장별 CPM, ACC 리스트
+        cpmList,
+        setCpmList,
+        accList,
+        setAccList,
       }}
     >
       {children}

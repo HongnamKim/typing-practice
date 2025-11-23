@@ -1,10 +1,19 @@
 .theme-icon-dark {
-    color: white;
+    color: #999;
+    transition: color 0.2s;
+}
 
+.theme-icon-dark:hover {
+    color: #e5e7eb;
 }
 
 .theme-icon-light {
-    color: black;
+    color: #666;
+    transition: color 0.2s;
+}
+
+.theme-icon-light:hover {
+    color: #333;
 }
 
 .theme-icon {

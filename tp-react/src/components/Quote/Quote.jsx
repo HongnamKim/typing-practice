@@ -1,14 +1,22 @@
 import "./Quote.css";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import Sentence from "./Sentence/Sentence";
 import Author from "./Author/Author";
 import { ThemeContext } from "../../Context/ThemeContext";
 import Input from "./Input/Input";
+import InputDisplay from "./InputDisplay/InputDisplay";
 import { QuoteContext } from "../../Context/QuoteContext";
 
 const Quote = () => {
   const { isDark } = useContext(ThemeContext);
-  const { author } = useContext(QuoteContext);
+  const { author, sentence } = useContext(QuoteContext);
+  const [inputValue, setInputValue] = useState("");
+
+  // 문장이 변경되면 inputValue 초기화
+  useEffect(() => {
+    setInputValue("");
+  }, [sentence]);
+
   /**
    * Quote : 인용문 = 문장 (sentence) + 저자 (author)
    * Sentence : 문장
@@ -22,10 +30,13 @@ const Quote = () => {
         <div className={`author-container ${isDark ? "author-dark" : ""}`}>
           <Author author={author} />
         </div>
-        <Sentence />
+        <div className="sentence-input-wrapper">
+          <Sentence inputLength={inputValue.length} inputValue={inputValue} />
+          <InputDisplay input={inputValue} />
+          {/* QuoteInput */}
+          <Input onInputChange={setInputValue} />
+        </div>
       </div>
-      {/* QuoteInput */}
-      <Input />
     </div>
   );
 };
