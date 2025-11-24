@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import {
   Storage_Display_Cpm,
   Storage_Result_Period,
+  Storage_Font_Size,
 } from "../const/config.const";
 
 export const SettingContext = createContext(null);
@@ -41,11 +42,11 @@ export const SettingContextProvider = ({ children }) => {
 
     // 폰트 크기 설정 불러오기
     setFontSize(() => {
-      const savedFontSize = localStorage.getItem("fontSize");
+      const savedFontSize = localStorage.getItem(Storage_Font_Size);
       if (savedFontSize) {
         return parseFloat(savedFontSize);
       } else {
-        localStorage.setItem("fontSize", "2.0");
+        localStorage.setItem(Storage_Font_Size, "2.0");
         return 2.0;
       }
     });

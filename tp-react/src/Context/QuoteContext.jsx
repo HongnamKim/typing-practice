@@ -18,7 +18,7 @@ export const QuoteContextProvider = ({ children }) => {
     const initQuotes = defaultQuotes.sort(() => Math.random() - 0.5);
 
     const initQuotesIndex = Math.floor(Math.random() * initQuotes.length);
-    //console.log(initQuotesIndex);
+
 
     setQuotes(initQuotes);
     setQuotesIndex(initQuotesIndex);
