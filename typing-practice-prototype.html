@@ -2,102 +2,24 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Typing Practice - 디자인 프로토타입</title>
+    <title>Typing Practice</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
-            font-family:
-                system-ui,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Roboto,
-                Oxygen,
-                Ubuntu,
-                Cantarell,
-                "Open Sans",
-                "Helvetica Neue",
-                sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            height: 100vh;
-            width: 100vw;
-            overflow-x: hidden;
-            overflow-y: hidden;
-            margin: 0;
+            min-height: 100vh;
+            padding-top: 18vh;
             background-color: #fafafa;
             color: #333;
-        }
-
-        .pop-up-background {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-color: black;
-            opacity: 40%;
-        }
-
-        .pop-up {
-            position: absolute;
-            background-color: white;
-            width: 25rem;
-            height: 25rem;
-            border-radius: 0.5rem;
-            display: flex;
-            flex-direction: column;
-            padding-left: 1.5rem;
-            padding-right: 1.5rem;
-            border: 1px solid #e5e7eb;
-        }
-
-        .pop-up.dark {
-            background-color: #1f1f1f;
-            border: 1px solid #3f3f46;
-        }
-
-        .pop-up-title {
-            font-size: 1.5rem;
-            color: #333;
-            margin-bottom: 3rem;
-            font-weight: 600;
-        }
-
-        .pop-up-title.dark {
-            color: #e5e7eb;
-        }
-
-        .pop-up-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-            font-size: 1.5rem;
-            color: #555;
-        }
-
-        .pop-up-info.dark {
-            color: #d4d4d8;
-        }
-
-        .pop-up-close {
-            margin-top: 2rem;
-            color: #999;
-            font-size: 0.9rem;
-        }
-
-        .pop-up-close.dark {
-            color: #71717a;
-        }
-
-        .spacer {
-            height: 25vh;
         }
 
         body.dark {
@@ -105,30 +27,61 @@
             color: #e5e7eb;
         }
 
-        .title {
+        .display-none {
+            display: none !important;
+        }
+
+        /* 폰트 슬라이더 */
+        .font-size-slider-container {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 100;
+        }
+
+        .font-size-label {
+            font-size: 0.9rem;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .font-size-label.dark {
+            color: #999;
+        }
+
+        .font-size-slider {
+            width: 100px;
+            height: 4px;
+            background: #e5e7eb;
+            cursor: pointer;
+        }
+
+        .font-size-slider.dark {
+            background: #3f3f46;
+        }
+
+        /* 헤더 */
+        .head {
             width: 80%;
             max-width: 1000px;
             min-width: 600px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 3rem;
         }
 
         .title-title {
             font-size: 2rem;
-            color: #333;
             font-weight: 600;
-            letter-spacing: -0.5px;
+            color: #333;
         }
 
         .title-title.dark {
             color: #e5e7eb;
-        }
-
-        .title-right {
-            display: flex;
-            align-items: center;
         }
 
         .dark-mode-icon {
@@ -149,50 +102,150 @@
             color: #e5e7eb;
         }
 
-        .display-none {
-            display: none;
+        .head-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
-        .container {
+        .header-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background-color: transparent;
+            color: #666;
+            border-radius: 0.375rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-btn:hover {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .header-btn.dark {
+            background-color: transparent;
+            color: #999;
+        }
+
+        .header-btn.dark:hover {
+            background-color: #27272a;
+            color: #e5e7eb;
+        }
+
+        /* 프로필 드롭다운 */
+        .profile-container {
+            position: relative;
+        }
+
+        .profile-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background-color: transparent;
+            color: #666;
+            border-radius: 0.375rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .profile-btn:hover {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .profile-btn.dark {
+            color: #999;
+        }
+
+        .profile-btn.dark:hover {
+            background-color: #27272a;
+            color: #e5e7eb;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            right: 0;
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            min-width: 180px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .dropdown-menu.dark {
+            background-color: #1f1f1f;
+            border-color: #3f3f46;
+        }
+
+        .dropdown-item {
+            padding: 0.75rem 1rem;
+            color: #666;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .dropdown-item.dark {
+            color: #999;
+        }
+
+        .dropdown-item.dark:hover {
+            background-color: #27272a;
+            color: #e5e7eb;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background-color: #e5e7eb;
+            margin: 0.25rem 0;
+        }
+
+        .dropdown-divider.dark {
+            background-color: #3f3f46;
+        }
+
+        /* 정보 영역 */
+        .info-background {
             width: 80%;
             max-width: 1000px;
             min-width: 600px;
+            padding: 1rem 0 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-settings {
             display: flex;
-            flex-direction: column;
-            padding: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .container.dark {
-        }
-
-        .upper-container {
-            margin: 1rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .upper-container.dark {
-            border-bottom: 1px solid #27272a;
-        }
-
-        .typing-info-settings {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content: flex-end;
+            padding: 0 1rem;
             margin-bottom: 1.5rem;
-            font-size: 0.95rem;
-            color: #666;
-        }
-
-        .typing-info-settings.dark {
-            color: #999;
         }
 
         .result-period-container {
             display: flex;
-            justify-content: space-between;
             align-items: center;
             gap: 0.5rem;
         }
@@ -201,20 +254,12 @@
             border: none;
             background: none;
             color: #666;
-            padding: 0.25rem;
-        }
-
-        .result-period-btn:hover {
             cursor: pointer;
-            color: #333;
+            font-size: 0.9rem;
         }
 
         .result-period-btn.dark {
             color: #999;
-        }
-
-        .result-period-btn.dark:hover {
-            color: #e5e7eb;
         }
 
         .result-period-value {
@@ -228,368 +273,422 @@
             color: #e5e7eb;
         }
 
-        .CPM-container {
+        .info-CPMs {
             display: flex;
             justify-content: space-between;
+            padding: 0 1rem;
+            margin-bottom: 1.5rem;
             font-size: 1.1rem;
-            color: #555;
         }
 
-        .CPM-container.dark {
-            color: #d4d4d8;
-        }
-
-        .currentCPM-text {
+        .CPM-text {
             color: #666;
         }
 
-        .currentCPM-text.dark {
+        .CPM-text.dark {
             color: #999;
         }
 
-        .speed-check {
-            font-size: 1.3rem;
-        }
-
-        .speed-check.dark {
-            color: #d4d4d8;
-        }
-
-        #speedCheck {
+        .CPM-value {
             margin-left: 2rem;
             font-weight: 600;
             color: #333;
         }
 
-        body.dark #speedCheck {
+        .CPM-value.dark {
             color: #ffffff;
         }
 
-        #maxSpeed {
-            margin-left: 2rem;
-            font-weight: 600;
-            color: #333;
-        }
-
-        body.dark #maxSpeed {
-            color: #ffffff;
-        }
-
-        .typing-info {
+        .info-averages {
             display: flex;
             justify-content: space-around;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #f5f5f5;
+            padding: 1.5rem 1rem;
+            border-top: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
         }
 
-        .typing-info.dark {
-            border-top: 1px solid #1f1f1f;
+        .info-averages.dark {
+            border-top-color: #27272a;
+            border-bottom-color: #27272a;
         }
 
-        .typing-info > div > span {
+        .average-label {
             font-size: 1.1rem;
             color: #666;
         }
 
-        .typing-info > div > span.dark {
-            font-size: 1.1rem;
+        .average-label.dark {
             color: #999;
         }
 
-        .typing-info-value {
+        .average-value {
             margin-left: 1.5rem;
             font-weight: 600;
             color: #333;
         }
 
-        .typing-info-value.dark {
+        .average-value.dark {
             color: #e5e7eb;
         }
 
-        .none {
-            color: #999;
+        /* 타이핑 영역 */
+        .quote-container {
+            width: 80%;
+            max-width: 1000px;
+            min-width: 600px;
+            padding: 1rem 2rem 2rem;
         }
 
-        .none.dark {
-            color: #555;
-        }
-
-        .correct {
-            color: #333;
-        }
-
-        .correct.dark {
-            color: #e5e7eb;
-        }
-
-        .incorrect {
-            color: #dc2626;
-        }
-
-        .bottom-container {
-            padding: 2rem;
-            padding-top: 1rem;
-        }
-
-        .quote-display {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.8;
-            color: #333;
-        }
-
-        .quote-display.dark {
-            color: #e5e7eb;
-        }
-
-        .qutoe-author {
-            margin-bottom: 1rem;
+        .author-container {
             display: flex;
-            flex-direction: row-reverse;
+            justify-content: flex-end;
+            margin-bottom: 0.5rem;
         }
 
-        .qutoe-author-text {
+        .author-text {
             font-size: 0.95rem;
             color: #999;
         }
 
-        .qutoe-author-text.dark {
+        .author-text.dark {
             color: #71717a;
         }
 
-        .quote-input {
-            border: none;
-            border-bottom: 2px solid #6d28d9;
+        .sentence-input-wrapper {
+            position: relative;
+            min-height: 100px;
+            line-height: 1.8;
+        }
+
+        .character-container {
+            position: relative;
+            z-index: 1;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .character {
+            color: #999;
+            line-height: 1.8;
+        }
+
+        .character.dark {
+            color: #a8a8a8;
+        }
+
+        .character-typed {
+            color: transparent;
+        }
+
+        .input-display {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
+            line-height: 1.8;
+            z-index: 10;
+            pointer-events: none;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .input-char-correct {
+            color: #333;
+        }
+
+        .input-char-correct.dark {
+            color: #ffffff;
+        }
+
+        .input-char-incorrect {
+            color: #dc2626;
+        }
+
+        .input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            border: none;
             padding: 0;
-            padding-bottom: 0.5rem;
             overflow-y: hidden;
             resize: none;
             outline: none;
-            font-size: 1.5rem;
             background-color: transparent;
-            color: #333;
-            transition: border-color 0.2s;
+            color: transparent;
+            caret-color: #6d28d9;
+            z-index: 20;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: inherit;
         }
 
-        .quote-input:focus {
-            border-bottom-color: #8b5cf6;
+        .input.dark {
+            caret-color: #8b5cf6;
         }
 
-        .quote-input.dark {
-            background-color: transparent;
-            color: #e5e7eb;
-            border-bottom-color: #6d28d9;
-        }
-
-        .quote-input.dark:focus {
-            border-bottom-color: #8b5cf6;
-        }
-
-        .quote-input::placeholder {
-            color: #bbb;
-        }
-
-        .quote-input.dark::placeholder {
-            color: #555;
+        .spacer {
+            height: 8rem;
         }
 
         .contact {
-            text-decoration: none;
             color: #666;
             font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-
-        .contact:hover {
-            color: #333;
+            text-decoration: none;
+            margin-bottom: 2rem;
         }
 
         .contact.dark {
             color: #999;
         }
-
-        .contact.dark:hover {
-            color: #e5e7eb;
-        }
     </style>
 </head>
 <body id="body">
-    <div class="pop-up-background display-none" id="pop-up-background"></div>
-    <div class="pop-up display-none" id="pop-up">
-        <h1 class="pop-up-title">Typing Practice</h1>
-        <div class="pop-up-info pop-up-avg-cpm">
-            <span>Avg CPM</span>
-            <span id="pop-up-avg-cpm">245</span>
+<!-- 폰트 슬라이더 -->
+<div class="font-size-slider-container">
+    <label class="font-size-label" id="fontSizeLabel">
+        <i class="fa-solid fa-text-height"></i>
+    </label>
+    <input type="range" class="font-size-slider" id="fontSizeSlider" min="0" max="100" value="50"/>
+</div>
+
+<!-- 헤더 -->
+<div class="head">
+    <h1 class="title-title" id="titleTitle">Typing Practice</h1>
+    <div class="head-right">
+        <button class="header-btn" id="uploadBtn">
+            <i class="fa-solid fa-upload"></i>
+            <span>문장 업로드</span>
+        </button>
+
+        <!-- 로그인 전 -->
+        <button class="header-btn" id="loginBtn">
+            <i class="fa-solid fa-user"></i>
+            <span>로그인</span>
+        </button>
+
+        <!-- 로그인 후 (초기에는 숨김) -->
+        <div class="profile-container display-none" id="profileContainer">
+            <button class="profile-btn" id="profileBtn">
+                <i class="fa-solid fa-user-circle"></i>
+                <span id="username">홍남김</span>
+                <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem;"></i>
+            </button>
+            <div class="dropdown-menu display-none" id="dropdownMenu">
+                <button class="dropdown-item" id="mysentencesBtn">
+                    <i class="fa-solid fa-file-lines"></i>
+                    <span>내 문장</span>
+                </button>
+                <button class="dropdown-item" id="statsBtn">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>통계</span>
+                </button>
+                <button class="dropdown-item" id="settingsBtn">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>설정</span>
+                </button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" id="logoutBtn">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>로그아웃</span>
+                </button>
+            </div>
         </div>
-        <div class="pop-up-info pop-up-max-cpm">
-            <span>Max CPM</span>
-            <span id="pop-up-max-cpm">312</span>
-        </div>
-        <div class="pop-up-info pop-up-acc">
-            <span>ACC</span>
-            <span id="pop-up-acc">96%</span>
-        </div>
-        <div class="pop-up-close">
-            <span>press ESC to continue</span>
+
+        <i class="fa-regular fa-sun fa-xl dark-mode-icon" id="iconSun"></i>
+        <i class="fa-regular fa-moon fa-xl dark-mode-icon display-none" id="iconMoon"></i>
+    </div>
+</div>
+
+<!-- 정보 영역 -->
+<div class="info-background">
+    <div class="info-settings">
+        <div class="result-period-container">
+            <button class="result-period-btn" id="resultPeriodDown">
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <span class="result-period-value" id="resultPeriodValue">5</span>
+            <button class="result-period-btn" id="resultPeriodUp">
+                <i class="fa-solid fa-chevron-up"></i>
+            </button>
         </div>
     </div>
 
-    <div class="title">
-        <div class="title-left">
-            <h1 class="title-title">Typing Practice</h1>
+    <div class="info-CPMs">
+        <div>
+            <span class="CPM-text">Current CPM</span>
+            <span class="CPM-value">8</span>
         </div>
-        <div class="title-right">
-            <i class="fa-regular fa-sun fa-xl dark-mode-icon" id="icon-sun" onclick="toggleTheme()"></i>
-            <i class="fa-regular fa-moon fa-xl dark-mode-icon display-none" id="icon-moon" onclick="toggleTheme()"></i>
-        </div>
-    </div>
-
-    <div class="container upper-container">
-        <div class="speed-check-container">
-            <div class="typing-info-settings">
-                <div>
-                    <input type="checkbox" id="currentCPM" checked />
-                    <label for="currentCPM" class="currentCPM-text">실시간 타자 속도</label>
-                </div>
-
-                <div class="result-period-container" id="result-period-container">
-                    <button class="result-period-btn" id="result-period-btn-down">
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </button>
-                    <span class="result-period-value" id="result-period-value">5</span>
-                    <button class="result-period-btn" id="result-period-btn-up">
-                        <i class="fa-solid fa-chevron-up"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="CPM-container">
-                <div>
-                    <span class="speed-check" id="speed-check-text">Current CPM</span>
-                    <span class="speed-check" id="speedCheck">245</span>
-                </div>
-                <div>
-                    <span class="speed-check" id="max-speed-text">Highest CPM</span>
-                    <span class="speed-check" id="maxSpeed">312</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="typing-info" id="typingInfo">
-            <div>
-                <span class="typing-info-CPM">CPM</span>
-                <span class="typing-info-CPM typing-info-value" id="cpm">278</span>
-            </div>
-
-            <div>
-                <span class="typing-info-ACC">ACC</span>
-                <span class="typing-info-ACC typing-info-value" id="acc">96%</span>
-            </div>
-
-            <div>
-                <span class="typing-info-CNT">CNT</span>
-                <span class="typing-info-CNT typing-info-value" id="cnt">15</span>
-            </div>
+        <div>
+            <span class="CPM-text">Highest CPM</span>
+            <span class="CPM-value">706</span>
         </div>
     </div>
 
-    <div class="container bottom-container">
-        <div id="quote-container">
-            <div class="qutoe-author">
-                <span class="qutoe-author-text" id="quoteAuthor">토마스 풀러</span>
-            </div>
-            <div class="quote-display" id="quoteDisplay">
-                <span class="correct">우리는 우물이 마르기 </span><span class="incorrect">전</span><span class="none">까지 물의 중요성을 결코 알지 못한다.</span>
-            </div>
+    <div class="info-averages">
+        <div>
+            <span class="average-label">CPM</span>
+            <span class="average-value">706</span>
         </div>
-        <textarea
-            class="quote-input"
-            id="quoteInput"
-            placeholder="위 문장을 입력하세요."
-            autofocus
-            autocomplete="off"
-            spellcheck="false"
-            rows="1"
-            cols="30"
-        >우리는 우물이 마르기 전</textarea>
+        <div>
+            <span class="average-label">ACC</span>
+            <span class="average-value">100</span>
+        </div>
+        <div>
+            <span class="average-label">CNT</span>
+            <span class="average-value">1</span>
+        </div>
     </div>
+</div>
 
-    <div class="spacer"></div>
-    <a class="contact" id="contact" href="#">Contact</a>
+<!-- 타이핑 영역 -->
+<div class="quote-container">
+    <div class="author-container">
+        <span class="author-text">웰러비</span>
+    </div>
+    <div class="sentence-input-wrapper">
+        <div class="character-container" id="characterContainer">
+            <span class="character">가</span><span class="character">시</span><span class="character">에</span><span
+                class="character"> </span><span class="character character-typed">절</span><span
+                class="character character-typed">리</span><span class="character character-typed">지</span><span
+                class="character character-typed"> </span><span class="character character-typed">않</span><span
+                class="character character-typed">고</span><span class="character character-typed">서</span><span
+                class="character character-typed">는</span><span class="character character-typed"> </span><span
+                class="character character-typed">장</span><span class="character character-typed">미</span><span
+                class="character character-typed">를</span><span class="character character-typed"> </span><span
+                class="character character-typed">모</span><span class="character character-typed">을</span><span
+                class="character character-typed"> </span><span class="character character-typed">수</span><span
+                class="character character-typed"> </span><span class="character character-typed">없</span><span
+                class="character character-typed">다</span><span class="character character-typed">.</span>
+        </div>
+        <div class="input-display" id="inputDisplay">
+            <span class="input-char-correct">가</span><span class="input-char-correct">시</span><span
+                class="input-char-correct">에</span><span class="input-char-correct"> </span><span
+                class="input-char-incorrect">절</span><span class="input-char-incorrect">리</span>
+        </div>
+        <textarea class="input" id="quoteInput" autofocus autocomplete="off" spellcheck="false">가시에 절리</textarea>
+    </div>
+</div>
 
-    <script>
-        function toggleTheme() {
-            const body = document.getElementById('body');
-            const sunIcon = document.getElementById('icon-sun');
-            const moonIcon = document.getElementById('icon-moon');
-            const popup = document.querySelector('.pop-up');
-            const popupTitle = document.querySelector('.pop-up-title');
-            const popupInfos = document.querySelectorAll('.pop-up-info');
-            const popupClose = document.querySelector('.pop-up-close');
-            const containers = document.querySelectorAll('.container');
-            const upperContainer = document.querySelector('.upper-container');
-            const titleTitle = document.querySelector('.title-title');
-            const darkModeIcon = document.querySelectorAll('.dark-mode-icon');
-            const resultPeriodBtns = document.querySelectorAll('.result-period-btn');
-            const resultPeriodValue = document.querySelector('.result-period-value');
-            const typingInfoSettings = document.querySelector('.typing-info-settings');
-            const cpmContainer = document.querySelector('.CPM-container');
-            const currentCPMText = document.querySelector('.currentCPM-text');
-            const speedChecks = document.querySelectorAll('.speed-check');
-            const speedCheck = document.getElementById('speedCheck');
-            const maxSpeed = document.getElementById('maxSpeed');
-            const typingInfo = document.querySelector('.typing-info');
-            const typingInfoSpans = document.querySelectorAll('.typing-info > div > span');
-            const typingInfoValues = document.querySelectorAll('.typing-info-value');
-            const quoteDisplay = document.querySelector('.quote-display');
-            const quoteAuthorText = document.querySelector('.qutoe-author-text');
-            const quoteInput = document.querySelector('.quote-input');
-            const contact = document.querySelector('.contact');
-            const noneSpans = document.querySelectorAll('.none');
-            const correctSpans = document.querySelectorAll('.correct');
+<div class="spacer"></div>
+<a class="contact" href="#">Contact</a>
 
-            body.classList.toggle('dark');
-            sunIcon.classList.toggle('display-none');
-            moonIcon.classList.toggle('display-none');
+<script>
+    let fontSize = 1.5;
 
-            if (popup) popup.classList.toggle('dark');
-            if (popupTitle) popupTitle.classList.toggle('dark');
-            popupInfos.forEach(info => info.classList.toggle('dark'));
-            if (popupClose) popupClose.classList.toggle('dark');
+    function sliderToFontSize(v) {
+        return 0.8 + (v / 100) * 2.7;
+    }
 
-            containers.forEach(container => container.classList.toggle('dark'));
-            if (upperContainer) upperContainer.classList.toggle('dark');
-            if (titleTitle) titleTitle.classList.toggle('dark');
-            darkModeIcon.forEach(icon => icon.classList.toggle('dark'));
-            resultPeriodBtns.forEach(btn => btn.classList.toggle('dark'));
-            if (resultPeriodValue) resultPeriodValue.classList.toggle('dark');
-            if (typingInfoSettings) typingInfoSettings.classList.toggle('dark');
-            if (cpmContainer) cpmContainer.classList.toggle('dark');
-            if (currentCPMText) currentCPMText.classList.toggle('dark');
-            speedChecks.forEach(check => check.classList.toggle('dark'));
-            if (speedCheck) speedCheck.classList.toggle('dark');
-            if (maxSpeed) maxSpeed.classList.toggle('dark');
-            if (typingInfo) typingInfo.classList.toggle('dark');
-            typingInfoSpans.forEach(span => span.classList.toggle('dark'));
-            typingInfoValues.forEach(value => value.classList.toggle('dark'));
-            if (quoteDisplay) quoteDisplay.classList.toggle('dark');
-            if (quoteAuthorText) quoteAuthorText.classList.toggle('dark');
-            if (quoteInput) quoteInput.classList.toggle('dark');
-            if (contact) contact.classList.toggle('dark');
-            noneSpans.forEach(span => span.classList.toggle('dark'));
-            correctSpans.forEach(span => span.classList.toggle('dark'));
+    function fontSizeToSlider(f) {
+        return ((f - 0.8) / 2.7) * 100;
+    }
+
+    function updateFontSize(size) {
+        fontSize = size;
+        ['characterContainer', 'inputDisplay', 'quoteInput'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.style.fontSize = size + 'rem';
+                if (id === 'quoteInput') {
+                    el.style.height = 'auto';
+                    el.style.height = el.scrollHeight + 'px';
+                }
+            }
+        });
+        localStorage.setItem('Typing-Practice-fontSize', size);
+    }
+
+    const slider = document.getElementById('fontSizeSlider');
+    const saved = localStorage.getItem('Typing-Practice-fontSize');
+    if (saved) {
+        fontSize = parseFloat(saved);
+        updateFontSize(fontSize);
+        slider.value = fontSizeToSlider(fontSize);
+    } else {
+        updateFontSize(1.5);
+    }
+    slider.addEventListener('input', e => updateFontSize(sliderToFontSize(parseFloat(e.target.value))));
+
+    function toggleTheme() {
+        document.getElementById('body').classList.toggle('dark');
+        document.getElementById('iconSun').classList.toggle('display-none');
+        document.getElementById('iconMoon').classList.toggle('display-none');
+        document.querySelectorAll('.font-size-label, .font-size-slider, .title-title, .header-btn, .profile-btn, .dropdown-menu, .dropdown-item, .dropdown-divider, .dark-mode-icon, .result-period-btn, .result-period-value, .CPM-text, .CPM-value, .info-averages, .average-label, .average-value, .author-text, .character, .input-char-correct, .input, .contact').forEach(el => el.classList.toggle('dark'));
+        localStorage.setItem('Typing-Practice-darkMode', document.getElementById('body').classList.contains('dark'));
+    }
+
+    document.getElementById('iconSun').addEventListener('click', toggleTheme);
+    document.getElementById('iconMoon').addEventListener('click', toggleTheme);
+    if (localStorage.getItem('Typing-Practice-darkMode') === 'true') toggleTheme();
+
+    const textarea = document.getElementById('quoteInput');
+    textarea.addEventListener('input', function () {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+    });
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+
+    // 버튼 이벤트
+    let isLoggedIn = false;
+
+    // 로그인 버튼
+    document.getElementById('loginBtn').addEventListener('click', () => {
+        // 임시: 로그인 처리
+        isLoggedIn = true;
+        document.getElementById('loginBtn').classList.add('display-none');
+        document.getElementById('profileContainer').classList.remove('display-none');
+    });
+
+    // 프로필 드롭다운 토글
+    document.getElementById('profileBtn').addEventListener('click', () => {
+        document.getElementById('dropdownMenu').classList.toggle('display-none');
+    });
+
+    // 드롭다운 외부 클릭 시 닫기
+    document.addEventListener('click', (e) => {
+        const profileContainer = document.getElementById('profileContainer');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        if (!profileContainer.contains(e.target) && !dropdownMenu.classList.contains('display-none')) {
+            dropdownMenu.classList.add('display-none');
         }
+    });
 
-        // Textarea 자동 높이 조절
-        const textarea = document.querySelector('.quote-input');
-        if (textarea) {
-            textarea.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = this.scrollHeight + 'px';
-            });
+    // 문장 업로드 버튼
+    document.getElementById('uploadBtn').addEventListener('click', () => {
+        if (!isLoggedIn) {
+            alert('로그인이 필요한 기능입니다.');
+            return;
         }
-    </script>
+        alert('문장 업로드 기능 (준비 중)');
+    });
+
+    // 드롭다운 메뉴 아이템들
+    document.getElementById('mysentencesBtn').addEventListener('click', () => {
+        alert('내 문장 기능 (준비 중)');
+        document.getElementById('dropdownMenu').classList.add('display-none');
+    });
+
+    document.getElementById('statsBtn').addEventListener('click', () => {
+        alert('통계 기능 (준비 중)');
+        document.getElementById('dropdownMenu').classList.add('display-none');
+    });
+
+    document.getElementById('settingsBtn').addEventListener('click', () => {
+        alert('설정 기능 (준비 중)');
+        document.getElementById('dropdownMenu').classList.add('display-none');
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        // 로그아웃 처리
+        isLoggedIn = false;
+        document.getElementById('profileContainer').classList.add('display-none');
+        document.getElementById('loginBtn').classList.remove('display-none');
+        document.getElementById('dropdownMenu').classList.add('display-none');
+        alert('로그아웃 되었습니다.');
+    });
+</script>
 </body>
 </html>

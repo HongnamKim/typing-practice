@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { ThemeContext } from "../../Context/ThemeContext";
 import { SettingContext } from "../../Context/SettingContext";
+import { Storage_Font_Size } from "../../const/config.const";
 import "./FontSizeSlider.css";
 
 const FontSizeSlider = () => {
@@ -38,12 +39,12 @@ const FontSizeSlider = () => {
     const sliderValue = parseFloat(e.target.value);
     const newSize = sliderToFontSize(sliderValue);
     setFontSize(newSize);
-    localStorage.setItem("fontSize", newSize.toString());
+    localStorage.setItem(Storage_Font_Size, newSize.toString());
   };
 
   const handleReset = () => {
     setFontSize(2.0);
-    localStorage.setItem("fontSize", "2.0");
+    localStorage.setItem(Storage_Font_Size, "2.0");
   };
 
   return (
