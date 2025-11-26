@@ -233,7 +233,7 @@
             width: 80%;
             max-width: 1000px;
             min-width: 600px;
-            padding: 1rem 0 1.5rem;
+            padding: 1rem 0 0;
             margin-bottom: 1rem;
         }
 
@@ -310,6 +310,38 @@
         .info-averages.dark {
             border-top-color: #27272a;
             border-bottom-color: #27272a;
+        }
+
+        .info-averages.collapsed {
+            display: none;
+        }
+
+        .averages-toggle-container {
+            display: flex;
+            justify-content: center;
+            padding: 0.5rem 0 0 0;
+        }
+
+        .averages-toggle-btn {
+            border: none;
+            background: none;
+            color: #999;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+            transition: color 0.2s;
+        }
+
+        .averages-toggle-btn:hover {
+            color: #666;
+        }
+
+        .averages-toggle-btn.dark {
+            color: #666;
+        }
+
+        .averages-toggle-btn.dark:hover {
+            color: #999;
         }
 
         .average-label {
@@ -526,7 +558,7 @@
         </div>
     </div>
 
-    <div class="info-averages">
+    <div class="info-averages" id="infoAverages">
         <div>
             <span class="average-label">CPM</span>
             <span class="average-value">706</span>
@@ -539,6 +571,11 @@
             <span class="average-label">CNT</span>
             <span class="average-value">1</span>
         </div>
+    </div>
+    <div class="averages-toggle-container" id="averagesToggleContainer">
+        <button class="averages-toggle-btn" id="averagesToggleBtn">
+            <i class="fa-solid fa-chevron-up" id="averagesToggleIcon"></i>
+        </button>
     </div>
 </div>
 
@@ -615,7 +652,7 @@
         document.getElementById('body').classList.toggle('dark');
         document.getElementById('iconSun').classList.toggle('display-none');
         document.getElementById('iconMoon').classList.toggle('display-none');
-        document.querySelectorAll('.font-size-label, .font-size-slider, .title-title, .header-btn, .profile-btn, .dropdown-menu, .dropdown-item, .dropdown-divider, .dark-mode-icon, .result-period-btn, .result-period-value, .CPM-text, .CPM-value, .info-averages, .average-label, .average-value, .author-text, .character, .input-char-correct, .input, .contact').forEach(el => el.classList.toggle('dark'));
+        document.querySelectorAll('.font-size-label, .font-size-slider, .title-title, .header-btn, .profile-btn, .dropdown-menu, .dropdown-item, .dropdown-divider, .dark-mode-icon, .result-period-btn, .result-period-value, .CPM-text, .CPM-value, .info-averages, .average-label, .average-value, .averages-toggle-container, .averages-toggle-btn, .author-text, .character, .input-char-correct, .input, .contact').forEach(el => el.classList.toggle('dark'));
         localStorage.setItem('Typing-Practice-darkMode', document.getElementById('body').classList.contains('dark'));
     }
 
@@ -688,6 +725,31 @@
         document.getElementById('loginBtn').classList.remove('display-none');
         document.getElementById('dropdownMenu').classList.add('display-none');
         alert('로그아웃 되었습니다.');
+    });
+
+    // 평균점수 토글
+    let averagesVisible = localStorage.getItem('Typing-Practice-averagesVisible') !== 'false';
+    const infoAverages = document.getElementById('infoAverages');
+    const averagesToggleIcon = document.getElementById('averagesToggleIcon');
+
+    function updateAveragesVisibility() {
+        if (averagesVisible) {
+            infoAverages.classList.remove('collapsed');
+            averagesToggleIcon.classList.remove('fa-chevron-down');
+            averagesToggleIcon.classList.add('fa-chevron-up');
+        } else {
+            infoAverages.classList.add('collapsed');
+            averagesToggleIcon.classList.remove('fa-chevron-up');
+            averagesToggleIcon.classList.add('fa-chevron-down');
+        }
+    }
+
+    updateAveragesVisibility();
+
+    document.getElementById('averagesToggleBtn').addEventListener('click', () => {
+        averagesVisible = !averagesVisible;
+        localStorage.setItem('Typing-Practice-averagesVisible', averagesVisible);
+        updateAveragesVisibility();
     });
 </script>
 </body>
