@@ -1,72 +1,79 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { defaultQuotes } from "../const/default-quotes.const";
-import { ScoreContext } from "./ScoreContext";
+import {createContext, useContext, useEffect, useState} from "react";
+import {defaultQuotes} from "../const/default-quotes.const";
+import {ScoreContext} from "./ScoreContext";
 
 export const QuoteContext = createContext();
 
-export const QuoteContextProvider = ({ children }) => {
-  const { setInputCheck } = useContext(ScoreContext);
+export const QuoteContextProvider = ({children}) => {
+    const {setInputCheck} = useContext(ScoreContext);
 
-  const [quotes, setQuotes] = useState(defaultQuotes);
-  const [quotesIndex, setQuotesIndex] = useState(0);
-  const [sentence, setSentence] = useState("");
-  const [author, setAuthor] = useState("");
+    const [quotes, setQuotes] = useState(defaultQuotes);
+    const [quotesIndex, setQuotesIndex] = useState(0);
+    const [sentence, setSentence] = useState("");
+    const [author, setAuthor] = useState("");
 
-  useEffect(() => {
-    // 문장 세트 순서
-    // 문장 업로드 기능 추가 시 수정
-    const initQuotes = defaultQuotes.sort(() => Math.random() - 0.5);
+    useEffect(() => {
+        // Fisher-Yates 셔플
+        const shuffleArray = (array) => {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        };
 
-    const initQuotesIndex = Math.floor(Math.random() * initQuotes.length);
+        console.log(defaultQuotes.length);
 
+        const initQuotes = shuffleArray(defaultQuotes);
 
-    setQuotes(initQuotes);
-    setQuotesIndex(initQuotesIndex);
+        setQuotes(initQuotes);
+        setQuotesIndex(0);
 
-    const initialQuote = initQuotes[initQuotesIndex];
-    
-    if (initialQuote && initialQuote.sentence) {
-      setSentence(initialQuote.sentence);
-      setAuthor(initialQuote.author);
-      setInputCheck(new Array(initialQuote.sentence.length).fill("none"));
-    }
-  }, [setInputCheck]);
+        const initialQuote = initQuotes[0];
 
-  useEffect(() => {
-    if (quotesIndex < 0) {
-      setQuotesIndex(quotes.length - 1);
-      return;
-    } 
-    
-    if (quotesIndex >= quotes.length) {
-      setQuotesIndex(0);
-      return;
-    }
-    
-    const currentQuote = quotes[quotesIndex];
-    
-    if (!currentQuote || !currentQuote.sentence) {
-      return;
-    }
+        if (initialQuote && initialQuote.sentence) {
+            setSentence(initialQuote.sentence);
+            setAuthor(initialQuote.author);
+            setInputCheck(new Array(initialQuote.sentence.length).fill("none"));
+        }
+    }, [setInputCheck]);
 
-    setInputCheck(() => {
-      return new Array(currentQuote.sentence.length).fill("none");
-    });
+    useEffect(() => {
+        if (quotesIndex < 0) {
+            setQuotesIndex(quotes.length - 1);
+            return;
+        }
 
-    setSentence(currentQuote.sentence);
-    setAuthor(currentQuote.author);
-  }, [quotesIndex, quotes, setInputCheck]);
+        if (quotesIndex >= quotes.length) {
+            setQuotesIndex(0);
+            return;
+        }
 
-  return (
-    <QuoteContext.Provider
-      value={{
-        sentence,
-        author,
-        quotesIndex,
-        setQuotesIndex,
-      }}
-    >
-      {children}
-    </QuoteContext.Provider>
-  );
+        const currentQuote = quotes[quotesIndex];
+
+        if (!currentQuote || !currentQuote.sentence) {
+            return;
+        }
+
+        setInputCheck(() => {
+            return new Array(currentQuote.sentence.length).fill("none");
+        });
+
+        setSentence(currentQuote.sentence);
+        setAuthor(currentQuote.author);
+    }, [quotesIndex, quotes, setInputCheck]);
+
+    return (
+        <QuoteContext.Provider
+            value={{
+                sentence,
+                author,
+                quotesIndex,
+                setQuotesIndex,
+            }}
+        >
+            {children}
+        </QuoteContext.Provider>
+    );
 };
