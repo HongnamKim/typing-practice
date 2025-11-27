@@ -12,6 +12,7 @@ import { QuoteContextProvider } from "./Context/QuoteContext";
 import AverageScorePopUp from "./components/AverageScorePopUp/AverageScorePopUp";
 import FontSizeSlider from "./components/FontSizeSlider/FontSizeSlider";
 import ModeToggle from "./components/ModeToggle/ModeToggle";
+import UpdatePopup from "./components/UpdatePopup/UpdatePopup";
 import {Analytics} from "@vercel/analytics/react";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
             <FontSizeSlider />
             <ModeToggle />
           </div>
+          <UpdatePopup />
           <ScoreContextProvider>
             <AverageScorePopUp />
             <Info />
