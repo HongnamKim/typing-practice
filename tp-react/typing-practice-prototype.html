@@ -124,6 +124,30 @@
             transform: translateX(16px);
         }
 
+        /* 공지 아이콘 */
+        .notice-icon {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            color: #999;
+            cursor: pointer;
+            font-size: 1.25rem;
+            transition: color 0.2s;
+            z-index: 100;
+        }
+
+        .notice-icon:hover {
+            color: #666;
+        }
+
+        .notice-icon.dark {
+            color: #666;
+        }
+
+        .notice-icon.dark:hover {
+            color: #999;
+        }
+
         /* 헤더 */
         .head {
             width: 80%;
@@ -570,6 +594,207 @@
         .contact.dark {
             color: #999;
         }
+
+        /* 업데이트 공지 팝업 */
+        .update-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .update-popup {
+            background-color: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 480px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .update-popup.dark {
+            background-color: #1f1f1f;
+            color: #e5e7eb;
+        }
+
+        .update-popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .update-popup-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #6d28d9;
+        }
+
+        .update-popup-version {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .update-popup-version.dark {
+            color: #666;
+        }
+
+        .update-popup-date {
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 1.5rem;
+        }
+
+        .update-popup-date.dark {
+            color: #666;
+        }
+
+        .update-popup-close {
+            width: 100%;
+            padding: 0.75rem;
+            margin-top: 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            background-color: #6d28d9;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .update-popup-close:hover {
+            background-color: #5b21b6;
+        }
+
+        .update-popup-history-btn {
+            width: 100%;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            background-color: transparent;
+            color: #666;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .update-popup-history-btn:hover {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .update-popup-history-btn.dark {
+            border-color: #3f3f46;
+            color: #999;
+        }
+
+        .update-popup-history-btn.dark:hover {
+            background-color: #27272a;
+            color: #e5e7eb;
+        }
+
+        .update-history-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .update-history-item.dark {
+            border-bottom-color: #3f3f46;
+        }
+
+        .update-history-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .update-history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .update-history-version {
+            font-weight: 600;
+            color: #6d28d9;
+        }
+
+        .update-history-date {
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        .update-history-date.dark {
+            color: #666;
+        }
+
+        .update-popup-section {
+            margin-bottom: 1.25rem;
+        }
+
+        .update-popup-section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .update-popup-section-title.dark {
+            color: #e5e7eb;
+        }
+
+        .update-popup-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .update-popup-list li {
+            position: relative;
+            padding-left: 1.25rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .update-popup-list li.dark {
+            color: #a1a1aa;
+        }
+
+        .update-popup-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #6d28d9;
+        }
+
+        /* 히스토리 모드 (작은 사이즈) */
+        .update-popup.history-mode .update-popup-section {
+            margin-bottom: 0.75rem;
+        }
+
+        .update-popup.history-mode .update-popup-section-title {
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .update-popup.history-mode .update-popup-list li {
+            padding-left: 1rem;
+            margin-bottom: 0.25rem;
+            font-size: 0.85rem;
+        }
     </style>
 </head>
 <body id="body">
@@ -586,6 +811,9 @@
         </div>
     </div>
 </div>
+
+<!-- 우측 상단 공지 아이콘 -->
+<i class="fa-solid fa-bullhorn notice-icon" id="iconNotice" title="업데이트 안내"></i>
 
 <!-- 헤더 -->
 <div class="head">
@@ -711,6 +939,18 @@
 <div class="spacer"></div>
 <a class="contact" href="#">Contact</a>
 
+<!-- 업데이트 공지 팝업 -->
+<div class="update-popup-overlay display-none" id="updatePopupOverlay">
+    <div class="update-popup" id="updatePopup">
+        <div class="update-popup-header">
+            <span class="update-popup-title" id="updatePopupTitle">🎉 업데이트 안내</span>
+        </div>
+        <div id="updateContent"></div>
+        <button class="update-popup-close" id="updatePopupClose">확인</button>
+        <button class="update-popup-history-btn display-none" id="updateHistoryBtn">지난 업데이트 보기</button>
+    </div>
+</div>
+
 <script>
     // 폰트 크기
     let fontSize = 1.5;
@@ -760,7 +1000,7 @@
         document.getElementById('body').classList.toggle('dark');
         document.getElementById('iconSun').classList.toggle('display-none');
         document.getElementById('iconMoon').classList.toggle('display-none');
-        document.querySelectorAll('.font-size-label, .font-size-slider, .mode-toggle-label, .mode-toggle, .title-title, .header-btn, .profile-btn, .dropdown-menu, .dropdown-item, .dropdown-divider, .dark-mode-icon, .result-period-btn, .result-period-value, .CPM-text, .CPM-value, .info-averages, .average-label, .average-value, .averages-toggle-btn, .author-text, .character, .input-char-correct, .input, .contact').forEach(el => el.classList.toggle('dark'));
+        document.querySelectorAll('.font-size-label, .font-size-slider, .mode-toggle-label, .mode-toggle, .notice-icon, .title-title, .header-btn, .profile-btn, .dropdown-menu, .dropdown-item, .dropdown-divider, .dark-mode-icon, .result-period-btn, .result-period-value, .CPM-text, .CPM-value, .info-averages, .average-label, .average-value, .averages-toggle-btn, .author-text, .character, .input-char-correct, .input, .contact').forEach(el => el.classList.toggle('dark'));
         localStorage.setItem('Typing-Practice-darkMode', document.getElementById('body').classList.contains('dark'));
     }
 
@@ -881,6 +1121,182 @@
 
     modeToggle.addEventListener('click', toggleMode);
     modeLabel.addEventListener('click', toggleMode);
+
+    // 업데이트 공지 데이터
+    const updateHistory = [
+        {
+            version: "1.2.0",
+            date: "2024년 11월 27일",
+            features: [
+                "평균점수 영역 접기/펼치기 기능 추가",
+                "Default/Compact 모드 전환 기능 추가"
+            ],
+            improvements: [
+                "문장 셔플 알고리즘 개선 (더 균등한 랜덤 분배)",
+                "예문 101개 추가 (총 1138개)"
+            ]
+        },
+        {
+            version: "1.1.0",
+            date: "2024년 11월 20일",
+            features: [
+                "폰트 크기 조절 슬라이더 추가",
+                "Vercel Analytics 적용"
+            ],
+            improvements: [
+                "한글 IME 입력 안정화",
+                "textarea 높이 자동 조절"
+            ]
+        },
+        {
+            version: "1.0.0",
+            date: "2024년 11월 15일",
+            features: [
+                "타자 연습 서비스 오픈",
+                "실시간 타자 속도(CPM) 측정",
+                "정확도 분석",
+                "다크 모드 지원"
+            ],
+            improvements: []
+        }
+    ];
+
+    const CURRENT_VERSION = updateHistory[0].version;
+    const updatePopupOverlay = document.getElementById('updatePopupOverlay');
+    const updatePopup = document.getElementById('updatePopup');
+    const updatePopupTitle = document.getElementById('updatePopupTitle');
+    const updateContent = document.getElementById('updateContent');
+    const updateHistoryBtn = document.getElementById('updateHistoryBtn');
+
+    // 최신 업데이트 렌더링 (첫 진입 시)
+    function renderLatestUpdate(update) {
+        const isDark = document.getElementById('body').classList.contains('dark');
+        const darkClass = isDark ? ' dark' : '';
+
+        let html = `
+            <div class="update-popup-version${darkClass}">v${update.version}</div>
+            <div class="update-popup-date${darkClass}">${update.date}</div>
+        `;
+
+        if (update.features && update.features.length > 0) {
+            html += `
+                <div class="update-popup-section">
+                    <div class="update-popup-section-title${darkClass}">✨ 새로운 기능</div>
+                    <ul class="update-popup-list">
+                        ${update.features.map(f => `<li class="${darkClass}">${f}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        if (update.improvements && update.improvements.length > 0) {
+            html += `
+                <div class="update-popup-section">
+                    <div class="update-popup-section-title${darkClass}">🔧 개선사항</div>
+                    <ul class="update-popup-list">
+                        ${update.improvements.map(i => `<li class="${darkClass}">${i}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        return html;
+    }
+
+    // 히스토리 아이템 렌더링 (아이콘 클릭 시)
+    function renderHistoryItem(update) {
+        const isDark = document.getElementById('body').classList.contains('dark');
+        const darkClass = isDark ? ' dark' : '';
+
+        let html = `
+            <div class="update-history-item${darkClass}">
+                <div class="update-history-header">
+                    <span class="update-history-version">v${update.version}</span>
+                    <span class="update-history-date${darkClass}">${update.date}</span>
+                </div>
+        `;
+
+        if (update.features && update.features.length > 0) {
+            html += `
+                <div class="update-popup-section">
+                    <div class="update-popup-section-title${darkClass}">✨ 새로운 기능</div>
+                    <ul class="update-popup-list">
+                        ${update.features.map(f => `<li class="${darkClass}">${f}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        if (update.improvements && update.improvements.length > 0) {
+            html += `
+                <div class="update-popup-section">
+                    <div class="update-popup-section-title${darkClass}">🔧 개선사항</div>
+                    <ul class="update-popup-list">
+                        ${update.improvements.map(i => `<li class="${darkClass}">${i}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        html += '</div>';
+        return html;
+    }
+
+    // 모든 업데이트 렌더링
+    function renderAllUpdates() {
+        let html = '';
+        for (const update of updateHistory) {
+            html += renderHistoryItem(update);
+        }
+        return html;
+    }
+
+    // 첫 진입 시 최신 업데이트만 표시
+    function openLatestUpdatePopup() {
+        updatePopupOverlay.classList.remove('display-none');
+        updatePopup.classList.remove('history-mode');
+        updatePopupTitle.textContent = '🎉 업데이트 안내';
+        updateContent.innerHTML = renderLatestUpdate(updateHistory[0]);
+        updateHistoryBtn.classList.remove('display-none');
+
+        if (document.getElementById('body').classList.contains('dark')) {
+            updatePopup.classList.add('dark');
+            updateHistoryBtn.classList.add('dark');
+        }
+    }
+
+    // 아이콘 클릭 시 모든 업데이트 표시
+    function openAllUpdatesPopup() {
+        updatePopupOverlay.classList.remove('display-none');
+        updatePopup.classList.add('history-mode');
+        updatePopupTitle.textContent = '📋 업데이트 내역';
+        updateContent.innerHTML = renderAllUpdates();
+        updateHistoryBtn.classList.add('display-none');
+
+        if (document.getElementById('body').classList.contains('dark')) {
+            updatePopup.classList.add('dark');
+        }
+    }
+
+    function closeUpdatePopup() {
+        updatePopupOverlay.classList.add('display-none');
+        localStorage.setItem('Typing-Practice-lastSeenVersion', CURRENT_VERSION);
+    }
+
+    // 새 버전이면 자동으로 팝업 표시
+    function showUpdatePopupIfNew() {
+        const lastSeenVersion = localStorage.getItem('Typing-Practice-lastSeenVersion');
+        if (lastSeenVersion !== CURRENT_VERSION) {
+            openLatestUpdatePopup();
+        }
+    }
+
+    document.getElementById('updatePopupClose').addEventListener('click', closeUpdatePopup);
+    document.getElementById('iconNotice').addEventListener('click', openAllUpdatesPopup);
+    updateHistoryBtn.addEventListener('click', openAllUpdatesPopup);
+
+    // 페이지 로드 시 팝업 표시
+    showUpdatePopupIfNew();
 </script>
 </body>
 </html>

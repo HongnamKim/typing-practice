@@ -4,3 +4,4 @@ export const Storage_Result_Period = "Typing-Practice-resultPeriod";
 export const Storage_Font_Size = "Typing-Practice-fontSize";
 export const Storage_Averages_Visible = "Typing-Practice-averagesVisible";
 export const Storage_Compact_Mode = "Typing-Practice-compactMode";
+export const Storage_Last_Seen_Version = "Typing-Practice-lastSeenVersion";
