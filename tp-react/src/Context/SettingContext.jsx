@@ -3,6 +3,7 @@ import {
   Storage_Display_Cpm,
   Storage_Result_Period,
   Storage_Font_Size,
+  Storage_Compact_Mode,
 } from "../const/config.const";
 
 export const SettingContext = createContext(null);
@@ -14,6 +15,7 @@ export const SettingContextProvider = ({ children }) => {
   const [displayCurrentCpm, setDisplayCurrentCpm] = useState(null);
   const [resultPeriod, setResultPeriod] = useState(null);
   const [fontSize, setFontSize] = useState(2.0);
+  const [isCompactMode, setIsCompactMode] = useState(false);
 
   useEffect(() => {
     // 실시간 타자 속도 설정 불러오기
@@ -50,6 +52,17 @@ export const SettingContextProvider = ({ children }) => {
         return 2.0;
       }
     });
+
+    // Compact 모드 설정 불러오기
+    setIsCompactMode(() => {
+      const savedCompactMode = localStorage.getItem(Storage_Compact_Mode);
+      if (savedCompactMode) {
+        return savedCompactMode === "true";
+      } else {
+        localStorage.setItem(Storage_Compact_Mode, "false");
+        return false;
+      }
+    });
   }, []);
 
   return (
@@ -61,6 +74,8 @@ export const SettingContextProvider = ({ children }) => {
         setResultPeriod,
         fontSize,
         setFontSize,
+        isCompactMode,
+        setIsCompactMode,
       }}
     >
       {children}

@@ -38,7 +38,7 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
         setPopupData,
     } = useContext(ScoreContext);
     const {sentence, setQuotesIndex} = useContext(QuoteContext); // 예문, 예문의 인덱스
-    const {resultPeriod, fontSize} = useContext(SettingContext);
+    const {resultPeriod, fontSize, isCompactMode} = useContext(SettingContext);
     const [input, setInput] = useState(""); // 사용자 입력값
     const speedInterval = useRef(null); // setInterval 을 참조하기 위함
     const startTime = useRef(null); // 타이핑 시작 시간
@@ -54,9 +54,10 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
         const textarea = textareaRef.current;
         if (!textarea) return;
 
+        // 높이 리셋 후 scrollHeight로 설정
         textarea.style.height = 'auto';
         textarea.style.height = `${textarea.scrollHeight}px`;
-    }, [input, fontSize]);
+    }, [input, fontSize, isCompactMode]);
 
     useEffect(() => {
         separatedSentence.current = sentence.split("").map((character) => {
@@ -257,24 +258,16 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
             // 마지막 글자까지 입력했으므로 입력값 설정은 하되
             // 추가 입력은 막음
             setInput(newValue);
-
-            // 입력값 자모 분리
-            for (let i = 0; i < newValue.length; i++) {
-                separatedInput.current[i] = koreanSeparator(newValue[i]);
-            }
-
-            typedCharCount.current = separatedInput.current.map((char) => {
-                return char.length;
-            });
-
-            // 채점 로직 실행
-            performGrading(newValue);
-
+            processInput(newValue);
             return;
         }
 
         setInput(newValue);
+        processInput(newValue);
+    };
 
+    // 입력값 처리 (자모 분리 및 채점)
+    const processInput = (newValue) => {
         // 입력값 자모 분리
         for (let i = 0; i < newValue.length; i++) {
             separatedInput.current[i] = koreanSeparator(newValue[i]);
@@ -409,6 +402,8 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
             autoComplete={"off"}
             spellCheck={false}
             value={input}
+            rows={1}
+            placeholder={isCompactMode ? "" : "위 문장을 입력하세요."}
             onInput={onInputChange}
             onKeyDown={handleKeyDown}
             onPaste={preventPaste}

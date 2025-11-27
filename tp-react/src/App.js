@@ -11,6 +11,7 @@ import Contact from "./components/Contact/Contact";
 import { QuoteContextProvider } from "./Context/QuoteContext";
 import AverageScorePopUp from "./components/AverageScorePopUp/AverageScorePopUp";
 import FontSizeSlider from "./components/FontSizeSlider/FontSizeSlider";
+import ModeToggle from "./components/ModeToggle/ModeToggle";
 import {Analytics} from "@vercel/analytics/react";
 
 function App() {
@@ -19,7 +20,10 @@ function App() {
       <AppDiv>
         <Head />
         <SettingContextProvider>
-          <FontSizeSlider />
+          <div className="top-left-controls">
+            <FontSizeSlider />
+            <ModeToggle />
+          </div>
           <ScoreContextProvider>
             <AverageScorePopUp />
             <Info />
@@ -37,5 +41,3 @@ function App() {
 }
 
 export default App;
-
-

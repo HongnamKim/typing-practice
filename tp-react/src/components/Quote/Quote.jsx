@@ -6,16 +6,25 @@ import { ThemeContext } from "../../Context/ThemeContext";
 import Input from "./Input/Input";
 import InputDisplay from "./InputDisplay/InputDisplay";
 import { QuoteContext } from "../../Context/QuoteContext";
+import { SettingContext } from "../../Context/SettingContext";
 
 const Quote = () => {
   const { isDark } = useContext(ThemeContext);
   const { author, sentence } = useContext(QuoteContext);
+  const { isCompactMode } = useContext(SettingContext);
   const [inputValue, setInputValue] = useState("");
 
   // 문장이 변경되면 inputValue 초기화
   useEffect(() => {
     setInputValue("");
   }, [sentence]);
+
+  const getQuoteContainerClassName = () => {
+    let className = "quote-container";
+    if (isDark) className += " quote-dark";
+    if (!isCompactMode) className += " default-mode";
+    return className;
+  };
 
   /**
    * Quote : 인용문 = 문장 (sentence) + 저자 (author)
@@ -24,7 +33,7 @@ const Quote = () => {
    */
 
   return (
-    <div className={`quote-container ${isDark ? "quote-dark" : ""}`}>
+    <div className={getQuoteContainerClassName()}>
       <div className={"quote-container-upper"}>
         {/* QuoteDisplay*/}
         <div className={`author-container ${isDark ? "author-dark" : ""}`}>

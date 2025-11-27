@@ -1,31 +1,27 @@
 .font-size-slider-container {
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    z-index: 100;
 }
 
 .font-size-label {
-    font-size: 0.9rem;
-    color: #666;
+    font-size: 0.75rem;
+    color: #999;
     cursor: pointer;
     transition: color 0.2s;
     user-select: none;
 }
 
 .font-size-label:hover {
-    color: #333;
+    color: #666;
 }
 
 .font-size-label.dark {
-    color: #999;
+    color: #666;
 }
 
 .font-size-label.dark:hover {
-    color: #e5e7eb;
+    color: #999;
 }
 
 .font-size-slider {

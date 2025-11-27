@@ -32,36 +32,28 @@
     color: transparent;
 }
 
-/*.character-container {*/
-/*    position: relative;*/
-/*    z-index: 1;*/
-/*}*/
+/* Default 모드 - 채점 결과에 따른 색상 */
+.character-correct-visible {
+    color: #333;
+}
 
-/*.character {*/
-/*    font-size: 1.5rem;*/
-/*    line-height: 1.8;*/
-/*}*/
+.character-correct-visible.character-dark {
+    color: #ffffff;
+}
 
-/*.character-not-typed {*/
-/*    color: #999;*/
-/*}*/
+.character-incorrect-visible {
+    color: #dc2626;
+}
 
-/*.character-not-typed.character-dark {*/
-/*    color: #555;*/
-/*}*/
+.character-typing {
+    color: #666;
+}
 
-/*.character-hidden {*/
-/*    color: transparent;*/
-/*}*/
+.character-typing.character-dark {
+    color: #d4d4d4;
+}
 
-/*.character-correct-done {*/
-/*    color: #333;*/
-/*}*/
-
-/*.character-correct-done.dark {*/
-/*    color: #e5e7eb;*/
-/*}*/
-
-/*.character-incorrect-done {*/
-/*    color: #dc2626;*/
-/*}*/
+/* Default 모드 스타일 */
+.default-mode .character-container {
+    margin-bottom: 1rem;
+}

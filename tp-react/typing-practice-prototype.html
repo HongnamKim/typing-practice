@@ -31,25 +31,32 @@
             display: none !important;
         }
 
-        /* 폰트 슬라이더 */
-        .font-size-slider-container {
+        /* 좌측 상단 컨트롤 */
+        .top-left-controls {
             position: fixed;
             top: 1rem;
             left: 1rem;
             display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
+            align-items: center;
+            gap: 1.5rem;
             z-index: 100;
         }
 
+        /* 폰트 슬라이더 */
+        .font-size-slider-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
         .font-size-label {
-            font-size: 0.9rem;
-            color: #666;
+            font-size: 0.75rem;
+            color: #999;
             cursor: pointer;
         }
 
         .font-size-label.dark {
-            color: #999;
+            color: #666;
         }
 
         .font-size-slider {
@@ -61,6 +68,60 @@
 
         .font-size-slider.dark {
             background: #3f3f46;
+        }
+
+        /* 모드 토글 */
+        .mode-toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mode-toggle-label {
+            font-size: 0.75rem;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .mode-toggle-label.dark {
+            color: #666;
+        }
+
+        .mode-toggle {
+            position: relative;
+            width: 36px;
+            height: 20px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .mode-toggle.dark {
+            background: #3f3f46;
+        }
+
+        .mode-toggle.active {
+            background: #6d28d9;
+        }
+
+        .mode-toggle.active.dark {
+            background: #8b5cf6;
+        }
+
+        .mode-toggle-knob {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+
+        .mode-toggle.active .mode-toggle-knob {
+            transform: translateX(16px);
         }
 
         /* 헤더 */
@@ -81,24 +142,6 @@
         }
 
         .title-title.dark {
-            color: #e5e7eb;
-        }
-
-        .dark-mode-icon {
-            color: #666;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .dark-mode-icon:hover {
-            color: #333;
-        }
-
-        .dark-mode-icon.dark {
-            color: #999;
-        }
-
-        .dark-mode-icon.dark:hover {
             color: #e5e7eb;
         }
 
@@ -128,12 +171,29 @@
         }
 
         .header-btn.dark {
-            background-color: transparent;
             color: #999;
         }
 
         .header-btn.dark:hover {
             background-color: #27272a;
+            color: #e5e7eb;
+        }
+
+        .dark-mode-icon {
+            color: #666;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .dark-mode-icon:hover {
+            color: #333;
+        }
+
+        .dark-mode-icon.dark {
+            color: #999;
+        }
+
+        .dark-mode-icon.dark:hover {
             color: #e5e7eb;
         }
 
@@ -191,7 +251,6 @@
         .dropdown-item {
             padding: 0.75rem 1rem;
             color: #666;
-            text-decoration: none;
             display: flex;
             align-items: center;
             gap: 0.75rem;
@@ -233,8 +292,8 @@
             width: 80%;
             max-width: 1000px;
             min-width: 600px;
-            padding: 1rem 0 1.5rem;
-            margin-bottom: 1rem;
+            padding: 1rem 0 0;
+            margin-bottom: 0.5rem;
         }
 
         .info-settings {
@@ -312,6 +371,10 @@
             border-bottom-color: #27272a;
         }
 
+        .info-averages.collapsed {
+            display: none;
+        }
+
         .average-label {
             font-size: 1.1rem;
             color: #666;
@@ -331,12 +394,40 @@
             color: #e5e7eb;
         }
 
+        .averages-toggle-container {
+            display: flex;
+            justify-content: center;
+            padding: 0.5rem 0 0 0;
+        }
+
+        .averages-toggle-btn {
+            border: none;
+            background: none;
+            color: #999;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+            transition: color 0.2s;
+        }
+
+        .averages-toggle-btn:hover {
+            color: #666;
+        }
+
+        .averages-toggle-btn.dark {
+            color: #666;
+        }
+
+        .averages-toggle-btn.dark:hover {
+            color: #999;
+        }
+
         /* 타이핑 영역 */
         .quote-container {
             width: 80%;
             max-width: 1000px;
             min-width: 600px;
-            padding: 1rem 2rem 2rem;
+            padding: 0 2rem 2rem;
         }
 
         .author-container {
@@ -428,6 +519,43 @@
             caret-color: #8b5cf6;
         }
 
+        .input::placeholder {
+            color: transparent;
+        }
+
+        /* Default 모드 스타일 */
+        .quote-container.default-mode .sentence-input-wrapper {
+            min-height: auto;
+        }
+
+        .quote-container.default-mode .character-container {
+            margin-bottom: 1rem;
+        }
+
+        .quote-container.default-mode .input-display {
+            display: none;
+        }
+
+        .quote-container.default-mode .input {
+            position: relative;
+            border-bottom: 2px solid #6d28d9;
+            color: #333;
+            padding-bottom: 0.25rem;
+        }
+
+        .quote-container.default-mode .input.dark {
+            border-bottom-color: #8b5cf6;
+            color: #e5e7eb;
+        }
+
+        .quote-container.default-mode .input::placeholder {
+            color: #999;
+        }
+
+        .quote-container.default-mode .input.dark::placeholder {
+            color: #71717a;
+        }
+
         .spacer {
             height: 8rem;
         }
@@ -445,12 +573,18 @@
     </style>
 </head>
 <body id="body">
-<!-- 폰트 슬라이더 -->
-<div class="font-size-slider-container">
-    <label class="font-size-label" id="fontSizeLabel">
-        <i class="fa-solid fa-text-height"></i>
-    </label>
-    <input type="range" class="font-size-slider" id="fontSizeSlider" min="0" max="100" value="50"/>
+<!-- 좌측 상단 컨트롤 -->
+<div class="top-left-controls">
+    <div class="font-size-slider-container">
+        <label class="font-size-label" id="fontSizeLabel" for="fontSizeSlider">Font Size</label>
+        <input type="range" class="font-size-slider" id="fontSizeSlider" min="0" max="100" value="50"/>
+    </div>
+    <div class="mode-toggle-container">
+        <span class="mode-toggle-label" id="modeLabel">Compact</span>
+        <div class="mode-toggle" id="modeToggle">
+            <div class="mode-toggle-knob"></div>
+        </div>
+    </div>
 </div>
 
 <!-- 헤더 -->
@@ -526,7 +660,7 @@
         </div>
     </div>
 
-    <div class="info-averages">
+    <div class="info-averages" id="infoAverages">
         <div>
             <span class="average-label">CPM</span>
             <span class="average-value">706</span>
@@ -540,34 +674,37 @@
             <span class="average-value">1</span>
         </div>
     </div>
+    <div class="averages-toggle-container">
+        <button class="averages-toggle-btn" id="averagesToggleBtn">
+            <i class="fa-solid fa-chevron-up" id="averagesToggleIcon"></i>
+        </button>
+    </div>
 </div>
 
 <!-- 타이핑 영역 -->
-<div class="quote-container">
+<div class="quote-container default-mode" id="quoteContainer">
     <div class="author-container">
         <span class="author-text">웰러비</span>
     </div>
     <div class="sentence-input-wrapper">
         <div class="character-container" id="characterContainer">
             <span class="character">가</span><span class="character">시</span><span class="character">에</span><span
-                class="character"> </span><span class="character character-typed">절</span><span
-                class="character character-typed">리</span><span class="character character-typed">지</span><span
-                class="character character-typed"> </span><span class="character character-typed">않</span><span
-                class="character character-typed">고</span><span class="character character-typed">서</span><span
-                class="character character-typed">는</span><span class="character character-typed"> </span><span
-                class="character character-typed">장</span><span class="character character-typed">미</span><span
-                class="character character-typed">를</span><span class="character character-typed"> </span><span
-                class="character character-typed">모</span><span class="character character-typed">을</span><span
-                class="character character-typed"> </span><span class="character character-typed">수</span><span
-                class="character character-typed"> </span><span class="character character-typed">없</span><span
-                class="character character-typed">다</span><span class="character character-typed">.</span>
+                class="character"> </span><span class="character">절</span><span
+                class="character">리</span><span class="character">지</span><span
+                class="character"> </span><span class="character">않</span><span
+                class="character">고</span><span class="character">서</span><span
+                class="character">는</span><span class="character"> </span><span
+                class="character">장</span><span class="character">미</span><span
+                class="character">를</span><span class="character"> </span><span
+                class="character">모</span><span class="character">을</span><span
+                class="character"> </span><span class="character">수</span><span
+                class="character"> </span><span class="character">없</span><span
+                class="character">다</span><span class="character">.</span>
         </div>
-        <div class="input-display" id="inputDisplay">
-            <span class="input-char-correct">가</span><span class="input-char-correct">시</span><span
-                class="input-char-correct">에</span><span class="input-char-correct"> </span><span
-                class="input-char-incorrect">절</span><span class="input-char-incorrect">리</span>
-        </div>
-        <textarea class="input" id="quoteInput" autofocus autocomplete="off" spellcheck="false">가시에 절리</textarea>
+        <div class="input-display" id="inputDisplay"></div>
+        <label for="quoteInput" class="display-none">타이핑 입력</label>
+        <textarea class="input" id="quoteInput" rows="1" autofocus autocomplete="off" spellcheck="false"
+                  placeholder="위 문장을 입력하세요."></textarea>
     </div>
 </div>
 
@@ -575,6 +712,7 @@
 <a class="contact" href="#">Contact</a>
 
 <script>
+    // 폰트 크기
     let fontSize = 1.5;
 
     function sliderToFontSize(v) {
@@ -601,9 +739,9 @@
     }
 
     const slider = document.getElementById('fontSizeSlider');
-    const saved = localStorage.getItem('Typing-Practice-fontSize');
-    if (saved) {
-        fontSize = parseFloat(saved);
+    const savedFontSize = localStorage.getItem('Typing-Practice-fontSize');
+    if (savedFontSize) {
+        fontSize = parseFloat(savedFontSize);
         updateFontSize(fontSize);
         slider.value = fontSizeToSlider(fontSize);
     } else {
@@ -611,11 +749,18 @@
     }
     slider.addEventListener('input', e => updateFontSize(sliderToFontSize(parseFloat(e.target.value))));
 
+    // Font Size 라벨 클릭 시 리셋
+    document.getElementById('fontSizeLabel').addEventListener('click', () => {
+        updateFontSize(1.5);
+        slider.value = fontSizeToSlider(1.5);
+    });
+
+    // 다크모드
     function toggleTheme() {
         document.getElementById('body').classList.toggle('dark');
         document.getElementById('iconSun').classList.toggle('display-none');
         document.getElementById('iconMoon').classList.toggle('display-none');
-        document.querySelectorAll('.font-size-label, .font-size-slider, .title-title, .header-btn, .profile-btn, .dropdown-menu, .dropdown-item, .dropdown-divider, .dark-mode-icon, .result-period-btn, .result-period-value, .CPM-text, .CPM-value, .info-averages, .average-label, .average-value, .author-text, .character, .input-char-correct, .input, .contact').forEach(el => el.classList.toggle('dark'));
+        document.querySelectorAll('.font-size-label, .font-size-slider, .mode-toggle-label, .mode-toggle, .title-title, .header-btn, .profile-btn, .dropdown-menu, .dropdown-item, .dropdown-divider, .dark-mode-icon, .result-period-btn, .result-period-value, .CPM-text, .CPM-value, .info-averages, .average-label, .average-value, .averages-toggle-btn, .author-text, .character, .input-char-correct, .input, .contact').forEach(el => el.classList.toggle('dark'));
         localStorage.setItem('Typing-Practice-darkMode', document.getElementById('body').classList.contains('dark'));
     }
 
@@ -623,31 +768,26 @@
     document.getElementById('iconMoon').addEventListener('click', toggleTheme);
     if (localStorage.getItem('Typing-Practice-darkMode') === 'true') toggleTheme();
 
+    // textarea 높이 자동 조절
     const textarea = document.getElementById('quoteInput');
     textarea.addEventListener('input', function () {
         this.style.height = 'auto';
         this.style.height = this.scrollHeight + 'px';
     });
-    textarea.style.height = 'auto';
-    textarea.style.height = textarea.scrollHeight + 'px';
 
-    // 버튼 이벤트
+    // 로그인 관련
     let isLoggedIn = false;
 
-    // 로그인 버튼
     document.getElementById('loginBtn').addEventListener('click', () => {
-        // 임시: 로그인 처리
         isLoggedIn = true;
         document.getElementById('loginBtn').classList.add('display-none');
         document.getElementById('profileContainer').classList.remove('display-none');
     });
 
-    // 프로필 드롭다운 토글
     document.getElementById('profileBtn').addEventListener('click', () => {
         document.getElementById('dropdownMenu').classList.toggle('display-none');
     });
 
-    // 드롭다운 외부 클릭 시 닫기
     document.addEventListener('click', (e) => {
         const profileContainer = document.getElementById('profileContainer');
         const dropdownMenu = document.getElementById('dropdownMenu');
@@ -656,7 +796,6 @@
         }
     });
 
-    // 문장 업로드 버튼
     document.getElementById('uploadBtn').addEventListener('click', () => {
         if (!isLoggedIn) {
             alert('로그인이 필요한 기능입니다.');
@@ -665,7 +804,6 @@
         alert('문장 업로드 기능 (준비 중)');
     });
 
-    // 드롭다운 메뉴 아이템들
     document.getElementById('mysentencesBtn').addEventListener('click', () => {
         alert('내 문장 기능 (준비 중)');
         document.getElementById('dropdownMenu').classList.add('display-none');
@@ -682,13 +820,67 @@
     });
 
     document.getElementById('logoutBtn').addEventListener('click', () => {
-        // 로그아웃 처리
         isLoggedIn = false;
         document.getElementById('profileContainer').classList.add('display-none');
         document.getElementById('loginBtn').classList.remove('display-none');
         document.getElementById('dropdownMenu').classList.add('display-none');
         alert('로그아웃 되었습니다.');
     });
+
+    // 평균점수 토글
+    let averagesVisible = localStorage.getItem('Typing-Practice-averagesVisible') !== 'false';
+    const infoAverages = document.getElementById('infoAverages');
+    const averagesToggleIcon = document.getElementById('averagesToggleIcon');
+
+    function updateAveragesVisibility() {
+        if (averagesVisible) {
+            infoAverages.classList.remove('collapsed');
+            averagesToggleIcon.classList.remove('fa-chevron-down');
+            averagesToggleIcon.classList.add('fa-chevron-up');
+        } else {
+            infoAverages.classList.add('collapsed');
+            averagesToggleIcon.classList.remove('fa-chevron-up');
+            averagesToggleIcon.classList.add('fa-chevron-down');
+        }
+    }
+
+    updateAveragesVisibility();
+
+    document.getElementById('averagesToggleBtn').addEventListener('click', () => {
+        averagesVisible = !averagesVisible;
+        localStorage.setItem('Typing-Practice-averagesVisible', averagesVisible);
+        updateAveragesVisibility();
+    });
+
+    // 모드 토글 (Default / Compact)
+    let isCompactMode = localStorage.getItem('Typing-Practice-compactMode') === 'true';
+    const modeToggle = document.getElementById('modeToggle');
+    const modeLabel = document.getElementById('modeLabel');
+    const quoteContainer = document.getElementById('quoteContainer');
+    const quoteInput = document.getElementById('quoteInput');
+
+    function updateMode() {
+        if (isCompactMode) {
+            modeToggle.classList.add('active');
+            quoteContainer.classList.remove('default-mode');
+            quoteInput.placeholder = '';
+        } else {
+            modeToggle.classList.remove('active');
+            quoteContainer.classList.add('default-mode');
+            quoteInput.placeholder = '위 문장을 입력하세요.';
+        }
+    }
+
+    updateMode();
+
+    function toggleMode() {
+        isCompactMode = !isCompactMode;
+        localStorage.setItem('Typing-Practice-compactMode', isCompactMode);
+        updateMode();
+    }
+
+    modeToggle.addEventListener('click', toggleMode);
+    modeLabel.addEventListener('click', toggleMode);
 </script>
 </body>
 </html>
