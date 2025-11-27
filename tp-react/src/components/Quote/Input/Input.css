@@ -35,3 +35,27 @@
 .input-dark::placeholder{
     color: transparent;
 }
+
+/* Default 모드 스타일 */
+.default-mode .input {
+    position: relative;
+    background-color: transparent;
+    border-bottom: 2px solid #6d28d9;
+    color: #333;
+    caret-color: #6d28d9;
+    padding-bottom: 0.25rem;
+}
+
+.default-mode .input-dark {
+    border-bottom-color: #8b5cf6;
+    color: #e5e7eb;
+    caret-color: #8b5cf6;
+}
+
+.default-mode .input::placeholder {
+    color: #999;
+}
+
+.default-mode .input-dark::placeholder {
+    color: #71717a;
+}

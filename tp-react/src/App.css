@@ -39,6 +39,17 @@
   }
 }
 
+/* Top left controls wrapper */
+.top-left-controls {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  z-index: 100;
+}
+
 
 /*!* ============ 기본 리셋 및 전역 스타일 ============ *!*/
 /** {*/

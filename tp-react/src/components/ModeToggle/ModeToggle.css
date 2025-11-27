@@ -1,0 +1,52 @@
+.mode-toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mode-toggle-label {
+    font-size: 0.75rem;
+    color: #999;
+    cursor: pointer;
+}
+
+.mode-toggle-label.dark {
+    color: #666;
+}
+
+.mode-toggle {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    background: #e5e7eb;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.mode-toggle.dark {
+    background: #3f3f46;
+}
+
+.mode-toggle.active {
+    background: #6d28d9;
+}
+
+.mode-toggle.active.dark {
+    background: #8b5cf6;
+}
+
+.mode-toggle-knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+}
+
+.mode-toggle.active .mode-toggle-knob {
+    transform: translateX(16px);
+}

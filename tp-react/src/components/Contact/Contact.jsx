@@ -8,6 +8,8 @@ const Contact = () => {
   return (
     <a
       href={"https://open.kakao.com/o/sMHDrAog"}
+      target="_blank"
+      rel="noopener noreferrer"
       className={`contact ${isDark && "dark"}`}
     >
       Contact
