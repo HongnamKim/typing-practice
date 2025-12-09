@@ -1,8 +1,9 @@
 import {useContext, useEffect, useState} from "react";
 import {ThemeContext} from "../../Context/ThemeContext";
 import {CiBullhorn} from "react-icons/ci";
-import {CURRENT_VERSION, updateHistory} from "../../data/updateHistory";
 import {Storage_Last_Seen_Version} from "../../const/config.const";
+import UpdateHistoryList from "./UpdateHistoryList/UpdateHistoryList";
+import LatestUpdate, {getLatestPopupUpdate} from "./LatestUpdate/LatestUpdate";
 import "./UpdatePopup.css";
 
 const UpdatePopup = () => {
@@ -12,7 +13,10 @@ const UpdatePopup = () => {
 
     useEffect(() => {
         const lastSeenVersion = localStorage.getItem(Storage_Last_Seen_Version);
-        if (lastSeenVersion !== CURRENT_VERSION) {
+        const latestPopupUpdate = getLatestPopupUpdate();
+        
+        // showPopup: true인 업데이트가 있고, 아직 해당 버전을 본 적 없으면 팝업 표시
+        if (latestPopupUpdate && lastSeenVersion !== latestPopupUpdate.version) {
             setIsOpen(true);
             setIsHistoryMode(false);
         }
@@ -20,7 +24,14 @@ const UpdatePopup = () => {
 
     const handleClose = () => {
         setIsOpen(false);
-        localStorage.setItem(Storage_Last_Seen_Version, CURRENT_VERSION);
+    };
+
+    const handleDontShowAgain = () => {
+        setIsOpen(false);
+        const latestPopupUpdate = getLatestPopupUpdate();
+        if (latestPopupUpdate) {
+            localStorage.setItem(Storage_Last_Seen_Version, latestPopupUpdate.version);
+        }
     };
 
     const handleIconClick = () => {
@@ -31,35 +42,6 @@ const UpdatePopup = () => {
     const handleHistoryClick = () => {
         setIsHistoryMode(true);
     };
-
-    const renderUpdateSection = (update) => (
-        <>
-            {update.features && update.features.length > 0 && (
-                <div className="update-popup-section">
-                    <div className={`update-popup-section-title ${isDark ? "dark" : ""}`}>
-                        ✨ 새로운 기능
-                    </div>
-                    <ul className="update-popup-list">
-                        {update.features.map((feature, index) => (
-                            <li key={index} className={isDark ? "dark" : ""}>{feature}</li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-            {update.improvements && update.improvements.length > 0 && (
-                <div className="update-popup-section">
-                    <div className={`update-popup-section-title ${isDark ? "dark" : ""}`}>
-                        🔧 개선사항
-                    </div>
-                    <ul className="update-popup-list">
-                        {update.improvements.map((improvement, index) => (
-                            <li key={index} className={isDark ? "dark" : ""}>{improvement}</li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-        </>
-    );
 
     return (
         <>
@@ -82,29 +64,9 @@ const UpdatePopup = () => {
 
                         <div className="update-content">
                             {isHistoryMode ? (
-                                // 모든 업데이트 표시
-                                updateHistory.map((update, index) => (
-                                    <div key={index} className={`update-history-item ${isDark ? "dark" : ""}`}>
-                                        <div className="update-history-header">
-                                            <span className="update-history-version">v{update.version}</span>
-                                            <span className={`update-history-date ${isDark ? "dark" : ""}`}>
-                                                {update.date}
-                                            </span>
-                                        </div>
-                                        {renderUpdateSection(update, true)}
-                                    </div>
-                                ))
+                                <UpdateHistoryList />
                             ) : (
-                                // 최신 업데이트만 표시
-                                <>
-                                    <div className={`update-popup-version ${isDark ? "dark" : ""}`}>
-                                        v{updateHistory[0].version}
-                                    </div>
-                                    <div className={`update-popup-date ${isDark ? "dark" : ""}`}>
-                                        {updateHistory[0].date}
-                                    </div>
-                                    {renderUpdateSection(updateHistory[0])}
-                                </>
+                                <LatestUpdate />
                             )}
                         </div>
 
@@ -112,12 +74,20 @@ const UpdatePopup = () => {
                             확인
                         </button>
                         {!isHistoryMode && (
-                            <button
-                                className={`update-popup-history-btn ${isDark ? "dark" : ""}`}
-                                onClick={handleHistoryClick}
-                            >
-                                지난 업데이트 보기
-                            </button>
+                            <>
+                                <button
+                                    className={`update-popup-history-btn ${isDark ? "dark" : ""}`}
+                                    onClick={handleHistoryClick}
+                                >
+                                    지난 업데이트 보기
+                                </button>
+                                <button
+                                    className={`update-popup-dont-show-btn ${isDark ? "dark" : ""}`}
+                                    onClick={handleDontShowAgain}
+                                >
+                                    다시 보지 않기
+                                </button>
+                            </>
                         )}
                     </div>
                 </div>

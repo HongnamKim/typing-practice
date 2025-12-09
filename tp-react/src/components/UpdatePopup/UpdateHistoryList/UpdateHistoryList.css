@@ -1,0 +1,40 @@
+.update-history-item {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    background-color: transparent;
+}
+
+.update-history-item.dark {
+    border-bottom-color: #3f3f46;
+    background-color: transparent;
+}
+
+.update-history-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.update-history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.update-history-version {
+    font-weight: 600;
+    color: #6d28d9;
+}
+
+.update-history-date {
+    font-size: 0.8rem;
+    color: #999;
+    background-color: transparent;
+}
+
+.update-history-date.dark {
+    color: #666;
+    background-color: transparent;
+}
