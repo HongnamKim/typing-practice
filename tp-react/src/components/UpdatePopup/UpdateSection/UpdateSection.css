@@ -1,0 +1,60 @@
+.update-popup-section {
+    margin-bottom: 1.25rem;
+}
+
+.update-popup-section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+    background-color: transparent;
+}
+
+.update-popup-section-title.dark {
+    color: #e5e7eb;
+    background-color: transparent;
+}
+
+.update-popup-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.update-popup-list li {
+    position: relative;
+    padding-left: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.5;
+    background-color: transparent;
+}
+
+.update-popup-list li.dark {
+    color: #a1a1aa;
+    background-color: transparent;
+}
+
+.update-popup-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #6d28d9;
+}
+
+/* 히스토리 모드 (작은 사이즈) */
+.update-popup.history-mode .update-popup-section {
+    margin-bottom: 0.75rem;
+}
+
+.update-popup.history-mode .update-popup-section-title {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.update-popup.history-mode .update-popup-list li {
+    padding-left: 1rem;
+    margin-bottom: 0.25rem;
+    font-size: 0.85rem;
+}

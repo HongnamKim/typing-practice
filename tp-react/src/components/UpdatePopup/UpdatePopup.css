@@ -66,74 +66,6 @@
     color: #6d28d9;
 }
 
-.update-popup-version {
-    font-size: 0.85rem;
-    color: #999;
-    background-color: transparent;
-}
-
-.update-popup-version.dark {
-    color: #666;
-    background-color: transparent;
-}
-
-.update-popup-date {
-    font-size: 0.85rem;
-    color: #999;
-    margin-bottom: 1.5rem;
-    background-color: transparent;
-}
-
-.update-popup-date.dark {
-    color: #666;
-    background-color: transparent;
-}
-
-.update-popup-section {
-    margin-bottom: 1.25rem;
-}
-
-.update-popup-section-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 0.5rem;
-    background-color: transparent;
-}
-
-.update-popup-section-title.dark {
-    color: #e5e7eb;
-    background-color: transparent;
-}
-
-.update-popup-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.update-popup-list li {
-    position: relative;
-    padding-left: 1.25rem;
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
-    color: #555;
-    line-height: 1.5;
-    background-color: transparent;
-}
-
-.update-popup-list li.dark {
-    color: #a1a1aa;
-    background-color: transparent;
-}
-
-.update-popup-list li::before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    color: #6d28d9;
-}
-
 .update-popup-close {
     width: 100%;
     padding: 0.75rem;
@@ -149,6 +81,33 @@
 
 .update-popup-close:hover {
     background-color: #5b21b6;
+}
+
+.update-popup-dont-show-btn {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: transparent;
+    color: #999;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.update-popup-dont-show-btn:hover {
+    background-color: #f5f5f5;
+    color: #666;
+}
+
+.update-popup-dont-show-btn.dark {
+    color: #666;
+}
+
+.update-popup-dont-show-btn.dark:hover {
+    background-color: #27272a;
+    color: #999;
 }
 
 .update-popup-history-btn {
@@ -177,62 +136,4 @@
 .update-popup-history-btn.dark:hover {
     background-color: #27272a;
     color: #e5e7eb;
-}
-
-/* 히스토리 아이템 */
-.update-history-item {
-    margin-bottom: 1.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid #e5e7eb;
-    background-color: transparent;
-}
-
-.update-history-item.dark {
-    border-bottom-color: #3f3f46;
-    background-color: transparent;
-}
-
-.update-history-item:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
-
-.update-history-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.75rem;
-}
-
-.update-history-version {
-    font-weight: 600;
-    color: #6d28d9;
-}
-
-.update-history-date {
-    font-size: 0.8rem;
-    color: #999;
-    background-color: transparent;
-}
-
-.update-history-date.dark {
-    color: #666;
-    background-color: transparent;
-}
-
-/* 히스토리 모드 (작은 사이즈) */
-.update-popup.history-mode .update-popup-section {
-    margin-bottom: 0.75rem;
-}
-
-.update-popup.history-mode .update-popup-section-title {
-    font-size: 0.9rem;
-    margin-bottom: 0.25rem;
-}
-
-.update-popup.history-mode .update-popup-list li {
-    padding-left: 1rem;
-    margin-bottom: 0.25rem;
-    font-size: 0.85rem;
 }

@@ -1,7 +1,18 @@
 export const updateHistory = [
     {
+        version: "1.1.1",
+        date: "2025년 12월 10일",
+        showPopup: false,
+        hidden: false,
+        improvements: [
+            "브라우저 높이가 낮을 때 예문과 Contact가 겹치는 문제 수정"
+        ]
+    },
+    {
         version: "1.1.0",
         date: "2025년 11월 27일",
+        showPopup: true,
+        hidden: false,
         features: [
             "평균점수 영역 접기/펼치기 기능 추가",
             "Default/Compact 모드 전환 기능 추가",
@@ -16,6 +27,8 @@ export const updateHistory = [
     {
         version: "1.0.0",
         date: "2025년 11월 23일",
+        showPopup: true,
+        hidden: false,
         features: [
             "새로운 디자인 적용",
             "폰트 크기 조절 기능 추가",
