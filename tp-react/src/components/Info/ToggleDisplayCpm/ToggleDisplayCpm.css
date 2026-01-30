@@ -1,0 +1,13 @@
+.currentCPM-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.toggle-current-cpm {
+    color: #666;
+}
+
+.toggle-current-cpm-dark {
+    color: #999;
+}

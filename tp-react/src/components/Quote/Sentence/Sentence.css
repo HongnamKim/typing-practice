@@ -1,0 +1,59 @@
+.character-container {
+    position: relative;
+    z-index: 1;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: normal;
+    overflow-wrap: break-word;
+}
+
+.character {
+    color: #999;
+    line-height: 1.8;
+}
+
+.character-dark {
+    color: #a8a8a8;
+}
+
+.character-typed {
+    color: transparent;
+}
+
+.character-incorrect {
+    color: transparent;
+}
+
+.character-correct {
+    color: transparent;
+}
+
+.character-correct.character-dark {
+    color: transparent;
+}
+
+/* Default 모드 - 채점 결과에 따른 색상 */
+.character-correct-visible {
+    color: #333;
+}
+
+.character-correct-visible.character-dark {
+    color: #ffffff;
+}
+
+.character-incorrect-visible {
+    color: #dc2626;
+}
+
+.character-typing {
+    color: #666;
+}
+
+.character-typing.character-dark {
+    color: #d4d4d4;
+}
+
+/* Default 모드 스타일 */
+.default-mode .character-container {
+    margin-bottom: 1rem;
+}

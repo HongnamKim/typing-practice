@@ -1,0 +1,13 @@
+.speed-check {
+    font-size: 1.3rem;
+}
+
+.speed-check-num {
+    margin-left: 2rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.speed-check-num.dark {
+    color: #ffffff;
+}
