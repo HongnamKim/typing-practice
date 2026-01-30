@@ -1,68 +1,88 @@
 package com.typingpractice.typing_practice_be.quote.controller;
 
-import com.typingpractice.typing_practice_be.member.domain.Member;
-import com.typingpractice.typing_practice_be.member.domain.MemberRole;
-import com.typingpractice.typing_practice_be.member.exception.NotAdminException;
-import com.typingpractice.typing_practice_be.member.service.MemberService;
+import com.typingpractice.typing_practice_be.common.ApiResponse;
+import com.typingpractice.typing_practice_be.common.dto.PageResult;
+import com.typingpractice.typing_practice_be.quote.domain.Quote;
+import com.typingpractice.typing_practice_be.quote.dto.QuotePaginationRequest;
+import com.typingpractice.typing_practice_be.quote.dto.QuotePaginationResponse;
+import com.typingpractice.typing_practice_be.quote.dto.QuoteResponse;
+import com.typingpractice.typing_practice_be.quote.dto.QuoteUpdateRequest;
+import com.typingpractice.typing_practice_be.quote.query.QuotePaginationQuery;
+import com.typingpractice.typing_practice_be.quote.query.QuoteUpdateQuery;
 import com.typingpractice.typing_practice_be.quote.service.AdminQuoteService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+// @AdminOnly
 public class AdminQuoteController {
-  private final MemberService memberService;
   private final AdminQuoteService adminQuoteService;
 
-  private void validateAdmin() {
-    Long memberId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    Member member = memberService.findMemberById(memberId);
+  @GetMapping("/admin/quotes")
+  public ApiResponse<QuotePaginationResponse> getQuotes(
+      @ModelAttribute @Valid QuotePaginationRequest request) {
 
-    if (member.getRole() != MemberRole.ADMIN) {
-      throw new NotAdminException();
-    }
-  }
+    QuotePaginationQuery query = QuotePaginationQuery.from(request);
 
-  // 승인 대기 목록 조회
-  @GetMapping("/admin/quotes/pending")
-  public void getPendingQuotes() {
-    validateAdmin();
+    PageResult<Quote> result = adminQuoteService.findQuotes(query);
+
+    return ApiResponse.ok(QuotePaginationResponse.from(result));
   }
 
   // 승인
   @PostMapping("/admin/quotes/{quoteId}/approve")
-  public void approvePendingQuote(@PathVariable Long quoteId) {
-    validateAdmin();
+  public ApiResponse<QuoteResponse> approvePendingQuote(@PathVariable Long quoteId) {
+
+    Quote quote = adminQuoteService.approvePublish(quoteId);
+
+    return ApiResponse.ok(QuoteResponse.from(quote));
   }
 
   // 거부
   @PostMapping("/admin/quotes/{quoteId}/reject")
-  public void rejectPendingQuote(@PathVariable Long quoteId) {
-    validateAdmin();
+  public ApiResponse<QuoteResponse> rejectPendingQuote(@PathVariable Long quoteId) {
+
+    Quote quote = adminQuoteService.rejectPublish(quoteId);
+
+    return ApiResponse.ok(QuoteResponse.from(quote));
   }
 
   // 공개 문장 수정
   @PatchMapping("/admin/quotes/{quoteId}")
-  public void patchQuote(@PathVariable Long quoteId) {
-    validateAdmin();
+  public ApiResponse<QuoteResponse> patchQuote(
+      @PathVariable Long quoteId, @RequestBody QuoteUpdateRequest request) {
+
+    QuoteUpdateQuery query = QuoteUpdateQuery.from(request);
+
+    Quote quote = adminQuoteService.updateQuote(quoteId, query);
+
+    return ApiResponse.ok(QuoteResponse.from(quote));
   }
 
   // 삭제
   @DeleteMapping("/admin/quotes/{quoteId}")
-  public void deleteQuote(@PathVariable Long quoteId) {
-    validateAdmin();
+  public ApiResponse<Void> deleteQuote(@PathVariable Long quoteId) {
+
+    adminQuoteService.deleteQuote(quoteId);
+
+    return ApiResponse.ok(null);
   }
 
-  // 숨김 목록
-  @GetMapping("/admin/quotes/hidden")
-  public void getHiddenQuotes() {
-    validateAdmin();
+  @PatchMapping("/admin/quotes/{quoteId}/hide")
+  public ApiResponse<QuoteResponse> hideQuote(@PathVariable Long quoteId) {
+    Quote hideQuote = adminQuoteService.hideQuote(quoteId);
+
+    return ApiResponse.ok(QuoteResponse.from(hideQuote));
   }
 
   // 숨김 해제
   @PostMapping("/admin/quotes/{quoteId}/restore")
-  public void restoreHiddenQuotes(@PathVariable Long quoteId) {
-    validateAdmin();
+  public ApiResponse<QuoteResponse> restoreHiddenQuotes(@PathVariable Long quoteId) {
+
+    Quote quote = adminQuoteService.cancelHidden(quoteId);
+
+    return ApiResponse.ok(QuoteResponse.from(quote));
   }
 }

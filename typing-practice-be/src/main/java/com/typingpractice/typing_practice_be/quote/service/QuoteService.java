@@ -1,22 +1,26 @@
 package com.typingpractice.typing_practice_be.quote.service;
 
+import com.typingpractice.typing_practice_be.common.dto.PageResult;
+import com.typingpractice.typing_practice_be.dailylimit.DailyLimitService;
+import com.typingpractice.typing_practice_be.dailylimit.exception.DailyQuoteUploadLimitException;
 import com.typingpractice.typing_practice_be.member.domain.Member;
 import com.typingpractice.typing_practice_be.member.exception.MemberNotFoundException;
 import com.typingpractice.typing_practice_be.member.repository.MemberRepository;
 import com.typingpractice.typing_practice_be.quote.domain.Quote;
 import com.typingpractice.typing_practice_be.quote.domain.QuoteStatus;
 import com.typingpractice.typing_practice_be.quote.domain.QuoteType;
-import com.typingpractice.typing_practice_be.quote.dto.QuoteCreateRequest;
-import com.typingpractice.typing_practice_be.quote.dto.QuoteUpdateRequest;
 import com.typingpractice.typing_practice_be.quote.exception.QuoteNotFoundException;
 import com.typingpractice.typing_practice_be.quote.exception.QuoteNotOwnedException;
 import com.typingpractice.typing_practice_be.quote.exception.QuoteNotProcessableException;
+import com.typingpractice.typing_practice_be.quote.query.PublicQuoteQuery;
+import com.typingpractice.typing_practice_be.quote.query.QuoteCreateQuery;
+import com.typingpractice.typing_practice_be.quote.query.QuotePaginationQuery;
+import com.typingpractice.typing_practice_be.quote.query.QuoteUpdateQuery;
 import com.typingpractice.typing_practice_be.quote.repository.QuoteRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -25,10 +29,15 @@ public class QuoteService {
   private final QuoteRepository quoteRepository;
   private final MemberRepository memberRepository;
 
-  public List<Quote> findPublicQuotes() {
-    List<Quote> all = quoteRepository.findPublicQuotes();
+  private final DailyLimitService dailyLimitService;
 
-    return all;
+  public PageResult<Quote> findRandomPublicQuotes(PublicQuoteQuery query) {
+    List<Quote> quotes = quoteRepository.findPublicQuotes(query);
+
+    boolean hasNext = quotes.size() > query.getCount();
+    List<Quote> content = hasNext ? quotes.subList(0, query.getCount()) : quotes;
+
+    return new PageResult<>(content, query.getPage(), query.getCount(), hasNext);
   }
 
   public Quote findById(Long quoteId) {
@@ -36,33 +45,30 @@ public class QuoteService {
   }
 
   @Transactional
-  public Quote create(Long memberId, QuoteCreateRequest request) {
+  public Quote create(Long memberId, QuoteCreateQuery query) {
     Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-    Quote quote =
-        Quote.create(member, request.getSentence(), request.getAuthor(), request.getType());
+
+    if (!dailyLimitService.canUploadQuote(memberId)) {
+      throw new DailyQuoteUploadLimitException();
+    }
+
+    Quote quote = Quote.create(member, query.getSentence(), query.getAuthor(), query.getType());
 
     quoteRepository.save(quote);
+    dailyLimitService.incrementQuoteUploadCount(memberId);
 
     return quote;
   }
 
   @Transactional
-  public Quote updatePrivateQuote(Long memberId, Long quoteId, QuoteUpdateRequest request) {
+  public Quote updatePrivateQuote(Long memberId, Long quoteId, QuoteUpdateQuery query) {
     Quote quote = findMyQuoteById(memberId, quoteId);
 
     if (quote.getType() != QuoteType.PRIVATE || quote.getStatus() != QuoteStatus.ACTIVE) {
       throw new QuoteNotProcessableException();
     }
 
-    if (request.getAuthor() != null) {
-      String author =
-          StringUtils.hasText(request.getAuthor()) ? request.getAuthor() : Quote.DEFAULT_AUTHOR;
-      quote.updateAuthor(author);
-    }
-
-    if (request.getSentence() != null) {
-      quote.updateSentence(request.getSentence());
-    }
+    quote.update(query.getSentence(), query.getAuthor());
 
     return quote;
   }
@@ -78,10 +84,15 @@ public class QuoteService {
     quoteRepository.deleteQuote(quote);
   }
 
-  public List<Quote> getMyQuotes(Long memberId) {
+  public PageResult<Quote> getMyQuotes(Long memberId, QuotePaginationQuery query) {
     Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
 
-    return quoteRepository.findByMember(member);
+    List<Quote> quotes = quoteRepository.findByMember(member, query);
+
+    boolean hasNext = quotes.size() > query.getSize();
+    List<Quote> content = hasNext ? quotes.subList(0, query.getSize()) : quotes;
+
+    return new PageResult<>(content, query.getPage(), query.getSize(), hasNext);
   }
 
   private Quote findMyQuoteById(Long memberId, Long quoteId) {

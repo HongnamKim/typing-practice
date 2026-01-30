@@ -33,16 +33,20 @@ public class Quote extends BaseEntity {
   private int reportCount;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "member_id", nullable = true)
+  @JoinColumn(name = "member_id")
   private Member member;
 
+  //  @OneToMany(mappedBy = "quote", cascade = CascadeType.REMOVE)
+  //  private List<Report> reports = new ArrayList<>();
+
   public static final String DEFAULT_AUTHOR = "작자 미상";
+  public static final int HIDDEN_THRESHOLD = 5; // 자동 숨김 기준값
 
   public static Quote create(Member member, String sentence, String author, QuoteType type) {
     Quote quote = new Quote();
     quote.member = member;
     quote.sentence = sentence;
-    quote.author = StringUtils.hasText(author) ? author : DEFAULT_AUTHOR;
+    quote.author = author != null ? author : DEFAULT_AUTHOR;
     quote.type = type;
     quote.reportCount = 0;
     quote.status = quote.type == QuoteType.PUBLIC ? QuoteStatus.PENDING : QuoteStatus.ACTIVE;
@@ -50,13 +54,33 @@ public class Quote extends BaseEntity {
     return quote;
   }
 
-  public void updateSentence(String sentence) {
-    this.sentence = sentence;
+  public void approvePublish() {
+    this.type = QuoteType.PUBLIC;
+    this.status = QuoteStatus.ACTIVE;
   }
 
-  public void updateAuthor(String author) {
-    this.author = author;
+  public void rejectPublish() {
+    this.type = QuoteType.PRIVATE;
+    this.status = QuoteStatus.ACTIVE;
   }
+
+  public void update(String sentence, String author) {
+    if (sentence != null) {
+      this.sentence = sentence;
+    }
+
+    if (author != null) {
+      this.author = StringUtils.hasText(author) ? author : DEFAULT_AUTHOR;
+    }
+  }
+
+  /*public void updateSentence(String sentence) {
+    this.sentence = sentence;
+  }*/
+
+  /*public void updateAuthor(String author) {
+    this.author = author;
+  }*/
 
   public void updateType(QuoteType quoteType) {
     this.type = quoteType;
@@ -64,5 +88,21 @@ public class Quote extends BaseEntity {
 
   public void updateStatus(QuoteStatus quoteStatus) {
     this.status = quoteStatus;
+  }
+
+  public void increaseReportCount() {
+    this.reportCount++;
+  }
+
+  public void decreaseReportCount() {
+    this.reportCount--;
+  }
+
+  public void resetReportCount() {
+    this.reportCount = 0;
+  }
+
+  public boolean shouldBeHidden() {
+    return this.reportCount >= Quote.HIDDEN_THRESHOLD;
   }
 }
