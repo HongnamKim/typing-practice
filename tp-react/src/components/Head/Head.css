@@ -8,3 +8,9 @@
     justify-content: space-between;
     margin-bottom: 3rem;
 }
+
+.head-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}

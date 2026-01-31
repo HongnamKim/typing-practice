@@ -1,9 +1,8 @@
-import {useContext} from "react";
-import {ThemeContext} from "../../../Context/ThemeContext";
+import {useTheme} from "../../../Context/ThemeContext";
 import "./UpdateSection.css";
 
 const UpdateSection = ({update}) => {
-    const {isDark} = useContext(ThemeContext);
+    const {isDark} = useTheme();
 
     return (
         <>

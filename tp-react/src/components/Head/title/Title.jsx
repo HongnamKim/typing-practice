@@ -1,9 +1,8 @@
 import "./Title.css";
-import { useContext } from "react";
-import { ThemeContext } from "../../../Context/ThemeContext";
+import { useTheme } from "../../../Context/ThemeContext";
 
 const Title = () => {
-  const { isDark } = useContext(ThemeContext);
+  const { isDark } = useTheme();
   return <h1 className={`title ${isDark ? "dark" : ""}`}>Typing Practice</h1>;
 };
 

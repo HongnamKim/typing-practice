@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import {
   Storage_Display_Cpm,
   Storage_Result_Period,
@@ -7,6 +7,14 @@ import {
 } from "../const/config.const";
 
 export const SettingContext = createContext(null);
+
+export const useSetting = () => {
+  const context = useContext(SettingContext);
+  if (!context) {
+    throw new Error('useSetting must be used within SettingContextProvider');
+  }
+  return context;
+};
 
 export const resultPeriodSet = [5, 10, 15, Infinity];
 export const resultPeriodDisplaySet = ["5", "10", "15", "∞"];

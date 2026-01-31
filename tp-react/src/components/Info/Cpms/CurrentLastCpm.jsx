@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { SettingContext } from "../../../Context/SettingContext";
+import { useSetting } from "../../../Context/SettingContext";
 import { ScoreContext } from "../../../Context/ScoreContext";
-import { ThemeContext } from "../../../Context/ThemeContext";
+import { useTheme } from "../../../Context/ThemeContext";
 import { Storage_Display_Cpm } from "../../../const/config.const";
 import "./Cpms.css";
 
@@ -13,9 +13,9 @@ import "./Cpms.css";
  * @constructor
  */
 const CurrentLastCpm = () => {
-  const { displayCurrentCpm, setDisplayCurrentCpm } = useContext(SettingContext);
+  const { displayCurrentCpm, setDisplayCurrentCpm } = useSetting();
   const { currentCpm, lastCpm } = useContext(ScoreContext);
-  const { isDark } = useContext(ThemeContext);
+  const { isDark } = useTheme();
 
   const handleToggle = () => {
     localStorage.setItem(Storage_Display_Cpm, (!displayCurrentCpm).toString());

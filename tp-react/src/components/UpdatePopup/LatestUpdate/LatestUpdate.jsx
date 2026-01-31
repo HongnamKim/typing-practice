@@ -1,5 +1,4 @@
-import {useContext} from "react";
-import {ThemeContext} from "../../../Context/ThemeContext";
+import {useTheme} from "../../../Context/ThemeContext";
 import {updateHistory} from "../../../data/updateHistory";
 import UpdateSection from "../UpdateSection/UpdateSection";
 import "./LatestUpdate.css";
@@ -10,7 +9,7 @@ const getLatestPopupUpdate = () => {
 };
 
 const LatestUpdate = () => {
-    const {isDark} = useContext(ThemeContext);
+    const {isDark} = useTheme();
     const latestPopupUpdate = getLatestPopupUpdate();
 
     if (!latestPopupUpdate) return null;

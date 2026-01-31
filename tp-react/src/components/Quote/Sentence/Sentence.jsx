@@ -1,14 +1,14 @@
 import { useContext } from "react";
-import { ThemeContext } from "../../../Context/ThemeContext";
+import { useTheme } from "../../../Context/ThemeContext";
 import { QuoteContext } from "../../../Context/QuoteContext";
-import { SettingContext } from "../../../Context/SettingContext";
+import { useSetting } from "../../../Context/SettingContext";
 import { ScoreContext } from "../../../Context/ScoreContext";
 import "./Sentence.css";
 
 const Sentence = ({ inputLength, inputValue }) => {
-  const { isDark } = useContext(ThemeContext);
+  const { isDark } = useTheme();
   const { sentence } = useContext(QuoteContext);
-  const { fontSize, isCompactMode } = useContext(SettingContext);
+  const { fontSize, isCompactMode } = useSetting();
   const { inputCheck } = useContext(ScoreContext);
 
   // 입력값에 맞춰 문장을 조정

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { ScoreContext } from "../../../Context/ScoreContext";
-import { ThemeContext } from "../../../Context/ThemeContext";
+import { useTheme } from "../../../Context/ThemeContext";
 import "./AverageScore.css";
 
 /**
@@ -10,7 +10,7 @@ import "./AverageScore.css";
  */
 const AverageScore = ({ type }) => {
   const { totalScore } = useContext(ScoreContext);
-  const { isDark } = useContext(ThemeContext);
+  const { isDark } = useTheme();
   const [avgScore, setAvgScore] = useState(0);
 
   // count 바뀔 때마다 평균 값 계산

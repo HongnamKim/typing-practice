@@ -1,13 +1,13 @@
 import {useContext} from "react";
-import {ThemeContext} from "../../../Context/ThemeContext";
+import {useTheme} from "../../../Context/ThemeContext";
 import {ScoreContext} from "../../../Context/ScoreContext";
-import {SettingContext} from "../../../Context/SettingContext";
+import {useSetting} from "../../../Context/SettingContext";
 import "./InputDisplay.css";
 
 const InputDisplay = ({input}) => {
-    const {isDark} = useContext(ThemeContext);
+    const {isDark} = useTheme();
     const {inputCheck} = useContext(ScoreContext);
-    const {fontSize} = useContext(SettingContext);
+    const {fontSize} = useSetting();
 
 
     if (!input || !inputCheck) {

@@ -1,7 +1,16 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { Storage_Dark_Mode } from "../const/config.const";
 
 export const ThemeContext = createContext();
+
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error('useTheme must be used within ThemeContextProvider');
+  }
+  return context;
+};
+
 export const ThemeContextProvider = ({ children }) => {
   const [isDark, setIsDark] = useState(null);
 

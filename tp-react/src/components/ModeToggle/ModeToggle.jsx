@@ -1,12 +1,11 @@
-import {useContext} from "react";
-import {ThemeContext} from "../../Context/ThemeContext";
-import {SettingContext} from "../../Context/SettingContext";
+import {useTheme} from "../../Context/ThemeContext";
+import {useSetting} from "../../Context/SettingContext";
 import {Storage_Compact_Mode} from "../../const/config.const";
 import "./ModeToggle.css";
 
 const ModeToggle = () => {
-    const {isDark} = useContext(ThemeContext);
-    const {isCompactMode, setIsCompactMode} = useContext(SettingContext);
+    const {isDark} = useTheme();
+    const {isCompactMode, setIsCompactMode} = useSetting();
 
     const handleModeToggle = () => {
         const newMode = !isCompactMode;
@@ -16,9 +15,9 @@ const ModeToggle = () => {
 
     return (
         <div className="mode-toggle-container">
-      <span 
-        className={isDark ? "mode-toggle-label dark" : "mode-toggle-label"}
-        onClick={handleModeToggle}
+      <span
+          className={isDark ? "mode-toggle-label dark" : "mode-toggle-label"}
+          onClick={handleModeToggle}
       >
         Compact
       </span>
