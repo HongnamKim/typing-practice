@@ -13,23 +13,15 @@
 }
 
 .input-char-correct {
-    color: #333;
-}
-
-.input-char-correct.dark {
-    color: #ffffff;
+    color: var(--color-correct);
 }
 
 .input-char-incorrect {
-    color: #dc2626;
+    color: var(--color-error);
 }
 
 .input-char-none {
-    color: #666;
-}
-
-.input-char-none.dark {
-    color: #d4d4d4;
+    color: var(--color-text-muted);
 }
 
 /* Default 모드 스타일 - InputDisplay 숨김 */

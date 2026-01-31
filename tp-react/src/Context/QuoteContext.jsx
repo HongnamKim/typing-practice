@@ -1,11 +1,19 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {defaultQuotes} from "../const/default-quotes.const";
-import {ScoreContext} from "./ScoreContext";
+import {useScore} from "./ScoreContext";
 
-export const QuoteContext = createContext();
+export const QuoteContext = createContext(null);
+
+export const useQuote = () => {
+    const context = useContext(QuoteContext);
+    if (!context) {
+        throw new Error('useQuote must be used within QuoteContextProvider');
+    }
+    return context;
+};
 
 export const QuoteContextProvider = ({children}) => {
-    const {setInputCheck} = useContext(ScoreContext);
+    const {setInputCheck} = useScore();
 
     const [quotes, setQuotes] = useState(defaultQuotes);
     const [quotesIndex, setQuotesIndex] = useState(0);

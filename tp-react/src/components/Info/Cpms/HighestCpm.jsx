@@ -1,10 +1,9 @@
-import { useContext } from "react";
-import { ScoreContext } from "../../../Context/ScoreContext";
+import { useScore } from "../../../Context/ScoreContext";
 import { useTheme } from "../../../Context/ThemeContext";
 import "./Cpms.css";
 
 const HighestCpm = () => {
-  const { totalScore } = useContext(ScoreContext);
+  const { totalScore } = useScore();
   const { isDark } = useTheme();
 
   return (

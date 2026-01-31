@@ -5,9 +5,5 @@
 }
 
 .toggle-current-cpm {
-    color: #666;
-}
-
-.toggle-current-cpm-dark {
-    color: #999;
+    color: var(--color-text-muted);
 }

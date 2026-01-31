@@ -1,13 +1,71 @@
+/* ===========================================
+   Color Variables
+   =========================================== */
+:root {
+    /* Primary (Purple) */
+    --color-primary: #6d28d9;
+    --color-primary-dark: #5b21b6;
+
+    /* Text */
+    --color-text: #333;
+    --color-text-muted: #666;
+    --color-text-placeholder: #999;
+
+    /* Background */
+    --color-bg: #fafafa;
+    --color-bg-secondary: #f4f4f5;
+    --color-popup-bg: #ffffff;
+
+    /* Border & Toggle */
+    --color-border: #e5e7eb;
+    --color-toggle-bg: #e5e7eb;
+
+    /* Semantic */
+    --color-error: #dc2626;
+    --color-success: #16a34a;
+    --color-correct: #333;
+    --color-white: #ffffff;
+}
+
+/* Dark Mode */
+.dark {
+    /* Primary (Purple) - same as light */
+    --color-primary: #6d28d9;
+    --color-primary-dark: #5b21b6;
+
+    /* Text */
+    --color-text: #e5e7eb;
+    --color-text-muted: #a1a1aa;
+    --color-text-placeholder: #71717a;
+
+    /* Background */
+    --color-bg: #0f0f0f;
+    --color-bg-secondary: #18181b;
+    --color-popup-bg: #1f1f1f;
+
+    /* Border & Toggle */
+    --color-border: #27272a;
+    --color-toggle-bg: #3f3f46;
+
+    /* Semantic */
+    --color-error: #dc2626;
+    --color-success: #22c55e;
+    --color-correct: #ffffff;
+}
+
+/* ===========================================
+   Base Styles
+   =========================================== */
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }

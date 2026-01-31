@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { ScoreContext } from "../../../Context/ScoreContext";
+import { useEffect, useState } from "react";
+import { useScore } from "../../../Context/ScoreContext";
 import { useTheme } from "../../../Context/ThemeContext";
 import "./AverageScore.css";
 
@@ -9,7 +9,7 @@ import "./AverageScore.css";
  * @constructor
  */
 const AverageScore = ({ type }) => {
-  const { totalScore } = useContext(ScoreContext);
+  const { totalScore } = useScore();
   const { isDark } = useTheme();
   const [avgScore, setAvgScore] = useState(0);
 

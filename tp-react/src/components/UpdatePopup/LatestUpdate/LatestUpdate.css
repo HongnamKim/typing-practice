@@ -1,22 +1,12 @@
 .update-popup-version {
     font-size: 0.85rem;
-    color: #999;
-    background-color: transparent;
-}
-
-.update-popup-version.dark {
-    color: #666;
+    color: var(--color-text-placeholder);
     background-color: transparent;
 }
 
 .update-popup-date {
     font-size: 0.85rem;
-    color: #999;
+    color: var(--color-text-placeholder);
     margin-bottom: 1.5rem;
-    background-color: transparent;
-}
-
-.update-popup-date.dark {
-    color: #666;
     background-color: transparent;
 }

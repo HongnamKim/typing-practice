@@ -1,5 +1,4 @@
 import {useEffect, useState} from "react";
-import {useTheme} from "../../Context/ThemeContext";
 import {CiBullhorn} from "react-icons/ci";
 import {Storage_Last_Seen_Version} from "../../const/config.const";
 import UpdateHistoryList from "./UpdateHistoryList/UpdateHistoryList";
@@ -7,14 +6,13 @@ import LatestUpdate, {getLatestPopupUpdate} from "./LatestUpdate/LatestUpdate";
 import "./UpdatePopup.css";
 
 const UpdatePopup = () => {
-    const {isDark} = useTheme();
     const [isOpen, setIsOpen] = useState(false);
     const [isHistoryMode, setIsHistoryMode] = useState(false);
 
     useEffect(() => {
         const lastSeenVersion = localStorage.getItem(Storage_Last_Seen_Version);
         const latestPopupUpdate = getLatestPopupUpdate();
-        
+
         // showPopup: true인 업데이트가 있고, 아직 해당 버전을 본 적 없으면 팝업 표시
         if (latestPopupUpdate && lastSeenVersion !== latestPopupUpdate.version) {
             setIsOpen(true);
@@ -47,7 +45,7 @@ const UpdatePopup = () => {
         <>
             {/* 공지 아이콘 */}
             <CiBullhorn
-                className={`notice-icon ${isDark ? "dark" : ""}`}
+                className="notice-icon"
                 title="업데이트 안내"
                 onClick={handleIconClick}
             />
@@ -55,7 +53,7 @@ const UpdatePopup = () => {
             {/* 팝업 */}
             {isOpen && (
                 <div className="update-popup-overlay">
-                    <div className={`update-popup ${isDark ? "dark" : ""} ${isHistoryMode ? "history-mode" : ""}`}>
+                    <div className={`update-popup ${isHistoryMode ? "history-mode" : ""}`}>
                         <div className="update-popup-header">
                             <span className="update-popup-title">
                                 {isHistoryMode ? "📋 업데이트 내역" : "🎉 업데이트 안내"}
@@ -76,13 +74,13 @@ const UpdatePopup = () => {
                         {!isHistoryMode && (
                             <>
                                 <button
-                                    className={`update-popup-history-btn ${isDark ? "dark" : ""}`}
+                                    className="update-popup-history-btn"
                                     onClick={handleHistoryClick}
                                 >
                                     지난 업데이트 보기
                                 </button>
                                 <button
-                                    className={`update-popup-dont-show-btn ${isDark ? "dark" : ""}`}
+                                    className="update-popup-dont-show-btn"
                                     onClick={handleDontShowAgain}
                                 >
                                     다시 보지 않기

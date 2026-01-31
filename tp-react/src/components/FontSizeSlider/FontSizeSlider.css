@@ -6,22 +6,14 @@
 
 .font-size-label {
     font-size: 0.75rem;
-    color: #999;
+    color: var(--color-text-placeholder);
     cursor: pointer;
     transition: color 0.2s;
     user-select: none;
 }
 
 .font-size-label:hover {
-    color: #666;
-}
-
-.font-size-label.dark {
-    color: #666;
-}
-
-.font-size-label.dark:hover {
-    color: #999;
+    color: var(--color-text-muted);
 }
 
 .font-size-slider {
@@ -29,13 +21,9 @@
     height: 4px;
     -webkit-appearance: none;
     appearance: none;
-    background: #e5e7eb;
+    background: var(--color-toggle-bg);
     outline: none;
     border-radius: 2px;
-}
-
-.font-size-slider.dark {
-    background: #3f3f46;
 }
 
 .font-size-slider::-webkit-slider-thumb {
@@ -43,7 +31,7 @@
     appearance: none;
     width: 16px;
     height: 16px;
-    background: #6d28d9;
+    background: var(--color-primary);
     cursor: pointer;
     border-radius: 50%;
 }
@@ -51,7 +39,7 @@
 .font-size-slider::-moz-range-thumb {
     width: 16px;
     height: 16px;
-    background: #6d28d9;
+    background: var(--color-primary);
     cursor: pointer;
     border-radius: 50%;
     border: none;
