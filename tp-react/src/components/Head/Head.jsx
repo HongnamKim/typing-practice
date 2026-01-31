@@ -93,10 +93,8 @@ const Head = () => {
             {isLoading && <LoadingSpinner/>}
             {showNicknamePopup && (
                 <NicknamePopup
-                    defaultNickname={user?.nickname}
-                    isNewMember={user?.isNewMember}
+                    initialNickname={user?.nickname}
                     onSubmit={handleNicknameSubmit}
-                    onClose={() => setShowNicknamePopup(false)}
                 />
             )}
         </>
