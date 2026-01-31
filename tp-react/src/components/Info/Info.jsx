@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { ThemeContext } from "../../Context/ThemeContext";
+import { useTheme } from "../../Context/ThemeContext";
 import "./Info.css";
 import ResultPeriod from "./ResultPeriod/ResultPeriod";
 import CurrentLastCpm from "./Cpms/CurrentLastCpm";
@@ -10,7 +10,7 @@ import { Storage_Averages_Visible } from "../../const/config.const";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
 
 const Info = () => {
-  const { isDark } = useContext(ThemeContext);
+  const { isDark } = useTheme();
   const { totalScore } = useContext(ScoreContext);
 
   const [averagesVisible, setAveragesVisible] = useState(() => {

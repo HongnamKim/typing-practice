@@ -1,5 +1,5 @@
-import {useContext, useEffect, useState} from "react";
-import {ThemeContext} from "../../Context/ThemeContext";
+import {useEffect, useState} from "react";
+import {useTheme} from "../../Context/ThemeContext";
 import {CiBullhorn} from "react-icons/ci";
 import {Storage_Last_Seen_Version} from "../../const/config.const";
 import UpdateHistoryList from "./UpdateHistoryList/UpdateHistoryList";
@@ -7,7 +7,7 @@ import LatestUpdate, {getLatestPopupUpdate} from "./LatestUpdate/LatestUpdate";
 import "./UpdatePopup.css";
 
 const UpdatePopup = () => {
-    const {isDark} = useContext(ThemeContext);
+    const {isDark} = useTheme();
     const [isOpen, setIsOpen] = useState(false);
     const [isHistoryMode, setIsHistoryMode] = useState(false);
 

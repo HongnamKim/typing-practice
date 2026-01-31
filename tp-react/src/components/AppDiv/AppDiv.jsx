@@ -1,9 +1,8 @@
 import "./AppDiv.css";
-import { useContext } from "react";
-import { ThemeContext } from "../../Context/ThemeContext";
+import { useTheme } from "../../Context/ThemeContext";
 
 const AppDiv = ({ children }) => {
-  const { isDark } = useContext(ThemeContext);
+  const { isDark } = useTheme();
   return <div className={`background ${isDark ? "dark" : ""}`}>{children}</div>;
 };
 

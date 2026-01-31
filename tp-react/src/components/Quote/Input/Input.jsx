@@ -1,9 +1,9 @@
 import "./Input.css";
 import {useContext, useEffect, useRef, useState} from "react";
-import {ThemeContext} from "../../../Context/ThemeContext";
+import {useTheme} from "../../../Context/ThemeContext";
 import {QuoteContext} from "../../../Context/QuoteContext";
 import {ScoreContext} from "../../../Context/ScoreContext";
-import {resultPeriodSet, SettingContext} from "../../../Context/SettingContext";
+import {resultPeriodSet, useSetting} from "../../../Context/SettingContext";
 import {
     KEY_ARROW_DOWN,
     KEY_ARROW_LEFT,
@@ -15,7 +15,7 @@ import {
 import {koreanSeparator} from "../../../utils/koreanSeparator";
 
 const Input = ({onInputChange: onInputChangeCallback}) => {
-    const {isDark} = useContext(ThemeContext);
+    const {isDark} = useTheme();
     const {
         speedCheck, // 타이핑 지속 시간 측정 트리거
         setSpeedCheck,
@@ -38,7 +38,7 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
         setPopupData,
     } = useContext(ScoreContext);
     const {sentence, setQuotesIndex} = useContext(QuoteContext); // 예문, 예문의 인덱스
-    const {resultPeriod, fontSize, isCompactMode} = useContext(SettingContext);
+    const {resultPeriod, fontSize, isCompactMode} = useSetting();
     const [input, setInput] = useState(""); // 사용자 입력값
     const speedInterval = useRef(null); // setInterval 을 참조하기 위함
     const startTime = useRef(null); // 타이핑 시작 시간

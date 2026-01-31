@@ -1,6 +1,8 @@
 import "./App.css";
 
 import { ThemeContextProvider } from "./Context/ThemeContext";
+import { AuthProvider } from "./Context/AuthContext";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import Head from "./components/Head/Head";
 import AppDiv from "./components/AppDiv/AppDiv";
 import Info from "./components/Info/Info";
@@ -17,27 +19,31 @@ import {Analytics} from "@vercel/analytics/react";
 
 function App() {
   return (
-    <ThemeContextProvider>
-      <AppDiv>
-        <Head />
-        <SettingContextProvider>
-          <div className="top-left-controls">
-            <FontSizeSlider />
-            <ModeToggle />
-          </div>
-          <UpdatePopup />
-          <ScoreContextProvider>
-            <AverageScorePopUp />
-            <Info />
-            <QuoteContextProvider>
-              <Quote />
-            </QuoteContextProvider>
-          </ScoreContextProvider>
-        </SettingContextProvider>
-        <Contact />
-          <Analytics/>
-      </AppDiv>
-    </ThemeContextProvider>
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+      <ThemeContextProvider>
+        <AuthProvider>
+          <AppDiv>
+            <Head />
+            <SettingContextProvider>
+              <div className="top-left-controls">
+                <FontSizeSlider />
+                <ModeToggle />
+              </div>
+              <UpdatePopup />
+              <ScoreContextProvider>
+                <AverageScorePopUp />
+                <Info />
+                <QuoteContextProvider>
+                  <Quote />
+                </QuoteContextProvider>
+              </ScoreContextProvider>
+            </SettingContextProvider>
+            <Contact />
+              <Analytics/>
+          </AppDiv>
+        </AuthProvider>
+      </ThemeContextProvider>
+    </GoogleOAuthProvider>
 
   );
 }

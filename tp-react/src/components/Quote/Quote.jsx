@@ -2,16 +2,16 @@ import "./Quote.css";
 import { useContext, useState, useEffect } from "react";
 import Sentence from "./Sentence/Sentence";
 import Author from "./Author/Author";
-import { ThemeContext } from "../../Context/ThemeContext";
+import { useTheme } from "../../Context/ThemeContext";
 import Input from "./Input/Input";
 import InputDisplay from "./InputDisplay/InputDisplay";
 import { QuoteContext } from "../../Context/QuoteContext";
-import { SettingContext } from "../../Context/SettingContext";
+import { useSetting } from "../../Context/SettingContext";
 
 const Quote = () => {
-  const { isDark } = useContext(ThemeContext);
+  const { isDark } = useTheme();
   const { author, sentence } = useContext(QuoteContext);
-  const { isCompactMode } = useContext(SettingContext);
+  const { isCompactMode } = useSetting();
   const [inputValue, setInputValue] = useState("");
 
   // 문장이 변경되면 inputValue 초기화

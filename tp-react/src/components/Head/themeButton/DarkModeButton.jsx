@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
-import { ThemeContext } from "../../../Context/ThemeContext";
+import React from "react";
+import { useTheme } from "../../../Context/ThemeContext";
 import "./ThemeButton.css";
 import { FaRegSun, FaRegMoon } from "react-icons/fa";
 import { Storage_Dark_Mode } from "../../../const/config.const";
 
 const DarkModeButton = () => {
-  const { isDark, setIsDark } = useContext(ThemeContext);
+  const { isDark, setIsDark } = useTheme();
 
   const handleDarkMode = () => {
     localStorage.setItem(Storage_Dark_Mode, (!isDark).toString());

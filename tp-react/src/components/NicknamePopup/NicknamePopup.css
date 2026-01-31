@@ -1,0 +1,206 @@
+.nickname-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2500;
+}
+
+.nickname-popup {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 1.5rem 2rem 2rem 2rem;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.nickname-popup.dark {
+    background-color: #1f1f1f;
+    color: #e5e7eb;
+}
+
+.nickname-popup-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #6d28d9;
+    margin-bottom: 0.5rem;
+    background-color: transparent;
+}
+
+.nickname-popup-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+    background-color: transparent;
+}
+
+.nickname-popup-description.dark {
+    color: #999;
+    background-color: transparent;
+}
+
+.nickname-input-group {
+    margin-bottom: 1rem;
+    background-color: transparent;
+}
+
+.nickname-input-wrapper {
+    display: flex;
+    gap: 0.5rem;
+    align-items: stretch;
+}
+
+.nickname-label {
+    display: block;
+    font-size: 0.9rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+    background-color: transparent;
+}
+
+.nickname-label.dark {
+    color: #e5e7eb;
+    background-color: transparent;
+}
+
+.nickname-input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.nickname-input:focus {
+    border-color: #6d28d9;
+}
+
+.nickname-input.dark {
+    background-color: #27272a;
+    border-color: #3f3f46;
+    color: #e5e7eb;
+}
+
+.nickname-input.dark:focus {
+    border-color: #8b5cf6;
+}
+
+.nickname-check-btn {
+    padding: 0.75rem 1rem;
+    border: 1px solid #6d28d9;
+    border-radius: 0.5rem;
+    background-color: white;
+    color: #6d28d9;
+    font-size: 0.9rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.nickname-check-btn:hover:not(:disabled) {
+    background-color: #6d28d9;
+    color: white;
+}
+
+.nickname-check-btn:disabled {
+    border-color: #9ca3af;
+    color: #52525b;
+    cursor: not-allowed;
+    background-color: white;
+}
+
+.nickname-check-btn:disabled:hover {
+    border-color: #9ca3af;
+    color: #52525b;
+    background-color: white;
+}
+
+.nickname-check-btn.dark {
+    background-color: #1f1f1f;
+    border-color: #8b5cf6;
+    color: #8b5cf6;
+}
+
+.nickname-check-btn.dark:hover:not(:disabled) {
+    background-color: #8b5cf6;
+    color: white;
+}
+
+.nickname-check-btn.dark:disabled {
+    border-color: #52525b;
+    color: #52525b;
+    background-color: #1f1f1f;
+}
+
+.nickname-check-btn.dark:disabled:hover {
+    border-color: #52525b;
+    color: #52525b;
+    background-color: #1f1f1f;
+}
+
+.nickname-error {
+    font-size: 0.85rem;
+    color: #dc2626;
+    margin-top: 0.25rem;
+    display: none;
+    background-color: transparent;
+}
+
+.nickname-error.show {
+    display: block;
+}
+
+.nickname-success {
+    font-size: 0.85rem;
+    color: #16a34a;
+    margin-top: 0.25rem;
+    background-color: transparent;
+}
+
+.nickname-helper {
+    font-size: 0.85rem;
+    color: #999;
+    margin-top: 0.25rem;
+    background-color: transparent;
+}
+
+.nickname-helper.dark {
+    color: #666;
+    background-color: transparent;
+}
+
+.nickname-popup-btn {
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #6d28d9;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.nickname-popup-btn:hover:not(:disabled) {
+    background-color: #5b21b6;
+    color: white;
+}
+
+.nickname-popup-btn:disabled {
+    background-color: #d1d5db;
+    color: #52525b;
+    cursor: not-allowed;
+}
+
+.nickname-popup-btn:disabled:hover {
+    background-color: #d1d5db;
+    color: #52525b;
+}

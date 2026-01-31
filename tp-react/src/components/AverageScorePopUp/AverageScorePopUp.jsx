@@ -1,11 +1,11 @@
 import "./AverageScorePopUp.css";
 import { useContext } from "react";
 import { ScoreContext } from "../../Context/ScoreContext";
-import { ThemeContext } from "../../Context/ThemeContext";
+import { useTheme } from "../../Context/ThemeContext";
 
 const AverageScorePopUp = () => {
   const { showPopup, setShowPopup, popupData } = useContext(ScoreContext);
-  const { isDark } = useContext(ThemeContext);
+  const { isDark } = useTheme();
 
   if (!showPopup) {
     return null;
