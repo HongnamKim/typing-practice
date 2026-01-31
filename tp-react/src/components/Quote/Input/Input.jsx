@@ -1,8 +1,8 @@
 import "./Input.css";
-import {useContext, useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useTheme} from "../../../Context/ThemeContext";
-import {QuoteContext} from "../../../Context/QuoteContext";
-import {ScoreContext} from "../../../Context/ScoreContext";
+import {useQuote} from "../../../Context/QuoteContext";
+import {useScore} from "../../../Context/ScoreContext";
 import {resultPeriodSet, useSetting} from "../../../Context/SettingContext";
 import {
     KEY_ARROW_DOWN,
@@ -36,8 +36,8 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
         showPopup,
         setShowPopup,
         setPopupData,
-    } = useContext(ScoreContext);
-    const {sentence, setQuotesIndex} = useContext(QuoteContext); // 예문, 예문의 인덱스
+    } = useScore();
+    const {sentence, setQuotesIndex} = useQuote(); // 예문, 예문의 인덱스
     const {resultPeriod, fontSize, isCompactMode} = useSetting();
     const [input, setInput] = useState(""); // 사용자 입력값
     const speedInterval = useRef(null); // setInterval 을 참조하기 위함

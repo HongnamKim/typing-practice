@@ -9,10 +9,6 @@
     margin-bottom: 0.5rem;
 }
 
-.info-dark {
-    color: #e5e7eb;
-}
-
 .info-settings {
     width: 100%;
     display: flex;
@@ -20,38 +16,25 @@
     align-items: center;
     margin-bottom: 1.5rem;
     font-size: 0.95rem;
-    color: #666;
+    color: var(--color-text-muted);
     padding: 0 1rem;
-}
-
-.info-settings.dark {
-    color: #999;
 }
 
 .info-CPMs {
     display: flex;
     justify-content: space-between;
     font-size: 1.1rem;
-    color: #555;
+    color: var(--color-text-muted);
     padding: 0 1rem;
     margin-bottom: 1.5rem;
-}
-
-.info-CPMs.dark {
-    color: #d4d4d8;
 }
 
 .info-averages {
     display: flex;
     justify-content: space-around;
     padding: 1.5rem 1rem;
-    border-top: 1px solid #e5e7eb;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.info-averages.dark {
-    border-top: 1px solid #27272a;
-    border-bottom: 1px solid #27272a;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
 }
 
 .info-averages.collapsed {
@@ -67,7 +50,7 @@
 .averages-toggle-btn {
     border: none;
     background: none;
-    color: #999;
+    color: var(--color-text-placeholder);
     cursor: pointer;
     padding: 0.25rem 0.5rem;
     font-size: 0.8rem;
@@ -75,14 +58,6 @@
 }
 
 .averages-toggle-btn:hover {
-    color: #666;
-}
-
-.averages-toggle-btn.dark {
-    color: #666;
-}
-
-.averages-toggle-btn.dark:hover {
-    color: #999;
+    color: var(--color-text-muted);
 }
 

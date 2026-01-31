@@ -1,10 +1,8 @@
-import {useTheme} from "../../Context/ThemeContext";
 import {useSetting} from "../../Context/SettingContext";
 import {Storage_Font_Size} from "../../const/config.const";
 import "./FontSizeSlider.css";
 
 const FontSizeSlider = () => {
-    const {isDark} = useTheme();
     const {fontSize, setFontSize} = useSetting();
 
     // 슬라이더 값(0-100)을 폰트 크기로 변환
@@ -49,7 +47,7 @@ const FontSizeSlider = () => {
     return (
         <div className="font-size-slider-container">
             <label
-                className={isDark ? "font-size-label dark" : "font-size-label"}
+                className="font-size-label"
                 onClick={handleReset}
                 title="Click to reset"
             >
@@ -62,7 +60,7 @@ const FontSizeSlider = () => {
                 step="1"
                 value={fontSizeToSlider(fontSize)}
                 onChange={handleChange}
-                className={isDark ? "font-size-slider dark" : "font-size-slider"}
+                className="font-size-slider"
             />
         </div>
     );

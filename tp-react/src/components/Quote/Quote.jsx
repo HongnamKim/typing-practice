@@ -1,16 +1,16 @@
 import "./Quote.css";
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Sentence from "./Sentence/Sentence";
 import Author from "./Author/Author";
 import { useTheme } from "../../Context/ThemeContext";
 import Input from "./Input/Input";
 import InputDisplay from "./InputDisplay/InputDisplay";
-import { QuoteContext } from "../../Context/QuoteContext";
+import { useQuote } from "../../Context/QuoteContext";
 import { useSetting } from "../../Context/SettingContext";
 
 const Quote = () => {
   const { isDark } = useTheme();
-  const { author, sentence } = useContext(QuoteContext);
+  const { author, sentence } = useQuote();
   const { isCompactMode } = useSetting();
   const [inputValue, setInputValue] = useState("");
 

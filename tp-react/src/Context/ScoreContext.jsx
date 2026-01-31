@@ -1,6 +1,14 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
-export const ScoreContext = createContext();
+export const ScoreContext = createContext(null);
+
+export const useScore = () => {
+  const context = useContext(ScoreContext);
+  if (!context) {
+    throw new Error('useScore must be used within ScoreContextProvider');
+  }
+  return context;
+};
 
 const initResultScore = {
   totalCpm: 0,

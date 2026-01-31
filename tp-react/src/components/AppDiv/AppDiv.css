@@ -25,11 +25,6 @@
     overflow-y: auto;
     margin: 0;
     padding-top: 18vh;
-    background-color: #fafafa;
-    color: #333;
-}
-
-.dark {
-    background-color: #0f0f0f;
-    color: #e5e7eb;
+    background-color: var(--color-bg);
+    color: var(--color-text);
 }

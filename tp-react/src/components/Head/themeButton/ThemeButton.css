@@ -1,19 +1,19 @@
 .theme-icon-dark {
-    color: #999;
+    color: var(--color-text-placeholder);
     transition: color 0.2s;
 }
 
 .theme-icon-dark:hover {
-    color: #e5e7eb;
+    color: var(--color-text);
 }
 
 .theme-icon-light {
-    color: #666;
+    color: var(--color-text-muted);
     transition: color 0.2s;
 }
 
 .theme-icon-light:hover {
-    color: #333;
+    color: var(--color-text);
 }
 
 .theme-icon {

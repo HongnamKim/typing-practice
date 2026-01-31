@@ -1,17 +1,17 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useTheme } from "../../Context/ThemeContext";
 import "./Info.css";
 import ResultPeriod from "./ResultPeriod/ResultPeriod";
 import CurrentLastCpm from "./Cpms/CurrentLastCpm";
 import HighestCpm from "./Cpms/HighestCpm";
 import AverageScore from "./AverageScores/AverageScore";
-import { ScoreContext } from "../../Context/ScoreContext";
+import { useScore } from "../../Context/ScoreContext";
 import { Storage_Averages_Visible } from "../../const/config.const";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
 
 const Info = () => {
   const { isDark } = useTheme();
-  const { totalScore } = useContext(ScoreContext);
+  const { totalScore } = useScore();
 
   const [averagesVisible, setAveragesVisible] = useState(() => {
     return localStorage.getItem(Storage_Averages_Visible) !== "false";

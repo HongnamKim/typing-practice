@@ -1,6 +1,5 @@
-import { useContext } from "react";
 import { useSetting } from "../../../Context/SettingContext";
-import { ScoreContext } from "../../../Context/ScoreContext";
+import { useScore } from "../../../Context/ScoreContext";
 import { useTheme } from "../../../Context/ThemeContext";
 import { Storage_Display_Cpm } from "../../../const/config.const";
 import "./Cpms.css";
@@ -14,7 +13,7 @@ import "./Cpms.css";
  */
 const CurrentLastCpm = () => {
   const { displayCurrentCpm, setDisplayCurrentCpm } = useSetting();
-  const { currentCpm, lastCpm } = useContext(ScoreContext);
+  const { currentCpm, lastCpm } = useScore();
   const { isDark } = useTheme();
 
   const handleToggle = () => {

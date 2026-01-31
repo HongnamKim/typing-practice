@@ -6,34 +6,22 @@
 
 .mode-toggle-label {
     font-size: 0.75rem;
-    color: #999;
+    color: var(--color-text-placeholder);
     cursor: pointer;
-}
-
-.mode-toggle-label.dark {
-    color: #666;
 }
 
 .mode-toggle {
     position: relative;
     width: 36px;
     height: 20px;
-    background: #e5e7eb;
+    background: var(--color-toggle-bg);
     border-radius: 10px;
     cursor: pointer;
     transition: background 0.2s;
 }
 
-.mode-toggle.dark {
-    background: #3f3f46;
-}
-
 .mode-toggle.active {
-    background: #6d28d9;
-}
-
-.mode-toggle.active.dark {
-    background: #8b5cf6;
+    background: var(--color-primary);
 }
 
 .mode-toggle-knob {

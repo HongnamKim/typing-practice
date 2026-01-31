@@ -12,7 +12,8 @@
 }
 
 .profile-popup {
-    background-color: white;
+    background-color: var(--color-popup-bg);
+    color: var(--color-text);
     border-radius: 1rem;
     padding: 1.5rem 2rem 2rem 2rem;
     max-width: 500px;
@@ -20,15 +21,10 @@
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
-.profile-popup.dark {
-    background-color: #1f1f1f;
-    color: #e5e7eb;
-}
-
 .profile-popup-title {
     font-size: 1.5rem;
     font-weight: 600;
-    color: #6d28d9;
+    color: var(--color-primary);
     margin-bottom: 1.25rem;
     background-color: transparent;
 }
@@ -50,25 +46,15 @@
 
 .profile-label {
     font-size: 0.9rem;
-    color: #666;
+    color: var(--color-text-muted);
     font-weight: 500;
-    background-color: transparent;
-}
-
-.profile-label.dark {
-    color: #999;
     background-color: transparent;
 }
 
 .profile-value {
     font-size: 1rem;
-    color: #333;
+    color: var(--color-text);
     padding: 0.5rem 0;
-    background-color: transparent;
-}
-
-.profile-value.dark {
-    color: #e5e7eb;
     background-color: transparent;
 }
 
@@ -76,26 +62,17 @@
     flex: 1;
     padding: 0.5rem 0;
     border: none;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--color-border);
     border-radius: 0;
     font-size: 1rem;
     outline: none;
     transition: border-color 0.2s;
     background-color: transparent;
+    color: var(--color-text);
 }
 
 .profile-input:focus {
-    border-bottom-color: #6d28d9;
-}
-
-.profile-input.dark {
-    border-bottom-color: #3f3f46;
-    color: #e5e7eb;
-    background-color: transparent;
-}
-
-.profile-input.dark:focus {
-    border-bottom-color: #8b5cf6;
+    border-bottom-color: var(--color-primary);
 }
 
 .nickname-input-wrapper {
@@ -107,10 +84,10 @@
 
 .nickname-check-btn {
     padding: 0.75rem 1rem;
-    border: 1px solid #6d28d9;
+    border: 1px solid var(--color-primary);
     border-radius: 0.5rem;
-    background-color: white;
-    color: #6d28d9;
+    background-color: var(--color-popup-bg);
+    color: var(--color-primary);
     font-size: 0.9rem;
     cursor: pointer;
     white-space: nowrap;
@@ -118,56 +95,33 @@
 }
 
 .nickname-check-btn:hover:not(:disabled) {
-    background-color: #6d28d9;
-    color: white;
+    background-color: var(--color-primary);
+    color: var(--color-white);
 }
 
 .nickname-check-btn:disabled {
-    border-color: #9ca3af;
-    color: #52525b;
+    border-color: var(--color-text-placeholder);
+    color: var(--color-text-placeholder);
     cursor: not-allowed;
-    background-color: white;
+    background-color: var(--color-popup-bg);
 }
 
 .nickname-check-btn:disabled:hover {
-    border-color: #9ca3af;
-    color: #52525b;
-    background-color: white;
-}
-
-.nickname-check-btn.dark {
-    background-color: #1f1f1f;
-    border-color: #8b5cf6;
-    color: #8b5cf6;
-}
-
-.nickname-check-btn.dark:hover:not(:disabled) {
-    background-color: #8b5cf6;
-    color: white;
-}
-
-.nickname-check-btn.dark:disabled {
-    border-color: #52525b;
-    color: #52525b;
-    background-color: #1f1f1f;
-}
-
-.nickname-check-btn.dark:disabled:hover {
-    border-color: #52525b;
-    color: #52525b;
-    background-color: #1f1f1f;
+    border-color: var(--color-text-placeholder);
+    color: var(--color-text-placeholder);
+    background-color: var(--color-popup-bg);
 }
 
 .profile-error {
     font-size: 0.85rem;
-    color: #dc2626;
+    color: var(--color-error);
     margin-top: 0.25rem;
     background-color: transparent;
 }
 
 .profile-success {
     font-size: 0.85rem;
-    color: #16a34a;
+    color: var(--color-success);
     margin-top: 0.25rem;
     background-color: transparent;
 }
@@ -189,62 +143,32 @@
 }
 
 .profile-btn-save {
-    background-color: #6d28d9;
-    color: white;
+    background-color: var(--color-primary);
+    color: var(--color-white);
 }
 
 .profile-btn-save:hover:not(:disabled) {
-    background-color: #5b21b6;
-    color: white;
+    background-color: var(--color-primary-dark);
+    color: var(--color-white);
 }
 
 .profile-btn-save:disabled {
-    background-color: #d1d5db;
-    color: #52525b;
+    background-color: var(--color-border);
+    color: var(--color-text-placeholder);
     cursor: not-allowed;
 }
 
 .profile-btn-save:disabled:hover {
-    background-color: #d1d5db;
-    color: #52525b;
-}
-
-.profile-btn-save.dark {
-    background-color: #6d28d9;
-    color: white;
-}
-
-.profile-btn-save.dark:hover:not(:disabled) {
-    background-color: #5b21b6;
-    color: white;
-}
-
-.profile-btn-save.dark:disabled {
-    background-color: #52525b;
-    color: #a1a1aa;
-}
-
-.profile-btn-save.dark:disabled:hover {
-    background-color: #52525b;
-    color: #a1a1aa;
+    background-color: var(--color-border);
+    color: var(--color-text-placeholder);
 }
 
 .profile-btn-close {
-    background-color: #e5e7eb;
-    color: #333;
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text);
 }
 
 .profile-btn-close:hover {
-    background-color: #d1d5db;
-    color: #333;
-}
-
-.profile-btn-close.dark {
-    background-color: #3f3f46;
-    color: #e5e7eb;
-}
-
-.profile-btn-close.dark:hover {
-    background-color: #52525b;
-    color: #e5e7eb;
+    background-color: var(--color-border);
+    color: var(--color-text);
 }

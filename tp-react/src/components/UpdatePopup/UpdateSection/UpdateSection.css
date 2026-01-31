@@ -5,13 +5,8 @@
 .update-popup-section-title {
     font-size: 1rem;
     font-weight: 600;
-    color: #333;
+    color: var(--color-text);
     margin-bottom: 0.5rem;
-    background-color: transparent;
-}
-
-.update-popup-section-title.dark {
-    color: #e5e7eb;
     background-color: transparent;
 }
 
@@ -26,13 +21,8 @@
     padding-left: 1.25rem;
     margin-bottom: 0.5rem;
     font-size: 0.95rem;
-    color: #555;
+    color: var(--color-text-muted);
     line-height: 1.5;
-    background-color: transparent;
-}
-
-.update-popup-list li.dark {
-    color: #a1a1aa;
     background-color: transparent;
 }
 
@@ -40,7 +30,7 @@
     content: "•";
     position: absolute;
     left: 0;
-    color: #6d28d9;
+    color: var(--color-primary);
 }
 
 /* 히스토리 모드 (작은 사이즈) */
