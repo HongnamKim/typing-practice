@@ -947,3 +947,523 @@ body.dark {
     background-color: #9ca3af;
     cursor: not-allowed;
 }
+
+/* 문장 업로드 팝업 */
+.upload-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2500;
+}
+
+.upload-popup {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    width: 80%;
+    max-width: 1000px;
+    min-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.upload-popup.dark {
+    background-color: #1f1f1f;
+    color: #e5e7eb;
+}
+
+.upload-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.upload-popup-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #6d28d9;
+}
+
+.upload-popup-close-btn {
+    border: none;
+    background: none;
+    color: #999;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    transition: color 0.2s;
+}
+
+.upload-popup-close-btn:hover {
+    color: #666;
+}
+
+.upload-popup-close-btn.dark {
+    color: #666;
+}
+
+.upload-popup-close-btn.dark:hover {
+    color: #999;
+}
+
+/* 공개/비공개 안내 */
+.upload-type-toggle {
+    margin-bottom: 1rem;
+}
+
+.upload-type-hint {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.upload-type-hint.dark {
+    color: #999;
+}
+
+.upload-type-info {
+    position: relative;
+    cursor: help;
+}
+
+.upload-type-info i {
+    margin-left: 0.25rem;
+    color: #999;
+}
+
+.upload-type-info.dark i {
+    color: #666;
+}
+
+.upload-type-tooltip {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 0.5rem;
+    padding: 0.75rem 1rem;
+    background-color: #333;
+    color: white;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    z-index: 10;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    width: max-content;
+    max-width: 350px;
+}
+
+.upload-type-tooltip p {
+    margin: 0;
+}
+
+.upload-type-tooltip p + p {
+    margin-top: 0.5rem;
+}
+
+.upload-type-tooltip.dark {
+    background-color: #3f3f46;
+}
+
+.upload-type-info:hover .upload-type-tooltip {
+    display: block;
+}
+
+/* 입력 영역들 */
+.upload-entries {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.upload-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background-color: #fafafa;
+}
+
+.upload-entry.dark {
+    border-color: #3f3f46;
+    background-color: #27272a;
+}
+
+.upload-entry.success {
+    border-color: #16a34a;
+    background-color: #f0fdf4;
+}
+
+.upload-entry.success.dark {
+    border-color: #22c55e;
+    background-color: #14532d20;
+}
+
+.upload-entry.error {
+    border-color: #dc2626;
+}
+
+.upload-entry-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.upload-entry-number {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #6d28d9;
+}
+
+.upload-entry-delete-btn {
+    border: none;
+    background: none;
+    color: #999;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.upload-entry-delete-btn:hover {
+    color: #dc2626;
+}
+
+.upload-entry-delete-btn.dark {
+    color: #666;
+}
+
+.upload-entry-delete-btn.dark:hover {
+    color: #dc2626;
+}
+
+/* 각 entry의 공개/비공개 토글 */
+.upload-entry-type-toggle {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.upload-entry-type-btn {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.25rem;
+    background-color: transparent;
+    color: #999;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.upload-entry-type-btn:hover {
+    border-color: #6d28d9;
+    color: #6d28d9;
+}
+
+.upload-entry-type-btn.active {
+    border-color: #6d28d9;
+    background-color: #6d28d9;
+    color: white;
+}
+
+.upload-entry-type-btn.dark {
+    border-color: #3f3f46;
+    color: #666;
+}
+
+.upload-entry-type-btn.dark:hover {
+    border-color: #8b5cf6;
+    color: #8b5cf6;
+}
+
+.upload-entry-type-btn.dark.active {
+    border-color: #8b5cf6;
+    background-color: #8b5cf6;
+    color: white;
+}
+
+.upload-entry-inputs {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.upload-sentence-wrapper {
+    flex: 1;
+}
+
+.upload-author-wrapper {
+    width: 150px;
+}
+
+.upload-input {
+    width: 100%;
+    padding: 0.5rem 0;
+    border: none;
+    border-bottom: 1px solid #e5e7eb;
+    background-color: transparent;
+    font-size: 1rem;
+    color: #333;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.upload-input:focus {
+    border-bottom-color: #6d28d9;
+}
+
+.upload-input.dark {
+    border-bottom-color: #3f3f46;
+    color: #e5e7eb;
+}
+
+.upload-input.dark:focus {
+    border-bottom-color: #8b5cf6;
+}
+
+.upload-input::placeholder {
+    color: #999;
+}
+
+.upload-input.dark::placeholder {
+    color: #666;
+}
+
+.upload-entry-message {
+    font-size: 0.85rem;
+    min-height: 1.25rem;
+}
+
+.upload-entry-message.error {
+    color: #dc2626;
+}
+
+.upload-entry-message.success {
+    color: #16a34a;
+}
+
+.upload-entry-message.success.dark {
+    color: #22c55e;
+}
+
+/* 문장 추가 버튼 */
+.upload-add-btn {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
+    border: 2px dashed #e5e7eb;
+    border-radius: 0.5rem;
+    background-color: transparent;
+    color: #999;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.upload-add-btn:hover {
+    border-color: #6d28d9;
+    color: #6d28d9;
+}
+
+.upload-add-btn.dark {
+    border-color: #3f3f46;
+    color: #666;
+}
+
+.upload-add-btn.dark:hover {
+    border-color: #8b5cf6;
+    color: #8b5cf6;
+}
+
+.upload-add-btn:disabled {
+    border-color: #e5e7eb;
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.upload-add-btn.dark:disabled {
+    border-color: #3f3f46;
+    color: #555;
+}
+
+/* 하단 버튼 */
+.upload-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.upload-cancel-btn {
+    padding: 0.75rem 1.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background-color: transparent;
+    color: #666;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.upload-cancel-btn:hover {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.upload-cancel-btn.dark {
+    border-color: #3f3f46;
+    color: #999;
+}
+
+.upload-cancel-btn.dark:hover {
+    background-color: #27272a;
+    color: #e5e7eb;
+}
+
+.upload-submit-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #6d28d9;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.upload-submit-btn:hover {
+    background-color: #5b21b6;
+}
+
+.upload-submit-btn:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.upload-submit-btn.dark {
+    background-color: #8b5cf6;
+}
+
+.upload-submit-btn.dark:hover {
+    background-color: #7c3aed;
+}
+
+/* 확인 팝업 */
+.confirm-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+}
+
+.confirm-popup {
+    background-color: white;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.confirm-popup.dark {
+    background-color: #1f1f1f;
+    color: #e5e7eb;
+}
+
+.confirm-popup-message {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.confirm-popup-message.dark {
+    color: #e5e7eb;
+}
+
+.confirm-popup-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.confirm-popup-cancel-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background-color: transparent;
+    color: #666;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.confirm-popup-cancel-btn:hover {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.confirm-popup-cancel-btn.dark {
+    border-color: #3f3f46;
+    color: #999;
+}
+
+.confirm-popup-cancel-btn.dark:hover {
+    background-color: #27272a;
+    color: #e5e7eb;
+}
+
+.confirm-popup-ok-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #6d28d9;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.confirm-popup-ok-btn:hover {
+    background-color: #5b21b6;
+}
+
+.confirm-popup-ok-btn.dark {
+    background-color: #8b5cf6;
+}
+
+.confirm-popup-ok-btn.dark:hover {
+    background-color: #7c3aed;
+}

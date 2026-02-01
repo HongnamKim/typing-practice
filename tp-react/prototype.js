@@ -46,7 +46,7 @@ function toggleTheme() {
     document.getElementById('body').classList.toggle('dark');
     document.getElementById('iconSun').classList.toggle('display-none');
     document.getElementById('iconMoon').classList.toggle('display-none');
-    document.querySelectorAll('.font-size-label, .font-size-slider, .mode-toggle-label, .mode-toggle, .notice-icon, .title-title, .header-btn, .profile-btn, .dropdown-menu, .dropdown-item, .dropdown-divider, .dark-mode-icon, .result-period-btn, .result-period-value, .CPM-text, .CPM-value, .info-averages, .average-label, .average-value, .averages-toggle-btn, .author-text, .character, .input-char-correct, .input, .contact').forEach(el => el.classList.toggle('dark'));
+    document.querySelectorAll('.font-size-label, .font-size-slider, .mode-toggle-label, .mode-toggle, .notice-icon, .title-title, .header-btn, .profile-btn, .dropdown-menu, .dropdown-item, .dropdown-divider, .dark-mode-icon, .result-period-btn, .result-period-value, .CPM-text, .CPM-value, .info-averages, .average-label, .average-value, .averages-toggle-btn, .author-text, .character, .input-char-correct, .input, .contact, .upload-popup, .upload-popup-close-btn, .upload-type-hint, .upload-type-info, .upload-type-tooltip, .upload-entry, .upload-input, .upload-entry-delete-btn, .upload-entry-type-btn, .upload-entry-message.success, .upload-add-btn, .upload-cancel-btn, .upload-submit-btn, .confirm-popup, .confirm-popup-message, .confirm-popup-cancel-btn, .confirm-popup-ok-btn').forEach(el => el.classList.toggle('dark'));
     localStorage.setItem('Typing-Practice-darkMode', document.getElementById('body').classList.contains('dark'));
 }
 
@@ -414,8 +414,341 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
 
 // 드롭다운 메뉴 아이템들
 document.getElementById('uploadBtn').addEventListener('click', () => {
-    alert('문장 업로드 기능 (준비 중)');
+    openUploadPopup();
 });
+
+// ============ 문장 업로드 ============
+
+const MAX_UPLOAD_ENTRIES = 5;
+let currentEntryCount = 0;
+
+const uploadPopupOverlay = document.getElementById('uploadPopupOverlay');
+const uploadPopup = document.getElementById('uploadPopup');
+const uploadEntries = document.getElementById('uploadEntries');
+const uploadAddBtn = document.getElementById('uploadAddBtn');
+
+// 단일 입력 필드 생성
+function createUploadEntry(index) {
+    const entry = document.createElement('div');
+    entry.className = 'upload-entry';
+    entry.id = `uploadEntry${index}`;
+    entry.dataset.index = index;
+    entry.dataset.type = 'public'; // 기본값: 공개
+    
+    const isDark = document.getElementById('body').classList.contains('dark');
+    if (isDark) entry.classList.add('dark');
+    
+    entry.innerHTML = `
+        <div class="upload-entry-header">
+            <span class="upload-entry-number">${index + 1}</span>
+            <button class="upload-entry-delete-btn${isDark ? ' dark' : ''}" title="삭제">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="upload-entry-type-toggle">
+            <button class="upload-entry-type-btn${isDark ? ' dark' : ''} active" data-type="public">
+                <i class="fa-solid fa-globe"></i>
+                <span>공개</span>
+            </button>
+            <button class="upload-entry-type-btn${isDark ? ' dark' : ''}" data-type="private">
+                <i class="fa-solid fa-lock"></i>
+                <span>비공개</span>
+            </button>
+        </div>
+        <div class="upload-entry-inputs">
+            <div class="upload-sentence-wrapper">
+                <input 
+                    type="text" 
+                    class="upload-input${isDark ? ' dark' : ''}" 
+                    id="uploadSentence${index}"
+                    placeholder="문장을 입력하세요 (5-100자)"
+                    maxlength="100"
+                />
+            </div>
+            <div class="upload-author-wrapper">
+                <input 
+                    type="text" 
+                    class="upload-input${isDark ? ' dark' : ''}" 
+                    id="uploadAuthor${index}"
+                    placeholder="출처 (선택)"
+                    maxlength="20"
+                />
+            </div>
+        </div>
+        <div class="upload-entry-message" id="uploadMessage${index}"></div>
+    `;
+    
+    // 삭제 버튼 이벤트
+    entry.querySelector('.upload-entry-delete-btn').addEventListener('click', () => {
+        removeUploadEntry(entry);
+    });
+    
+    // 공개/비공개 토글 이벤트
+    entry.querySelectorAll('.upload-entry-type-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            entry.querySelectorAll('.upload-entry-type-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            entry.dataset.type = btn.dataset.type;
+        });
+    });
+    
+    return entry;
+}
+
+// 입력 영역 추가
+function addUploadEntry() {
+    if (currentEntryCount >= MAX_UPLOAD_ENTRIES) return;
+    
+    const entry = createUploadEntry(currentEntryCount);
+    uploadEntries.appendChild(entry);
+    currentEntryCount++;
+    
+    updateAddButton();
+    updateDeleteButtons();
+}
+
+// 입력 영역 삭제
+function removeUploadEntry(entry) {
+    if (currentEntryCount <= 1) return;
+    
+    entry.remove();
+    currentEntryCount--;
+    
+    // 번호 재정렬
+    renumberEntries();
+    updateAddButton();
+    updateDeleteButtons();
+}
+
+// 번호 재정렬
+function renumberEntries() {
+    const entries = uploadEntries.querySelectorAll('.upload-entry');
+    entries.forEach((entry, index) => {
+        entry.id = `uploadEntry${index}`;
+        entry.dataset.index = index;
+        entry.querySelector('.upload-entry-number').textContent = index + 1;
+        
+        const sentenceInput = entry.querySelector('input[id^="uploadSentence"]');
+        const authorInput = entry.querySelector('input[id^="uploadAuthor"]');
+        const messageEl = entry.querySelector('div[id^="uploadMessage"]');
+        
+        sentenceInput.id = `uploadSentence${index}`;
+        authorInput.id = `uploadAuthor${index}`;
+        messageEl.id = `uploadMessage${index}`;
+    });
+}
+
+// 삭제 버튼 표시/숨김
+function updateDeleteButtons() {
+    const deleteButtons = uploadEntries.querySelectorAll('.upload-entry-delete-btn');
+    deleteButtons.forEach(btn => {
+        btn.style.display = currentEntryCount <= 1 ? 'none' : 'flex';
+    });
+}
+
+// + 버튼 상태 업데이트
+function updateAddButton() {
+    if (currentEntryCount >= MAX_UPLOAD_ENTRIES) {
+        uploadAddBtn.disabled = true;
+        uploadAddBtn.querySelector('span').textContent = `최대 ${MAX_UPLOAD_ENTRIES}개`;
+    } else {
+        uploadAddBtn.disabled = false;
+        uploadAddBtn.querySelector('span').textContent = `문장 추가 (${currentEntryCount}/${MAX_UPLOAD_ENTRIES})`;
+    }
+}
+
+// 팝업 열기
+function openUploadPopup() {
+    uploadPopupOverlay.classList.remove('display-none');
+    
+    const isDark = document.getElementById('body').classList.contains('dark');
+    if (isDark) {
+        uploadPopup.classList.add('dark');
+        document.getElementById('uploadPopupCloseBtn').classList.add('dark');
+        document.querySelector('.upload-type-hint').classList.add('dark');
+        document.querySelector('.upload-type-info').classList.add('dark');
+        document.querySelector('.upload-type-tooltip').classList.add('dark');
+        uploadAddBtn.classList.add('dark');
+        document.getElementById('uploadCancelBtn').classList.add('dark');
+        document.getElementById('uploadSubmitBtn').classList.add('dark');
+    }
+    
+    // 초기화: 입력 영역 비우고 1개만 생성
+    uploadEntries.innerHTML = '';
+    currentEntryCount = 0;
+    addUploadEntry();
+    updateDeleteButtons();
+}
+
+// 팝업 닫기
+function closeUploadPopup() {
+    uploadPopupOverlay.classList.add('display-none');
+}
+
+// + 버튼 이벤트
+uploadAddBtn.addEventListener('click', addUploadEntry);
+
+// 닫기 버튼
+document.getElementById('uploadPopupCloseBtn').addEventListener('click', closeUploadPopup);
+document.getElementById('uploadCancelBtn').addEventListener('click', closeUploadPopup);
+
+// 확인 팝업
+const uploadConfirmOverlay = document.getElementById('uploadConfirmOverlay');
+const uploadConfirmPopup = document.getElementById('uploadConfirmPopup');
+const uploadConfirmMessage = document.getElementById('uploadConfirmMessage');
+let pendingUploadEntries = [];
+
+function showUploadConfirm(entries) {
+    pendingUploadEntries = entries;
+    
+    const publicCount = entries.filter(e => e.type === 'public').length;
+    const privateCount = entries.filter(e => e.type === 'private').length;
+    
+    let message = '';
+    if (publicCount > 0 && privateCount > 0) {
+        message = `공개 ${publicCount}개, 비공개 ${privateCount}개의 문장을 업로드합니다.`;
+    } else if (publicCount > 0) {
+        message = `${publicCount}개의 문장을 공개로 업로드합니다.`;
+    } else {
+        message = `${privateCount}개의 문장을 비공개로 업로드합니다.`;
+    }
+    uploadConfirmMessage.textContent = message;
+    
+    const isDark = document.getElementById('body').classList.contains('dark');
+    if (isDark) {
+        uploadConfirmPopup.classList.add('dark');
+        uploadConfirmMessage.classList.add('dark');
+        document.getElementById('uploadConfirmCancelBtn').classList.add('dark');
+        document.getElementById('uploadConfirmOkBtn').classList.add('dark');
+    } else {
+        uploadConfirmPopup.classList.remove('dark');
+        uploadConfirmMessage.classList.remove('dark');
+        document.getElementById('uploadConfirmCancelBtn').classList.remove('dark');
+        document.getElementById('uploadConfirmOkBtn').classList.remove('dark');
+    }
+    
+    uploadConfirmOverlay.classList.remove('display-none');
+}
+
+function hideUploadConfirm() {
+    uploadConfirmOverlay.classList.add('display-none');
+    pendingUploadEntries = [];
+}
+
+document.getElementById('uploadConfirmCancelBtn').addEventListener('click', hideUploadConfirm);
+document.getElementById('uploadConfirmOkBtn').addEventListener('click', () => {
+    hideUploadConfirm();
+    executeUpload(pendingUploadEntries);
+});
+
+// 업로드 버튼 클릭 - 확인 팝업 표시
+document.getElementById('uploadSubmitBtn').addEventListener('click', () => {
+    const entries = [];
+    
+    // 입력된 문장들 수집
+    for (let i = 0; i < currentEntryCount; i++) {
+        const entryEl = document.getElementById(`uploadEntry${i}`);
+        const sentenceEl = document.getElementById(`uploadSentence${i}`);
+        const authorEl = document.getElementById(`uploadAuthor${i}`);
+        
+        if (!entryEl || !sentenceEl || !authorEl) continue;
+        
+        const sentence = sentenceEl.value.trim();
+        const author = authorEl.value.trim();
+        const type = entryEl.dataset.type || 'public';
+        const messageEl = document.getElementById(`uploadMessage${i}`);
+        
+        // 메시지 초기화
+        if (messageEl) {
+            messageEl.textContent = '';
+            messageEl.className = 'upload-entry-message';
+        }
+        entryEl.classList.remove('error', 'success');
+        
+        if (sentence) {
+            entries.push({ index: i, sentence, author, type });
+        }
+    }
+    
+    if (entries.length === 0) {
+        alert('최소 1개의 문장을 입력해주세요.');
+        return;
+    }
+    
+    showUploadConfirm(entries);
+});
+
+// 실제 업로드 실행
+async function executeUpload(entries) {
+    const submitBtn = document.getElementById('uploadSubmitBtn');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>업로드 중...</span>';
+    
+    // 각 문장 업로드 시뮬레이션
+    let successCount = 0;
+    
+    for (const entry of entries) {
+        const { index, sentence, author, type } = entry;
+        const messageEl = document.getElementById(`uploadMessage${index}`);
+        const entryEl = document.getElementById(`uploadEntry${index}`);
+        const sentenceInput = document.getElementById(`uploadSentence${index}`);
+        const authorInput = document.getElementById(`uploadAuthor${index}`);
+        
+        // 유효성 검증
+        if (sentence.length < 5 || sentence.length > 100) {
+            messageEl.textContent = '문장은 5-100자여야 합니다.';
+            messageEl.classList.add('error');
+            entryEl.classList.add('error');
+            continue;
+        }
+        
+        // API 호출 시뮬레이션
+        try {
+            // 실제로는 fetch 호출
+            // const response = await fetch(`/quotes/${type}`, {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            //     body: JSON.stringify({ sentence, author: author || undefined })
+            // });
+            
+            // 시뮬레이션: 랜덤하게 성공/실패
+            await new Promise(resolve => setTimeout(resolve, 500));
+            const isSuccess = Math.random() > 0.3; // 70% 성공률
+            
+            if (isSuccess) {
+                messageEl.textContent = '업로드 성공!';
+                messageEl.classList.add('success');
+                if (document.getElementById('body').classList.contains('dark')) {
+                    messageEl.classList.add('dark');
+                }
+                entryEl.classList.add('success');
+                
+                // 성공한 입력 필드 비우기
+                sentenceInput.value = '';
+                authorInput.value = '';
+                successCount++;
+            } else {
+                // 실패 시뮬레이션
+                throw new Error('서버 오류가 발생했습니다.');
+            }
+        } catch (error) {
+            messageEl.textContent = error.message || '업로드에 실패했습니다.';
+            messageEl.classList.add('error');
+            entryEl.classList.add('error');
+        }
+    }
+    
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<i class="fa-solid fa-upload"></i><span>업로드</span>';
+    
+    // 결과 알림
+    if (successCount === entries.length) {
+        alert(`${successCount}개의 문장이 모두 업로드되었습니다!`);
+        closeUploadPopup();
+    } else if (successCount > 0) {
+        alert(`${entries.length}개 중 ${successCount}개 업로드 성공, ${entries.length - successCount}개 실패`);
+    }
+}
 
 document.getElementById('mysentencesBtn').addEventListener('click', () => {
     alert('내 문장 기능 (준비 중)');
