@@ -3,4 +3,5 @@
     color: var(--color-text);
     font-weight: 600;
     letter-spacing: -0.5px;
+    cursor: pointer;
 }
