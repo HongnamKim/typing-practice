@@ -597,9 +597,11 @@ const uploadConfirmOverlay = document.getElementById('uploadConfirmOverlay');
 const uploadConfirmPopup = document.getElementById('uploadConfirmPopup');
 const uploadConfirmMessage = document.getElementById('uploadConfirmMessage');
 let pendingUploadEntries = [];
+let isResultPopup = false;
 
 function showUploadConfirm(entries) {
     pendingUploadEntries = entries;
+    isResultPopup = false;
     
     const publicCount = entries.filter(e => e.type === 'public').length;
     const privateCount = entries.filter(e => e.type === 'private').length;
@@ -637,9 +639,44 @@ function hideUploadConfirm() {
 
 document.getElementById('uploadConfirmCancelBtn').addEventListener('click', hideUploadConfirm);
 document.getElementById('uploadConfirmOkBtn').addEventListener('click', () => {
-    hideUploadConfirm();
-    executeUpload(pendingUploadEntries);
+    if (isResultPopup) {
+        hideResultPopup();
+    } else {
+        const entriesToUpload = [...pendingUploadEntries];
+        hideUploadConfirm();
+        executeUpload(entriesToUpload);
+    }
 });
+
+// 결과 팝업 (확인 버튼만)
+function showResultPopup(message) {
+    isResultPopup = true;
+    uploadConfirmMessage.textContent = message;
+    
+    const isDark = document.getElementById('body').classList.contains('dark');
+    if (isDark) {
+        uploadConfirmPopup.classList.add('dark');
+        uploadConfirmMessage.classList.add('dark');
+        document.getElementById('uploadConfirmCancelBtn').classList.add('dark');
+        document.getElementById('uploadConfirmOkBtn').classList.add('dark');
+    } else {
+        uploadConfirmPopup.classList.remove('dark');
+        uploadConfirmMessage.classList.remove('dark');
+        document.getElementById('uploadConfirmCancelBtn').classList.remove('dark');
+        document.getElementById('uploadConfirmOkBtn').classList.remove('dark');
+    }
+    
+    // 취소 버튼 숨김
+    document.getElementById('uploadConfirmCancelBtn').classList.add('display-none');
+    
+    uploadConfirmOverlay.classList.remove('display-none');
+}
+
+function hideResultPopup() {
+    uploadConfirmOverlay.classList.add('display-none');
+    // 취소 버튼 다시 표시
+    document.getElementById('uploadConfirmCancelBtn').classList.remove('display-none');
+}
 
 // 업로드 버튼 클릭 - 확인 팝업 표시
 document.getElementById('uploadSubmitBtn').addEventListener('click', () => {
@@ -686,8 +723,10 @@ async function executeUpload(entries) {
     
     // 각 문장 업로드 시뮬레이션
     let successCount = 0;
+    const successIndices = [];
     
-    for (const entry of entries) {
+    for (let i = 0; i < entries.length; i++) {
+        const entry = entries[i];
         const { index, sentence, author, type } = entry;
         const messageEl = document.getElementById(`uploadMessage${index}`);
         const entryEl = document.getElementById(`uploadEntry${index}`);
@@ -711,22 +750,13 @@ async function executeUpload(entries) {
             //     body: JSON.stringify({ sentence, author: author || undefined })
             // });
             
-            // 시뮬레이션: 랜덤하게 성공/실패
+            // 시뮬레이션: 2, 4번째 문장은 실패 (i는 0부터 시작하므로 i=1, i=3이 실패)
             await new Promise(resolve => setTimeout(resolve, 500));
-            const isSuccess = Math.random() > 0.3; // 70% 성공률
+            const isSuccess = i % 2 === 0; // 1, 3, 5번째 성공 / 2, 4번째 실패
             
             if (isSuccess) {
-                messageEl.textContent = '업로드 성공!';
-                messageEl.classList.add('success');
-                if (document.getElementById('body').classList.contains('dark')) {
-                    messageEl.classList.add('dark');
-                }
-                entryEl.classList.add('success');
-                
-                // 성공한 입력 필드 비우기
-                sentenceInput.value = '';
-                authorInput.value = '';
                 successCount++;
+                successIndices.push(index);
             } else {
                 // 실패 시뮬레이션
                 throw new Error('서버 오류가 발생했습니다.');
@@ -741,12 +771,26 @@ async function executeUpload(entries) {
     submitBtn.disabled = false;
     submitBtn.innerHTML = '<i class="fa-solid fa-upload"></i><span>업로드</span>';
     
-    // 결과 알림
-    if (successCount === entries.length) {
-        alert(`${successCount}개의 문장이 모두 업로드되었습니다!`);
-        closeUploadPopup();
-    } else if (successCount > 0) {
-        alert(`${entries.length}개 중 ${successCount}개 업로드 성공, ${entries.length - successCount}개 실패`);
+    // 성공한 entry 제거 및 결과 팝업
+    if (successCount > 0) {
+        // 성공한 entry 제거
+        successIndices.forEach(index => {
+            const entryEl = document.getElementById(`uploadEntry${index}`);
+            if (entryEl) entryEl.remove();
+        });
+        currentEntryCount -= successCount;
+        
+        // entry가 0개면 1개 추가
+        if (currentEntryCount === 0) {
+            addUploadEntry();
+        } else {
+            renumberEntries();
+            updateAddButton();
+            updateDeleteButtons();
+        }
+        
+        // 결과 팝업 표시
+        showResultPopup(`${successCount}개의 문장 업로드에 성공했습니다.`);
     }
 }
 

@@ -1,50 +1,35 @@
 import "./App.css";
 
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeContextProvider } from "./Context/ThemeContext";
 import { AuthProvider } from "./Context/AuthContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Head from "./components/Head/Head";
 import AppDiv from "./components/AppDiv/AppDiv";
-import Info from "./components/Info/Info";
-import { SettingContextProvider } from "./Context/SettingContext";
-import { ScoreContextProvider } from "./Context/ScoreContext";
-import Quote from "./components/Quote/Quote";
 import Contact from "./components/Contact/Contact";
-import { QuoteContextProvider } from "./Context/QuoteContext";
-import AverageScorePopUp from "./components/AverageScorePopUp/AverageScorePopUp";
-import FontSizeSlider from "./components/FontSizeSlider/FontSizeSlider";
-import ModeToggle from "./components/ModeToggle/ModeToggle";
-import UpdatePopup from "./components/UpdatePopup/UpdatePopup";
+import Home from "./pages/Home/Home";
+import QuoteUpload from "./pages/QuoteUpload/QuoteUpload";
 import {Analytics} from "@vercel/analytics/react";
 
 function App() {
   return (
     <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
-      <ThemeContextProvider>
-        <AuthProvider>
-          <AppDiv>
-            <Head />
-            <SettingContextProvider>
-              <div className="top-left-controls">
-                <FontSizeSlider />
-                <ModeToggle />
-              </div>
-              <UpdatePopup />
-              <ScoreContextProvider>
-                <AverageScorePopUp />
-                <Info />
-                <QuoteContextProvider>
-                  <Quote />
-                </QuoteContextProvider>
-              </ScoreContextProvider>
-            </SettingContextProvider>
-            <Contact />
+      <BrowserRouter>
+        <ThemeContextProvider>
+          <AuthProvider>
+            <AppDiv>
+              <Head />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/quote/upload" element={<QuoteUpload />} />
+              </Routes>
+              <Contact />
               <Analytics/>
-          </AppDiv>
-        </AuthProvider>
-      </ThemeContextProvider>
+            </AppDiv>
+          </AuthProvider>
+        </ThemeContextProvider>
+      </BrowserRouter>
     </GoogleOAuthProvider>
-
   );
 }
 

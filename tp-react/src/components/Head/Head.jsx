@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 import Title from "./title/Title";
 import DarkModeButton from "./themeButton/DarkModeButton";
 import LoginButton from "../LoginButton/LoginButton";
@@ -6,8 +7,10 @@ import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import NicknamePopup from "../NicknamePopup/NicknamePopup";
 import {useAuth} from "../../Context/AuthContext";
+import {useTheme} from "../../Context/ThemeContext";
 import {useGoogleLogin} from "@react-oauth/google";
 import {loginWithGoogle} from "../../utils/authApi";
+import {FaPlus} from "react-icons/fa";
 import "./Head.css";
 
 // UUID 형식 체크 함수
@@ -18,6 +21,8 @@ const isUuidFormat = (str) => {
 };
 
 const Head = () => {
+    const navigate = useNavigate();
+    const {isDark} = useTheme();
     const {user, accessToken, refreshToken, isLoading, setIsLoading, login} = useAuth();
     const [showNicknamePopup, setShowNicknamePopup] = useState(false);
 
@@ -85,6 +90,19 @@ const Head = () => {
             <div className="head">
                 <Title/>
                 <div className="head-right">
+                    <button 
+                        className={`header-btn ${isDark ? 'dark' : ''}`}
+                        onClick={() => {
+                            if (user) {
+                                navigate('/quote/upload');
+                            } else {
+                                alert('로그인이 필요한 기능입니다.');
+                            }
+                        }}
+                    >
+                        <FaPlus/>
+                        <span>문장 업로드</span>
+                    </button>
                     {user ? <ProfileDropdown/> : <LoginButton onClick={handleLogin}/>}
                     <DarkModeButton/>
                 </div>
