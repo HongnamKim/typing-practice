@@ -795,8 +795,8 @@ async function executeUpload(entries) {
 }
 
 document.getElementById('mysentencesBtn').addEventListener('click', () => {
-    alert('내 문장 기능 (준비 중)');
     document.getElementById('dropdownMenu').classList.add('display-none');
+    openMyQuotesPopup();
 });
 
 document.getElementById('statsBtn').addEventListener('click', () => {
@@ -808,3 +808,389 @@ document.getElementById('settingsBtn').addEventListener('click', () => {
     alert('설정 기능 (준비 중)');
     document.getElementById('dropdownMenu').classList.add('display-none');
 });
+
+// ===========================================
+// 내 문장 팝업
+// ===========================================
+let myQuotesCurrentPage = 1;
+let myQuotesHasNext = true;
+let myQuotesIsLoading = false;
+let myQuotesTypeFilter = 'all';
+let myQuotesStatusFilter = 'all';
+let editingQuoteId = null;
+let deletingQuoteId = null;
+
+// 더미 데이터 생성
+function generateMockQuotes(page, type, status) {
+    const mockData = [];
+    const types = ['PUBLIC', 'PRIVATE'];
+    const statuses = ['PENDING', 'ACTIVE'];
+    
+    for (let i = 0; i < 10; i++) {
+        const quoteType = types[Math.floor(Math.random() * types.length)];
+        let quoteStatus;
+        
+        // PUBLIC은 PENDING, ACTIVE 가능
+        // PRIVATE은 ACTIVE만 가능
+        if (quoteType === 'PRIVATE') {
+            quoteStatus = 'ACTIVE';
+        } else {
+            quoteStatus = statuses[Math.floor(Math.random() * statuses.length)];
+        }
+        
+        // 필터 적용
+        if (type !== 'all' && quoteType !== type) continue;
+        if (status !== 'all' && quoteStatus !== status) continue;
+        
+        mockData.push({
+            quoteId: (page - 1) * 10 + i + 1,
+            sentence: `이것은 ${(page - 1) * 10 + i + 1}번째 테스트 문장입니다. 타이핑 연습을 위한 샘플 텍스트입니다.`,
+            author: Math.random() > 0.3 ? '테스트 저자' : null,
+            type: quoteType,
+            status: quoteStatus,
+            createdAt: new Date().toISOString(),
+        });
+    }
+    
+    return {
+        page: page,
+        size: 10,
+        hasNext: page < 3, // 3페이지까지만
+        content: mockData,
+    };
+}
+
+function openMyQuotesPopup() {
+    const overlay = document.getElementById('myQuotesPopupOverlay');
+    
+    // 상태 초기화
+    myQuotesCurrentPage = 1;
+    myQuotesHasNext = true;
+    myQuotesTypeFilter = 'all';
+    myQuotesStatusFilter = 'all';
+    
+    // 필터 버튼 초기화
+    document.querySelectorAll('.my-quotes-filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.type === 'all') btn.classList.add('active');
+        if (btn.dataset.status === 'all') btn.classList.add('active');
+    });
+    
+    // 목록 초기화
+    document.getElementById('myQuotesList').innerHTML = '';
+    document.getElementById('myQuotesLoading').classList.add('display-none');
+    document.getElementById('myQuotesEmpty').classList.add('display-none');
+    
+    overlay.classList.remove('display-none');
+    
+    // 초기 데이터 로드
+    loadMyQuotes();
+}
+
+function closeMyQuotesPopup() {
+    document.getElementById('myQuotesPopupOverlay').classList.add('display-none');
+}
+
+document.getElementById('myQuotesCloseBtn').addEventListener('click', closeMyQuotesPopup);
+document.getElementById('myQuotesPopupOverlay').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeMyQuotesPopup();
+});
+
+// 필터 버튼 이벤트
+document.querySelectorAll('.my-quotes-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (btn.dataset.type) {
+            // type 필터
+            document.querySelectorAll('.my-quotes-filter-btn[data-type]').forEach(b => {
+                b.classList.remove('active');
+            });
+            btn.classList.add('active');
+            myQuotesTypeFilter = btn.dataset.type;
+        } else if (btn.dataset.status) {
+            // status 필터
+            document.querySelectorAll('.my-quotes-filter-btn[data-status]').forEach(b => {
+                b.classList.remove('active');
+            });
+            btn.classList.add('active');
+            myQuotesStatusFilter = btn.dataset.status;
+        }
+        
+        // 목록 초기화 후 다시 로드
+        myQuotesCurrentPage = 1;
+        myQuotesHasNext = true;
+        document.getElementById('myQuotesList').innerHTML = '';
+        document.getElementById('myQuotesEmpty').classList.add('display-none');
+        loadMyQuotes();
+    });
+});
+
+async function loadMyQuotes() {
+    if (myQuotesIsLoading || !myQuotesHasNext) return;
+    
+    myQuotesIsLoading = true;
+    const loadingEl = document.getElementById('myQuotesLoading');
+    
+    loadingEl.classList.remove('display-none');
+    
+    // API 호출 시뮬레이션
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    const response = generateMockQuotes(myQuotesCurrentPage, myQuotesTypeFilter, myQuotesStatusFilter);
+    
+    loadingEl.classList.add('display-none');
+    myQuotesIsLoading = false;
+    
+    if (response.content.length === 0 && myQuotesCurrentPage === 1) {
+        document.getElementById('myQuotesEmpty').classList.remove('display-none');
+        return;
+    }
+    
+    // 카드 추가
+    const listEl = document.getElementById('myQuotesList');
+    response.content.forEach(quote => {
+        listEl.appendChild(createQuoteCard(quote));
+    });
+    
+    myQuotesHasNext = response.hasNext;
+    myQuotesCurrentPage++;
+}
+
+function createQuoteCard(quote) {
+    const card = document.createElement('div');
+    card.className = 'my-quote-card';
+    card.dataset.quoteId = quote.quoteId;
+    
+    // 타입 뱃지
+    const typeBadgeClass = quote.type === 'PUBLIC' ? 'type-public' : 'type-private';
+    const typeText = quote.type === 'PUBLIC' ? '공개' : '비공개';
+    
+    // 상태 뱃지
+    let statusBadgeClass, statusText;
+    switch (quote.status) {
+        case 'PENDING':
+            statusBadgeClass = 'status-pending';
+            statusText = '대기중';
+            break;
+        case 'ACTIVE':
+            statusBadgeClass = 'status-active';
+            statusText = '활성';
+            break;
+    }
+    
+    // 액션 버튼 결정
+    let actionsHtml = '';
+    if (quote.type === 'PRIVATE' && quote.status === 'ACTIVE') {
+        // 비공개 + 활성: 수정, 삭제, 공개전환
+        actionsHtml = `
+            <button class="my-quote-action-btn" onclick="openEditPopup(${quote.quoteId})">수정</button>
+            <button class="my-quote-action-btn danger" onclick="openDeleteConfirm(${quote.quoteId})">삭제</button>
+            <button class="my-quote-action-btn primary" onclick="publishQuote(${quote.quoteId})">공개전환</button>
+        `;
+    } else if (quote.type === 'PUBLIC' && quote.status === 'PENDING') {
+        // 공개 + 대기중: 공개취소
+        actionsHtml = `
+            <button class="my-quote-action-btn" onclick="cancelPublish(${quote.quoteId})">공개취소</button>
+        `;
+    }
+    // PUBLIC + ACTIVE: 액션 없음
+    
+    card.innerHTML = `
+        <div class="my-quote-card-header">
+            <span class="my-quote-badge ${typeBadgeClass}">${typeText}</span>
+            <span class="my-quote-badge ${statusBadgeClass}">${statusText}</span>
+        </div>
+        <div class="my-quote-sentence">${quote.sentence}</div>
+        ${quote.author ? `<div class="my-quote-author">- ${quote.author}</div>` : ''}
+        <div class="my-quote-card-footer">
+            ${actionsHtml}
+        </div>
+    `;
+    
+    return card;
+}
+
+// 무한 스크롤
+document.getElementById('myQuotesList').addEventListener('scroll', (e) => {
+    const el = e.target;
+    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 100) {
+        loadMyQuotes();
+    }
+});
+
+// 문장 수정 팝업
+function openEditPopup(quoteId) {
+    editingQuoteId = quoteId;
+    const card = document.querySelector(`.my-quote-card[data-quote-id="${quoteId}"]`);
+    const sentence = card.querySelector('.my-quote-sentence').textContent;
+    const authorEl = card.querySelector('.my-quote-author');
+    const author = authorEl ? authorEl.textContent.replace('- ', '') : '';
+    
+    const overlay = document.getElementById('quoteEditPopupOverlay');
+    const sentenceInput = document.getElementById('quoteEditSentence');
+    const authorInput = document.getElementById('quoteEditAuthor');
+    
+    sentenceInput.value = sentence;
+    authorInput.value = author;
+    updateEditCharCount();
+    updateEditSaveButton(sentence, author);
+    
+    overlay.classList.remove('display-none');
+    
+    // 팝업이 보인 후 높이 조절
+    requestAnimationFrame(() => {
+        adjustEditTextareaHeight();
+    });
+}
+
+function closeEditPopup() {
+    document.getElementById('quoteEditPopupOverlay').classList.add('display-none');
+    editingQuoteId = null;
+}
+
+document.getElementById('quoteEditCancelBtn').addEventListener('click', closeEditPopup);
+document.getElementById('quoteEditPopupOverlay').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeEditPopup();
+});
+
+const quoteEditSentence = document.getElementById('quoteEditSentence');
+const quoteEditAuthor = document.getElementById('quoteEditAuthor');
+
+quoteEditSentence.addEventListener('input', () => {
+    updateEditCharCount();
+    adjustEditTextareaHeight();
+    updateEditSaveButton();
+});
+
+quoteEditAuthor.addEventListener('input', updateEditSaveButton);
+
+function updateEditCharCount() {
+    const count = quoteEditSentence.value.length;
+    const countEl = document.getElementById('quoteEditCharCount');
+    countEl.textContent = `${count}/100`;
+    
+    if (count > 0 && count < 5) {
+        countEl.classList.add('warning');
+    } else {
+        countEl.classList.remove('warning');
+    }
+}
+
+function adjustEditTextareaHeight() {
+    quoteEditSentence.style.height = 'auto';
+    quoteEditSentence.style.height = quoteEditSentence.scrollHeight + 'px';
+}
+
+function updateEditSaveButton() {
+    const sentence = quoteEditSentence.value.trim();
+    const saveBtn = document.getElementById('quoteEditSaveBtn');
+    
+    if (sentence.length >= 5 && sentence.length <= 100) {
+        saveBtn.disabled = false;
+    } else {
+        saveBtn.disabled = true;
+    }
+}
+
+document.getElementById('quoteEditSaveBtn').addEventListener('click', async () => {
+    const sentence = quoteEditSentence.value.trim();
+    const author = quoteEditAuthor.value.trim();
+    
+    // API 호출 시뮬레이션
+    console.log('수정 요청:', { quoteId: editingQuoteId, sentence, author });
+    
+    // 카드 업데이트
+    const card = document.querySelector(`.my-quote-card[data-quote-id="${editingQuoteId}"]`);
+    card.querySelector('.my-quote-sentence').textContent = sentence;
+    const authorEl = card.querySelector('.my-quote-author');
+    if (author) {
+        if (authorEl) {
+            authorEl.textContent = `- ${author}`;
+        } else {
+            const newAuthorEl = document.createElement('div');
+            newAuthorEl.className = 'my-quote-author';
+            newAuthorEl.textContent = `- ${author}`;
+            card.querySelector('.my-quote-sentence').after(newAuthorEl);
+        }
+    } else if (authorEl) {
+        authorEl.remove();
+    }
+    
+    closeEditPopup();
+});
+
+// 삭제 확인 팝업
+function openDeleteConfirm(quoteId) {
+    deletingQuoteId = quoteId;
+    const overlay = document.getElementById('deleteConfirmOverlay');
+    overlay.classList.remove('display-none');
+}
+
+function closeDeleteConfirm() {
+    document.getElementById('deleteConfirmOverlay').classList.add('display-none');
+    deletingQuoteId = null;
+}
+
+document.getElementById('deleteConfirmCancelBtn').addEventListener('click', closeDeleteConfirm);
+document.getElementById('deleteConfirmOverlay').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeDeleteConfirm();
+});
+
+document.getElementById('deleteConfirmOkBtn').addEventListener('click', async () => {
+    // API 호출 시뮬레이션
+    console.log('삭제 요청:', deletingQuoteId);
+    
+    // 카드 제거
+    const card = document.querySelector(`.my-quote-card[data-quote-id="${deletingQuoteId}"]`);
+    card.remove();
+    
+    closeDeleteConfirm();
+    
+    // 목록이 비었는지 확인
+    if (document.getElementById('myQuotesList').children.length === 0) {
+        document.getElementById('myQuotesEmpty').classList.remove('display-none');
+    }
+});
+
+// 공개 전환
+async function publishQuote(quoteId) {
+    console.log('공개 전환 요청:', quoteId);
+    
+    // 카드 업데이트 (PRIVATE -> PUBLIC, ACTIVE -> PENDING)
+    const card = document.querySelector(`.my-quote-card[data-quote-id="${quoteId}"]`);
+    
+    // 뱃지 업데이트
+    const header = card.querySelector('.my-quote-card-header');
+    header.innerHTML = `
+        <span class="my-quote-badge type-public">공개</span>
+        <span class="my-quote-badge status-pending">대기중</span>
+    `;
+    
+    // 액션 버튼 업데이트
+    const footer = card.querySelector('.my-quote-card-footer');
+    footer.innerHTML = `
+        <button class="my-quote-action-btn" onclick="cancelPublish(${quoteId})">공개취소</button>
+    `;
+}
+
+// 공개 취소
+async function cancelPublish(quoteId) {
+    console.log('공개 취소 요청:', quoteId);
+    
+    // 카드 업데이트 (PUBLIC -> PRIVATE, PENDING -> ACTIVE)
+    const card = document.querySelector(`.my-quote-card[data-quote-id="${quoteId}"]`);
+    
+    // 뱃지 업데이트
+    const header = card.querySelector('.my-quote-card-header');
+    header.innerHTML = `
+        <span class="my-quote-badge type-private">비공개</span>
+        <span class="my-quote-badge status-active">활성</span>
+    `;
+    
+    // 액션 버튼 업데이트
+    const footer = card.querySelector('.my-quote-card-footer');
+    footer.innerHTML = `
+        <button class="my-quote-action-btn" onclick="openEditPopup(${quoteId})">수정</button>
+        <button class="my-quote-action-btn danger" onclick="openDeleteConfirm(${quoteId})">삭제</button>
+        <button class="my-quote-action-btn primary" onclick="publishQuote(${quoteId})">공개전환</button>
+    `;
+}

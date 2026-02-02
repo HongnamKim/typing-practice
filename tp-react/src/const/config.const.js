@@ -6,3 +6,8 @@ export const Storage_Averages_Visible = "Typing-Practice-averagesVisible";
 export const Storage_Compact_Mode = "Typing-Practice-compactMode";
 export const Storage_Last_Seen_Version = "Typing-Practice-lastSeenVersion";
 export const Storage_Refresh_Token = "Typing-Practice-refreshToken";
+
+// Quote 관련 상수
+export const MIN_SENTENCE_LENGTH = 5;
+export const MAX_SENTENCE_LENGTH = 100;
+export const MAX_AUTHOR_LENGTH = 20;

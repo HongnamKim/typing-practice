@@ -8,6 +8,7 @@ import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import NicknamePopup from "../NicknamePopup/NicknamePopup";
 import {useAuth} from "../../Context/AuthContext";
 import {useTheme} from "../../Context/ThemeContext";
+import {useError} from "../../Context/ErrorContext";
 import {useGoogleLogin} from "@react-oauth/google";
 import {loginWithGoogle} from "../../utils/authApi";
 import {FaPlus} from "react-icons/fa";
@@ -23,6 +24,7 @@ const isUuidFormat = (str) => {
 const Head = () => {
     const navigate = useNavigate();
     const {isDark} = useTheme();
+    const {showError} = useError();
     const {user, accessToken, refreshToken, isLoading, setIsLoading, login} = useAuth();
     const [showNicknamePopup, setShowNicknamePopup] = useState(false);
 
@@ -61,13 +63,13 @@ const Head = () => {
                 setIsLoading(false);
             } catch (error) {
                 console.error('로그인 실패:', error);
-                alert('로그인에 실패했습니다. 다시 시도해주세요.');
+                showError('로그인에 실패했습니다. 다시 시도해주세요.');
                 setIsLoading(false);
             }
         },
         onError: (error) => {
             console.error('구글 로그인 실패:', error);
-            alert('구글 로그인에 실패했습니다.');
+            showError('구글 로그인에 실패했습니다.');
         },
     });
 
@@ -96,7 +98,7 @@ const Head = () => {
                             if (user) {
                                 navigate('/quote/upload');
                             } else {
-                                alert('로그인이 필요한 기능입니다.');
+                                showError('로그인이 필요한 기능입니다.');
                             }
                         }}
                     >

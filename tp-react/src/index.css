@@ -22,9 +22,28 @@
 
     /* Semantic */
     --color-error: #dc2626;
+    --color-error-dark: #b91c1c;
+    --color-error-light: #fee2e2;
+    --color-error-border: #fecaca;
     --color-success: #16a34a;
     --color-correct: #333;
     --color-white: #ffffff;
+
+    /* Badge - Public (Blue) */
+    --color-badge-public-bg: #dbeafe;
+    --color-badge-public-text: #1d4ed8;
+
+    /* Badge - Private (Purple) */
+    --color-badge-private-bg: #f3e8ff;
+    --color-badge-private-text: #7c3aed;
+
+    /* Badge - Pending (Yellow) */
+    --color-badge-pending-bg: #fef3c7;
+    --color-badge-pending-text: #d97706;
+
+    /* Badge - Active (Green) */
+    --color-badge-active-bg: #dcfce7;
+    --color-badge-active-text: #16a34a;
 }
 
 /* Dark Mode */
@@ -48,9 +67,28 @@
     --color-toggle-bg: #3f3f46;
 
     /* Semantic */
-    --color-error: #dc2626;
+    --color-error: #f87171;
+    --color-error-dark: #fca5a5;
+    --color-error-light: #4a1f1f;
+    --color-error-border: #f87171;
     --color-success: #22c55e;
     --color-correct: #ffffff;
+
+    /* Badge - Public (Blue) */
+    --color-badge-public-bg: #1e3a5f;
+    --color-badge-public-text: #93c5fd;
+
+    /* Badge - Private (Purple) */
+    --color-badge-private-bg: #3b1f5c;
+    --color-badge-private-text: #c4b5fd;
+
+    /* Badge - Pending (Yellow) */
+    --color-badge-pending-bg: #4a3f1f;
+    --color-badge-pending-text: #fcd34d;
+
+    /* Badge - Active (Green) */
+    --color-badge-active-bg: #1a3d2e;
+    --color-badge-active-text: #86efac;
 }
 
 /* ===========================================
@@ -65,7 +103,91 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+body.disable-transitions,
+body.disable-transitions * {
+    transition: none !important;
+}
+
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* ===========================================
+   Error Popup (Global)
+   =========================================== */
+.error-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.error-popup {
+    background-color: var(--color-bg);
+    border-radius: 1rem;
+    padding: 2rem;
+    width: 90%;
+    max-width: 360px;
+    border: 1px solid var(--color-border);
+    text-align: center;
+}
+
+.error-popup-icon {
+    width: 3.5rem;
+    height: 3.5rem;
+    margin: 0 auto 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-error-light);
+    border-radius: 50%;
+    color: var(--color-error);
+    font-size: 1.75rem;
+}
+
+.error-popup-message {
+    font-size: 1rem;
+    color: var(--color-text);
+    margin: 0 0 1.5rem 0;
+    line-height: 1.6;
+    word-break: keep-all;
+}
+
+.error-popup-btn {
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 0.625rem;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.error-popup-btn:hover {
+    background-color: var(--color-primary-dark);
+}
+
+/* Error Popup - Dark Mode */
+.error-popup-overlay.dark .error-popup {
+    background-color: #0f0f0f;
+    border-color: #27272a;
+}
+
+.error-popup-overlay.dark .error-popup-icon {
+    background-color: #4a1f1f;
+    color: #f87171;
+}
+
+.error-popup-overlay.dark .error-popup-message {
+    color: #e5e7eb;
 }

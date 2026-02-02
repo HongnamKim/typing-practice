@@ -234,6 +234,77 @@
     </div>
 </div>
 
+<!-- 내 문장 팝업 -->
+<div class="my-quotes-popup-overlay display-none" id="myQuotesPopupOverlay">
+    <div class="my-quotes-popup" id="myQuotesPopup">
+        <div class="my-quotes-header">
+            <h2 class="my-quotes-title">내 문장</h2>
+            <button class="my-quotes-close-btn" id="myQuotesCloseBtn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="my-quotes-filters">
+            <div class="my-quotes-filter-group">
+                <button class="my-quotes-filter-btn active" data-type="all">전체</button>
+                <button class="my-quotes-filter-btn" data-type="PUBLIC">공개</button>
+                <button class="my-quotes-filter-btn" data-type="PRIVATE">비공개</button>
+            </div>
+            <div class="my-quotes-filter-group">
+                <button class="my-quotes-filter-btn active" data-status="all">전체</button>
+                <button class="my-quotes-filter-btn" data-status="PENDING">대기중</button>
+                <button class="my-quotes-filter-btn" data-status="ACTIVE">활성</button>
+            </div>
+        </div>
+
+        <div class="my-quotes-list" id="myQuotesList">
+            <!-- 문장 카드가 여기에 동적으로 생성됨 -->
+        </div>
+
+        <div class="my-quotes-loading display-none" id="myQuotesLoading">
+            <div class="my-quotes-spinner"></div>
+        </div>
+
+        <div class="my-quotes-empty display-none" id="myQuotesEmpty">
+            <i class="fa-solid fa-file-circle-question"></i>
+            <p>등록한 문장이 없습니다.</p>
+        </div>
+    </div>
+</div>
+
+<!-- 문장 수정 팝업 -->
+<div class="quote-edit-popup-overlay display-none" id="quoteEditPopupOverlay">
+    <div class="quote-edit-popup" id="quoteEditPopup">
+        <h3 class="quote-edit-title">문장 수정</h3>
+        <div class="quote-edit-content">
+            <div class="quote-edit-field">
+                <label class="quote-edit-label">문장</label>
+                <textarea class="quote-edit-input quote-edit-sentence" id="quoteEditSentence" maxlength="100" rows="1"></textarea>
+                <span class="quote-edit-char-count" id="quoteEditCharCount">0/100</span>
+            </div>
+            <div class="quote-edit-field">
+                <label class="quote-edit-label">저자 (선택)</label>
+                <input type="text" class="quote-edit-input" id="quoteEditAuthor" maxlength="20" />
+            </div>
+        </div>
+        <div class="quote-edit-actions">
+            <button class="quote-edit-cancel-btn" id="quoteEditCancelBtn">취소</button>
+            <button class="quote-edit-save-btn" id="quoteEditSaveBtn">저장</button>
+        </div>
+    </div>
+</div>
+
+<!-- 삭제 확인 팝업 -->
+<div class="confirm-popup-overlay display-none" id="deleteConfirmOverlay">
+    <div class="confirm-popup" id="deleteConfirmPopup">
+        <p class="confirm-popup-message">이 문장을 삭제하시겠습니까?</p>
+        <div class="confirm-popup-actions">
+            <button class="confirm-popup-cancel-btn" id="deleteConfirmCancelBtn">취소</button>
+            <button class="confirm-popup-ok-btn danger" id="deleteConfirmOkBtn">삭제</button>
+        </div>
+    </div>
+</div>
+
 <script src="prototype.js"></script>
 </body>
 </html>
