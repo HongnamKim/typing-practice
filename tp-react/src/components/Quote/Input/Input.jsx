@@ -3,6 +3,7 @@ import {useEffect, useRef, useState} from "react";
 import {useTheme} from "../../../Context/ThemeContext";
 import {useQuote} from "../../../Context/QuoteContext";
 import {useScore} from "../../../Context/ScoreContext";
+import {useError} from "../../../Context/ErrorContext";
 import {resultPeriodSet, useSetting} from "../../../Context/SettingContext";
 import {
     KEY_ARROW_DOWN,
@@ -16,6 +17,7 @@ import {koreanSeparator} from "../../../utils/koreanSeparator";
 
 const Input = ({onInputChange: onInputChangeCallback}) => {
     const {isDark} = useTheme();
+    const {showError} = useError();
     const {
         speedCheck, // 타이핑 지속 시간 측정 트리거
         setSpeedCheck,
@@ -391,7 +393,7 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
 
     const preventPaste = (e) => {
         e.preventDefault();
-        alert("붙여넣기가 금지되어 있습니다!");
+        showError("붙여넣기가 금지되어 있습니다!");
     };
 
     return (

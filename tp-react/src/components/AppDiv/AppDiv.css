@@ -28,3 +28,7 @@
     background-color: var(--color-bg);
     color: var(--color-text);
 }
+
+.background.compact {
+    padding-top: 2rem;
+}

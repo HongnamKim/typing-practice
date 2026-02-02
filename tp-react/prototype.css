@@ -1467,3 +1467,743 @@ body.dark {
 .confirm-popup-ok-btn.dark:hover {
     background-color: #7c3aed;
 }
+
+.confirm-popup-ok-btn.danger {
+    background-color: #dc2626;
+}
+
+.confirm-popup-ok-btn.danger:hover {
+    background-color: #b91c1c;
+}
+
+/* ===========================================
+   내 문장 팝업
+   =========================================== */
+.my-quotes-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.my-quotes-popup {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    width: 90%;
+    max-width: 700px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.my-quotes-popup.dark {
+    background-color: #1f1f1f;
+}
+
+body.dark .my-quotes-popup {
+    background-color: #1f1f1f;
+}
+
+.my-quotes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem 1rem 2rem;
+}
+
+.my-quotes-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #6d28d9;
+    margin: 0;
+}
+
+.my-quotes-close-btn {
+    border: none;
+    background: none;
+    color: #999;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.my-quotes-close-btn:hover {
+    color: #666;
+}
+
+.my-quotes-close-btn.dark {
+    color: #71717a;
+}
+
+.my-quotes-close-btn.dark:hover {
+    color: #a1a1aa;
+}
+
+body.dark .my-quotes-close-btn {
+    color: #71717a;
+}
+
+body.dark .my-quotes-close-btn:hover {
+    color: #a1a1aa;
+}
+
+/* 필터 버튼 */
+.my-quotes-filters {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 2rem 1rem 2rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.my-quotes-filters.dark {
+    border-bottom-color: #27272a;
+}
+
+body.dark .my-quotes-filters {
+    border-bottom-color: #27272a;
+}
+
+.my-quotes-filter-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.my-quotes-filter-btn {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    background-color: transparent;
+    color: #999;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.my-quotes-filter-btn:hover {
+    border-color: #6d28d9;
+    color: #6d28d9;
+}
+
+.my-quotes-filter-btn.active {
+    border-color: #6d28d9;
+    background-color: #6d28d9;
+    color: white;
+}
+
+.my-quotes-filter-btn.dark {
+    border-color: #3f3f46;
+    color: #71717a;
+}
+
+.my-quotes-filter-btn.dark:hover {
+    border-color: #8b5cf6;
+    color: #8b5cf6;
+}
+
+.my-quotes-filter-btn.dark.active {
+    border-color: #8b5cf6;
+    background-color: #8b5cf6;
+    color: white;
+}
+
+/* 문장 목록 */
+.my-quotes-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* 문장 카드 */
+.my-quote-card {
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background-color: #f9fafb;
+}
+
+.my-quote-card.dark {
+    border-color: #27272a;
+    background-color: #18181b;
+}
+
+.my-quote-card-header {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.my-quote-badge {
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+.my-quote-badge.type-public {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+}
+
+.my-quote-badge.type-private {
+    background-color: #f3e8ff;
+    color: #7c3aed;
+}
+
+.my-quote-badge.status-pending {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.my-quote-badge.status-active {
+    background-color: #dcfce7;
+    color: #16a34a;
+}
+
+.my-quote-badge.status-hidden {
+    background-color: #fecaca;
+    color: #dc2626;
+}
+
+.my-quote-badge.dark.type-public {
+    background-color: #1e3a5f;
+    color: #93c5fd;
+}
+
+.my-quote-badge.dark.type-private {
+    background-color: #3b1f5c;
+    color: #c4b5fd;
+}
+
+.my-quote-badge.dark.status-pending {
+    background-color: #4a3f1f;
+    color: #fcd34d;
+}
+
+.my-quote-badge.dark.status-active {
+    background-color: #1a3d2e;
+    color: #86efac;
+}
+
+.my-quote-badge.dark.status-hidden {
+    background-color: #4a1f1f;
+    color: #fca5a5;
+}
+
+.my-quote-sentence {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+    word-break: break-word;
+}
+
+.my-quote-sentence.dark {
+    color: #e5e7eb;
+}
+
+.my-quote-author {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.my-quote-author.dark {
+    color: #a1a1aa;
+}
+
+.my-quote-card-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.my-quote-action-btn {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    background-color: transparent;
+    color: #666;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.my-quote-action-btn:hover {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.my-quote-action-btn.dark {
+    border-color: #3f3f46;
+    color: #a1a1aa;
+}
+
+.my-quote-action-btn.dark:hover {
+    background-color: #27272a;
+    color: #e5e7eb;
+}
+
+.my-quote-action-btn.danger {
+    border-color: #fecaca;
+    color: #dc2626;
+}
+
+.my-quote-action-btn.danger:hover {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.my-quote-action-btn.dark.danger {
+    border-color: #4a1f1f;
+    color: #f87171;
+}
+
+.my-quote-action-btn.dark.danger:hover {
+    background-color: #4a1f1f;
+    color: #fca5a5;
+}
+
+.my-quote-action-btn.primary {
+    border-color: #6d28d9;
+    color: #6d28d9;
+}
+
+.my-quote-action-btn.primary:hover {
+    background-color: #6d28d9;
+    color: white;
+}
+
+.my-quote-action-btn.dark.primary {
+    border-color: #8b5cf6;
+    color: #8b5cf6;
+}
+
+.my-quote-action-btn.dark.primary:hover {
+    background-color: #8b5cf6;
+    color: white;
+}
+
+/* 로딩, 끝, 빈 상태 */
+.my-quotes-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.my-quotes-loading.dark {
+    color: #a1a1aa;
+}
+
+.my-quotes-spinner {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid #e5e7eb;
+    border-top-color: #6d28d9;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.my-quotes-spinner.dark {
+    border-color: #3f3f46;
+    border-top-color: #8b5cf6;
+}
+
+.my-quotes-end {
+    text-align: center;
+    padding: 1rem;
+    color: #999;
+    font-size: 0.85rem;
+}
+
+.my-quotes-end.dark {
+    color: #71717a;
+}
+
+.my-quotes-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    color: #999;
+}
+
+.my-quotes-empty.dark {
+    color: #71717a;
+}
+
+.my-quotes-empty i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.my-quotes-empty p {
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* ===========================================
+   문장 수정 팝업
+   =========================================== */
+.quote-edit-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2500;
+}
+
+.quote-edit-popup {
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.quote-edit-popup.dark {
+    background-color: #1f1f1f;
+}
+
+.quote-edit-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #6d28d9;
+    margin: 0 0 1.5rem 0;
+}
+
+.quote-edit-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.quote-edit-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    position: relative;
+}
+
+.quote-edit-label {
+    font-size: 0.85rem;
+    color: #666;
+    font-weight: 500;
+}
+
+.quote-edit-label.dark {
+    color: #a1a1aa;
+}
+
+.quote-edit-input {
+    padding: 0.5rem 0;
+    border: none;
+    border-bottom: 1px solid #e5e7eb;
+    background-color: transparent;
+    font-size: 1rem;
+    color: #333;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+.quote-edit-input:focus {
+    border-bottom-color: #6d28d9;
+}
+
+.quote-edit-input.dark {
+    border-bottom-color: #3f3f46;
+    color: #e5e7eb;
+}
+
+.quote-edit-input.dark:focus {
+    border-bottom-color: #8b5cf6;
+}
+
+.quote-edit-sentence {
+    resize: none;
+    overflow: hidden;
+    min-height: 1.5rem;
+    line-height: 1.5;
+}
+
+.quote-edit-char-count {
+    position: absolute;
+    right: 0;
+    bottom: 0.25rem;
+    font-size: 0.75rem;
+    color: #999;
+}
+
+.quote-edit-char-count.dark {
+    color: #71717a;
+}
+
+.quote-edit-char-count.warning {
+    color: #dc2626;
+}
+
+.quote-edit-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.quote-edit-cancel-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background-color: transparent;
+    color: #666;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quote-edit-cancel-btn:hover {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.quote-edit-cancel-btn.dark {
+    border-color: #3f3f46;
+    color: #a1a1aa;
+}
+
+.quote-edit-cancel-btn.dark:hover {
+    background-color: #27272a;
+    color: #e5e7eb;
+}
+
+.quote-edit-save-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #e5e7eb;
+    color: #999;
+    font-size: 1rem;
+    cursor: not-allowed;
+    transition: all 0.2s;
+}
+
+.quote-edit-save-btn:enabled {
+    background-color: #6d28d9;
+    color: white;
+    cursor: pointer;
+}
+
+.quote-edit-save-btn:enabled:hover {
+    background-color: #5b21b6;
+}
+
+.quote-edit-save-btn.dark {
+    background-color: #3f3f46;
+    color: #71717a;
+}
+
+.quote-edit-save-btn.dark:enabled {
+    background-color: #8b5cf6;
+    color: white;
+}
+
+.quote-edit-save-btn.dark:enabled:hover {
+    background-color: #7c3aed;
+}
+
+/* ===========================================
+   body.dark 기반 스타일 (내 문장, 문장 수정 팝업)
+   =========================================== */
+body.dark .my-quotes-filter-btn {
+    border-color: #3f3f46;
+    color: #71717a;
+}
+
+body.dark .my-quotes-filter-btn:hover {
+    border-color: #8b5cf6;
+    color: #8b5cf6;
+}
+
+body.dark .my-quotes-filter-btn.active {
+    border-color: #8b5cf6;
+    background-color: #8b5cf6;
+    color: white;
+}
+
+body.dark .my-quote-card {
+    border-color: #27272a;
+    background-color: #18181b;
+}
+
+body.dark .my-quote-badge.type-public {
+    background-color: #1e3a5f;
+    color: #93c5fd;
+}
+
+body.dark .my-quote-badge.type-private {
+    background-color: #3b1f5c;
+    color: #c4b5fd;
+}
+
+body.dark .my-quote-badge.status-pending {
+    background-color: #4a3f1f;
+    color: #fcd34d;
+}
+
+body.dark .my-quote-badge.status-active {
+    background-color: #1a3d2e;
+    color: #86efac;
+}
+
+body.dark .my-quote-badge.status-hidden {
+    background-color: #4a1f1f;
+    color: #fca5a5;
+}
+
+body.dark .my-quote-sentence {
+    color: #e5e7eb;
+}
+
+body.dark .my-quote-author {
+    color: #a1a1aa;
+}
+
+body.dark .my-quote-action-btn {
+    border-color: #3f3f46;
+    color: #a1a1aa;
+}
+
+body.dark .my-quote-action-btn:hover {
+    background-color: #27272a;
+    color: #e5e7eb;
+}
+
+body.dark .my-quote-action-btn.danger {
+    border-color: #4a1f1f;
+    color: #f87171;
+}
+
+body.dark .my-quote-action-btn.danger:hover {
+    background-color: #4a1f1f;
+    color: #fca5a5;
+}
+
+body.dark .my-quote-action-btn.primary {
+    border-color: #8b5cf6;
+    color: #8b5cf6;
+}
+
+body.dark .my-quote-action-btn.primary:hover {
+    background-color: #8b5cf6;
+    color: white;
+}
+
+body.dark .my-quotes-loading {
+    color: #a1a1aa;
+}
+
+body.dark .my-quotes-spinner {
+    border-color: #3f3f46;
+    border-top-color: #8b5cf6;
+}
+
+body.dark .my-quotes-empty {
+    color: #71717a;
+}
+
+body.dark .quote-edit-popup {
+    background-color: #1f1f1f;
+}
+
+body.dark .quote-edit-label {
+    color: #a1a1aa;
+}
+
+body.dark .quote-edit-input {
+    border-bottom-color: #3f3f46;
+    color: #e5e7eb;
+}
+
+body.dark .quote-edit-input:focus {
+    border-bottom-color: #8b5cf6;
+}
+
+body.dark .quote-edit-char-count {
+    color: #71717a;
+}
+
+body.dark .quote-edit-cancel-btn {
+    border-color: #3f3f46;
+    color: #a1a1aa;
+}
+
+body.dark .quote-edit-cancel-btn:hover {
+    background-color: #27272a;
+    color: #e5e7eb;
+}
+
+body.dark .quote-edit-save-btn {
+    background-color: #3f3f46;
+    color: #71717a;
+}
+
+body.dark .quote-edit-save-btn:enabled {
+    background-color: #8b5cf6;
+    color: white;
+}
+
+body.dark .quote-edit-save-btn:enabled:hover {
+    background-color: #7c3aed;
+}
+
+body.dark .confirm-popup {
+    background-color: #1f1f1f;
+}
+
+body.dark .confirm-popup-message {
+    color: #e5e7eb;
+}
+
+body.dark .confirm-popup-cancel-btn {
+    border-color: #3f3f46;
+    color: #999;
+}
+
+body.dark .confirm-popup-cancel-btn:hover {
+    background-color: #27272a;
+    color: #e5e7eb;
+}
+
+body.dark .confirm-popup-ok-btn {
+    background-color: #8b5cf6;
+}
+
+body.dark .confirm-popup-ok-btn:hover {
+    background-color: #7c3aed;
+}

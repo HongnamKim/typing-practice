@@ -1,0 +1,97 @@
+.my-quote-card {
+    padding: 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    background-color: var(--color-bg-secondary);
+}
+
+.my-quote-card-header {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.my-quote-badge {
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+.my-quote-badge.type-public {
+    background-color: var(--color-badge-public-bg);
+    color: var(--color-badge-public-text);
+}
+
+.my-quote-badge.type-private {
+    background-color: var(--color-badge-private-bg);
+    color: var(--color-badge-private-text);
+}
+
+.my-quote-badge.status-pending {
+    background-color: var(--color-badge-pending-bg);
+    color: var(--color-badge-pending-text);
+}
+
+.my-quote-badge.status-active {
+    background-color: var(--color-badge-active-bg);
+    color: var(--color-badge-active-text);
+}
+
+.my-quote-sentence {
+    font-size: 1rem;
+    color: var(--color-text);
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+    word-break: break-word;
+}
+
+.my-quote-author {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+.my-quote-card-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.my-quote-action-btn {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.375rem;
+    background-color: transparent;
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.my-quote-action-btn:hover {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text);
+}
+
+.my-quote-action-btn.danger {
+    border-color: #dc2626;
+    background-color: #dc2626;
+    color: var(--color-white);
+}
+
+.my-quote-action-btn.danger:hover {
+    background-color: #b91c1c;
+    border-color: #b91c1c;
+}
+
+.my-quote-action-btn.primary {
+    border-color: #6d28d9;
+    background-color: #6d28d9;
+    color: var(--color-white);
+}
+
+.my-quote-action-btn.primary:hover {
+    background-color: #5b21b6;
+    border-color: #5b21b6;
+}

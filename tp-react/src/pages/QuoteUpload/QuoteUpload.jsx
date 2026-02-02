@@ -3,16 +3,16 @@ import {useNavigate} from 'react-router-dom';
 import {FaCircleInfo, FaGlobe, FaLock, FaPlus, FaUpload, FaXmark} from 'react-icons/fa6';
 import {uploadQuote} from '../../utils/quoteApi';
 import {useAuth} from '../../Context/AuthContext';
+import {useError} from '../../Context/ErrorContext';
+import {MAX_AUTHOR_LENGTH, MAX_SENTENCE_LENGTH, MIN_SENTENCE_LENGTH} from '../../const/config.const';
 import './QuoteUpload.css';
 
 const MAX_ENTRIES = 5;
-const MIN_SENTENCE_LENGTH = 5;
-const MAX_SENTENCE_LENGTH = 100;
-const MAX_AUTHOR_LENGTH = 20;
 
 function QuoteUpload() {
     const navigate = useNavigate();
     const {user} = useAuth();
+    const {showError} = useError();
     const [entries, setEntries] = useState([createEmptyEntry(0)]);
     const [isUploading, setIsUploading] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
@@ -81,7 +81,7 @@ function QuoteUpload() {
         const validEntries = getValidEntries();
 
         if (validEntries.length === 0) {
-            alert('최소 1개의 문장을 입력해주세요.');
+            showError('최소 1개의 문장을 입력해주세요.');
             return;
         }
 
