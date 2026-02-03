@@ -1,6 +1,6 @@
 import "./App.css";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeContextProvider } from "./Context/ThemeContext";
 import { AuthProvider } from "./Context/AuthContext";
 import { ErrorProvider } from "./Context/ErrorContext";
@@ -26,6 +26,7 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/quote/upload" element={<QuoteUpload />} />
                   <Route path="/quote/my" element={<MyQuotes />} />
+                  <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
                 <Contact />
                 <Analytics/>

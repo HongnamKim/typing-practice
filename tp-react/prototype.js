@@ -434,10 +434,10 @@ function createUploadEntry(index) {
     entry.id = `uploadEntry${index}`;
     entry.dataset.index = index;
     entry.dataset.type = 'public'; // 기본값: 공개
-    
+
     const isDark = document.getElementById('body').classList.contains('dark');
     if (isDark) entry.classList.add('dark');
-    
+
     entry.innerHTML = `
         <div class="upload-entry-header">
             <span class="upload-entry-number">${index + 1}</span>
@@ -477,12 +477,12 @@ function createUploadEntry(index) {
         </div>
         <div class="upload-entry-message" id="uploadMessage${index}"></div>
     `;
-    
+
     // 삭제 버튼 이벤트
     entry.querySelector('.upload-entry-delete-btn').addEventListener('click', () => {
         removeUploadEntry(entry);
     });
-    
+
     // 공개/비공개 토글 이벤트
     entry.querySelectorAll('.upload-entry-type-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -491,18 +491,18 @@ function createUploadEntry(index) {
             entry.dataset.type = btn.dataset.type;
         });
     });
-    
+
     return entry;
 }
 
 // 입력 영역 추가
 function addUploadEntry() {
     if (currentEntryCount >= MAX_UPLOAD_ENTRIES) return;
-    
+
     const entry = createUploadEntry(currentEntryCount);
     uploadEntries.appendChild(entry);
     currentEntryCount++;
-    
+
     updateAddButton();
     updateDeleteButtons();
 }
@@ -510,10 +510,10 @@ function addUploadEntry() {
 // 입력 영역 삭제
 function removeUploadEntry(entry) {
     if (currentEntryCount <= 1) return;
-    
+
     entry.remove();
     currentEntryCount--;
-    
+
     // 번호 재정렬
     renumberEntries();
     updateAddButton();
@@ -527,11 +527,11 @@ function renumberEntries() {
         entry.id = `uploadEntry${index}`;
         entry.dataset.index = index;
         entry.querySelector('.upload-entry-number').textContent = index + 1;
-        
+
         const sentenceInput = entry.querySelector('input[id^="uploadSentence"]');
         const authorInput = entry.querySelector('input[id^="uploadAuthor"]');
         const messageEl = entry.querySelector('div[id^="uploadMessage"]');
-        
+
         sentenceInput.id = `uploadSentence${index}`;
         authorInput.id = `uploadAuthor${index}`;
         messageEl.id = `uploadMessage${index}`;
@@ -560,7 +560,7 @@ function updateAddButton() {
 // 팝업 열기
 function openUploadPopup() {
     uploadPopupOverlay.classList.remove('display-none');
-    
+
     const isDark = document.getElementById('body').classList.contains('dark');
     if (isDark) {
         uploadPopup.classList.add('dark');
@@ -572,7 +572,7 @@ function openUploadPopup() {
         document.getElementById('uploadCancelBtn').classList.add('dark');
         document.getElementById('uploadSubmitBtn').classList.add('dark');
     }
-    
+
     // 초기화: 입력 영역 비우고 1개만 생성
     uploadEntries.innerHTML = '';
     currentEntryCount = 0;
@@ -602,10 +602,10 @@ let isResultPopup = false;
 function showUploadConfirm(entries) {
     pendingUploadEntries = entries;
     isResultPopup = false;
-    
+
     const publicCount = entries.filter(e => e.type === 'public').length;
     const privateCount = entries.filter(e => e.type === 'private').length;
-    
+
     let message = '';
     if (publicCount > 0 && privateCount > 0) {
         message = `공개 ${publicCount}개, 비공개 ${privateCount}개의 문장을 업로드합니다.`;
@@ -615,7 +615,7 @@ function showUploadConfirm(entries) {
         message = `${privateCount}개의 문장을 비공개로 업로드합니다.`;
     }
     uploadConfirmMessage.textContent = message;
-    
+
     const isDark = document.getElementById('body').classList.contains('dark');
     if (isDark) {
         uploadConfirmPopup.classList.add('dark');
@@ -628,7 +628,7 @@ function showUploadConfirm(entries) {
         document.getElementById('uploadConfirmCancelBtn').classList.remove('dark');
         document.getElementById('uploadConfirmOkBtn').classList.remove('dark');
     }
-    
+
     uploadConfirmOverlay.classList.remove('display-none');
 }
 
@@ -652,7 +652,7 @@ document.getElementById('uploadConfirmOkBtn').addEventListener('click', () => {
 function showResultPopup(message) {
     isResultPopup = true;
     uploadConfirmMessage.textContent = message;
-    
+
     const isDark = document.getElementById('body').classList.contains('dark');
     if (isDark) {
         uploadConfirmPopup.classList.add('dark');
@@ -665,10 +665,10 @@ function showResultPopup(message) {
         document.getElementById('uploadConfirmCancelBtn').classList.remove('dark');
         document.getElementById('uploadConfirmOkBtn').classList.remove('dark');
     }
-    
+
     // 취소 버튼 숨김
     document.getElementById('uploadConfirmCancelBtn').classList.add('display-none');
-    
+
     uploadConfirmOverlay.classList.remove('display-none');
 }
 
@@ -681,37 +681,37 @@ function hideResultPopup() {
 // 업로드 버튼 클릭 - 확인 팝업 표시
 document.getElementById('uploadSubmitBtn').addEventListener('click', () => {
     const entries = [];
-    
+
     // 입력된 문장들 수집
     for (let i = 0; i < currentEntryCount; i++) {
         const entryEl = document.getElementById(`uploadEntry${i}`);
         const sentenceEl = document.getElementById(`uploadSentence${i}`);
         const authorEl = document.getElementById(`uploadAuthor${i}`);
-        
+
         if (!entryEl || !sentenceEl || !authorEl) continue;
-        
+
         const sentence = sentenceEl.value.trim();
         const author = authorEl.value.trim();
         const type = entryEl.dataset.type || 'public';
         const messageEl = document.getElementById(`uploadMessage${i}`);
-        
+
         // 메시지 초기화
         if (messageEl) {
             messageEl.textContent = '';
             messageEl.className = 'upload-entry-message';
         }
         entryEl.classList.remove('error', 'success');
-        
+
         if (sentence) {
-            entries.push({ index: i, sentence, author, type });
+            entries.push({index: i, sentence, author, type});
         }
     }
-    
+
     if (entries.length === 0) {
         alert('최소 1개의 문장을 입력해주세요.');
         return;
     }
-    
+
     showUploadConfirm(entries);
 });
 
@@ -720,19 +720,19 @@ async function executeUpload(entries) {
     const submitBtn = document.getElementById('uploadSubmitBtn');
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>업로드 중...</span>';
-    
+
     // 각 문장 업로드 시뮬레이션
     let successCount = 0;
     const successIndices = [];
-    
+
     for (let i = 0; i < entries.length; i++) {
         const entry = entries[i];
-        const { index, sentence, author, type } = entry;
+        const {index, sentence, author, type} = entry;
         const messageEl = document.getElementById(`uploadMessage${index}`);
         const entryEl = document.getElementById(`uploadEntry${index}`);
         const sentenceInput = document.getElementById(`uploadSentence${index}`);
         const authorInput = document.getElementById(`uploadAuthor${index}`);
-        
+
         // 유효성 검증
         if (sentence.length < 5 || sentence.length > 100) {
             messageEl.textContent = '문장은 5-100자여야 합니다.';
@@ -740,7 +740,7 @@ async function executeUpload(entries) {
             entryEl.classList.add('error');
             continue;
         }
-        
+
         // API 호출 시뮬레이션
         try {
             // 실제로는 fetch 호출
@@ -749,11 +749,11 @@ async function executeUpload(entries) {
             //     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
             //     body: JSON.stringify({ sentence, author: author || undefined })
             // });
-            
+
             // 시뮬레이션: 2, 4번째 문장은 실패 (i는 0부터 시작하므로 i=1, i=3이 실패)
             await new Promise(resolve => setTimeout(resolve, 500));
             const isSuccess = i % 2 === 0; // 1, 3, 5번째 성공 / 2, 4번째 실패
-            
+
             if (isSuccess) {
                 successCount++;
                 successIndices.push(index);
@@ -767,10 +767,10 @@ async function executeUpload(entries) {
             entryEl.classList.add('error');
         }
     }
-    
+
     submitBtn.disabled = false;
     submitBtn.innerHTML = '<i class="fa-solid fa-upload"></i><span>업로드</span>';
-    
+
     // 성공한 entry 제거 및 결과 팝업
     if (successCount > 0) {
         // 성공한 entry 제거
@@ -779,7 +779,7 @@ async function executeUpload(entries) {
             if (entryEl) entryEl.remove();
         });
         currentEntryCount -= successCount;
-        
+
         // entry가 0개면 1개 추가
         if (currentEntryCount === 0) {
             addUploadEntry();
@@ -788,7 +788,7 @@ async function executeUpload(entries) {
             updateAddButton();
             updateDeleteButtons();
         }
-        
+
         // 결과 팝업 표시
         showResultPopup(`${successCount}개의 문장 업로드에 성공했습니다.`);
     }
@@ -825,11 +825,11 @@ function generateMockQuotes(page, type, status) {
     const mockData = [];
     const types = ['PUBLIC', 'PRIVATE'];
     const statuses = ['PENDING', 'ACTIVE'];
-    
+
     for (let i = 0; i < 10; i++) {
         const quoteType = types[Math.floor(Math.random() * types.length)];
         let quoteStatus;
-        
+
         // PUBLIC은 PENDING, ACTIVE 가능
         // PRIVATE은 ACTIVE만 가능
         if (quoteType === 'PRIVATE') {
@@ -837,11 +837,11 @@ function generateMockQuotes(page, type, status) {
         } else {
             quoteStatus = statuses[Math.floor(Math.random() * statuses.length)];
         }
-        
+
         // 필터 적용
         if (type !== 'all' && quoteType !== type) continue;
         if (status !== 'all' && quoteStatus !== status) continue;
-        
+
         mockData.push({
             quoteId: (page - 1) * 10 + i + 1,
             sentence: `이것은 ${(page - 1) * 10 + i + 1}번째 테스트 문장입니다. 타이핑 연습을 위한 샘플 텍스트입니다.`,
@@ -851,7 +851,7 @@ function generateMockQuotes(page, type, status) {
             createdAt: new Date().toISOString(),
         });
     }
-    
+
     return {
         page: page,
         size: 10,
@@ -862,27 +862,27 @@ function generateMockQuotes(page, type, status) {
 
 function openMyQuotesPopup() {
     const overlay = document.getElementById('myQuotesPopupOverlay');
-    
+
     // 상태 초기화
     myQuotesCurrentPage = 1;
     myQuotesHasNext = true;
     myQuotesTypeFilter = 'all';
     myQuotesStatusFilter = 'all';
-    
+
     // 필터 버튼 초기화
     document.querySelectorAll('.my-quotes-filter-btn').forEach(btn => {
         btn.classList.remove('active');
         if (btn.dataset.type === 'all') btn.classList.add('active');
         if (btn.dataset.status === 'all') btn.classList.add('active');
     });
-    
+
     // 목록 초기화
     document.getElementById('myQuotesList').innerHTML = '';
     document.getElementById('myQuotesLoading').classList.add('display-none');
     document.getElementById('myQuotesEmpty').classList.add('display-none');
-    
+
     overlay.classList.remove('display-none');
-    
+
     // 초기 데이터 로드
     loadMyQuotes();
 }
@@ -914,7 +914,7 @@ document.querySelectorAll('.my-quotes-filter-btn').forEach(btn => {
             btn.classList.add('active');
             myQuotesStatusFilter = btn.dataset.status;
         }
-        
+
         // 목록 초기화 후 다시 로드
         myQuotesCurrentPage = 1;
         myQuotesHasNext = true;
@@ -926,31 +926,31 @@ document.querySelectorAll('.my-quotes-filter-btn').forEach(btn => {
 
 async function loadMyQuotes() {
     if (myQuotesIsLoading || !myQuotesHasNext) return;
-    
+
     myQuotesIsLoading = true;
     const loadingEl = document.getElementById('myQuotesLoading');
-    
+
     loadingEl.classList.remove('display-none');
-    
+
     // API 호출 시뮬레이션
     await new Promise(resolve => setTimeout(resolve, 500));
-    
+
     const response = generateMockQuotes(myQuotesCurrentPage, myQuotesTypeFilter, myQuotesStatusFilter);
-    
+
     loadingEl.classList.add('display-none');
     myQuotesIsLoading = false;
-    
+
     if (response.content.length === 0 && myQuotesCurrentPage === 1) {
         document.getElementById('myQuotesEmpty').classList.remove('display-none');
         return;
     }
-    
+
     // 카드 추가
     const listEl = document.getElementById('myQuotesList');
     response.content.forEach(quote => {
         listEl.appendChild(createQuoteCard(quote));
     });
-    
+
     myQuotesHasNext = response.hasNext;
     myQuotesCurrentPage++;
 }
@@ -959,11 +959,11 @@ function createQuoteCard(quote) {
     const card = document.createElement('div');
     card.className = 'my-quote-card';
     card.dataset.quoteId = quote.quoteId;
-    
+
     // 타입 뱃지
     const typeBadgeClass = quote.type === 'PUBLIC' ? 'type-public' : 'type-private';
     const typeText = quote.type === 'PUBLIC' ? '공개' : '비공개';
-    
+
     // 상태 뱃지
     let statusBadgeClass, statusText;
     switch (quote.status) {
@@ -976,7 +976,7 @@ function createQuoteCard(quote) {
             statusText = '활성';
             break;
     }
-    
+
     // 액션 버튼 결정
     let actionsHtml = '';
     if (quote.type === 'PRIVATE' && quote.status === 'ACTIVE') {
@@ -993,7 +993,7 @@ function createQuoteCard(quote) {
         `;
     }
     // PUBLIC + ACTIVE: 액션 없음
-    
+
     card.innerHTML = `
         <div class="my-quote-card-header">
             <span class="my-quote-badge ${typeBadgeClass}">${typeText}</span>
@@ -1005,7 +1005,7 @@ function createQuoteCard(quote) {
             ${actionsHtml}
         </div>
     `;
-    
+
     return card;
 }
 
@@ -1024,18 +1024,18 @@ function openEditPopup(quoteId) {
     const sentence = card.querySelector('.my-quote-sentence').textContent;
     const authorEl = card.querySelector('.my-quote-author');
     const author = authorEl ? authorEl.textContent.replace('- ', '') : '';
-    
+
     const overlay = document.getElementById('quoteEditPopupOverlay');
     const sentenceInput = document.getElementById('quoteEditSentence');
     const authorInput = document.getElementById('quoteEditAuthor');
-    
+
     sentenceInput.value = sentence;
     authorInput.value = author;
     updateEditCharCount();
     updateEditSaveButton(sentence, author);
-    
+
     overlay.classList.remove('display-none');
-    
+
     // 팝업이 보인 후 높이 조절
     requestAnimationFrame(() => {
         adjustEditTextareaHeight();
@@ -1067,7 +1067,7 @@ function updateEditCharCount() {
     const count = quoteEditSentence.value.length;
     const countEl = document.getElementById('quoteEditCharCount');
     countEl.textContent = `${count}/100`;
-    
+
     if (count > 0 && count < 5) {
         countEl.classList.add('warning');
     } else {
@@ -1083,7 +1083,7 @@ function adjustEditTextareaHeight() {
 function updateEditSaveButton() {
     const sentence = quoteEditSentence.value.trim();
     const saveBtn = document.getElementById('quoteEditSaveBtn');
-    
+
     if (sentence.length >= 5 && sentence.length <= 100) {
         saveBtn.disabled = false;
     } else {
@@ -1094,10 +1094,10 @@ function updateEditSaveButton() {
 document.getElementById('quoteEditSaveBtn').addEventListener('click', async () => {
     const sentence = quoteEditSentence.value.trim();
     const author = quoteEditAuthor.value.trim();
-    
+
     // API 호출 시뮬레이션
-    console.log('수정 요청:', { quoteId: editingQuoteId, sentence, author });
-    
+    console.log('수정 요청:', {quoteId: editingQuoteId, sentence, author});
+
     // 카드 업데이트
     const card = document.querySelector(`.my-quote-card[data-quote-id="${editingQuoteId}"]`);
     card.querySelector('.my-quote-sentence').textContent = sentence;
@@ -1114,7 +1114,7 @@ document.getElementById('quoteEditSaveBtn').addEventListener('click', async () =
     } else if (authorEl) {
         authorEl.remove();
     }
-    
+
     closeEditPopup();
 });
 
@@ -1138,13 +1138,13 @@ document.getElementById('deleteConfirmOverlay').addEventListener('click', (e) =>
 document.getElementById('deleteConfirmOkBtn').addEventListener('click', async () => {
     // API 호출 시뮬레이션
     console.log('삭제 요청:', deletingQuoteId);
-    
+
     // 카드 제거
     const card = document.querySelector(`.my-quote-card[data-quote-id="${deletingQuoteId}"]`);
     card.remove();
-    
+
     closeDeleteConfirm();
-    
+
     // 목록이 비었는지 확인
     if (document.getElementById('myQuotesList').children.length === 0) {
         document.getElementById('myQuotesEmpty').classList.remove('display-none');
@@ -1154,17 +1154,17 @@ document.getElementById('deleteConfirmOkBtn').addEventListener('click', async ()
 // 공개 전환
 async function publishQuote(quoteId) {
     console.log('공개 전환 요청:', quoteId);
-    
+
     // 카드 업데이트 (PRIVATE -> PUBLIC, ACTIVE -> PENDING)
     const card = document.querySelector(`.my-quote-card[data-quote-id="${quoteId}"]`);
-    
+
     // 뱃지 업데이트
     const header = card.querySelector('.my-quote-card-header');
     header.innerHTML = `
         <span class="my-quote-badge type-public">공개</span>
         <span class="my-quote-badge status-pending">대기중</span>
     `;
-    
+
     // 액션 버튼 업데이트
     const footer = card.querySelector('.my-quote-card-footer');
     footer.innerHTML = `
@@ -1175,17 +1175,17 @@ async function publishQuote(quoteId) {
 // 공개 취소
 async function cancelPublish(quoteId) {
     console.log('공개 취소 요청:', quoteId);
-    
+
     // 카드 업데이트 (PUBLIC -> PRIVATE, PENDING -> ACTIVE)
     const card = document.querySelector(`.my-quote-card[data-quote-id="${quoteId}"]`);
-    
+
     // 뱃지 업데이트
     const header = card.querySelector('.my-quote-card-header');
     header.innerHTML = `
         <span class="my-quote-badge type-private">비공개</span>
         <span class="my-quote-badge status-active">활성</span>
     `;
-    
+
     // 액션 버튼 업데이트
     const footer = card.querySelector('.my-quote-card-footer');
     footer.innerHTML = `
@@ -1193,4 +1193,114 @@ async function cancelPublish(quoteId) {
         <button class="my-quote-action-btn danger" onclick="openDeleteConfirm(${quoteId})">삭제</button>
         <button class="my-quote-action-btn primary" onclick="publishQuote(${quoteId})">공개전환</button>
     `;
+}
+
+// ===========================================
+// 문장 소스 선택
+// ===========================================
+let quoteSource = 'all'; // 'all' | 'my'
+
+const quoteSourceAllBtn = document.getElementById('quoteSourceAll');
+const quoteSourceMyBtn = document.getElementById('quoteSourceMy');
+
+// 로그인 상태 확인
+function isLoggedIn() {
+    return !document.getElementById('loginBtn').classList.contains('display-none');
+}
+
+// 문장 소스 변경
+function setQuoteSource(source) {
+    quoteSource = source;
+
+    // 버튼 상태 업데이트
+    quoteSourceAllBtn.classList.toggle('active', source === 'all');
+    quoteSourceMyBtn.classList.toggle('active', source === 'my');
+
+    // 문장 다시 로드
+    console.log('문장 소스 변경:', source);
+}
+
+// 전체 문장 버튼
+quoteSourceAllBtn.addEventListener('click', () => {
+    setQuoteSource('all');
+});
+
+// 내 문장만 버튼
+quoteSourceMyBtn.addEventListener('click', () => {
+    // 비로그인 상태 체크
+    if (document.getElementById('loginBtn').classList.contains('display-none') === false) {
+        // 로그인 안내 팝업
+        showLoginRequiredPopup();
+        return;
+    }
+    setQuoteSource('my');
+});
+
+// 로그인 필요 안내 팝업
+function showLoginRequiredPopup() {
+    const message = '내 문장을 사용하려면 로그인이 필요합니다.';
+
+    // 기존 확인 팝업 재활용
+    const overlay = document.getElementById('uploadConfirmOverlay');
+    const popup = document.getElementById('uploadConfirmPopup');
+    const messageEl = document.getElementById('uploadConfirmMessage');
+    const cancelBtn = document.getElementById('uploadConfirmCancelBtn');
+    const okBtn = document.getElementById('uploadConfirmOkBtn');
+
+    messageEl.textContent = message;
+    cancelBtn.textContent = '취소';
+    okBtn.textContent = '로그인';
+
+    // 다크모드 적용
+    const isDark = document.getElementById('body').classList.contains('dark');
+    if (isDark) {
+        popup.classList.add('dark');
+        messageEl.classList.add('dark');
+        cancelBtn.classList.add('dark');
+        okBtn.classList.add('dark');
+    }
+
+    // 취소 버튼 보이게
+    cancelBtn.classList.remove('display-none');
+
+    // 일회성 이벤트 핸들러
+    const handleOk = () => {
+        overlay.classList.add('display-none');
+        // 로그인 버튼 클릭
+        document.getElementById('loginBtn').click();
+        okBtn.removeEventListener('click', handleOk);
+        cancelBtn.removeEventListener('click', handleCancel);
+        // 버튼 텍스트 복원
+        cancelBtn.textContent = '취소';
+        okBtn.textContent = '확인';
+    };
+
+    const handleCancel = () => {
+        overlay.classList.add('display-none');
+        okBtn.removeEventListener('click', handleOk);
+        cancelBtn.removeEventListener('click', handleCancel);
+        // 버튼 텍스트 복원
+        cancelBtn.textContent = '취소';
+        okBtn.textContent = '확인';
+    };
+
+    okBtn.addEventListener('click', handleOk);
+    cancelBtn.addEventListener('click', handleCancel);
+
+    overlay.classList.remove('display-none');
+}
+
+// 다크모드 토글 시 버튼 스타일 업데이트
+const originalToggleTheme = toggleTheme;
+toggleTheme = function () {
+    originalToggleTheme();
+    const isDark = document.getElementById('body').classList.contains('dark');
+    quoteSourceAllBtn.classList.toggle('dark', isDark);
+    quoteSourceMyBtn.classList.toggle('dark', isDark);
+};
+
+// 초기 다크모드 상태 반영
+if (document.getElementById('body').classList.contains('dark')) {
+    quoteSourceAllBtn.classList.add('dark');
+    quoteSourceMyBtn.classList.add('dark');
 }

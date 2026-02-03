@@ -14,8 +14,14 @@
 .quote-container-upper {
 }
 
+.quote-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
 .author-container {
-    margin-bottom: 0.5rem;
     display: flex;
     flex-direction: row-reverse;
 }

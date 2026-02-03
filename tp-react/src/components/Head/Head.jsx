@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import {useNavigate} from "react-router-dom";
 import Title from "./title/Title";
 import DarkModeButton from "./themeButton/DarkModeButton";
@@ -25,8 +25,9 @@ const Head = () => {
     const navigate = useNavigate();
     const {isDark} = useTheme();
     const {showError} = useError();
-    const {user, accessToken, refreshToken, isLoading, setIsLoading, login} = useAuth();
+    const {user, accessToken, refreshToken, isLoading, setIsLoading, login, loginTrigger} = useAuth();
     const [showNicknamePopup, setShowNicknamePopup] = useState(false);
+    const prevLoginTriggerRef = useRef(loginTrigger);
 
     // user가 변경될 때마다 닉네임이 UUID 형식인지 체크
     useEffect(() => {
@@ -72,6 +73,14 @@ const Head = () => {
             showError('구글 로그인에 실패했습니다.');
         },
     });
+
+    // 다른 컴포넌트에서 로그인 트리거 시 googleLogin 호출
+    useEffect(() => {
+        if (loginTrigger > 0 && loginTrigger !== prevLoginTriggerRef.current) {
+            prevLoginTriggerRef.current = loginTrigger;
+            googleLogin();
+        }
+    }, [loginTrigger, googleLogin]);
 
     const handleLogin = () => {
         googleLogin();

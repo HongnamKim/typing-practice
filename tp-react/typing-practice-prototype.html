@@ -121,8 +121,21 @@
 
 <!-- 타이핑 영역 -->
 <div class="quote-container default-mode" id="quoteContainer">
-    <div class="author-container">
-        <span class="author-text">웰러비</span>
+    <div class="quote-top-row">
+        <!-- 문장 소스 선택 -->
+        <div class="quote-source-selector">
+            <button class="quote-source-btn active" id="quoteSourceAll">
+                <i class="fa-solid fa-globe"></i>
+                <span>전체 문장</span>
+            </button>
+            <button class="quote-source-btn" id="quoteSourceMy">
+                <i class="fa-solid fa-user"></i>
+                <span>내 문장만</span>
+            </button>
+        </div>
+        <div class="author-container">
+            <span class="author-text">웰러비</span>
+        </div>
     </div>
     <div class="sentence-input-wrapper">
         <div class="character-container" id="characterContainer">
