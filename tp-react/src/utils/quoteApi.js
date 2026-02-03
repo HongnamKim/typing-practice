@@ -1,6 +1,26 @@
 import apiClient from './apiClient';
 
 /**
+ * 공개 문장 랜덤 조회
+ * @param {Object} params - 쿼리 파라미터
+ * @param {number} [params.page=1] - 페이지 번호
+ * @param {number} [params.count=100] - 조회 개수 (100-300)
+ * @param {number} params.seed - 랜덤 시드 (-1.0 ~ 1.0)
+ * @param {boolean} [params.onlyMyQuotes=false] - 내 문장만 조회
+ * @returns {Promise} API 응답
+ */
+export const getQuotes = async (params = {}) => {
+    const queryParams = new URLSearchParams();
+    if (params.page) queryParams.append('page', params.page);
+    if (params.count) queryParams.append('count', params.count);
+    if (params.seed !== undefined) queryParams.append('seed', params.seed);
+    if (params.onlyMyQuotes) queryParams.append('onlyMyQuotes', params.onlyMyQuotes);
+
+    const queryString = queryParams.toString();
+    return apiClient.get(`/quotes${queryString ? `?${queryString}` : ''}`);
+};
+
+/**
  * 공개 문장 업로드
  * @param {string} sentence - 문장 (5-100자)
  * @param {string} [author] - 저자 (1-20자, 선택)

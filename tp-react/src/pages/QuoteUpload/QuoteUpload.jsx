@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {FaCircleInfo, FaGlobe, FaLock, FaPlus, FaUpload, FaXmark} from 'react-icons/fa6';
 import {uploadQuote} from '../../utils/quoteApi';
@@ -18,6 +18,13 @@ function QuoteUpload() {
     const [showConfirm, setShowConfirm] = useState(false);
     const [confirmMessage, setConfirmMessage] = useState('');
     const [isResultPopup, setIsResultPopup] = useState(false);
+
+    // 로그아웃 시 홈으로 이동
+    useEffect(() => {
+        if (!user) {
+            navigate('/');
+        }
+    }, [user, navigate]);
 
     function createEmptyEntry(id) {
         return {

@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useState, useEffect} from 'react';
+import React, {createContext, useContext, useState, useEffect, useCallback} from 'react';
 import {refreshAccessToken as refreshTokenApi} from '../utils/authApi';
 import {Storage_Refresh_Token} from '../const/config.const';
 import {setAccessToken as setApiAccessToken} from '../utils/apiClient';
@@ -12,6 +12,9 @@ export const AuthProvider = ({children}) => {
     const [refreshToken, setRefreshToken] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isInitialized, setIsInitialized] = useState(false);
+    
+    // 로그인 트리거 (다른 컴포넌트에서 로그인 요청 시 사용)
+    const [loginTrigger, setLoginTrigger] = useState(0);
 
     // 앱 시작 시 자동 로그인
     useEffect(() => {
@@ -94,6 +97,11 @@ export const AuthProvider = ({children}) => {
         setUser(userData);
     };
 
+    // 로그인 트리거 함수 (다른 컴포넌트에서 호출)
+    const triggerLogin = useCallback(() => {
+        setLoginTrigger(prev => prev + 1);
+    }, []);
+
     return (
         <AuthContext.Provider value={{
             user, 
@@ -104,7 +112,9 @@ export const AuthProvider = ({children}) => {
             setIsLoading, 
             login, 
             logout,
-            updateUser
+            updateUser,
+            loginTrigger,
+            triggerLogin,
         }}>
             {children}
         </AuthContext.Provider>

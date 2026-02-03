@@ -18,6 +18,13 @@ function MyQuotes() {
     const { user } = useAuth();
     const { showError } = useError();
 
+    // 로그아웃 시 홈으로 이동
+    useEffect(() => {
+        if (!user) {
+            navigate('/');
+        }
+    }, [user, navigate]);
+
     // 필터 상태
     const [typeFilter, setTypeFilter] = useState('all');
     const [statusFilter, setStatusFilter] = useState('all');
