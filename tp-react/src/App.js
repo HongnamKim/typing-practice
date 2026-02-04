@@ -11,6 +11,7 @@ import Contact from "./components/Contact/Contact";
 import Home from "./pages/Home/Home";
 import QuoteUpload from "./pages/QuoteUpload/QuoteUpload";
 import MyQuotes from "./pages/MyQuotes/MyQuotes";
+import MyReports from "./pages/MyReports/MyReports";
 import {Analytics} from "@vercel/analytics/react";
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/quote/upload" element={<QuoteUpload />} />
                   <Route path="/quote/my" element={<MyQuotes />} />
+                  <Route path="/quote/report" element={<MyReports />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
                 <Contact />

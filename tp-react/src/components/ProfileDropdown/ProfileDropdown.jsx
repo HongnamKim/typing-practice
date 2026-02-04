@@ -5,7 +5,7 @@ import {useAuth} from '../../Context/AuthContext';
 import {useError} from '../../Context/ErrorContext';
 import {logout as logoutApi} from '../../utils/authApi';
 import ProfilePopup from '../ProfilePopup/ProfilePopup';
-import {FaChartBar, FaChevronDown, FaCog, FaFileAlt, FaSignOutAlt, FaUser} from 'react-icons/fa';
+import {FaChartBar, FaChevronDown, FaCog, FaFileAlt, FaFlag, FaSignOutAlt, FaUser} from 'react-icons/fa';
 import './ProfileDropdown.css';
 
 // UUID 형식 체크 함수
@@ -47,6 +47,9 @@ const ProfileDropdown = () => {
         switch (action) {
             case 'my-sentences':
                 navigate('/quote/my');
+                break;
+            case 'my-reports':
+                navigate('/quote/report');
                 break;
             case 'stats':
                 showError('통계 기능 (준비 중)');
@@ -103,6 +106,13 @@ const ProfileDropdown = () => {
                         >
                             <FaCog/>
                             <span>프로필</span>
+                        </button>
+                        <button
+                            className={`dropdown-item ${isDark ? 'dark' : ''}`}
+                            onClick={() => handleMenuClick('my-reports')}
+                        >
+                            <FaFlag/>
+                            <span>신고 내역</span>
                         </button>
                         <div className={`dropdown-divider ${isDark ? 'dark' : ''}`}></div>
                         <button

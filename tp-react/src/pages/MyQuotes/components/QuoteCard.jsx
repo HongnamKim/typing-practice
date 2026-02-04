@@ -1,15 +1,27 @@
+import Badge from '../../../components/Badge/Badge';
 import './QuoteCard.css';
 
+// 타입 매핑
+const TYPE_MAP = {
+    PUBLIC: {variant: 'type-public', text: '공개'},
+    PRIVATE: {variant: 'type-private', text: '비공개'},
+};
+
+// 상태 매핑
+const STATUS_MAP = {
+    PENDING: {variant: 'status-pending', text: '대기중'},
+    ACTIVE: {variant: 'status-active', text: '활성'},
+};
+
 const QuoteCard = ({quote, onEdit, onDelete, onPublish, onCancelPublish}) => {
+    const type = TYPE_MAP[quote.type] || TYPE_MAP.PRIVATE;
+    const status = STATUS_MAP[quote.status] || STATUS_MAP.ACTIVE;
+
     return (
         <div className="my-quote-card">
             <div className="my-quote-card-header">
-                <span className={`my-quote-badge ${quote.type === 'PUBLIC' ? 'type-public' : 'type-private'}`}>
-                    {quote.type === 'PUBLIC' ? '공개' : '비공개'}
-                </span>
-                <span className={`my-quote-badge ${quote.status === 'PENDING' ? 'status-pending' : 'status-active'}`}>
-                    {quote.status === 'PENDING' ? '대기중' : '활성'}
-                </span>
+                <Badge variant={type.variant}>{type.text}</Badge>
+                <Badge variant={status.variant}>{status.text}</Badge>
             </div>
             <div className="my-quote-sentence">{quote.sentence}</div>
             {quote.author && <div className="my-quote-author">- {quote.author}</div>}
