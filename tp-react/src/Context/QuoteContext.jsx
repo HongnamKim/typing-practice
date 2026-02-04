@@ -3,6 +3,7 @@ import {useScore} from "./ScoreContext";
 import {useAuth} from "./AuthContext";
 import {useError} from "./ErrorContext";
 import {getQuotes} from "../utils/quoteApi";
+import {defaultQuotes} from "../const/default-quotes.const";
 
 export const QuoteContext = createContext(null);
 
@@ -23,6 +24,16 @@ const QUOTE_SOURCE = {
 
 // 시드 생성 함수 (소수점 둘째자리까지, -1.0 ~ 1.0)
 const generateSeed = () => Math.round((Math.random() * 2 - 1) * 100) / 100;
+
+// 배열 셔플 함수
+const shuffleArray = (array) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+};
 
 export const QuoteContextProvider = ({children}) => {
     const {setInputCheck} = useScore();
@@ -47,6 +58,7 @@ export const QuoteContextProvider = ({children}) => {
     // UI 상태
     const [isLoading, setIsLoading] = useState(false);
     const [isEmpty, setIsEmpty] = useState(false);
+    const [isOffline, setIsOffline] = useState(false);
 
     // 상태 초기화
     const resetState = useCallback(() => {
@@ -66,6 +78,20 @@ export const QuoteContextProvider = ({children}) => {
         setAuthor(quote.author || '');
         setInputCheck(new Array(quote.sentence.length).fill("none"));
     }, [setInputCheck]);
+
+    // Fallback: 로컬 문장 로드
+    const loadFallbackQuotes = useCallback(() => {
+        const shuffled = shuffleArray(defaultQuotes);
+        setQuotes(shuffled);
+        setQuotesIndex(0);
+        hasNextRef.current = false;
+        setIsOffline(true);
+        setIsEmpty(false);
+        
+        if (shuffled.length > 0) {
+            setCurrentQuote(shuffled[0]);
+        }
+    }, [setCurrentQuote]);
 
     // 문장 로드
     const loadQuotes = useCallback(async (page = 1, reset = false, source = quoteSource) => {
@@ -94,6 +120,7 @@ export const QuoteContextProvider = ({children}) => {
             hasNextRef.current = data.hasNext ?? false;
             currentPageRef.current = page;
             setIsEmpty(reset && content.length === 0);
+            setIsOffline(false);
 
             // 첫 로드 시 첫 번째 문장 설정
             if (reset && content.length > 0) {
@@ -101,15 +128,22 @@ export const QuoteContextProvider = ({children}) => {
             }
         } catch (error) {
             console.error('문장 로드 실패:', error);
-            showError('문장을 불러오는데 실패했습니다.');
-            if (reset) {
-                setIsEmpty(true);
+            
+            // Fallback: 로컬 문장 사용
+            if (reset && source === QUOTE_SOURCE.ALL) {
+                console.log('서버 연결 실패 - 로컬 문장 사용');
+                loadFallbackQuotes();
+            } else {
+                showError('문장을 불러오는데 실패했습니다.');
+                if (reset) {
+                    setIsEmpty(true);
+                }
             }
         } finally {
             isLoadingRef.current = false;
             setIsLoading(false);
         }
-    }, [quoteSource, setCurrentQuote, showError]);
+    }, [quoteSource, setCurrentQuote, showError, loadFallbackQuotes]);
 
     // 로그아웃 시 전체 문장으로 초기화
     useEffect(() => {
@@ -140,10 +174,19 @@ export const QuoteContextProvider = ({children}) => {
                 // 다음 페이지 로드
                 loadQuotes(currentPageRef.current + 1, false, quoteSource);
             } else {
-                // 마지막 페이지 끝: 시드 재생성 후 첫 페이지로
-                seedRef.current = generateSeed();
-                resetState();
-                loadQuotes(1, true, quoteSource);
+                // 마지막 문장 끝: 셔플 후 처음으로
+                if (isOffline) {
+                    // 오프라인 모드: 셔플 후 처음으로
+                    const shuffled = shuffleArray(quotes);
+                    setQuotes(shuffled);
+                    setQuotesIndex(0);
+                    setCurrentQuote(shuffled[0]);
+                } else {
+                    // 온라인 모드: 시드 재생성 후 첫 페이지로
+                    seedRef.current = generateSeed();
+                    resetState();
+                    loadQuotes(1, true, quoteSource);
+                }
             }
             return;
         }
@@ -175,6 +218,7 @@ export const QuoteContextProvider = ({children}) => {
                 changeQuoteSource,
                 isLoading,
                 isEmpty,
+                isOffline,
             }}
         >
             {children}
