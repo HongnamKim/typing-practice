@@ -16,7 +16,7 @@ import {Analytics} from "@vercel/analytics/react";
 
 function App() {
   return (
-    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <BrowserRouter>
         <ThemeContextProvider>
           <ErrorProvider>

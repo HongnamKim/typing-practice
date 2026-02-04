@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {Storage_Refresh_Token} from '../const/config.const';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
 
 // axios 인스턴스 생성
 const apiClient = axios.create({
@@ -19,6 +19,13 @@ export const setAccessToken = (token) => {
 // accessToken 가져오기 함수
 export const getAccessToken = () => {
     return currentAccessToken;
+};
+
+// 로그아웃 처리 함수
+const handleLogout = () => {
+    localStorage.removeItem(Storage_Refresh_Token);
+    currentAccessToken = null;
+    window.dispatchEvent(new Event('auth:logout'));
 };
 
 // 요청 인터셉터: 모든 요청에 accessToken 자동 추가
@@ -46,14 +53,14 @@ apiClient.interceptors.response.use(
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
+            const refreshToken = localStorage.getItem(Storage_Refresh_Token);
+
+            if (!refreshToken) {
+                handleLogout();
+                return Promise.reject(error);
+            }
+
             try {
-                const refreshToken = localStorage.getItem(Storage_Refresh_Token);
-
-                if (!refreshToken) {
-                    // refreshToken이 없으면 로그아웃 처리
-                    throw new Error('No refresh token');
-                }
-
                 // refreshToken으로 새 accessToken 발급
                 const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
                     refreshToken,
@@ -73,14 +80,7 @@ apiClient.interceptors.response.use(
             } catch (refreshError) {
                 // refreshToken도 만료되었거나 재발급 실패
                 console.error('Token refresh failed:', refreshError);
-
-                // localStorage 정리
-                localStorage.removeItem(Storage_Refresh_Token);
-                currentAccessToken = null;
-
-                // 로그아웃 이벤트 발생 (AuthContext에서 감지)
-                window.dispatchEvent(new Event('auth:logout'));
-
+                handleLogout();
                 return Promise.reject(refreshError);
             }
         }
