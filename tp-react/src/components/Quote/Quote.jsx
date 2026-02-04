@@ -5,6 +5,7 @@ import Author from "./Author/Author";
 import Input from "./Input/Input";
 import InputDisplay from "./InputDisplay/InputDisplay";
 import QuoteSourceSelector from "./QuoteSourceSelector/QuoteSourceSelector";
+import QuoteMoreMenu from "./QuoteMoreMenu/QuoteMoreMenu";
 import QuoteLoading from "./QuoteLoading/QuoteLoading";
 import QuoteEmpty from "./QuoteEmpty/QuoteEmpty";
 import { useTheme } from "../../Context/ThemeContext";
@@ -41,6 +42,7 @@ const Quote = () => {
           <QuoteSourceSelector />
           <div className={`author-container ${isDark ? "author-dark" : ""}`}>
             <Author author={author} />
+            <QuoteMoreMenu />
           </div>
         </div>
 

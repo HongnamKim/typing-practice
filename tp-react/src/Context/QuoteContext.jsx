@@ -151,6 +151,9 @@ export const QuoteContextProvider = ({children}) => {
         setCurrentQuote(quotes[quotesIndex]);
     }, [quotesIndex, quotes]); // eslint-disable-line react-hooks/exhaustive-deps
 
+    // 현재 문장 객체
+    const currentQuote = quotes[quotesIndex] || null;
+
     // 문장 소스 변경 핸들러
     const changeQuoteSource = useCallback((source) => {
         if (source === QUOTE_SOURCE.MY && !user) {
@@ -165,6 +168,7 @@ export const QuoteContextProvider = ({children}) => {
             value={{
                 sentence,
                 author,
+                currentQuote,
                 quotesIndex,
                 setQuotesIndex,
                 quoteSource,

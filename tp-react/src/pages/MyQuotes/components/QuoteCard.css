@@ -11,33 +11,6 @@
     margin-bottom: 0.75rem;
 }
 
-.my-quote-badge {
-    padding: 0.125rem 0.5rem;
-    border-radius: 0.25rem;
-    font-size: 0.7rem;
-    font-weight: 500;
-}
-
-.my-quote-badge.type-public {
-    background-color: var(--color-badge-public-bg);
-    color: var(--color-badge-public-text);
-}
-
-.my-quote-badge.type-private {
-    background-color: var(--color-badge-private-bg);
-    color: var(--color-badge-private-text);
-}
-
-.my-quote-badge.status-pending {
-    background-color: var(--color-badge-pending-bg);
-    color: var(--color-badge-pending-text);
-}
-
-.my-quote-badge.status-active {
-    background-color: var(--color-badge-active-bg);
-    color: var(--color-badge-active-text);
-}
-
 .my-quote-sentence {
     font-size: 1rem;
     color: var(--color-text);

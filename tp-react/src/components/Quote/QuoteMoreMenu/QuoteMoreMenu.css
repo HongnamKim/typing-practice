@@ -1,0 +1,57 @@
+.quote-more-container {
+    position: relative;
+    margin-left: 0.5rem;
+}
+
+.quote-more-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-placeholder);
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.quote-more-btn:hover {
+    color: var(--color-text-muted);
+}
+
+.quote-more-menu {
+    position: absolute;
+    top: calc(100% + 0.25rem);
+    right: 0;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    min-width: 100px;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.quote-more-menu.dark {
+    background-color: var(--color-popup-bg);
+}
+
+.quote-more-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    border: none;
+    background: none;
+    color: var(--color-text-placeholder);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quote-more-item:hover {
+    background-color: var(--color-badge-delete-bg);
+    color: var(--color-badge-delete-text);
+}

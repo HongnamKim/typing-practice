@@ -1,0 +1,46 @@
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1;
+}
+
+/* Type badges */
+.badge-type-public {
+    background-color: var(--color-badge-public-bg);
+    color: var(--color-badge-public-text);
+}
+
+.badge-type-private {
+    background-color: var(--color-badge-private-bg);
+    color: var(--color-badge-private-text);
+}
+
+/* Status badges */
+.badge-status-pending {
+    background-color: var(--color-badge-pending-bg);
+    color: var(--color-badge-pending-text);
+}
+
+.badge-status-active {
+    background-color: var(--color-badge-active-bg);
+    color: var(--color-badge-active-text);
+}
+
+.badge-status-processed {
+    background-color: var(--color-badge-processed-bg);
+    color: var(--color-badge-processed-text);
+}
+
+/* Reason badges */
+.badge-reason-modify {
+    background-color: var(--color-badge-modify-bg);
+    color: var(--color-badge-modify-text);
+}
+
+.badge-reason-delete {
+    background-color: var(--color-badge-delete-bg);
+    color: var(--color-badge-delete-text);
+}
