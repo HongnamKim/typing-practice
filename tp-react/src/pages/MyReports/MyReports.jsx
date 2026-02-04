@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import {FaFlag} from 'react-icons/fa6';
 import {useAuth} from '../../Context/AuthContext';
 import {useError} from '../../Context/ErrorContext';
-import {deleteReport, getMyReports} from '../../utils/reportApi';
+import {deleteReport, getMyReports} from '@/utils/reportApi.ts';
 import ReportCard from './components/ReportCard';
 import ReportFilters from './components/ReportFilters';
 import ConfirmPopup from '../../components/ConfirmPopup/ConfirmPopup';
@@ -14,15 +14,15 @@ const PAGE_SIZE = 10;
 
 function MyReports() {
     const navigate = useNavigate();
-    const {user} = useAuth();
+    const {user, isInitialized} = useAuth();
     const {showError} = useError();
 
-    // 로그아웃 시 홈으로 이동
+    // 초기화 완료 후 로그인 안 되어 있으면 홈으로 이동
     useEffect(() => {
-        if (!user) {
+        if (isInitialized && !user) {
             navigate('/');
         }
-    }, [user, navigate]);
+    }, [user, isInitialized, navigate]);
 
     // 필터 상태
     const [statusFilter, setStatusFilter] = useState('all');
@@ -132,6 +132,11 @@ function MyReports() {
             setDeletingReportId(null);
         }
     };
+
+    // 초기화 중이면 아무것도 렌더링하지 않음
+    if (!isInitialized) {
+        return null;
+    }
 
     // 로그인 필요
     if (!user) {

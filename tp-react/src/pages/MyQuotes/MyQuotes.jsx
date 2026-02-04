@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FaFileCircleQuestion } from 'react-icons/fa6';
-import { useAuth } from '../../Context/AuthContext';
-import { useError } from '../../Context/ErrorContext';
-import { getMyQuotes, updateQuote, deleteQuote, publishQuote, cancelPublishQuote } from '../../utils/quoteApi';
+import {useCallback, useEffect, useRef, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {FaFileCircleQuestion} from 'react-icons/fa6';
+import {useAuth} from '../../Context/AuthContext';
+import {useError} from '../../Context/ErrorContext';
+import {cancelPublishQuote, deleteQuote, getMyQuotes, publishQuote, updateQuote} from '@/utils/quoteApi.ts';
 import QuoteCard from './components/QuoteCard';
 import QuoteFilters from './components/QuoteFilters';
 import QuoteEditPopup from './components/QuoteEditPopup';
@@ -15,15 +15,15 @@ const PAGE_SIZE = 10;
 
 function MyQuotes() {
     const navigate = useNavigate();
-    const { user } = useAuth();
-    const { showError } = useError();
+    const {user, isInitialized} = useAuth();
+    const {showError} = useError();
 
-    // 로그아웃 시 홈으로 이동
+    // 초기화 완료 후 로그인 안 되어 있으면 홈으로 이동
     useEffect(() => {
-        if (!user) {
+        if (isInitialized && !user) {
             navigate('/');
         }
-    }, [user, navigate]);
+    }, [user, isInitialized, navigate]);
 
     // 필터 상태
     const [typeFilter, setTypeFilter] = useState('all');
@@ -54,7 +54,7 @@ function MyQuotes() {
         const currentPage = reset ? 1 : pageRef.current;
 
         try {
-            const params = { page: currentPage, size: PAGE_SIZE };
+            const params = {page: currentPage, size: PAGE_SIZE};
             if (typeFilter !== 'all') params.type = typeFilter;
             if (statusFilter !== 'all') params.status = statusFilter;
 
@@ -106,7 +106,7 @@ function MyQuotes() {
                     loadQuotes();
                 }
             },
-            { threshold: 0.1 }
+            {threshold: 0.1}
         );
 
         if (loadMoreRef.current) {
@@ -117,15 +117,15 @@ function MyQuotes() {
     }, [loadQuotes, quotes.length]);
 
     // 수정 저장
-    const handleSaveEdit = async ({ sentence, author }) => {
+    const handleSaveEdit = async ({sentence, author}) => {
         if (!editingQuote) return;
 
         try {
-            await updateQuote(editingQuote.quoteId, { sentence, author });
+            await updateQuote(editingQuote.quoteId, {sentence, author});
 
             setQuotes(prev => prev.map(q =>
                 q.quoteId === editingQuote.quoteId
-                    ? { ...q, sentence, author }
+                    ? {...q, sentence, author}
                     : q
             ));
             setEditingQuote(null);
@@ -164,7 +164,7 @@ function MyQuotes() {
 
             setQuotes(prev => prev.map(q =>
                 q.quoteId === quoteId
-                    ? { ...q, type: 'PUBLIC', status: 'PENDING' }
+                    ? {...q, type: 'PUBLIC', status: 'PENDING'}
                     : q
             ));
         } catch (error) {
@@ -181,7 +181,7 @@ function MyQuotes() {
 
             setQuotes(prev => prev.map(q =>
                 q.quoteId === quoteId
-                    ? { ...q, type: 'PRIVATE', status: 'ACTIVE' }
+                    ? {...q, type: 'PRIVATE', status: 'ACTIVE'}
                     : q
             ));
         } catch (error) {
@@ -190,6 +190,11 @@ function MyQuotes() {
             showError(message);
         }
     };
+
+    // 초기화 중이면 아무것도 렌더링하지 않음
+    if (!isInitialized) {
+        return null;
+    }
 
     // 로그인 필요
     if (!user) {
@@ -239,13 +244,13 @@ function MyQuotes() {
 
                 {isEmpty && (
                     <div className="my-quotes-empty">
-                        <FaFileCircleQuestion />
+                        <FaFileCircleQuestion/>
                         <p>등록한 문장이 없습니다.</p>
                     </div>
                 )}
 
                 {/* 무한 스크롤 트리거 */}
-                {hasNext && !isEmpty && <div ref={loadMoreRef} style={{ height: '1px' }} />}
+                {hasNext && !isEmpty && <div ref={loadMoreRef} style={{height: '1px'}}/>}
             </div>
 
             <div className="my-quotes-actions">
@@ -277,7 +282,7 @@ function MyQuotes() {
                 />
             )}
 
-            <ScrollButtons />
+            <ScrollButtons/>
         </div>
     );
 }

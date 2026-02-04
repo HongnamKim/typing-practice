@@ -1,10 +1,10 @@
 import "./Input.css";
 import {useEffect, useRef, useState} from "react";
-import {useTheme} from "../../../Context/ThemeContext";
-import {useQuote} from "../../../Context/QuoteContext";
-import {useScore} from "../../../Context/ScoreContext";
-import {useError} from "../../../Context/ErrorContext";
-import {resultPeriodSet, useSetting} from "../../../Context/SettingContext";
+import {useTheme} from "@/Context/ThemeContext.jsx";
+import {useQuote} from "@/Context/QuoteContext.jsx";
+import {useScore} from "@/Context/ScoreContext.jsx";
+import {useError} from "@/Context/ErrorContext.jsx";
+import {resultPeriodSet, useSetting} from "@/Context/SettingContext.jsx";
 import {
     KEY_ARROW_DOWN,
     KEY_ARROW_LEFT,
@@ -12,8 +12,8 @@ import {
     KEY_ARROW_UP,
     KEY_COMMANDS,
     KEY_ESC,
-} from "../../../const/key.const";
-import {koreanSeparator} from "../../../utils/koreanSeparator";
+} from "@/const/key.const.js";
+import {koreanSeparator} from "@/utils/koreanSeparator.ts";
 
 const Input = ({onInputChange: onInputChangeCallback}) => {
     const {isDark} = useTheme();
@@ -116,6 +116,11 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
     const handleKeyDown = (e) => {
         // 엔터키 처리
         if (e.key === "Enter") {
+            // IME 조합 중이면 무시 (조합 완료 후 처리)
+            if (e.nativeEvent.isComposing) {
+                return;
+            }
+
             e.preventDefault();
 
             // 문장 입력이 완료된 경우 제출
@@ -217,7 +222,7 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
         clearInterval(speedInterval.current);
         setSpeedCheck(true);
 
-        
+
     };
 
     const onInputChange = (e) => {
