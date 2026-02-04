@@ -6,6 +6,7 @@ import LoginButton from "../LoginButton/LoginButton";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import NicknamePopup from "../NicknamePopup/NicknamePopup";
+import LoginRequiredPopup from "../LoginRequiredPopup/LoginRequiredPopup";
 import {useAuth} from "../../Context/AuthContext";
 import {useTheme} from "../../Context/ThemeContext";
 import {useError} from "../../Context/ErrorContext";
@@ -27,6 +28,7 @@ const Head = () => {
     const {showError} = useError();
     const {user, accessToken, refreshToken, isLoading, setIsLoading, login, loginTrigger} = useAuth();
     const [showNicknamePopup, setShowNicknamePopup] = useState(false);
+    const [showLoginPopup, setShowLoginPopup] = useState(false);
     const prevLoginTriggerRef = useRef(loginTrigger);
 
     // user가 변경될 때마다 닉네임이 UUID 형식인지 체크
@@ -107,7 +109,7 @@ const Head = () => {
                             if (user) {
                                 navigate('/quote/upload');
                             } else {
-                                showError('로그인이 필요한 기능입니다.');
+                                setShowLoginPopup(true);
                             }
                         }}
                     >
@@ -124,6 +126,12 @@ const Head = () => {
                 <NicknamePopup
                     initialNickname={user?.nickname}
                     onSubmit={handleNicknameSubmit}
+                />
+            )}
+            {showLoginPopup && (
+                <LoginRequiredPopup
+                    message="문장을 업로드하려면 로그인이 필요합니다."
+                    onClose={() => setShowLoginPopup(false)}
                 />
             )}
         </>

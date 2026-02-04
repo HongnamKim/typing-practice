@@ -2,14 +2,12 @@ import {useState} from 'react';
 import {FaGlobe, FaUser} from 'react-icons/fa';
 import {useTheme} from '../../../Context/ThemeContext';
 import {useQuote} from '../../../Context/QuoteContext';
-import {useAuth} from '../../../Context/AuthContext';
-import ConfirmPopup from '../../ConfirmPopup/ConfirmPopup';
+import LoginRequiredPopup from '../../LoginRequiredPopup/LoginRequiredPopup';
 import './QuoteSourceSelector.css';
 
 const QuoteSourceSelector = () => {
     const {isDark} = useTheme();
     const {quoteSource, changeQuoteSource} = useQuote();
-    const {triggerLogin} = useAuth();
     const [showLoginPopup, setShowLoginPopup] = useState(false);
 
     const handleAllClick = () => {
@@ -21,16 +19,6 @@ const QuoteSourceSelector = () => {
         if (!success) {
             setShowLoginPopup(true);
         }
-    };
-
-    const handleLoginConfirm = () => {
-        setShowLoginPopup(false);
-        // AuthContext의 triggerLogin 호출 → Head에서 googleLogin 실행
-        triggerLogin();
-    };
-
-    const handleLoginCancel = () => {
-        setShowLoginPopup(false);
     };
 
     return (
@@ -53,12 +41,9 @@ const QuoteSourceSelector = () => {
             </div>
 
             {showLoginPopup && (
-                <ConfirmPopup
+                <LoginRequiredPopup
                     message="내 문장을 사용하려면 로그인이 필요합니다."
-                    onConfirm={handleLoginConfirm}
-                    onCancel={handleLoginCancel}
-                    confirmText="로그인"
-                    cancelText="취소"
+                    onClose={() => setShowLoginPopup(false)}
                 />
             )}
         </>
