@@ -21,6 +21,12 @@
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
+.profile-loading {
+    text-align: center;
+    padding: 2rem;
+    color: var(--color-text-muted);
+}
+
 .profile-popup-title {
     font-size: 1.5rem;
     font-weight: 600;

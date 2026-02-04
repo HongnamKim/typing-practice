@@ -1,17 +1,17 @@
-import {useState, useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {FaCircleInfo, FaGlobe, FaLock, FaPlus, FaUpload, FaXmark} from 'react-icons/fa6';
-import {uploadQuote} from '../../utils/quoteApi';
+import {uploadQuote} from '@/utils/quoteApi.ts';
 import {useAuth} from '../../Context/AuthContext';
 import {useError} from '../../Context/ErrorContext';
-import {MAX_AUTHOR_LENGTH, MAX_SENTENCE_LENGTH, MIN_SENTENCE_LENGTH} from '../../const/config.const';
+import {MAX_AUTHOR_LENGTH, MAX_SENTENCE_LENGTH, MIN_SENTENCE_LENGTH} from '@/const/config.const.js';
 import './QuoteUpload.css';
 
 const MAX_ENTRIES = 5;
 
 function QuoteUpload() {
     const navigate = useNavigate();
-    const {user} = useAuth();
+    const {user, isInitialized} = useAuth();
     const {showError} = useError();
     const [entries, setEntries] = useState([createEmptyEntry(0)]);
     const [isUploading, setIsUploading] = useState(false);
@@ -19,12 +19,12 @@ function QuoteUpload() {
     const [confirmMessage, setConfirmMessage] = useState('');
     const [isResultPopup, setIsResultPopup] = useState(false);
 
-    // 로그아웃 시 홈으로 이동
+    // 초기화 완료 후 로그인 안 되어 있으면 홈으로 이동
     useEffect(() => {
-        if (!user) {
+        if (isInitialized && !user) {
             navigate('/');
         }
-    }, [user, navigate]);
+    }, [user, isInitialized, navigate]);
 
     function createEmptyEntry(id) {
         return {
@@ -175,6 +175,11 @@ function QuoteUpload() {
         e.target.style.height = e.target.scrollHeight + 'px';
         updateEntry(id, field, e.target.value);
     };
+
+    // 초기화 중이면 아무것도 렌더링하지 않음
+    if (!isInitialized) {
+        return null;
+    }
 
     // 로그인 필요
     if (!user) {

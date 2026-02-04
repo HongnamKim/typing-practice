@@ -1,5 +1,17 @@
-import axios from 'axios';
-import {Storage_Refresh_Token} from '../const/config.const';
+import axios, {AxiosError, InternalAxiosRequestConfig} from 'axios';
+import {Storage_Refresh_Token} from '@/const/config.const';
+import {ApiResponse} from '../types/api.types';
+
+// 재시도 플래그를 위한 타입 확장
+interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
+    _retry?: boolean;
+}
+
+// 토큰 갱신 응답 타입
+interface RefreshTokenData {
+    accessToken: string;
+    refreshToken: string;
+}
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
 
@@ -9,20 +21,15 @@ const apiClient = axios.create({
 });
 
 // accessToken을 저장할 변수 (메모리)
-let currentAccessToken = null;
+let currentAccessToken: string | null = null;
 
 // accessToken 설정 함수
-export const setAccessToken = (token) => {
+export const setAccessToken = (token: string | null): void => {
     currentAccessToken = token;
 };
 
-// accessToken 가져오기 함수
-export const getAccessToken = () => {
-    return currentAccessToken;
-};
-
 // 로그아웃 처리 함수
-const handleLogout = () => {
+const handleLogout = (): void => {
     localStorage.removeItem(Storage_Refresh_Token);
     currentAccessToken = null;
     window.dispatchEvent(new Event('auth:logout'));
@@ -46,11 +53,11 @@ apiClient.interceptors.response.use(
     (response) => {
         return response;
     },
-    async (error) => {
-        const originalRequest = error.config;
+    async (error: AxiosError) => {
+        const originalRequest = error.config as CustomAxiosRequestConfig;
 
         // 401 에러이고, 재시도하지 않은 요청인 경우
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
             originalRequest._retry = true;
 
             const refreshToken = localStorage.getItem(Storage_Refresh_Token);
@@ -62,7 +69,7 @@ apiClient.interceptors.response.use(
 
             try {
                 // refreshToken으로 새 accessToken 발급
-                const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
+                const response = await axios.post<ApiResponse<RefreshTokenData>>(`${API_BASE_URL}/auth/refresh`, {
                     refreshToken,
                 });
 

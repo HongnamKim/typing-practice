@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useTheme} from '../../Context/ThemeContext';
 import {useAuth} from '../../Context/AuthContext';
-import {checkNickname, updateNickname} from '../../utils/authApi';
+import {checkNickname, getMyInfo, updateNickname} from '@/utils/authApi.ts';
 import './ProfilePopup.css';
 
 // UUID 형식 체크 함수
@@ -13,18 +13,39 @@ const isUuidFormat = (str) => {
 
 const ProfilePopup = ({onClose}) => {
     const {isDark} = useTheme();
-    const {user, updateUser} = useAuth();
+    const {updateUser} = useAuth();
 
-    // UUID 형식이면 빈 값으로 시작, 아니면 user.nickname 사용
-    const [nickname, setNickname] = useState(isUuidFormat(user?.nickname) ? '' : (user?.nickname || ''));
+    // 프로필 정보 상태
+    const [profile, setProfile] = useState(null);
+    const [isLoadingProfile, setIsLoadingProfile] = useState(true);
+
+    // UUID 형식이면 빈 값으로 시작, 아니면 nickname 사용
+    const [nickname, setNickname] = useState('');
     const [error, setError] = useState('');
     const [isChecking, setIsChecking] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [isNicknameAvailable, setIsNicknameAvailable] = useState(false);
     const [checkedNickname, setCheckedNickname] = useState('');
 
+    // 프로필 조회
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const response = await getMyInfo();
+                const data = response.data;
+                setProfile(data);
+                setNickname(isUuidFormat(data.nickname) ? '' : data.nickname);
+            } catch (err) {
+                setError('프로필을 불러오는데 실패했습니다.');
+            } finally {
+                setIsLoadingProfile(false);
+            }
+        };
+        fetchProfile();
+    }, []);
+
     // UUID 형식이면 항상 변경된 것으로 간주
-    const isNicknameChanged = isUuidFormat(user?.nickname) || nickname.trim() !== user?.nickname;
+    const isNicknameChanged = profile && (isUuidFormat(profile.nickname) || nickname.trim() !== profile.nickname);
 
     const handleCheckNickname = async () => {
         const trimmedNickname = nickname.trim();
@@ -76,11 +97,13 @@ const ProfilePopup = ({onClose}) => {
         try {
             await updateNickname(trimmedNickname);
 
-            // user state 업데이트 (닉네임 + isNewMember false 처리)
+            // AuthContext의 user state 업데이트
             updateUser({
-                ...user,
                 nickname: trimmedNickname,
-                isNewMember: false, // 닉네임 설정 후 신규 회원 상태 해제
+                email: profile.email,
+                role: profile.role,
+                createdAt: profile.createdAt,
+                isNewMember: false,
             });
 
             onClose();
@@ -111,6 +134,16 @@ const ProfilePopup = ({onClose}) => {
 
     const isCheckButtonEnabled = nickname.trim().length >= 2 && nickname.trim() !== checkedNickname;
 
+    if (isLoadingProfile) {
+        return (
+            <div className="profile-popup-overlay" onClick={onClose}>
+                <div className={`profile-popup ${isDark ? 'dark' : ''}`} onClick={(e) => e.stopPropagation()}>
+                    <div className="profile-loading">로딩 중...</div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="profile-popup-overlay" onClick={onClose}>
             <div className={`profile-popup ${isDark ? 'dark' : ''}`} onClick={(e) => e.stopPropagation()}>
@@ -119,7 +152,7 @@ const ProfilePopup = ({onClose}) => {
                 <div className="profile-content">
                     <div className="profile-section">
                         <label className={`profile-label ${isDark ? 'dark' : ''}`}>이메일</label>
-                        <div className={`profile-value ${isDark ? 'dark' : ''}`}>{user?.email || '-'}</div>
+                        <div className={`profile-value ${isDark ? 'dark' : ''}`}>{profile?.email || '-'}</div>
                     </div>
 
                     <div className="profile-section">
@@ -152,7 +185,7 @@ const ProfilePopup = ({onClose}) => {
                     <div className="profile-section">
                         <label className={`profile-label ${isDark ? 'dark' : ''}`}>가입일</label>
                         <div className={`profile-value ${isDark ? 'dark' : ''}`}>
-                            {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : '-'}
+                            {profile?.createdAt ? new Date(profile.createdAt).toLocaleDateString() : '-'}
                         </div>
                     </div>
                 </div>
