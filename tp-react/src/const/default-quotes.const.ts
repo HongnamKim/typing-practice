@@ -1,4 +1,9 @@
-export const defaultQuotes = [
+interface DefaultQuote {
+    sentence: string;
+    author: string;
+}
+
+export const defaultQuotes: DefaultQuote[] = [
   {
     sentence: "우리는 우물이 마르기 전까지 물의 중요성을 결코 알지 못한다.",
     author: "토마스 풀러",

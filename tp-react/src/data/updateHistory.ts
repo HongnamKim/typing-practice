@@ -1,4 +1,13 @@
-export const updateHistory = [
+interface UpdateEntry {
+    version: string;
+    date: string;
+    showPopup: boolean;
+    hidden: boolean;
+    features?: string[];
+    improvements?: string[];
+}
+
+export const updateHistory: UpdateEntry[] = [
     {
         version: "1.1.1",
         date: "2025년 12월 10일",
