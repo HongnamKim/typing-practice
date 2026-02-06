@@ -1,10 +1,15 @@
-import {createContext, useContext, useState} from 'react';
+import {createContext, ReactNode, useContext, useState} from 'react';
 import {FaExclamationCircle} from 'react-icons/fa';
 import {useTheme} from './ThemeContext';
 
-const ErrorContext = createContext();
+interface ErrorContextType {
+    showError: (message: string) => void;
+    clearError: () => void;
+}
 
-export const useError = () => {
+const ErrorContext = createContext<ErrorContextType | null>(null);
+
+export const useError = (): ErrorContextType => {
     const context = useContext(ErrorContext);
     if (!context) {
         throw new Error('useError must be used within ErrorProvider');
@@ -12,11 +17,15 @@ export const useError = () => {
     return context;
 };
 
-export const ErrorProvider = ({children}) => {
-    const {isDark} = useTheme();
-    const [errorMessage, setErrorMessage] = useState(null);
+interface ErrorProviderProps {
+    children: ReactNode;
+}
 
-    const showError = (message) => {
+export const ErrorProvider = ({children}: ErrorProviderProps) => {
+    const {isDark} = useTheme();
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+    const showError = (message: string) => {
         setErrorMessage(message);
     };
 
@@ -33,7 +42,7 @@ export const ErrorProvider = ({children}) => {
                 <div className={`error-popup-overlay ${isDark ? 'dark' : ''}`} onClick={clearError}>
                     <div className="error-popup" onClick={e => e.stopPropagation()}>
                         <div className="error-popup-icon">
-                            <FaExclamationCircle />
+                            <FaExclamationCircle/>
                         </div>
                         <p className="error-popup-message">{errorMessage}</p>
                         <button className="error-popup-btn" onClick={clearError}>확인</button>

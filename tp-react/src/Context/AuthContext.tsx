@@ -1,39 +1,59 @@
-import React, {createContext, useContext, useState, useEffect, useCallback} from 'react';
+import {createContext, Dispatch, ReactNode, SetStateAction, useCallback, useContext, useEffect, useState} from 'react';
 import {refreshAccessToken as refreshTokenApi} from '../utils/authApi';
 import {Storage_Refresh_Token} from '../const/config.const';
-import {setAccessToken as setApiAccessToken} from '../utils/apiClient';
-import apiClient from '../utils/apiClient';
+import apiClient, {setAccessToken as setApiAccessToken} from '../utils/apiClient';
 
-const AuthContext = createContext(null);
+interface User {
+    nickname: string;
+    email: string;
+    role: string;
+    createdAt: string;
+    isNewMember?: boolean;
+}
 
-export const AuthProvider = ({children}) => {
-    const [user, setUser] = useState(null);
-    const [accessToken, setAccessToken] = useState(null);
-    const [refreshToken, setRefreshToken] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isInitialized, setIsInitialized] = useState(false);
-    
-    // 로그인 트리거 (다른 컴포넌트에서 로그인 요청 시 사용)
-    const [loginTrigger, setLoginTrigger] = useState(0);
+interface AuthContextType {
+    user: User | null;
+    accessToken: string | null;
+    refreshToken: string | null;
+    isLoading: boolean;
+    isInitialized: boolean;
+    setIsLoading: Dispatch<SetStateAction<boolean>>;
+    login: (userData: User, newAccessToken: string, newRefreshToken: string) => void;
+    logout: () => void;
+    updateUser: (userData: User) => void;
+    loginTrigger: number;
+    triggerLogin: () => void;
+}
 
-    // 앱 시작 시 자동 로그인
+const AuthContext = createContext<AuthContextType | null>(null);
+
+interface AuthProviderProps {
+    children: ReactNode;
+}
+
+export const AuthProvider = ({children}: AuthProviderProps) => {
+    const [user, setUser] = useState<User | null>(null);
+    const [accessToken, setAccessToken] = useState<string | null>(null);
+    const [refreshToken, setRefreshToken] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isInitialized, setIsInitialized] = useState<boolean>(false);
+
+    const [loginTrigger, setLoginTrigger] = useState<number>(0);
+
     useEffect(() => {
         const initializeAuth = async () => {
             const storedRefreshToken = localStorage.getItem(Storage_Refresh_Token);
-            
+
             if (storedRefreshToken) {
                 try {
-                    // 1. refreshToken으로 새 accessToken 발급
                     const refreshResponse = await refreshTokenApi(storedRefreshToken);
                     const {accessToken: newAccessToken, refreshToken: newRefreshToken} = refreshResponse.data;
-                    
-                    // 2. accessToken을 apiClient에 설정
+
                     setApiAccessToken(newAccessToken);
-                    
-                    // 3. accessToken으로 사용자 정보 조회
+
                     const userInfoResponse = await apiClient.get('/members/me');
                     const userData = userInfoResponse.data.data;
-                    
+
                     setUser({
                         nickname: userData.nickname,
                         email: userData.email,
@@ -45,19 +65,17 @@ export const AuthProvider = ({children}) => {
                     localStorage.setItem(Storage_Refresh_Token, newRefreshToken);
                 } catch (error) {
                     console.error('Auto-login failed:', error);
-                    // 토큰이 만료되었거나 유효하지 않으면 제거
                     localStorage.removeItem(Storage_Refresh_Token);
                     setApiAccessToken(null);
                 }
             }
-            
+
             setIsInitialized(true);
         };
 
         initializeAuth();
     }, []);
 
-    // auth:logout 이벤트 리스너 (apiClient에서 발생)
     useEffect(() => {
         const handleLogout = () => {
             setUser(null);
@@ -71,15 +89,13 @@ export const AuthProvider = ({children}) => {
         return () => window.removeEventListener('auth:logout', handleLogout);
     }, []);
 
-    const login = (userData, newAccessToken, newRefreshToken) => {
+    const login = (userData: User, newAccessToken: string, newRefreshToken: string) => {
         setUser(userData);
         setAccessToken(newAccessToken);
         setRefreshToken(newRefreshToken);
-        
-        // apiClient에 accessToken 설정
+
         setApiAccessToken(newAccessToken);
-        
-        // refreshToken을 localStorage에 저장
+
         if (newRefreshToken) {
             localStorage.setItem(Storage_Refresh_Token, newRefreshToken);
         }
@@ -93,24 +109,23 @@ export const AuthProvider = ({children}) => {
         setApiAccessToken(null);
     };
 
-    const updateUser = (userData) => {
+    const updateUser = (userData: User) => {
         setUser(userData);
     };
 
-    // 로그인 트리거 함수 (다른 컴포넌트에서 호출)
     const triggerLogin = useCallback(() => {
         setLoginTrigger(prev => prev + 1);
     }, []);
 
     return (
         <AuthContext.Provider value={{
-            user, 
-            accessToken, 
+            user,
+            accessToken,
             refreshToken,
-            isLoading, 
+            isLoading,
             isInitialized,
-            setIsLoading, 
-            login, 
+            setIsLoading,
+            login,
             logout,
             updateUser,
             loginTrigger,
@@ -121,7 +136,7 @@ export const AuthProvider = ({children}) => {
     );
 };
 
-export const useAuth = () => {
+export const useAuth = (): AuthContextType => {
     const context = useContext(AuthContext);
     if (!context) {
         throw new Error('useAuth must be used within AuthProvider');

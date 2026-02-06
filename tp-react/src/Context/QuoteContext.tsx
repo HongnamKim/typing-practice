@@ -1,13 +1,34 @@
-import {createContext, useCallback, useContext, useEffect, useRef, useState} from "react";
+import {createContext, ReactNode, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {useScore} from "./ScoreContext";
 import {useAuth} from "./AuthContext";
 import {useError} from "./ErrorContext";
 import {getQuotes} from "../utils/quoteApi";
 import {defaultQuotes} from "../const/default-quotes.const";
 
-export const QuoteContext = createContext(null);
+interface Quote {
+    quoteId?: number;
+    sentence: string;
+    author?: string;
+}
 
-export const useQuote = () => {
+type QuoteSourceType = 'all' | 'my';
+
+interface QuoteContextType {
+    sentence: string;
+    author: string;
+    currentQuote: Quote | null;
+    quotesIndex: number;
+    setQuotesIndex: React.Dispatch<React.SetStateAction<number>>;
+    quoteSource: QuoteSourceType;
+    changeQuoteSource: (source: QuoteSourceType) => boolean;
+    isLoading: boolean;
+    isEmpty: boolean;
+    isOffline: boolean;
+}
+
+export const QuoteContext = createContext<QuoteContextType | null>(null);
+
+export const useQuote = (): QuoteContextType => {
     const context = useContext(QuoteContext);
     if (!context) {
         throw new Error('useQuote must be used within QuoteContextProvider');
@@ -15,18 +36,15 @@ export const useQuote = () => {
     return context;
 };
 
-// 상수
 const QUOTES_PER_PAGE = 100;
 const QUOTE_SOURCE = {
-    ALL: 'all',
-    MY: 'my',
+    ALL: 'all' as const,
+    MY: 'my' as const,
 };
 
-// 시드 생성 함수 (소수점 둘째자리까지, -1.0 ~ 1.0)
 const generateSeed = () => Math.round((Math.random() * 2 - 1) * 100) / 100;
 
-// 배열 셔플 함수
-const shuffleArray = (array) => {
+const shuffleArray = <T, >(array: T[]): T[] => {
     const shuffled = [...array];
     for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -35,32 +53,30 @@ const shuffleArray = (array) => {
     return shuffled;
 };
 
-export const QuoteContextProvider = ({children}) => {
+interface QuoteContextProviderProps {
+    children: ReactNode;
+}
+
+export const QuoteContextProvider = ({children}: QuoteContextProviderProps) => {
     const {setInputCheck} = useScore();
     const {user} = useAuth();
     const {showError} = useError();
 
-    // Refs
-    const seedRef = useRef(generateSeed());
-    const currentPageRef = useRef(1);
-    const hasNextRef = useRef(true);
-    const isLoadingRef = useRef(false);
+    const seedRef = useRef<number>(generateSeed());
+    const currentPageRef = useRef<number>(1);
+    const hasNextRef = useRef<boolean>(true);
+    const isLoadingRef = useRef<boolean>(false);
 
-    // 문장 소스
-    const [quoteSource, setQuoteSource] = useState(QUOTE_SOURCE.ALL);
+    const [quoteSource, setQuoteSource] = useState<QuoteSourceType>(QUOTE_SOURCE.ALL);
+    const [quotes, setQuotes] = useState<Quote[]>([]);
+    const [quotesIndex, setQuotesIndex] = useState<number>(0);
+    const [sentence, setSentence] = useState<string>("");
+    const [author, setAuthor] = useState<string>("");
 
-    // 문장 목록
-    const [quotes, setQuotes] = useState([]);
-    const [quotesIndex, setQuotesIndex] = useState(0);
-    const [sentence, setSentence] = useState("");
-    const [author, setAuthor] = useState("");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isEmpty, setIsEmpty] = useState<boolean>(false);
+    const [isOffline, setIsOffline] = useState<boolean>(false);
 
-    // UI 상태
-    const [isLoading, setIsLoading] = useState(false);
-    const [isEmpty, setIsEmpty] = useState(false);
-    const [isOffline, setIsOffline] = useState(false);
-
-    // 상태 초기화
     const resetState = useCallback(() => {
         setQuotes([]);
         setQuotesIndex(0);
@@ -71,15 +87,13 @@ export const QuoteContextProvider = ({children}) => {
         setIsEmpty(false);
     }, []);
 
-    // 현재 문장 설정
-    const setCurrentQuote = useCallback((quote) => {
+    const setCurrentQuote = useCallback((quote: Quote) => {
         if (!quote?.sentence) return;
         setSentence(quote.sentence);
         setAuthor(quote.author || '');
         setInputCheck(new Array(quote.sentence.length).fill("none"));
     }, [setInputCheck]);
 
-    // Fallback: 로컬 문장 로드
     const loadFallbackQuotes = useCallback(() => {
         const shuffled = shuffleArray(defaultQuotes);
         setQuotes(shuffled);
@@ -87,13 +101,12 @@ export const QuoteContextProvider = ({children}) => {
         hasNextRef.current = false;
         setIsOffline(true);
         setIsEmpty(false);
-        
+
         if (shuffled.length > 0) {
             setCurrentQuote(shuffled[0]);
         }
     }, [setCurrentQuote]);
 
-    // 문장 로드
     const loadQuotes = useCallback(async (page = 1, reset = false, source = quoteSource) => {
         if (isLoadingRef.current) return;
 
@@ -122,14 +135,12 @@ export const QuoteContextProvider = ({children}) => {
             setIsEmpty(reset && content.length === 0);
             setIsOffline(false);
 
-            // 첫 로드 시 첫 번째 문장 설정
             if (reset && content.length > 0) {
                 setCurrentQuote(content[0]);
             }
         } catch (error) {
             console.error('문장 로드 실패:', error);
-            
-            // Fallback: 로컬 문장 사용
+
             if (reset && source === QUOTE_SOURCE.ALL) {
                 console.log('서버 연결 실패 - 로컬 문장 사용');
                 loadFallbackQuotes();
@@ -145,44 +156,35 @@ export const QuoteContextProvider = ({children}) => {
         }
     }, [quoteSource, setCurrentQuote, showError, loadFallbackQuotes]);
 
-    // 로그아웃 시 전체 문장으로 초기화
     useEffect(() => {
         if (!user && quoteSource === QUOTE_SOURCE.MY) {
             setQuoteSource(QUOTE_SOURCE.ALL);
         }
     }, [user, quoteSource]);
 
-    // 소스 변경 시 로드
     useEffect(() => {
         resetState();
         loadQuotes(1, true, quoteSource);
     }, [quoteSource]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // 문장 인덱스 변경 시
     useEffect(() => {
         if (quotes.length === 0) return;
 
-        // 이전 문장 (인덱스 < 0)
         if (quotesIndex < 0) {
             setQuotesIndex(quotes.length - 1);
             return;
         }
 
-        // 다음 문장 (인덱스 >= 길이)
         if (quotesIndex >= quotes.length) {
             if (hasNextRef.current && !isLoadingRef.current) {
-                // 다음 페이지 로드
                 loadQuotes(currentPageRef.current + 1, false, quoteSource);
             } else {
-                // 마지막 문장 끝: 셔플 후 처음으로
                 if (isOffline) {
-                    // 오프라인 모드: 셔플 후 처음으로
                     const shuffled = shuffleArray(quotes);
                     setQuotes(shuffled);
                     setQuotesIndex(0);
                     setCurrentQuote(shuffled[0]);
                 } else {
-                    // 온라인 모드: 시드 재생성 후 첫 페이지로
                     seedRef.current = generateSeed();
                     resetState();
                     loadQuotes(1, true, quoteSource);
@@ -194,11 +196,9 @@ export const QuoteContextProvider = ({children}) => {
         setCurrentQuote(quotes[quotesIndex]);
     }, [quotesIndex, quotes]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // 현재 문장 객체
     const currentQuote = quotes[quotesIndex] || null;
 
-    // 문장 소스 변경 핸들러
-    const changeQuoteSource = useCallback((source) => {
+    const changeQuoteSource = useCallback((source: QuoteSourceType): boolean => {
         if (source === QUOTE_SOURCE.MY && !user) {
             return false;
         }
