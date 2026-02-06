@@ -1,0 +1,36 @@
+//import {Storage_Display_Cpm} from "../../../const/config.const";
+
+import "./ToggleDisplayCpm.css";
+import {useSetting} from "@/Context/SettingContext.tsx";
+import {useTheme} from "@/Context/ThemeContext.tsx";
+import {Storage_Display_Cpm} from "@/const/config.const.ts";
+
+const ToggleDisplayCurrentCpm = () => {
+    const {displayCurrentCpm, setDisplayCurrentCpm} =
+        useSetting();
+    const {isDark} = useTheme();
+
+    const handleCurrentCPM = () => {
+        localStorage.setItem(Storage_Display_Cpm, (!displayCurrentCpm).toString());
+        setDisplayCurrentCpm((prev) => !prev);
+    };
+
+    return (
+        <div className={"currentCPM-container"}>
+            <input
+                type={"checkbox"}
+                onChange={handleCurrentCPM}
+                id="currentCPM"
+                checked={!!displayCurrentCpm}
+            />
+            <label
+                htmlFor={"currentCPM"}
+                className={isDark ? "toggle-current-cpm-dark" : "toggle-current-cpm"}
+            >
+                실시간 타자 속도
+            </label>
+        </div>
+    );
+};
+
+export default ToggleDisplayCurrentCpm;
