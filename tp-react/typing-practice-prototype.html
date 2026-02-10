@@ -4,454 +4,26 @@
     <meta charset="UTF-8">
     <title>Typing Practice</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    <link rel="stylesheet" href="prototype.css">
 
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding-top: 18vh;
-            background-color: #fafafa;
-            color: #333;
-        }
-
-        body.dark {
-            background-color: #0f0f0f;
-            color: #e5e7eb;
-        }
-
-        .display-none {
-            display: none !important;
-        }
-
-        /* 폰트 슬라이더 */
-        .font-size-slider-container {
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            z-index: 100;
-        }
-
-        .font-size-label {
-            font-size: 0.9rem;
-            color: #666;
-            cursor: pointer;
-        }
-
-        .font-size-label.dark {
-            color: #999;
-        }
-
-        .font-size-slider {
-            width: 100px;
-            height: 4px;
-            background: #e5e7eb;
-            cursor: pointer;
-        }
-
-        .font-size-slider.dark {
-            background: #3f3f46;
-        }
-
-        /* 헤더 */
-        .head {
-            width: 80%;
-            max-width: 1000px;
-            min-width: 600px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 3rem;
-        }
-
-        .title-title {
-            font-size: 2rem;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .title-title.dark {
-            color: #e5e7eb;
-        }
-
-        .dark-mode-icon {
-            color: #666;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .dark-mode-icon:hover {
-            color: #333;
-        }
-
-        .dark-mode-icon.dark {
-            color: #999;
-        }
-
-        .dark-mode-icon.dark:hover {
-            color: #e5e7eb;
-        }
-
-        .head-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .header-btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            background-color: transparent;
-            color: #666;
-            border-radius: 0.375rem;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .header-btn:hover {
-            background-color: #f5f5f5;
-            color: #333;
-        }
-
-        .header-btn.dark {
-            background-color: transparent;
-            color: #999;
-        }
-
-        .header-btn.dark:hover {
-            background-color: #27272a;
-            color: #e5e7eb;
-        }
-
-        /* 프로필 드롭다운 */
-        .profile-container {
-            position: relative;
-        }
-
-        .profile-btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            background-color: transparent;
-            color: #666;
-            border-radius: 0.375rem;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .profile-btn:hover {
-            background-color: #f5f5f5;
-            color: #333;
-        }
-
-        .profile-btn.dark {
-            color: #999;
-        }
-
-        .profile-btn.dark:hover {
-            background-color: #27272a;
-            color: #e5e7eb;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: calc(100% + 0.5rem);
-            right: 0;
-            background-color: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            min-width: 180px;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .dropdown-menu.dark {
-            background-color: #1f1f1f;
-            border-color: #3f3f46;
-        }
-
-        .dropdown-item {
-            padding: 0.75rem 1rem;
-            color: #666;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            border: none;
-            background: none;
-            width: 100%;
-            text-align: left;
-            font-size: 0.9rem;
-        }
-
-        .dropdown-item:hover {
-            background-color: #f5f5f5;
-            color: #333;
-        }
-
-        .dropdown-item.dark {
-            color: #999;
-        }
-
-        .dropdown-item.dark:hover {
-            background-color: #27272a;
-            color: #e5e7eb;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background-color: #e5e7eb;
-            margin: 0.25rem 0;
-        }
-
-        .dropdown-divider.dark {
-            background-color: #3f3f46;
-        }
-
-        /* 정보 영역 */
-        .info-background {
-            width: 80%;
-            max-width: 1000px;
-            min-width: 600px;
-            padding: 1rem 0 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .info-settings {
-            display: flex;
-            justify-content: flex-end;
-            padding: 0 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .result-period-container {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .result-period-btn {
-            border: none;
-            background: none;
-            color: #666;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .result-period-btn.dark {
-            color: #999;
-        }
-
-        .result-period-value {
-            font-size: 1.3rem;
-            color: #333;
-            min-width: 2rem;
-            text-align: center;
-        }
-
-        .result-period-value.dark {
-            color: #e5e7eb;
-        }
-
-        .info-CPMs {
-            display: flex;
-            justify-content: space-between;
-            padding: 0 1rem;
-            margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-        }
-
-        .CPM-text {
-            color: #666;
-        }
-
-        .CPM-text.dark {
-            color: #999;
-        }
-
-        .CPM-value {
-            margin-left: 2rem;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .CPM-value.dark {
-            color: #ffffff;
-        }
-
-        .info-averages {
-            display: flex;
-            justify-content: space-around;
-            padding: 1.5rem 1rem;
-            border-top: 1px solid #e5e7eb;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .info-averages.dark {
-            border-top-color: #27272a;
-            border-bottom-color: #27272a;
-        }
-
-        .average-label {
-            font-size: 1.1rem;
-            color: #666;
-        }
-
-        .average-label.dark {
-            color: #999;
-        }
-
-        .average-value {
-            margin-left: 1.5rem;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .average-value.dark {
-            color: #e5e7eb;
-        }
-
-        /* 타이핑 영역 */
-        .quote-container {
-            width: 80%;
-            max-width: 1000px;
-            min-width: 600px;
-            padding: 1rem 2rem 2rem;
-        }
-
-        .author-container {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 0.5rem;
-        }
-
-        .author-text {
-            font-size: 0.95rem;
-            color: #999;
-        }
-
-        .author-text.dark {
-            color: #71717a;
-        }
-
-        .sentence-input-wrapper {
-            position: relative;
-            min-height: 100px;
-            line-height: 1.8;
-        }
-
-        .character-container {
-            position: relative;
-            z-index: 1;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-
-        .character {
-            color: #999;
-            line-height: 1.8;
-        }
-
-        .character.dark {
-            color: #a8a8a8;
-        }
-
-        .character-typed {
-            color: transparent;
-        }
-
-        .input-display {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            line-height: 1.8;
-            z-index: 10;
-            pointer-events: none;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-
-        .input-char-correct {
-            color: #333;
-        }
-
-        .input-char-correct.dark {
-            color: #ffffff;
-        }
-
-        .input-char-incorrect {
-            color: #dc2626;
-        }
-
-        .input {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            border: none;
-            padding: 0;
-            overflow-y: hidden;
-            resize: none;
-            outline: none;
-            background-color: transparent;
-            color: transparent;
-            caret-color: #6d28d9;
-            z-index: 20;
-            line-height: 1.8;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-family: inherit;
-        }
-
-        .input.dark {
-            caret-color: #8b5cf6;
-        }
-
-        .spacer {
-            height: 8rem;
-        }
-
-        .contact {
-            color: #666;
-            font-size: 0.9rem;
-            text-decoration: none;
-            margin-bottom: 2rem;
-        }
-
-        .contact.dark {
-            color: #999;
-        }
-    </style>
 </head>
 <body id="body">
-<!-- 폰트 슬라이더 -->
-<div class="font-size-slider-container">
-    <label class="font-size-label" id="fontSizeLabel">
-        <i class="fa-solid fa-text-height"></i>
-    </label>
-    <input type="range" class="font-size-slider" id="fontSizeSlider" min="0" max="100" value="50"/>
+<!-- 좌측 상단 컨트롤 -->
+<div class="top-left-controls">
+    <div class="font-size-slider-container">
+        <label class="font-size-label" id="fontSizeLabel" for="fontSizeSlider">Font Size</label>
+        <input type="range" class="font-size-slider" id="fontSizeSlider" min="0" max="100" value="50"/>
+    </div>
+    <div class="mode-toggle-container">
+        <span class="mode-toggle-label" id="modeLabel">Compact</span>
+        <div class="mode-toggle" id="modeToggle">
+            <div class="mode-toggle-knob"></div>
+        </div>
+    </div>
 </div>
+
+<!-- 우측 상단 공지 아이콘 -->
+<i class="fa-solid fa-bullhorn notice-icon" id="iconNotice" title="업데이트 안내"></i>
 
 <!-- 헤더 -->
 <div class="head">
@@ -487,6 +59,10 @@
                 <button class="dropdown-item" id="settingsBtn">
                     <i class="fa-solid fa-gear"></i>
                     <span>설정</span>
+                </button>
+                <button class="dropdown-item" id="myReportsBtn">
+                    <i class="fa-solid fa-flag"></i>
+                    <span>신고 내역</span>
                 </button>
                 <div class="dropdown-divider"></div>
                 <button class="dropdown-item" id="logoutBtn">
@@ -526,7 +102,7 @@
         </div>
     </div>
 
-    <div class="info-averages">
+    <div class="info-averages" id="infoAverages">
         <div>
             <span class="average-label">CPM</span>
             <span class="average-value">706</span>
@@ -540,155 +116,330 @@
             <span class="average-value">1</span>
         </div>
     </div>
+    <div class="averages-toggle-container">
+        <button class="averages-toggle-btn" id="averagesToggleBtn">
+            <i class="fa-solid fa-chevron-up" id="averagesToggleIcon"></i>
+        </button>
+    </div>
 </div>
 
 <!-- 타이핑 영역 -->
-<div class="quote-container">
-    <div class="author-container">
-        <span class="author-text">웰러비</span>
+<div class="quote-container default-mode" id="quoteContainer">
+    <div class="quote-top-row">
+        <!-- 문장 소스 선택 -->
+        <div class="quote-source-selector">
+            <button class="quote-source-btn active" id="quoteSourceAll">
+                <i class="fa-solid fa-globe"></i>
+                <span>전체 문장</span>
+            </button>
+            <button class="quote-source-btn" id="quoteSourceMy">
+                <i class="fa-solid fa-user"></i>
+                <span>내 문장만</span>
+            </button>
+        </div>
+        <div class="author-container">
+            <span class="author-text">웰러비</span>
+            <!-- 더보기 메뉴 -->
+            <div class="quote-more-container">
+                <button class="quote-more-btn" id="quoteMoreBtn">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </button>
+                <div class="quote-more-menu display-none" id="quoteMoreMenu">
+                    <button class="quote-more-item" id="quoteReportBtn">
+                        <i class="fa-solid fa-flag"></i>
+                        <span>신고</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="sentence-input-wrapper">
         <div class="character-container" id="characterContainer">
             <span class="character">가</span><span class="character">시</span><span class="character">에</span><span
-                class="character"> </span><span class="character character-typed">절</span><span
-                class="character character-typed">리</span><span class="character character-typed">지</span><span
-                class="character character-typed"> </span><span class="character character-typed">않</span><span
-                class="character character-typed">고</span><span class="character character-typed">서</span><span
-                class="character character-typed">는</span><span class="character character-typed"> </span><span
-                class="character character-typed">장</span><span class="character character-typed">미</span><span
-                class="character character-typed">를</span><span class="character character-typed"> </span><span
-                class="character character-typed">모</span><span class="character character-typed">을</span><span
-                class="character character-typed"> </span><span class="character character-typed">수</span><span
-                class="character character-typed"> </span><span class="character character-typed">없</span><span
-                class="character character-typed">다</span><span class="character character-typed">.</span>
+                class="character"> </span><span class="character">절</span><span
+                class="character">리</span><span class="character">지</span><span
+                class="character"> </span><span class="character">않</span><span
+                class="character">고</span><span class="character">서</span><span
+                class="character">는</span><span class="character"> </span><span
+                class="character">장</span><span class="character">미</span><span
+                class="character">를</span><span class="character"> </span><span
+                class="character">모</span><span class="character">을</span><span
+                class="character"> </span><span class="character">수</span><span
+                class="character"> </span><span class="character">없</span><span
+                class="character">다</span><span class="character">.</span>
         </div>
-        <div class="input-display" id="inputDisplay">
-            <span class="input-char-correct">가</span><span class="input-char-correct">시</span><span
-                class="input-char-correct">에</span><span class="input-char-correct"> </span><span
-                class="input-char-incorrect">절</span><span class="input-char-incorrect">리</span>
-        </div>
-        <textarea class="input" id="quoteInput" autofocus autocomplete="off" spellcheck="false">가시에 절리</textarea>
+        <div class="input-display" id="inputDisplay"></div>
+        <label for="quoteInput" class="display-none">타이핑 입력</label>
+        <textarea class="input" id="quoteInput" rows="1" autofocus autocomplete="off" spellcheck="false"
+                  placeholder="위 문장을 입력하세요."></textarea>
     </div>
 </div>
 
 <div class="spacer"></div>
 <a class="contact" href="#">Contact</a>
 
-<script>
-    let fontSize = 1.5;
+<!-- 업데이트 공지 팝업 -->
+<div class="update-popup-overlay display-none" id="updatePopupOverlay">
+    <div class="update-popup" id="updatePopup">
+        <div class="update-popup-header">
+            <span class="update-popup-title" id="updatePopupTitle">🎉 업데이트 안내</span>
+        </div>
+        <div id="updateContent"></div>
+        <button class="update-popup-close" id="updatePopupClose">확인</button>
+        <button class="update-popup-history-btn display-none" id="updateHistoryBtn">지난 업데이트 보기</button>
+    </div>
+</div>
 
-    function sliderToFontSize(v) {
-        return 0.8 + (v / 100) * 2.7;
-    }
+<!-- 로딩 스피너 -->
+<div class="loading-overlay display-none" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+</div>
 
-    function fontSizeToSlider(f) {
-        return ((f - 0.8) / 2.7) * 100;
-    }
+<!-- 닉네임 설정 팝업 -->
+<div class="nickname-popup-overlay display-none" id="nicknamePopupOverlay">
+    <div class="nickname-popup" id="nicknamePopup">
+        <h2 class="nickname-popup-title">환영합니다! 🎉</h2>
+        <p class="nickname-popup-description">닉네임을 설정해주세요. (2-10자)</p>
+        <div class="nickname-input-group">
+            <label class="nickname-label" for="nicknameInput">닉네임</label>
+            <input
+                    type="text"
+                    class="nickname-input"
+                    id="nicknameInput"
+                    placeholder="닉네임 입력"
+                    maxlength="10"
+            />
+            <div class="nickname-error" id="nicknameError">닉네임은 2-10자여야 합니다.</div>
+            <div class="nickname-helper">한글, 영문, 숫자 사용 가능</div>
+        </div>
+        <button class="nickname-popup-btn" id="nicknameSubmitBtn">시작하기</button>
+    </div>
+</div>
 
-    function updateFontSize(size) {
-        fontSize = size;
-        ['characterContainer', 'inputDisplay', 'quoteInput'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) {
-                el.style.fontSize = size + 'rem';
-                if (id === 'quoteInput') {
-                    el.style.height = 'auto';
-                    el.style.height = el.scrollHeight + 'px';
-                }
-            }
-        });
-        localStorage.setItem('Typing-Practice-fontSize', size);
-    }
+<!-- 문장 업로드 팝업 -->
+<div class="upload-popup-overlay display-none" id="uploadPopupOverlay">
+    <div class="upload-popup" id="uploadPopup">
+        <div class="upload-popup-header">
+            <h2 class="upload-popup-title">문장 업로드</h2>
+            <button class="upload-popup-close-btn" id="uploadPopupCloseBtn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
 
-    const slider = document.getElementById('fontSizeSlider');
-    const saved = localStorage.getItem('Typing-Practice-fontSize');
-    if (saved) {
-        fontSize = parseFloat(saved);
-        updateFontSize(fontSize);
-        slider.value = fontSizeToSlider(fontSize);
-    } else {
-        updateFontSize(1.5);
-    }
-    slider.addEventListener('input', e => updateFontSize(sliderToFontSize(parseFloat(e.target.value))));
+        <div class="upload-type-toggle">
+            <span class="upload-type-hint">각 문장마다 공개/비공개를 선택할 수 있습니다. <span class="upload-type-info"><i
+                    class="fa-solid fa-circle-info"></i><span class="upload-type-tooltip">
+                    <p><strong>공개</strong>: 관리자 승인 후 모든 사용자에게 노출됩니다.</p>
+                    <p><strong>비공개</strong>: 본인만 사용할 수 있습니다.</p>
+                </span></span></span>
+        </div>
 
-    function toggleTheme() {
-        document.getElementById('body').classList.toggle('dark');
-        document.getElementById('iconSun').classList.toggle('display-none');
-        document.getElementById('iconMoon').classList.toggle('display-none');
-        document.querySelectorAll('.font-size-label, .font-size-slider, .title-title, .header-btn, .profile-btn, .dropdown-menu, .dropdown-item, .dropdown-divider, .dark-mode-icon, .result-period-btn, .result-period-value, .CPM-text, .CPM-value, .info-averages, .average-label, .average-value, .author-text, .character, .input-char-correct, .input, .contact').forEach(el => el.classList.toggle('dark'));
-        localStorage.setItem('Typing-Practice-darkMode', document.getElementById('body').classList.contains('dark'));
-    }
+        <div class="upload-entries" id="uploadEntries">
+            <!-- 입력 필드가 여기에 동적으로 생성됨 -->
+        </div>
 
-    document.getElementById('iconSun').addEventListener('click', toggleTheme);
-    document.getElementById('iconMoon').addEventListener('click', toggleTheme);
-    if (localStorage.getItem('Typing-Practice-darkMode') === 'true') toggleTheme();
+        <button class="upload-add-btn" id="uploadAddBtn">
+            <i class="fa-solid fa-plus"></i>
+            <span>문장 추가</span>
+        </button>
 
-    const textarea = document.getElementById('quoteInput');
-    textarea.addEventListener('input', function () {
-        this.style.height = 'auto';
-        this.style.height = this.scrollHeight + 'px';
-    });
-    textarea.style.height = 'auto';
-    textarea.style.height = textarea.scrollHeight + 'px';
+        <div class="upload-actions">
+            <button class="upload-cancel-btn" id="uploadCancelBtn">취소</button>
+            <button class="upload-submit-btn" id="uploadSubmitBtn">
+                <i class="fa-solid fa-upload"></i>
+                <span>업로드</span>
+            </button>
+        </div>
+    </div>
+</div>
 
-    // 버튼 이벤트
-    let isLoggedIn = false;
+<!-- 업로드 확인 팝업 -->
+<div class="confirm-popup-overlay display-none" id="uploadConfirmOverlay">
+    <div class="confirm-popup" id="uploadConfirmPopup">
+        <p class="confirm-popup-message" id="uploadConfirmMessage"></p>
+        <div class="confirm-popup-actions">
+            <button class="confirm-popup-cancel-btn" id="uploadConfirmCancelBtn">취소</button>
+            <button class="confirm-popup-ok-btn" id="uploadConfirmOkBtn">확인</button>
+        </div>
+    </div>
+</div>
 
-    // 로그인 버튼
-    document.getElementById('loginBtn').addEventListener('click', () => {
-        // 임시: 로그인 처리
-        isLoggedIn = true;
-        document.getElementById('loginBtn').classList.add('display-none');
-        document.getElementById('profileContainer').classList.remove('display-none');
-    });
+<!-- 내 문장 팝업 -->
+<div class="my-quotes-popup-overlay display-none" id="myQuotesPopupOverlay">
+    <div class="my-quotes-popup" id="myQuotesPopup">
+        <div class="my-quotes-header">
+            <h2 class="my-quotes-title">내 문장</h2>
+            <button class="my-quotes-close-btn" id="myQuotesCloseBtn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
 
-    // 프로필 드롭다운 토글
-    document.getElementById('profileBtn').addEventListener('click', () => {
-        document.getElementById('dropdownMenu').classList.toggle('display-none');
-    });
+        <div class="my-quotes-filters">
+            <div class="my-quotes-filter-group">
+                <button class="my-quotes-filter-btn active" data-type="all">전체</button>
+                <button class="my-quotes-filter-btn" data-type="PUBLIC">공개</button>
+                <button class="my-quotes-filter-btn" data-type="PRIVATE">비공개</button>
+            </div>
+            <div class="my-quotes-filter-group">
+                <button class="my-quotes-filter-btn active" data-status="all">전체</button>
+                <button class="my-quotes-filter-btn" data-status="PENDING">대기중</button>
+                <button class="my-quotes-filter-btn" data-status="ACTIVE">활성</button>
+            </div>
+        </div>
 
-    // 드롭다운 외부 클릭 시 닫기
-    document.addEventListener('click', (e) => {
-        const profileContainer = document.getElementById('profileContainer');
-        const dropdownMenu = document.getElementById('dropdownMenu');
-        if (!profileContainer.contains(e.target) && !dropdownMenu.classList.contains('display-none')) {
-            dropdownMenu.classList.add('display-none');
-        }
-    });
+        <div class="my-quotes-list" id="myQuotesList">
+            <!-- 문장 카드가 여기에 동적으로 생성됨 -->
+        </div>
 
-    // 문장 업로드 버튼
-    document.getElementById('uploadBtn').addEventListener('click', () => {
-        if (!isLoggedIn) {
-            alert('로그인이 필요한 기능입니다.');
-            return;
-        }
-        alert('문장 업로드 기능 (준비 중)');
-    });
+        <div class="my-quotes-loading display-none" id="myQuotesLoading">
+            <div class="my-quotes-spinner"></div>
+        </div>
 
-    // 드롭다운 메뉴 아이템들
-    document.getElementById('mysentencesBtn').addEventListener('click', () => {
-        alert('내 문장 기능 (준비 중)');
-        document.getElementById('dropdownMenu').classList.add('display-none');
-    });
+        <div class="my-quotes-empty display-none" id="myQuotesEmpty">
+            <i class="fa-solid fa-file-circle-question"></i>
+            <p>등록한 문장이 없습니다.</p>
+        </div>
+    </div>
+</div>
 
-    document.getElementById('statsBtn').addEventListener('click', () => {
-        alert('통계 기능 (준비 중)');
-        document.getElementById('dropdownMenu').classList.add('display-none');
-    });
+<!-- 문장 수정 팝업 -->
+<div class="quote-edit-popup-overlay display-none" id="quoteEditPopupOverlay">
+    <div class="quote-edit-popup" id="quoteEditPopup">
+        <h3 class="quote-edit-title">문장 수정</h3>
+        <div class="quote-edit-content">
+            <div class="quote-edit-field">
+                <label class="quote-edit-label">문장</label>
+                <textarea class="quote-edit-input quote-edit-sentence" id="quoteEditSentence" maxlength="100"
+                          rows="1"></textarea>
+                <span class="quote-edit-char-count" id="quoteEditCharCount">0/100</span>
+            </div>
+            <div class="quote-edit-field">
+                <label class="quote-edit-label">저자 (선택)</label>
+                <input type="text" class="quote-edit-input" id="quoteEditAuthor" maxlength="20"/>
+            </div>
+        </div>
+        <div class="quote-edit-actions">
+            <button class="quote-edit-cancel-btn" id="quoteEditCancelBtn">취소</button>
+            <button class="quote-edit-save-btn" id="quoteEditSaveBtn">저장</button>
+        </div>
+    </div>
+</div>
 
-    document.getElementById('settingsBtn').addEventListener('click', () => {
-        alert('설정 기능 (준비 중)');
-        document.getElementById('dropdownMenu').classList.add('display-none');
-    });
+<!-- 삭제 확인 팝업 -->
+<div class="confirm-popup-overlay display-none" id="deleteConfirmOverlay">
+    <div class="confirm-popup" id="deleteConfirmPopup">
+        <p class="confirm-popup-message">이 문장을 삭제하시겠습니까?</p>
+        <div class="confirm-popup-actions">
+            <button class="confirm-popup-cancel-btn" id="deleteConfirmCancelBtn">취소</button>
+            <button class="confirm-popup-ok-btn danger" id="deleteConfirmOkBtn">삭제</button>
+        </div>
+    </div>
+</div>
 
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-        // 로그아웃 처리
-        isLoggedIn = false;
-        document.getElementById('profileContainer').classList.add('display-none');
-        document.getElementById('loginBtn').classList.remove('display-none');
-        document.getElementById('dropdownMenu').classList.add('display-none');
-        alert('로그아웃 되었습니다.');
-    });
-</script>
+<!-- 신고 팝업 -->
+<div class="report-popup-overlay display-none" id="reportPopupOverlay">
+    <div class="report-popup" id="reportPopup">
+        <div class="report-popup-header">
+            <h3 class="report-popup-title">문장 신고</h3>
+            <button class="report-popup-close-btn" id="reportPopupCloseBtn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- 신고 대상 문장 -->
+        <div class="report-quote-preview">
+            <span class="report-quote-label">신고 대상</span>
+            <p class="report-quote-sentence" id="reportQuoteSentence">가시에 절리지 않고서는 장미를 모을 수 없다.</p>
+            <span class="report-quote-author" id="reportQuoteAuthor">- 웰러비</span>
+        </div>
+
+        <!-- 신고 사유 선택 -->
+        <div class="report-reason-section">
+            <span class="report-section-label">신고 사유</span>
+            <div class="report-reason-options">
+                <label class="report-reason-option">
+                    <input type="radio" name="reportReason" value="MODIFY" checked/>
+                    <span class="report-reason-radio"></span>
+                    <span class="report-reason-text">수정 요청</span>
+                    <span class="report-reason-desc">오타, 맞춤법 오류 등</span>
+                </label>
+                <label class="report-reason-option">
+                    <input type="radio" name="reportReason" value="DELETE"/>
+                    <span class="report-reason-radio"></span>
+                    <span class="report-reason-text">삭제 요청</span>
+                    <span class="report-reason-desc">부적절한 내용, 저작권 위반 등</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- 상세 설명 -->
+        <div class="report-detail-section">
+            <label class="report-section-label" for="reportDetail">상세 설명</label>
+            <textarea
+                    class="report-detail-input"
+                    id="reportDetail"
+                    placeholder="신고 사유를 자세히 설명해주세요."
+                    maxlength="120"
+                    rows="3"
+            ></textarea>
+            <span class="report-detail-count" id="reportDetailCount">0/120</span>
+        </div>
+
+        <!-- 버튼 -->
+        <div class="report-popup-actions">
+            <button class="report-cancel-btn" id="reportCancelBtn">취소</button>
+            <button class="report-submit-btn" id="reportSubmitBtn">
+                <i class="fa-solid fa-flag"></i>
+                <span>신고</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 신고 내역 팝업 -->
+<div class="my-reports-popup-overlay display-none" id="myReportsPopupOverlay">
+    <div class="my-reports-popup" id="myReportsPopup">
+        <div class="my-reports-header">
+            <h2 class="my-reports-title">신고 내역</h2>
+            <button class="my-reports-close-btn" id="myReportsCloseBtn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="my-reports-filters">
+            <button class="my-reports-filter-btn active" data-status="all">전체</button>
+            <button class="my-reports-filter-btn" data-status="PENDING">대기중</button>
+            <button class="my-reports-filter-btn" data-status="PROCESSED">처리완료</button>
+        </div>
+
+        <div class="my-reports-list" id="myReportsList">
+            <!-- 신고 카드가 여기에 동적으로 생성됨 -->
+        </div>
+
+        <div class="my-reports-loading display-none" id="myReportsLoading">
+            <div class="my-reports-spinner"></div>
+        </div>
+
+        <div class="my-reports-empty display-none" id="myReportsEmpty">
+            <i class="fa-solid fa-flag"></i>
+            <p>신고 내역이 없습니다.</p>
+        </div>
+    </div>
+</div>
+
+<!-- 신고 삭제 확인 팝업 -->
+<div class="confirm-popup-overlay display-none" id="reportDeleteConfirmOverlay">
+    <div class="confirm-popup" id="reportDeleteConfirmPopup">
+        <p class="confirm-popup-message">이 신고를 취소하시겠습니까?</p>
+        <div class="confirm-popup-actions">
+            <button class="confirm-popup-cancel-btn" id="reportDeleteConfirmCancelBtn">취소</button>
+            <button class="confirm-popup-ok-btn danger" id="reportDeleteConfirmOkBtn">삭제</button>
+        </div>
+    </div>
+</div>
+
+<script src="prototype1.js"></script>
+<script src="prototype2.js"></script>
+<script src="prototype3.js"></script>
 </body>
 </html>

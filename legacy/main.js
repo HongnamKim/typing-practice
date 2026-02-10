@@ -3,6 +3,7 @@
 const speedCheck = document.getElementById("speedCheck");
 const maxSpeed = document.getElementById("maxSpeed");
 const quoteDisplay = document.getElementById("quoteDisplay");
+const quoteDifficulty = document.getElementById("quoteDifficulty");
 const quoteAuthor = document.getElementById("quoteAuthor");
 const quoteInput = document.getElementById("quoteInput");
 
@@ -45,6 +46,8 @@ let shuffledSentencesIndex = Math.floor(
   Math.random() * shuffledSentences.length
 );
 
+shuffledSentencesIndex= shuffledSentences.length - 1
+
 const loadQuote = (arrowInput) => {
   // 방향키 입력
   if (arrowInput) {
@@ -53,6 +56,15 @@ const loadQuote = (arrowInput) => {
     } else {
       shuffledSentencesIndex--;
     }
+  }
+
+  // 문장 세트 끝에 도달하면 다시 문장을 섞고 랜덤한 위치에서 시작
+  if(shuffledSentencesIndex >= shuffledSentences.length || shuffledSentencesIndex < 0) {
+    shuffledSentences.sort(() => Math.random() - 0.5);
+
+    shuffledSentencesIndex = Math.floor(
+        Math.random() * shuffledSentences.length
+    )
   }
 
   //const quoteIndex = Math.floor(Math.random() * sentences.length);
@@ -77,6 +89,16 @@ const loadQuote = (arrowInput) => {
     quoteDisplay.appendChild(characterSpan);
   });
 
+  let difficulty
+  if(shuffledSentences[shuffledSentencesIndex][2] === '상') {
+    difficulty = 'Hard'
+  } else if (shuffledSentences[shuffledSentencesIndex][2] === '중') {
+    difficulty = 'Normal'
+  } else {
+    difficulty = 'Easy'
+  }
+
+  quoteDifficulty.innerText = difficulty
   quoteAuthor.innerText = `-${shuffledSentences[shuffledSentencesIndex][1]}-`;
 };
 

@@ -265,18 +265,37 @@ body.dark {
   margin-bottom: 1.5rem;
 }
 
-.qutoe-author {
+.quote-author {
   /* margin-top: 1rem; */
   margin-bottom: 0.5rem;
   display: flex;
   flex-direction: row-reverse;
 }
 
-.qutoe-author-text {
+.qutoe-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.quote-difficulty {
+  margin-bottom: 0.5rem;
+  display: flex;
+  flex-direction: row;
+}
+
+.quote-difficulty-text {
   font-size: 1.2rem;
 }
 
-.qutoe-author-text.dark {
+.quote-difficulty-text.dark {
+  color: #a1a1aa;
+}
+
+.quote-author-text {
+  font-size: 1.2rem;
+}
+
+.quote-author-text.dark {
   color: #a1a1aa;
 }
 
