@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import Title from "./title/Title";
 import DarkModeButton from "./themeButton/DarkModeButton";
@@ -11,7 +11,7 @@ import {useAuth} from "../../Context/AuthContext";
 import {useTheme} from "../../Context/ThemeContext";
 import {useError} from "../../Context/ErrorContext";
 import {useGoogleLogin} from "@react-oauth/google";
-import {loginWithGoogle} from "../../utils/authApi";
+import {loginWithGoogle} from "@/utils/authApi.ts";
 import {FaPlus} from "react-icons/fa";
 import "./Head.css";
 
@@ -48,7 +48,7 @@ const Head = () => {
 
                 // response.data: { newMember, nickname, accessToken, refreshToken }
                 const userData = response.data;
-                
+
                 // 신규/기존 회원 모두 바로 로그인 처리
                 login({
                     nickname: userData.nickname,
@@ -57,12 +57,12 @@ const Head = () => {
                     createdAt: userData.createdAt,
                     isNewMember: userData.newMember,
                 }, userData.accessToken, userData.refreshToken);
-                
+
                 // UUID 형식 닉네임이면 팝업 표시 (useEffect에서도 처리하지만 즉시 표시를 위해)
                 if (isUuidFormat(userData.nickname)) {
                     setShowNicknamePopup(true);
                 }
-                
+
                 setIsLoading(false);
             } catch (error) {
                 console.error('로그인 실패:', error);
@@ -103,7 +103,7 @@ const Head = () => {
             <div className="head">
                 <Title/>
                 <div className="head-right">
-                    <button 
+                    <button
                         className={`header-btn ${isDark ? 'dark' : ''}`}
                         onClick={() => {
                             if (user) {

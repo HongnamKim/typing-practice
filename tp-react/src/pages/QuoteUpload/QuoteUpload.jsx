@@ -1,10 +1,12 @@
 import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {FaCircleInfo, FaGlobe, FaLock, FaPlus, FaUpload, FaXmark} from 'react-icons/fa6';
+import {FaCircleInfo, FaPlus, FaUpload} from 'react-icons/fa6';
 import {uploadQuote} from '@/utils/quoteApi.ts';
 import {useAuth} from '../../Context/AuthContext';
 import {useError} from '../../Context/ErrorContext';
 import {MAX_AUTHOR_LENGTH, MAX_SENTENCE_LENGTH, MIN_SENTENCE_LENGTH} from '@/const/config.const.js';
+import UploadEntry from './components/UploadEntry';
+import ConfirmPopup from '../../components/ConfirmPopup/ConfirmPopup';
 import './QuoteUpload.css';
 
 const MAX_ENTRIES = 5;
@@ -170,12 +172,6 @@ function QuoteUpload() {
         }
     };
 
-    const handleTextareaChange = (e, id, field) => {
-        e.target.style.height = 'auto';
-        e.target.style.height = e.target.scrollHeight + 'px';
-        updateEntry(id, field, e.target.value);
-    };
-
     // 초기화 중이면 아무것도 렌더링하지 않음
     if (!isInitialized) {
         return null;
@@ -217,63 +213,14 @@ function QuoteUpload() {
 
             <div className="quote-upload-entries">
                 {entries.map((entry, index) => (
-                    <div key={entry.id} className={`quote-upload-entry ${entry.error ? 'error' : ''}`}>
-                        <div className="quote-upload-entry-header">
-                            <span className="quote-upload-entry-number">{index + 1}</span>
-                            <button
-                                className="quote-upload-entry-delete-btn"
-                                onClick={() => removeEntry(entry.id)}
-                                style={{display: entries.length <= 1 ? 'none' : 'flex'}}
-                            >
-                                <FaXmark/>
-                            </button>
-                        </div>
-                        <div className="quote-upload-entry-type-toggle">
-                            <button
-                                className={`quote-upload-entry-type-btn ${entry.type === 'public' ? 'active' : ''}`}
-                                onClick={() => updateEntry(entry.id, 'type', 'public')}
-                            >
-                                <FaGlobe/>
-                                <span>공개</span>
-                            </button>
-                            <button
-                                className={`quote-upload-entry-type-btn ${entry.type === 'private' ? 'active' : ''}`}
-                                onClick={() => updateEntry(entry.id, 'type', 'private')}
-                            >
-                                <FaLock/>
-                                <span>비공개</span>
-                            </button>
-                        </div>
-                        <div className="quote-upload-entry-inputs">
-                            <div className="quote-upload-sentence-wrapper">
-                                <textarea
-                                    className="quote-upload-input quote-upload-sentence"
-                                    placeholder={`문장을 입력하세요 (${MIN_SENTENCE_LENGTH}-${MAX_SENTENCE_LENGTH}자)`}
-                                    maxLength={MAX_SENTENCE_LENGTH}
-                                    value={entry.sentence}
-                                    onChange={(e) => handleTextareaChange(e, entry.id, 'sentence')}
-                                    rows={1}
-                                />
-                                <span
-                                    className={`quote-upload-char-count ${entry.sentence.length > 0 && entry.sentence.length < MIN_SENTENCE_LENGTH ? 'warning' : ''}`}>
-                                    {entry.sentence.length}/{MAX_SENTENCE_LENGTH}
-                                </span>
-                            </div>
-                            <div className="quote-upload-author-wrapper">
-                                <textarea
-                                    className="quote-upload-input quote-upload-author"
-                                    placeholder="저자 (선택)"
-                                    maxLength={MAX_AUTHOR_LENGTH}
-                                    value={entry.author}
-                                    onChange={(e) => handleTextareaChange(e, entry.id, 'author')}
-                                    rows={1}
-                                />
-                            </div>
-                        </div>
-                        {entry.error && (
-                            <div className="quote-upload-entry-error">{entry.error}</div>
-                        )}
-                    </div>
+                    <UploadEntry
+                        key={entry.id}
+                        entry={entry}
+                        index={index}
+                        showDelete={entries.length > 1}
+                        onUpdate={updateEntry}
+                        onRemove={removeEntry}
+                    />
                 ))}
             </div>
 
@@ -315,27 +262,12 @@ function QuoteUpload() {
 
             {/* 확인/결과 팝업 */}
             {showConfirm && (
-                <div className="quote-upload-confirm-overlay">
-                    <div className="quote-upload-confirm-popup">
-                        <p className="quote-upload-confirm-message">{confirmMessage}</p>
-                        <div className="quote-upload-confirm-actions">
-                            {!isResultPopup && (
-                                <button
-                                    className="quote-upload-confirm-cancel-btn"
-                                    onClick={() => setShowConfirm(false)}
-                                >
-                                    취소
-                                </button>
-                            )}
-                            <button
-                                className="quote-upload-confirm-ok-btn"
-                                onClick={handleConfirmOk}
-                            >
-                                확인
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <ConfirmPopup
+                    message={confirmMessage}
+                    onConfirm={handleConfirmOk}
+                    onCancel={() => setShowConfirm(false)}
+                    showCancel={!isResultPopup}
+                />
             )}
         </div>
     );
