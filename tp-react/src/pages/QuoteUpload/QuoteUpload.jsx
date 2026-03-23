@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {FaCircleInfo, FaPlus, FaUpload} from 'react-icons/fa6';
-import {uploadQuote} from '@/utils/quoteApi.ts';
+import {uploadQuote, extractQuoteErrorMessage} from '@/utils/quoteApi.ts';
 import {useAuth} from '../../Context/AuthContext';
 import {useError} from '../../Context/ErrorContext';
 import {MAX_AUTHOR_LENGTH, MAX_SENTENCE_LENGTH, MIN_SENTENCE_LENGTH} from '@/const/config.const.js';
@@ -138,7 +138,10 @@ function QuoteUpload() {
                 successCount++;
                 successIds.push(entry.id);
             } catch (error) {
-                const errorMessage = error.response?.data?.message || '업로드에 실패했습니다.';
+                const similarMessage = entry.type === 'public'
+                    ? '공개 문장 내에 유사한 문장이 존재합니다.'
+                    : '내 문장 내에 유사한 문장이 존재합니다.';
+                const errorMessage = extractQuoteErrorMessage(error, similarMessage, '업로드에 실패했습니다.');
                 setEntries(prev => prev.map(e =>
                     e.id === entry.id ? {...e, error: errorMessage} : e
                 ));
