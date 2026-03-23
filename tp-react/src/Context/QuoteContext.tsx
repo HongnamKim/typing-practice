@@ -124,6 +124,11 @@ export const QuoteContextProvider = ({children}: QuoteContextProviderProps) => {
             const content = data.content || [];
 
             if (reset) {
+                if (content.length === 0 && source === QUOTE_SOURCE.ALL) {
+                    // 서버 응답은 왔지만 공개 문장이 없는 경우 로컬 문장 사용
+                    loadFallbackQuotes();
+                    return;
+                }
                 setQuotes(content);
                 setQuotesIndex(0);
             } else {

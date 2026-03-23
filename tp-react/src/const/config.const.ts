@@ -12,3 +12,6 @@ export const Storage_Refresh_Token = "Typing-Practice-refreshToken" as const;
 export const MIN_SENTENCE_LENGTH = 5 as const;
 export const MAX_SENTENCE_LENGTH = 100 as const;
 export const MAX_AUTHOR_LENGTH = 20 as const;
+
+// Typing Record 관련 상수
+export const RESET_COUNT_THRESHOLD_RATIO = 0.3 as const;
