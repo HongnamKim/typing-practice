@@ -10,26 +10,17 @@ const ResultPeriod = () => {
     const {resultPeriod, setResultPeriod} = useSetting();
 
     const handleResultPeriod = (event) => {
-        if (event.target.id === "result-period-up") {
-            setResultPeriod((prev) => {
-                return (prev + 1) % 4;
-            });
+        const length = resultPeriodDisplaySet.length;
+        let newPeriod;
 
-            localStorage.setItem(
-                Storage_Result_Period,
-                ((resultPeriod + 1) % 4).toString(),
-            );
+        if (event.currentTarget.id === "result-period-up") {
+            newPeriod = (resultPeriod + 1) % length;
         } else {
-            setResultPeriod((prev) => {
-                if (prev === 0) return prev + 3;
-                return prev - 1;
-            });
-
-            localStorage.setItem(
-                Storage_Result_Period,
-                ((resultPeriod - 1) % 4).toString(),
-            );
+            newPeriod = (resultPeriod - 1 + length) % length;
         }
+
+        setResultPeriod(newPeriod);
+        localStorage.setItem(Storage_Result_Period, newPeriod.toString());
     };
 
     return (
@@ -41,7 +32,6 @@ const ResultPeriod = () => {
                 className={isDark ? "result-period-button dark" : "result-period-button"}
             >
                 <FaChevronDown
-                    id={"result-period-down"}
                     className={isDark ? "result-period-dark" : ""}
                 />
             </button>
@@ -62,7 +52,6 @@ const ResultPeriod = () => {
                 className={isDark ? "result-period-button dark" : "result-period-button"}
             >
                 <FaChevronUp
-                    id={"result-period-up"}
                     className={isDark ? "result-period-dark" : ""}
                 />
             </button>
