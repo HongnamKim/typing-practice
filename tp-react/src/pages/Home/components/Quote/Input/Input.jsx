@@ -375,11 +375,39 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
 
             // 입력한 자모 수가 예문의 자모 수와 같거나 많을 경우 (글자 완성)
             if (currentInputSeparated.length >= currentSentenceSeparated.length) {
-                // 예문 자모 길이만큼만 비교 (입력이 더 긴 경우에도 앞부분만 일치하면 정답)
-                const isCorrect = areJamoEqual(
+                // 예문 자모 길이만큼 비교
+                let isCorrect = areJamoEqual(
                     currentInputSeparated.slice(0, currentSentenceSeparated.length),
                     currentSentenceSeparated,
                 );
+
+                // 입력 자모가 예문보다 많을 경우, 추가 자모가 다음 글자의 시작과 일치하는지 확인
+                let isExtraJamoMismatch = false;
+                let extraJamoMismatchInfo = null;
+
+                if (isCorrect && currentInputSeparated.length > currentSentenceSeparated.length) {
+                    const extraJamo = currentInputSeparated.slice(currentSentenceSeparated.length);
+                    const nextCharIndex = lastCharIndex + 1;
+
+                    if (nextCharIndex < sentence.length) {
+                        const nextSentenceSeparated = separatedSentence.current[nextCharIndex];
+                        isCorrect = areJamoEqual(
+                            extraJamo,
+                            nextSentenceSeparated.slice(0, extraJamo.length),
+                        );
+                        if (!isCorrect) {
+                            isExtraJamoMismatch = true;
+                            extraJamoMismatchInfo = {
+                                nextCharIndex,
+                                nextSentenceSeparated,
+                                extraJamo,
+                            };
+                        }
+                    } else {
+                        // 마지막 글자인데 추가 자모가 있으면 오답
+                        isCorrect = false;
+                    }
+                }
 
                 if (isCorrect) {
                     if (prevCheck[lastCharIndex] !== "correct") {
@@ -388,7 +416,27 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
                     }
                 } else {
                     if (prevCheck[lastCharIndex] !== "incorrect") {
-                        markIncorrect(prevCheck, lastCharIndex, currentSentenceSeparated, currentInputSeparated);
+                        prevCheck[lastCharIndex] = "incorrect";
+                        setIncorrectCount((prev) => prev + 1);
+
+                        if (isExtraJamoMismatch && extraJamoMismatchInfo) {
+                            // 추가 자모 불일치: 다음 글자 기준으로 typo 기록
+                            const {nextCharIndex, nextSentenceSeparated, extraJamo} = extraJamoMismatchInfo;
+                            typosRef.current.push(createTypoEntry(
+                                sentence[nextCharIndex],
+                                nextSentenceSeparated,
+                                extraJamo,
+                                nextCharIndex,
+                            ));
+                        } else {
+                            // 일반 오답: 현재 글자 기준으로 typo 기록
+                            typosRef.current.push(createTypoEntry(
+                                sentence[lastCharIndex],
+                                currentSentenceSeparated,
+                                currentInputSeparated,
+                                lastCharIndex,
+                            ));
+                        }
                     }
                 }
             } else {
