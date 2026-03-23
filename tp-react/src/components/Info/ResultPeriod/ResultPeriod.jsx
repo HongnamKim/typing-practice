@@ -16,7 +16,7 @@ const ResultPeriod = () => {
     const length = resultPeriodDisplaySet.length;
     let newPeriod;
 
-    if (event.target.id === "result-period-up") {
+    if (event.currentTarget.id === "result-period-up") {
       newPeriod = (resultPeriod + 1) % length;
     } else {
       newPeriod = (resultPeriod - 1 + length) % length;
@@ -35,7 +35,6 @@ const ResultPeriod = () => {
         className={isDark ? "result-period-button dark" : "result-period-button"}
       >
         <FaChevronDown
-          id={"result-period-down"}
           className={isDark ? "result-period-dark" : ""}
         />
       </button>
@@ -56,7 +55,6 @@ const ResultPeriod = () => {
         className={isDark ? "result-period-button dark" : "result-period-button"}
       >
         <FaChevronUp
-          id={"result-period-up"}
           className={isDark ? "result-period-dark" : ""}
         />
       </button>
