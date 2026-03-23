@@ -20,13 +20,10 @@ const InputDisplay = ({input}) => {
                 const status = inputCheck[index];
                 let className = "";
 
-                if (status === "correct") {
-                    className = isDark ? "input-char-correct dark" : "input-char-correct";
-                } else if (status === "incorrect") {
+                if (status === "incorrect") {
                     className = "input-char-incorrect";
                 } else {
-                    // none 상태 - 입력 중인 글자는 회색으로 표시
-                    className = isDark ? "input-char-none dark" : "input-char-none";
+                    className = isDark ? "input-char-correct dark" : "input-char-correct";
                 }
 
 

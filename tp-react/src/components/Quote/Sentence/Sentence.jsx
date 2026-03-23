@@ -16,12 +16,17 @@ const Sentence = ({ inputLength, inputValue }) => {
     if (!sentence) {
       return "";
     }
-    
+
+    // 일반 모드: 원본 문장 유지 (글자색만 변경)
+    if (!isCompactMode) {
+      return sentence;
+    }
+
     if (!inputValue || inputValue.length === 0) {
       return sentence;
     }
 
-    // 입력된 부분(inputValue) + 남은 원본 문장 부분
+    // 컴팩트 모드: 입력된 부분(inputValue) + 남은 원본 문장 부분
     const remainingSentence = sentence.slice(inputLength);
     return inputValue + remainingSentence;
   };
@@ -32,16 +37,14 @@ const Sentence = ({ inputLength, inputValue }) => {
     
     if (index < inputLength) {
       if (isCompactMode) {
-        // Compact 모드: 입력된 글자는 투명
+        // Compact 모드: 입력된 글자는 투명 (InputDisplay가 색상 담당)
         className += " character-typed";
       } else {
-        // Default 모드: 채점 결과에 따라 색상 표시
+        // Default 모드: 채점 완료된 글자만 색상 표시 (입력 중이면 원래 색 유지)
         if (inputCheck[index] === "correct") {
           className += " character-correct-visible";
         } else if (inputCheck[index] === "incorrect") {
           className += " character-incorrect-visible";
-        } else {
-          className += " character-typing";
         }
       }
     }
