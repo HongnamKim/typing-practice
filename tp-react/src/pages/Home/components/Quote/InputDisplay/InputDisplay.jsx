@@ -18,11 +18,9 @@ const InputDisplay = ({input}) => {
             {input.split("").map((char, index) => {
                 const status = inputCheck[index];
                 const className =
-                    status === "correct"
-                        ? isDark ? "input-char-correct dark" : "input-char-correct"
-                        : status === "incorrect"
-                            ? "input-char-incorrect"
-                            : isDark ? "input-char-none dark" : "input-char-none";
+                    status === "incorrect"
+                        ? "input-char-incorrect"
+                        : isDark ? "input-char-correct dark" : "input-char-correct";
 
                 return (
                     <span key={index} className={className}>
