@@ -1,0 +1,46 @@
+.quote-source-selector {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.quote-source-btn {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    background-color: transparent;
+    color: #999;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.quote-source-btn:hover {
+    border-color: #666;
+    color: #666;
+}
+
+.quote-source-btn.active {
+    border-color: #666;
+    background-color: #666;
+    color: white;
+}
+
+/* 다크 모드 */
+.quote-source-btn.dark {
+    border-color: #3f3f46;
+    color: #71717a;
+}
+
+.quote-source-btn.dark:hover {
+    border-color: #a1a1aa;
+    color: #a1a1aa;
+}
+
+.quote-source-btn.dark.active {
+    border-color: #71717a;
+    background-color: #71717a;
+    color: white;
+}

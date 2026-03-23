@@ -75,7 +75,7 @@ src/
 │   └── config.const.js      # localStorage 키 상수
 ├── utils/
 │   └── sentences.js         # 300+ 한글 문장 데이터
-├── App.js                   # 메인 앱 컴포넌트
+├── App.jsx                   # 메인 앱 컴포넌트
 └── index.js                 # React 엔트리 포인트
 ```
 

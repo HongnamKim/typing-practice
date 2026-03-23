@@ -1,15 +1,12 @@
 import React from 'react';
-import {useTheme} from '../../Context/ThemeContext';
-import {FaUser} from 'react-icons/fa';
+import {FaGoogle} from 'react-icons/fa';
 import './LoginButton.css';
 
 const LoginButton = ({onClick}) => {
-    const {isDark} = useTheme();
-
     return (
-        <button className={`header-btn ${isDark ? 'dark' : ''}`} onClick={onClick}>
-            <FaUser />
-            <span>로그인</span>
+        <button className="header-btn" onClick={onClick}>
+            <FaGoogle />
+            <span>구글 로그인</span>
         </button>
     );
 };

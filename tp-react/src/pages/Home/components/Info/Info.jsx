@@ -1,0 +1,61 @@
+import {useState} from "react";
+import "./Info.css";
+import ResultPeriod from "./ResultPeriod/ResultPeriod";
+import CurrentLastCpm from "./Cpms/CurrentLastCpm";
+import HighestCpm from "./Cpms/HighestCpm";
+import AverageScore from "./AverageScores/AverageScore";
+//import {Storage_Averages_Visible} from "../../const/config.const";
+import {FaChevronDown, FaChevronUp} from "react-icons/fa6";
+import {useTheme} from "@/Context/ThemeContext.tsx";
+import {useScore} from "@/Context/ScoreContext.tsx";
+import {Storage_Averages_Visible} from "@/const/config.const.ts";
+
+const Info = () => {
+    const {isDark} = useTheme();
+    const {totalScore} = useScore();
+
+    const [averagesVisible, setAveragesVisible] = useState(() => {
+        return localStorage.getItem(Storage_Averages_Visible) !== "false";
+    });
+
+    const toggleAverages = () => {
+        const newValue = !averagesVisible;
+        setAveragesVisible(newValue);
+        localStorage.setItem(Storage_Averages_Visible, newValue);
+    };
+
+    const getAveragesClassName = () => {
+        let className = "info-averages";
+        if (isDark) className += " dark";
+        if (!averagesVisible) className += " collapsed";
+        return className;
+    };
+
+    return (
+        <div className={isDark ? "info-background info-dark" : "info-background"}>
+            <div className={isDark ? "info-settings dark" : "info-settings"}>
+                <ResultPeriod/>
+            </div>
+            <div className={isDark ? "info-CPMs dark" : "info-CPMs"}>
+                <CurrentLastCpm/>
+                <HighestCpm/>
+            </div>
+            <div className={getAveragesClassName()}>
+                {Object.keys(totalScore).map(
+                    (value, index) =>
+                        value !== "highestCpm" && <AverageScore type={value} key={index}/>,
+                )}
+            </div>
+            <div className="averages-toggle-container">
+                <button
+                    className={isDark ? "averages-toggle-btn dark" : "averages-toggle-btn"}
+                    onClick={toggleAverages}
+                >
+                    {averagesVisible ? <FaChevronUp/> : <FaChevronDown/>}
+                </button>
+            </div>
+        </div>
+    );
+};
+
+export default Info;

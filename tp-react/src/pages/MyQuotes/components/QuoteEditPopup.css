@@ -1,0 +1,169 @@
+.quote-edit-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2500;
+}
+
+.quote-edit-popup {
+    background-color: var(--color-bg);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    width: 90%;
+    max-width: 500px;
+    border: 1px solid var(--color-border);
+}
+
+.quote-edit-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin: 0 0 1.5rem 0;
+}
+
+.quote-edit-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.quote-edit-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    position: relative;
+}
+
+.quote-edit-label {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+}
+
+.quote-edit-input {
+    padding: 0.5rem 0;
+    border: none;
+    border-bottom: 1px solid var(--color-border);
+    background-color: transparent;
+    font-size: 1rem;
+    color: var(--color-text);
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+.quote-edit-input:focus {
+    border-bottom-color: var(--color-primary);
+}
+
+.quote-edit-sentence {
+    resize: none;
+    overflow: hidden;
+    min-height: 1.5rem;
+    line-height: 1.5;
+}
+
+.quote-edit-char-count {
+    position: absolute;
+    right: 0;
+    bottom: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--color-text-placeholder);
+}
+
+.quote-edit-char-count.warning {
+    color: var(--color-error);
+}
+
+.quote-edit-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.quote-edit-cancel-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    background-color: transparent;
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quote-edit-cancel-btn:hover {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text);
+}
+
+.quote-edit-save-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--color-border);
+    color: var(--color-text-placeholder);
+    font-size: 1rem;
+    cursor: not-allowed;
+    transition: all 0.2s;
+}
+
+.quote-edit-save-btn:enabled {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    cursor: pointer;
+}
+
+.quote-edit-save-btn:enabled:hover {
+    background-color: var(--color-primary-dark);
+}
+
+/* Dark Mode */
+.quote-edit-popup-overlay.dark .quote-edit-popup {
+    background-color: #0f0f0f;
+    border-color: #27272a;
+}
+
+.quote-edit-popup-overlay.dark .quote-edit-title {
+    color: var(--color-primary);
+}
+
+.quote-edit-popup-overlay.dark .quote-edit-label {
+    color: #a1a1aa;
+}
+
+.quote-edit-popup-overlay.dark .quote-edit-input {
+    color: #e5e7eb;
+    border-bottom-color: #27272a;
+}
+
+.quote-edit-popup-overlay.dark .quote-edit-char-count {
+    color: #71717a;
+}
+
+.quote-edit-popup-overlay.dark .quote-edit-char-count.warning {
+    color: #f87171;
+}
+
+.quote-edit-popup-overlay.dark .quote-edit-cancel-btn {
+    border-color: #27272a;
+    color: #a1a1aa;
+}
+
+.quote-edit-popup-overlay.dark .quote-edit-cancel-btn:hover {
+    background-color: #18181b;
+    color: #e5e7eb;
+}
+
+.quote-edit-popup-overlay.dark .quote-edit-save-btn {
+    background-color: #27272a;
+    color: #71717a;
+}

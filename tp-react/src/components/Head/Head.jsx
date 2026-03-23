@@ -1,13 +1,18 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useRef, useState} from "react";
+import {useNavigate} from "react-router-dom";
 import Title from "./title/Title";
 import DarkModeButton from "./themeButton/DarkModeButton";
 import LoginButton from "../LoginButton/LoginButton";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import NicknamePopup from "../NicknamePopup/NicknamePopup";
+import LoginRequiredPopup from "../LoginRequiredPopup/LoginRequiredPopup";
 import {useAuth} from "../../Context/AuthContext";
+import {useTheme} from "../../Context/ThemeContext";
+import {useError} from "../../Context/ErrorContext";
 import {useGoogleLogin} from "@react-oauth/google";
-import {loginWithGoogle} from "../../utils/authApi";
+import {loginWithGoogle} from "@/utils/authApi.ts";
+import {FaPlus} from "react-icons/fa";
 import "./Head.css";
 
 // UUID 형식 체크 함수
@@ -18,8 +23,13 @@ const isUuidFormat = (str) => {
 };
 
 const Head = () => {
-    const {user, accessToken, refreshToken, isLoading, setIsLoading, login} = useAuth();
+    const navigate = useNavigate();
+    const {isDark} = useTheme();
+    const {showError} = useError();
+    const {user, accessToken, refreshToken, isLoading, setIsLoading, login, loginTrigger} = useAuth();
     const [showNicknamePopup, setShowNicknamePopup] = useState(false);
+    const [showLoginPopup, setShowLoginPopup] = useState(false);
+    const prevLoginTriggerRef = useRef(loginTrigger);
 
     // user가 변경될 때마다 닉네임이 UUID 형식인지 체크
     useEffect(() => {
@@ -38,7 +48,7 @@ const Head = () => {
 
                 // response.data: { newMember, nickname, accessToken, refreshToken }
                 const userData = response.data;
-                
+
                 // 신규/기존 회원 모두 바로 로그인 처리
                 login({
                     nickname: userData.nickname,
@@ -47,24 +57,32 @@ const Head = () => {
                     createdAt: userData.createdAt,
                     isNewMember: userData.newMember,
                 }, userData.accessToken, userData.refreshToken);
-                
+
                 // UUID 형식 닉네임이면 팝업 표시 (useEffect에서도 처리하지만 즉시 표시를 위해)
                 if (isUuidFormat(userData.nickname)) {
                     setShowNicknamePopup(true);
                 }
-                
+
                 setIsLoading(false);
             } catch (error) {
                 console.error('로그인 실패:', error);
-                alert('로그인에 실패했습니다. 다시 시도해주세요.');
+                showError('로그인에 실패했습니다. 다시 시도해주세요.');
                 setIsLoading(false);
             }
         },
         onError: (error) => {
             console.error('구글 로그인 실패:', error);
-            alert('구글 로그인에 실패했습니다.');
+            showError('구글 로그인에 실패했습니다.');
         },
     });
+
+    // 다른 컴포넌트에서 로그인 트리거 시 googleLogin 호출
+    useEffect(() => {
+        if (loginTrigger > 0 && loginTrigger !== prevLoginTriggerRef.current) {
+            prevLoginTriggerRef.current = loginTrigger;
+            googleLogin();
+        }
+    }, [loginTrigger, googleLogin]);
 
     const handleLogin = () => {
         googleLogin();
@@ -85,6 +103,19 @@ const Head = () => {
             <div className="head">
                 <Title/>
                 <div className="head-right">
+                    <button
+                        className={`header-btn ${isDark ? 'dark' : ''}`}
+                        onClick={() => {
+                            if (user) {
+                                navigate('/quote/upload');
+                            } else {
+                                setShowLoginPopup(true);
+                            }
+                        }}
+                    >
+                        <FaPlus/>
+                        <span>문장 업로드</span>
+                    </button>
                     {user ? <ProfileDropdown/> : <LoginButton onClick={handleLogin}/>}
                     <DarkModeButton/>
                 </div>
@@ -93,10 +124,14 @@ const Head = () => {
             {isLoading && <LoadingSpinner/>}
             {showNicknamePopup && (
                 <NicknamePopup
-                    defaultNickname={user?.nickname}
-                    isNewMember={user?.isNewMember}
+                    initialNickname={user?.nickname}
                     onSubmit={handleNicknameSubmit}
-                    onClose={() => setShowNicknamePopup(false)}
+                />
+            )}
+            {showLoginPopup && (
+                <LoginRequiredPopup
+                    message="문장을 업로드하려면 로그인이 필요합니다."
+                    onClose={() => setShowLoginPopup(false)}
                 />
             )}
         </>

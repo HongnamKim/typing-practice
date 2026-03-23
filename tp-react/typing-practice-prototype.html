@@ -60,6 +60,10 @@
                     <i class="fa-solid fa-gear"></i>
                     <span>설정</span>
                 </button>
+                <button class="dropdown-item" id="myReportsBtn">
+                    <i class="fa-solid fa-flag"></i>
+                    <span>신고 내역</span>
+                </button>
                 <div class="dropdown-divider"></div>
                 <button class="dropdown-item" id="logoutBtn">
                     <i class="fa-solid fa-arrow-right-from-bracket"></i>
@@ -121,8 +125,33 @@
 
 <!-- 타이핑 영역 -->
 <div class="quote-container default-mode" id="quoteContainer">
-    <div class="author-container">
-        <span class="author-text">웰러비</span>
+    <div class="quote-top-row">
+        <!-- 문장 소스 선택 -->
+        <div class="quote-source-selector">
+            <button class="quote-source-btn active" id="quoteSourceAll">
+                <i class="fa-solid fa-globe"></i>
+                <span>전체 문장</span>
+            </button>
+            <button class="quote-source-btn" id="quoteSourceMy">
+                <i class="fa-solid fa-user"></i>
+                <span>내 문장만</span>
+            </button>
+        </div>
+        <div class="author-container">
+            <span class="author-text">웰러비</span>
+            <!-- 더보기 메뉴 -->
+            <div class="quote-more-container">
+                <button class="quote-more-btn" id="quoteMoreBtn">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </button>
+                <div class="quote-more-menu display-none" id="quoteMoreMenu">
+                    <button class="quote-more-item" id="quoteReportBtn">
+                        <i class="fa-solid fa-flag"></i>
+                        <span>신고</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="sentence-input-wrapper">
         <div class="character-container" id="characterContainer">
@@ -187,6 +216,230 @@
     </div>
 </div>
 
-<script src="prototype.js"></script>
+<!-- 문장 업로드 팝업 -->
+<div class="upload-popup-overlay display-none" id="uploadPopupOverlay">
+    <div class="upload-popup" id="uploadPopup">
+        <div class="upload-popup-header">
+            <h2 class="upload-popup-title">문장 업로드</h2>
+            <button class="upload-popup-close-btn" id="uploadPopupCloseBtn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="upload-type-toggle">
+            <span class="upload-type-hint">각 문장마다 공개/비공개를 선택할 수 있습니다. <span class="upload-type-info"><i
+                    class="fa-solid fa-circle-info"></i><span class="upload-type-tooltip">
+                    <p><strong>공개</strong>: 관리자 승인 후 모든 사용자에게 노출됩니다.</p>
+                    <p><strong>비공개</strong>: 본인만 사용할 수 있습니다.</p>
+                </span></span></span>
+        </div>
+
+        <div class="upload-entries" id="uploadEntries">
+            <!-- 입력 필드가 여기에 동적으로 생성됨 -->
+        </div>
+
+        <button class="upload-add-btn" id="uploadAddBtn">
+            <i class="fa-solid fa-plus"></i>
+            <span>문장 추가</span>
+        </button>
+
+        <div class="upload-actions">
+            <button class="upload-cancel-btn" id="uploadCancelBtn">취소</button>
+            <button class="upload-submit-btn" id="uploadSubmitBtn">
+                <i class="fa-solid fa-upload"></i>
+                <span>업로드</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 업로드 확인 팝업 -->
+<div class="confirm-popup-overlay display-none" id="uploadConfirmOverlay">
+    <div class="confirm-popup" id="uploadConfirmPopup">
+        <p class="confirm-popup-message" id="uploadConfirmMessage"></p>
+        <div class="confirm-popup-actions">
+            <button class="confirm-popup-cancel-btn" id="uploadConfirmCancelBtn">취소</button>
+            <button class="confirm-popup-ok-btn" id="uploadConfirmOkBtn">확인</button>
+        </div>
+    </div>
+</div>
+
+<!-- 내 문장 팝업 -->
+<div class="my-quotes-popup-overlay display-none" id="myQuotesPopupOverlay">
+    <div class="my-quotes-popup" id="myQuotesPopup">
+        <div class="my-quotes-header">
+            <h2 class="my-quotes-title">내 문장</h2>
+            <button class="my-quotes-close-btn" id="myQuotesCloseBtn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="my-quotes-filters">
+            <div class="my-quotes-filter-group">
+                <button class="my-quotes-filter-btn active" data-type="all">전체</button>
+                <button class="my-quotes-filter-btn" data-type="PUBLIC">공개</button>
+                <button class="my-quotes-filter-btn" data-type="PRIVATE">비공개</button>
+            </div>
+            <div class="my-quotes-filter-group">
+                <button class="my-quotes-filter-btn active" data-status="all">전체</button>
+                <button class="my-quotes-filter-btn" data-status="PENDING">대기중</button>
+                <button class="my-quotes-filter-btn" data-status="ACTIVE">활성</button>
+            </div>
+        </div>
+
+        <div class="my-quotes-list" id="myQuotesList">
+            <!-- 문장 카드가 여기에 동적으로 생성됨 -->
+        </div>
+
+        <div class="my-quotes-loading display-none" id="myQuotesLoading">
+            <div class="my-quotes-spinner"></div>
+        </div>
+
+        <div class="my-quotes-empty display-none" id="myQuotesEmpty">
+            <i class="fa-solid fa-file-circle-question"></i>
+            <p>등록한 문장이 없습니다.</p>
+        </div>
+    </div>
+</div>
+
+<!-- 문장 수정 팝업 -->
+<div class="quote-edit-popup-overlay display-none" id="quoteEditPopupOverlay">
+    <div class="quote-edit-popup" id="quoteEditPopup">
+        <h3 class="quote-edit-title">문장 수정</h3>
+        <div class="quote-edit-content">
+            <div class="quote-edit-field">
+                <label class="quote-edit-label">문장</label>
+                <textarea class="quote-edit-input quote-edit-sentence" id="quoteEditSentence" maxlength="100"
+                          rows="1"></textarea>
+                <span class="quote-edit-char-count" id="quoteEditCharCount">0/100</span>
+            </div>
+            <div class="quote-edit-field">
+                <label class="quote-edit-label">저자 (선택)</label>
+                <input type="text" class="quote-edit-input" id="quoteEditAuthor" maxlength="20"/>
+            </div>
+        </div>
+        <div class="quote-edit-actions">
+            <button class="quote-edit-cancel-btn" id="quoteEditCancelBtn">취소</button>
+            <button class="quote-edit-save-btn" id="quoteEditSaveBtn">저장</button>
+        </div>
+    </div>
+</div>
+
+<!-- 삭제 확인 팝업 -->
+<div class="confirm-popup-overlay display-none" id="deleteConfirmOverlay">
+    <div class="confirm-popup" id="deleteConfirmPopup">
+        <p class="confirm-popup-message">이 문장을 삭제하시겠습니까?</p>
+        <div class="confirm-popup-actions">
+            <button class="confirm-popup-cancel-btn" id="deleteConfirmCancelBtn">취소</button>
+            <button class="confirm-popup-ok-btn danger" id="deleteConfirmOkBtn">삭제</button>
+        </div>
+    </div>
+</div>
+
+<!-- 신고 팝업 -->
+<div class="report-popup-overlay display-none" id="reportPopupOverlay">
+    <div class="report-popup" id="reportPopup">
+        <div class="report-popup-header">
+            <h3 class="report-popup-title">문장 신고</h3>
+            <button class="report-popup-close-btn" id="reportPopupCloseBtn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- 신고 대상 문장 -->
+        <div class="report-quote-preview">
+            <span class="report-quote-label">신고 대상</span>
+            <p class="report-quote-sentence" id="reportQuoteSentence">가시에 절리지 않고서는 장미를 모을 수 없다.</p>
+            <span class="report-quote-author" id="reportQuoteAuthor">- 웰러비</span>
+        </div>
+
+        <!-- 신고 사유 선택 -->
+        <div class="report-reason-section">
+            <span class="report-section-label">신고 사유</span>
+            <div class="report-reason-options">
+                <label class="report-reason-option">
+                    <input type="radio" name="reportReason" value="MODIFY" checked/>
+                    <span class="report-reason-radio"></span>
+                    <span class="report-reason-text">수정 요청</span>
+                    <span class="report-reason-desc">오타, 맞춤법 오류 등</span>
+                </label>
+                <label class="report-reason-option">
+                    <input type="radio" name="reportReason" value="DELETE"/>
+                    <span class="report-reason-radio"></span>
+                    <span class="report-reason-text">삭제 요청</span>
+                    <span class="report-reason-desc">부적절한 내용, 저작권 위반 등</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- 상세 설명 -->
+        <div class="report-detail-section">
+            <label class="report-section-label" for="reportDetail">상세 설명</label>
+            <textarea
+                    class="report-detail-input"
+                    id="reportDetail"
+                    placeholder="신고 사유를 자세히 설명해주세요."
+                    maxlength="120"
+                    rows="3"
+            ></textarea>
+            <span class="report-detail-count" id="reportDetailCount">0/120</span>
+        </div>
+
+        <!-- 버튼 -->
+        <div class="report-popup-actions">
+            <button class="report-cancel-btn" id="reportCancelBtn">취소</button>
+            <button class="report-submit-btn" id="reportSubmitBtn">
+                <i class="fa-solid fa-flag"></i>
+                <span>신고</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 신고 내역 팝업 -->
+<div class="my-reports-popup-overlay display-none" id="myReportsPopupOverlay">
+    <div class="my-reports-popup" id="myReportsPopup">
+        <div class="my-reports-header">
+            <h2 class="my-reports-title">신고 내역</h2>
+            <button class="my-reports-close-btn" id="myReportsCloseBtn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="my-reports-filters">
+            <button class="my-reports-filter-btn active" data-status="all">전체</button>
+            <button class="my-reports-filter-btn" data-status="PENDING">대기중</button>
+            <button class="my-reports-filter-btn" data-status="PROCESSED">처리완료</button>
+        </div>
+
+        <div class="my-reports-list" id="myReportsList">
+            <!-- 신고 카드가 여기에 동적으로 생성됨 -->
+        </div>
+
+        <div class="my-reports-loading display-none" id="myReportsLoading">
+            <div class="my-reports-spinner"></div>
+        </div>
+
+        <div class="my-reports-empty display-none" id="myReportsEmpty">
+            <i class="fa-solid fa-flag"></i>
+            <p>신고 내역이 없습니다.</p>
+        </div>
+    </div>
+</div>
+
+<!-- 신고 삭제 확인 팝업 -->
+<div class="confirm-popup-overlay display-none" id="reportDeleteConfirmOverlay">
+    <div class="confirm-popup" id="reportDeleteConfirmPopup">
+        <p class="confirm-popup-message">이 신고를 취소하시겠습니까?</p>
+        <div class="confirm-popup-actions">
+            <button class="confirm-popup-cancel-btn" id="reportDeleteConfirmCancelBtn">취소</button>
+            <button class="confirm-popup-ok-btn danger" id="reportDeleteConfirmOkBtn">삭제</button>
+        </div>
+    </div>
+</div>
+
+<script src="prototype1.js"></script>
+<script src="prototype2.js"></script>
+<script src="prototype3.js"></script>
 </body>
 </html>

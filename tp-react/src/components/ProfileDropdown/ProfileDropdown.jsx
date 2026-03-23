@@ -1,9 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {useTheme} from '../../Context/ThemeContext';
 import {useAuth} from '../../Context/AuthContext';
+import {useError} from '../../Context/ErrorContext';
 import {logout as logoutApi} from '../../utils/authApi';
 import ProfilePopup from '../ProfilePopup/ProfilePopup';
-import {FaChartBar, FaChevronDown, FaCog, FaFileAlt, FaSignOutAlt, FaUser} from 'react-icons/fa';
+import {FaChartBar, FaChevronDown, FaCog, FaFileAlt, FaFlag, FaSignOutAlt, FaUser} from 'react-icons/fa';
 import './ProfileDropdown.css';
 
 // UUID 형식 체크 함수
@@ -14,8 +16,10 @@ const isUuidFormat = (str) => {
 };
 
 const ProfileDropdown = () => {
+    const navigate = useNavigate();
     const {isDark} = useTheme();
     const {user, logout} = useAuth();
+    const {showError} = useError();
     const [isOpen, setIsOpen] = useState(false);
     const [showProfilePopup, setShowProfilePopup] = useState(false);
     const dropdownRef = useRef(null);
@@ -42,10 +46,13 @@ const ProfileDropdown = () => {
 
         switch (action) {
             case 'my-sentences':
-                alert('내 문장 기능 (준비 중)');
+                navigate('/quote/my');
+                break;
+            case 'my-reports':
+                navigate('/quote/report');
                 break;
             case 'stats':
-                alert('통계 기능 (준비 중)');
+                showError('통계 기능 (준비 중)');
                 break;
             case 'settings':
                 setShowProfilePopup(true);
@@ -99,6 +106,13 @@ const ProfileDropdown = () => {
                         >
                             <FaCog/>
                             <span>프로필</span>
+                        </button>
+                        <button
+                            className={`dropdown-item ${isDark ? 'dark' : ''}`}
+                            onClick={() => handleMenuClick('my-reports')}
+                        >
+                            <FaFlag/>
+                            <span>신고 내역</span>
                         </button>
                         <div className={`dropdown-divider ${isDark ? 'dark' : ''}`}></div>
                         <button

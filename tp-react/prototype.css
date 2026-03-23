@@ -440,6 +440,64 @@ body.dark {
     color: #999;
 }
 
+/* 문장 소스 선택 */
+.quote-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.quote-source-selector {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.quote-source-btn {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    background-color: transparent;
+    color: #999;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.quote-source-btn:hover {
+    border-color: #666;
+    color: #666;
+}
+
+.quote-source-btn.active {
+    border-color: #666;
+    background-color: #666;
+    color: white;
+}
+
+.quote-source-btn.dark {
+    border-color: #3f3f46;
+    color: #71717a;
+}
+
+.quote-source-btn.dark:hover {
+    border-color: #a1a1aa;
+    color: #a1a1aa;
+}
+
+.quote-source-btn.dark.active {
+    border-color: #71717a;
+    background-color: #71717a;
+    color: white;
+}
+
+.quote-top-row .author-container {
+    margin-bottom: 0;
+}
+
 /* 타이핑 영역 */
 .quote-container {
     width: 80%;
@@ -946,4 +1004,2040 @@ body.dark {
 .nickname-popup-btn:disabled {
     background-color: #9ca3af;
     cursor: not-allowed;
+}
+
+/* 문장 업로드 팝업 */
+.upload-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2500;
+}
+
+.upload-popup {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    width: 80%;
+    max-width: 1000px;
+    min-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.upload-popup.dark {
+    background-color: #1f1f1f;
+    color: #e5e7eb;
+}
+
+.upload-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.upload-popup-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #6d28d9;
+}
+
+.upload-popup-close-btn {
+    border: none;
+    background: none;
+    color: #999;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    transition: color 0.2s;
+}
+
+.upload-popup-close-btn:hover {
+    color: #666;
+}
+
+.upload-popup-close-btn.dark {
+    color: #666;
+}
+
+.upload-popup-close-btn.dark:hover {
+    color: #999;
+}
+
+/* 공개/비공개 안내 */
+.upload-type-toggle {
+    margin-bottom: 1rem;
+}
+
+.upload-type-hint {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.upload-type-hint.dark {
+    color: #999;
+}
+
+.upload-type-info {
+    position: relative;
+    cursor: help;
+}
+
+.upload-type-info i {
+    margin-left: 0.25rem;
+    color: #999;
+}
+
+.upload-type-info.dark i {
+    color: #666;
+}
+
+.upload-type-tooltip {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 0.5rem;
+    padding: 0.75rem 1rem;
+    background-color: #333;
+    color: white;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    z-index: 10;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    width: max-content;
+    max-width: 350px;
+}
+
+.upload-type-tooltip p {
+    margin: 0;
+}
+
+.upload-type-tooltip p + p {
+    margin-top: 0.5rem;
+}
+
+.upload-type-tooltip.dark {
+    background-color: #3f3f46;
+}
+
+.upload-type-info:hover .upload-type-tooltip {
+    display: block;
+}
+
+/* 입력 영역들 */
+.upload-entries {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.upload-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background-color: #fafafa;
+}
+
+.upload-entry.dark {
+    border-color: #3f3f46;
+    background-color: #27272a;
+}
+
+.upload-entry.success {
+    border-color: #16a34a;
+    background-color: #f0fdf4;
+}
+
+.upload-entry.success.dark {
+    border-color: #22c55e;
+    background-color: #14532d20;
+}
+
+.upload-entry.error {
+    border-color: #dc2626;
+}
+
+.upload-entry-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.upload-entry-number {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #6d28d9;
+}
+
+.upload-entry-delete-btn {
+    border: none;
+    background: none;
+    color: #999;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.upload-entry-delete-btn:hover {
+    color: #dc2626;
+}
+
+.upload-entry-delete-btn.dark {
+    color: #666;
+}
+
+.upload-entry-delete-btn.dark:hover {
+    color: #dc2626;
+}
+
+/* 각 entry의 공개/비공개 토글 */
+.upload-entry-type-toggle {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.upload-entry-type-btn {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.25rem;
+    background-color: transparent;
+    color: #999;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.upload-entry-type-btn:hover {
+    border-color: #6d28d9;
+    color: #6d28d9;
+}
+
+.upload-entry-type-btn.active {
+    border-color: #6d28d9;
+    background-color: #6d28d9;
+    color: white;
+}
+
+.upload-entry-type-btn.dark {
+    border-color: #3f3f46;
+    color: #666;
+}
+
+.upload-entry-type-btn.dark:hover {
+    border-color: #8b5cf6;
+    color: #8b5cf6;
+}
+
+.upload-entry-type-btn.dark.active {
+    border-color: #8b5cf6;
+    background-color: #8b5cf6;
+    color: white;
+}
+
+.upload-entry-inputs {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.upload-sentence-wrapper {
+    flex: 1;
+}
+
+.upload-author-wrapper {
+    width: 150px;
+}
+
+.upload-input {
+    width: 100%;
+    padding: 0.5rem 0;
+    border: none;
+    border-bottom: 1px solid #e5e7eb;
+    background-color: transparent;
+    font-size: 1rem;
+    color: #333;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.upload-input:focus {
+    border-bottom-color: #6d28d9;
+}
+
+.upload-input.dark {
+    border-bottom-color: #3f3f46;
+    color: #e5e7eb;
+}
+
+.upload-input.dark:focus {
+    border-bottom-color: #8b5cf6;
+}
+
+.upload-input::placeholder {
+    color: #999;
+}
+
+.upload-input.dark::placeholder {
+    color: #666;
+}
+
+.upload-entry-message {
+    font-size: 0.85rem;
+    min-height: 1.25rem;
+}
+
+.upload-entry-message.error {
+    color: #dc2626;
+}
+
+.upload-entry-message.success {
+    color: #16a34a;
+}
+
+.upload-entry-message.success.dark {
+    color: #22c55e;
+}
+
+/* 문장 추가 버튼 */
+.upload-add-btn {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
+    border: 2px dashed #e5e7eb;
+    border-radius: 0.5rem;
+    background-color: transparent;
+    color: #999;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.upload-add-btn:hover {
+    border-color: #6d28d9;
+    color: #6d28d9;
+}
+
+.upload-add-btn.dark {
+    border-color: #3f3f46;
+    color: #666;
+}
+
+.upload-add-btn.dark:hover {
+    border-color: #8b5cf6;
+    color: #8b5cf6;
+}
+
+.upload-add-btn:disabled {
+    border-color: #e5e7eb;
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.upload-add-btn.dark:disabled {
+    border-color: #3f3f46;
+    color: #555;
+}
+
+/* 하단 버튼 */
+.upload-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.upload-cancel-btn {
+    padding: 0.75rem 1.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background-color: transparent;
+    color: #666;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.upload-cancel-btn:hover {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.upload-cancel-btn.dark {
+    border-color: #3f3f46;
+    color: #999;
+}
+
+.upload-cancel-btn.dark:hover {
+    background-color: #27272a;
+    color: #e5e7eb;
+}
+
+.upload-submit-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #6d28d9;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.upload-submit-btn:hover {
+    background-color: #5b21b6;
+}
+
+.upload-submit-btn:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.upload-submit-btn.dark {
+    background-color: #8b5cf6;
+}
+
+.upload-submit-btn.dark:hover {
+    background-color: #7c3aed;
+}
+
+/* 확인 팝업 */
+.confirm-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+}
+
+.confirm-popup {
+    background-color: white;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.confirm-popup.dark {
+    background-color: #1f1f1f;
+    color: #e5e7eb;
+}
+
+.confirm-popup-message {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.confirm-popup-message.dark {
+    color: #e5e7eb;
+}
+
+.confirm-popup-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.confirm-popup-cancel-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background-color: transparent;
+    color: #666;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.confirm-popup-cancel-btn:hover {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.confirm-popup-cancel-btn.dark {
+    border-color: #3f3f46;
+    color: #999;
+}
+
+.confirm-popup-cancel-btn.dark:hover {
+    background-color: #27272a;
+    color: #e5e7eb;
+}
+
+.confirm-popup-ok-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #6d28d9;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.confirm-popup-ok-btn:hover {
+    background-color: #5b21b6;
+}
+
+.confirm-popup-ok-btn.dark {
+    background-color: #8b5cf6;
+}
+
+.confirm-popup-ok-btn.dark:hover {
+    background-color: #7c3aed;
+}
+
+.confirm-popup-ok-btn.danger {
+    background-color: #dc2626;
+}
+
+.confirm-popup-ok-btn.danger:hover {
+    background-color: #b91c1c;
+}
+
+/* ===========================================
+   내 문장 팝업
+   =========================================== */
+.my-quotes-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.my-quotes-popup {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    width: 90%;
+    max-width: 700px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.my-quotes-popup.dark {
+    background-color: #1f1f1f;
+}
+
+body.dark .my-quotes-popup {
+    background-color: #1f1f1f;
+}
+
+.my-quotes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem 1rem 2rem;
+}
+
+.my-quotes-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #6d28d9;
+    margin: 0;
+}
+
+.my-quotes-close-btn {
+    border: none;
+    background: none;
+    color: #999;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.my-quotes-close-btn:hover {
+    color: #666;
+}
+
+.my-quotes-close-btn.dark {
+    color: #71717a;
+}
+
+.my-quotes-close-btn.dark:hover {
+    color: #a1a1aa;
+}
+
+body.dark .my-quotes-close-btn {
+    color: #71717a;
+}
+
+body.dark .my-quotes-close-btn:hover {
+    color: #a1a1aa;
+}
+
+/* 필터 버튼 */
+.my-quotes-filters {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 2rem 1rem 2rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.my-quotes-filters.dark {
+    border-bottom-color: #27272a;
+}
+
+body.dark .my-quotes-filters {
+    border-bottom-color: #27272a;
+}
+
+.my-quotes-filter-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.my-quotes-filter-btn {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    background-color: transparent;
+    color: #999;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.my-quotes-filter-btn:hover {
+    border-color: #6d28d9;
+    color: #6d28d9;
+}
+
+.my-quotes-filter-btn.active {
+    border-color: #6d28d9;
+    background-color: #6d28d9;
+    color: white;
+}
+
+.my-quotes-filter-btn.dark {
+    border-color: #3f3f46;
+    color: #71717a;
+}
+
+.my-quotes-filter-btn.dark:hover {
+    border-color: #8b5cf6;
+    color: #8b5cf6;
+}
+
+.my-quotes-filter-btn.dark.active {
+    border-color: #8b5cf6;
+    background-color: #8b5cf6;
+    color: white;
+}
+
+/* 문장 목록 */
+.my-quotes-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* 문장 카드 */
+.my-quote-card {
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background-color: #f9fafb;
+}
+
+.my-quote-card.dark {
+    border-color: #27272a;
+    background-color: #18181b;
+}
+
+.my-quote-card-header {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.my-quote-badge {
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+.my-quote-badge.type-public {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+}
+
+.my-quote-badge.type-private {
+    background-color: #f3e8ff;
+    color: #7c3aed;
+}
+
+.my-quote-badge.status-pending {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.my-quote-badge.status-active {
+    background-color: #dcfce7;
+    color: #16a34a;
+}
+
+.my-quote-badge.status-hidden {
+    background-color: #fecaca;
+    color: #dc2626;
+}
+
+.my-quote-badge.dark.type-public {
+    background-color: #1e3a5f;
+    color: #93c5fd;
+}
+
+.my-quote-badge.dark.type-private {
+    background-color: #3b1f5c;
+    color: #c4b5fd;
+}
+
+.my-quote-badge.dark.status-pending {
+    background-color: #4a3f1f;
+    color: #fcd34d;
+}
+
+.my-quote-badge.dark.status-active {
+    background-color: #1a3d2e;
+    color: #86efac;
+}
+
+.my-quote-badge.dark.status-hidden {
+    background-color: #4a1f1f;
+    color: #fca5a5;
+}
+
+.my-quote-sentence {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+    word-break: break-word;
+}
+
+.my-quote-sentence.dark {
+    color: #e5e7eb;
+}
+
+.my-quote-author {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.my-quote-author.dark {
+    color: #a1a1aa;
+}
+
+.my-quote-card-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.my-quote-action-btn {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    background-color: transparent;
+    color: #666;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.my-quote-action-btn:hover {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.my-quote-action-btn.dark {
+    border-color: #3f3f46;
+    color: #a1a1aa;
+}
+
+.my-quote-action-btn.dark:hover {
+    background-color: #27272a;
+    color: #e5e7eb;
+}
+
+.my-quote-action-btn.danger {
+    border-color: #fecaca;
+    color: #dc2626;
+}
+
+.my-quote-action-btn.danger:hover {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.my-quote-action-btn.dark.danger {
+    border-color: #4a1f1f;
+    color: #f87171;
+}
+
+.my-quote-action-btn.dark.danger:hover {
+    background-color: #4a1f1f;
+    color: #fca5a5;
+}
+
+.my-quote-action-btn.primary {
+    border-color: #6d28d9;
+    color: #6d28d9;
+}
+
+.my-quote-action-btn.primary:hover {
+    background-color: #6d28d9;
+    color: white;
+}
+
+.my-quote-action-btn.dark.primary {
+    border-color: #8b5cf6;
+    color: #8b5cf6;
+}
+
+.my-quote-action-btn.dark.primary:hover {
+    background-color: #8b5cf6;
+    color: white;
+}
+
+/* 로딩, 끝, 빈 상태 */
+.my-quotes-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.my-quotes-loading.dark {
+    color: #a1a1aa;
+}
+
+.my-quotes-spinner {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid #e5e7eb;
+    border-top-color: #6d28d9;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.my-quotes-spinner.dark {
+    border-color: #3f3f46;
+    border-top-color: #8b5cf6;
+}
+
+.my-quotes-end {
+    text-align: center;
+    padding: 1rem;
+    color: #999;
+    font-size: 0.85rem;
+}
+
+.my-quotes-end.dark {
+    color: #71717a;
+}
+
+.my-quotes-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    color: #999;
+}
+
+.my-quotes-empty.dark {
+    color: #71717a;
+}
+
+.my-quotes-empty i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.my-quotes-empty p {
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* ===========================================
+   문장 수정 팝업
+   =========================================== */
+.quote-edit-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2500;
+}
+
+.quote-edit-popup {
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.quote-edit-popup.dark {
+    background-color: #1f1f1f;
+}
+
+.quote-edit-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #6d28d9;
+    margin: 0 0 1.5rem 0;
+}
+
+.quote-edit-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.quote-edit-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    position: relative;
+}
+
+.quote-edit-label {
+    font-size: 0.85rem;
+    color: #666;
+    font-weight: 500;
+}
+
+.quote-edit-label.dark {
+    color: #a1a1aa;
+}
+
+.quote-edit-input {
+    padding: 0.5rem 0;
+    border: none;
+    border-bottom: 1px solid #e5e7eb;
+    background-color: transparent;
+    font-size: 1rem;
+    color: #333;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+.quote-edit-input:focus {
+    border-bottom-color: #6d28d9;
+}
+
+.quote-edit-input.dark {
+    border-bottom-color: #3f3f46;
+    color: #e5e7eb;
+}
+
+.quote-edit-input.dark:focus {
+    border-bottom-color: #8b5cf6;
+}
+
+.quote-edit-sentence {
+    resize: none;
+    overflow: hidden;
+    min-height: 1.5rem;
+    line-height: 1.5;
+}
+
+.quote-edit-char-count {
+    position: absolute;
+    right: 0;
+    bottom: 0.25rem;
+    font-size: 0.75rem;
+    color: #999;
+}
+
+.quote-edit-char-count.dark {
+    color: #71717a;
+}
+
+.quote-edit-char-count.warning {
+    color: #dc2626;
+}
+
+.quote-edit-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.quote-edit-cancel-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background-color: transparent;
+    color: #666;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quote-edit-cancel-btn:hover {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.quote-edit-cancel-btn.dark {
+    border-color: #3f3f46;
+    color: #a1a1aa;
+}
+
+.quote-edit-cancel-btn.dark:hover {
+    background-color: #27272a;
+    color: #e5e7eb;
+}
+
+.quote-edit-save-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #e5e7eb;
+    color: #999;
+    font-size: 1rem;
+    cursor: not-allowed;
+    transition: all 0.2s;
+}
+
+.quote-edit-save-btn:enabled {
+    background-color: #6d28d9;
+    color: white;
+    cursor: pointer;
+}
+
+.quote-edit-save-btn:enabled:hover {
+    background-color: #5b21b6;
+}
+
+.quote-edit-save-btn.dark {
+    background-color: #3f3f46;
+    color: #71717a;
+}
+
+.quote-edit-save-btn.dark:enabled {
+    background-color: #8b5cf6;
+    color: white;
+}
+
+.quote-edit-save-btn.dark:enabled:hover {
+    background-color: #7c3aed;
+}
+
+/* ===========================================
+   body.dark 기반 스타일 (내 문장, 문장 수정 팝업)
+   =========================================== */
+body.dark .my-quotes-filter-btn {
+    border-color: #3f3f46;
+    color: #71717a;
+}
+
+body.dark .my-quotes-filter-btn:hover {
+    border-color: #8b5cf6;
+    color: #8b5cf6;
+}
+
+body.dark .my-quotes-filter-btn.active {
+    border-color: #8b5cf6;
+    background-color: #8b5cf6;
+    color: white;
+}
+
+body.dark .my-quote-card {
+    border-color: #27272a;
+    background-color: #18181b;
+}
+
+body.dark .my-quote-badge.type-public {
+    background-color: #1e3a5f;
+    color: #93c5fd;
+}
+
+body.dark .my-quote-badge.type-private {
+    background-color: #3b1f5c;
+    color: #c4b5fd;
+}
+
+body.dark .my-quote-badge.status-pending {
+    background-color: #4a3f1f;
+    color: #fcd34d;
+}
+
+body.dark .my-quote-badge.status-active {
+    background-color: #1a3d2e;
+    color: #86efac;
+}
+
+body.dark .my-quote-badge.status-hidden {
+    background-color: #4a1f1f;
+    color: #fca5a5;
+}
+
+body.dark .my-quote-sentence {
+    color: #e5e7eb;
+}
+
+body.dark .my-quote-author {
+    color: #a1a1aa;
+}
+
+body.dark .my-quote-action-btn {
+    border-color: #3f3f46;
+    color: #a1a1aa;
+}
+
+body.dark .my-quote-action-btn:hover {
+    background-color: #27272a;
+    color: #e5e7eb;
+}
+
+body.dark .my-quote-action-btn.danger {
+    border-color: #4a1f1f;
+    color: #f87171;
+}
+
+body.dark .my-quote-action-btn.danger:hover {
+    background-color: #4a1f1f;
+    color: #fca5a5;
+}
+
+body.dark .my-quote-action-btn.primary {
+    border-color: #8b5cf6;
+    color: #8b5cf6;
+}
+
+body.dark .my-quote-action-btn.primary:hover {
+    background-color: #8b5cf6;
+    color: white;
+}
+
+body.dark .my-quotes-loading {
+    color: #a1a1aa;
+}
+
+body.dark .my-quotes-spinner {
+    border-color: #3f3f46;
+    border-top-color: #8b5cf6;
+}
+
+body.dark .my-quotes-empty {
+    color: #71717a;
+}
+
+body.dark .quote-edit-popup {
+    background-color: #1f1f1f;
+}
+
+body.dark .quote-edit-label {
+    color: #a1a1aa;
+}
+
+body.dark .quote-edit-input {
+    border-bottom-color: #3f3f46;
+    color: #e5e7eb;
+}
+
+body.dark .quote-edit-input:focus {
+    border-bottom-color: #8b5cf6;
+}
+
+body.dark .quote-edit-char-count {
+    color: #71717a;
+}
+
+body.dark .quote-edit-cancel-btn {
+    border-color: #3f3f46;
+    color: #a1a1aa;
+}
+
+body.dark .quote-edit-cancel-btn:hover {
+    background-color: #27272a;
+    color: #e5e7eb;
+}
+
+body.dark .quote-edit-save-btn {
+    background-color: #3f3f46;
+    color: #71717a;
+}
+
+body.dark .quote-edit-save-btn:enabled {
+    background-color: #8b5cf6;
+    color: white;
+}
+
+body.dark .quote-edit-save-btn:enabled:hover {
+    background-color: #7c3aed;
+}
+
+body.dark .confirm-popup {
+    background-color: #1f1f1f;
+}
+
+body.dark .confirm-popup-message {
+    color: #e5e7eb;
+}
+
+body.dark .confirm-popup-cancel-btn {
+    border-color: #3f3f46;
+    color: #999;
+}
+
+body.dark .confirm-popup-cancel-btn:hover {
+    background-color: #27272a;
+    color: #e5e7eb;
+}
+
+body.dark .confirm-popup-ok-btn {
+    background-color: #8b5cf6;
+}
+
+body.dark .confirm-popup-ok-btn:hover {
+    background-color: #7c3aed;
+}
+
+/* 더보기 메뉴 */
+.quote-more-container {
+    position: relative;
+    margin-left: 0.5rem;
+}
+
+.quote-more-btn {
+    padding: 0.25rem 0.5rem;
+    border: none;
+    background: none;
+    color: #999;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.quote-more-btn:hover {
+    color: #666;
+}
+
+body.dark .quote-more-btn {
+    color: #71717a;
+}
+
+body.dark .quote-more-btn:hover {
+    color: #a1a1aa;
+}
+
+.quote-more-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0.25rem;
+    padding: 0.25rem 0;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+body.dark .quote-more-menu {
+    background-color: #1f1f1f;
+    border-color: #3f3f46;
+}
+
+.quote-more-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: none;
+    background: none;
+    color: #666;
+    font-size: 0.875rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.quote-more-item:hover {
+    background-color: #f5f5f5;
+    color: #ef4444;
+}
+
+body.dark .quote-more-item {
+    color: #a1a1aa;
+}
+
+body.dark .quote-more-item:hover {
+    background-color: #27272a;
+    color: #f87171;
+}
+
+/* 신고 팝업 */
+.report-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.report-popup {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    max-width: 480px;
+    width: 90%;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+body.dark .report-popup {
+    background-color: #1f1f1f;
+}
+
+.report-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+
+.report-popup-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+body.dark .report-popup-title {
+    color: #e5e7eb;
+}
+
+.report-popup-close-btn {
+    border: none;
+    background: none;
+    color: #999;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    transition: color 0.2s;
+}
+
+.report-popup-close-btn:hover {
+    color: #666;
+}
+
+body.dark .report-popup-close-btn {
+    color: #71717a;
+}
+
+body.dark .report-popup-close-btn:hover {
+    color: #a1a1aa;
+}
+
+/* 신고 대상 문장 미리보기 */
+.report-quote-preview {
+    background-color: #f5f5f5;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+body.dark .report-quote-preview {
+    background-color: #27272a;
+}
+
+.report-quote-label {
+    font-size: 0.75rem;
+    color: #999;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+body.dark .report-quote-label {
+    color: #71717a;
+}
+
+.report-quote-sentence {
+    font-size: 0.95rem;
+    color: #333;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.5;
+}
+
+body.dark .report-quote-sentence {
+    color: #e5e7eb;
+}
+
+.report-quote-author {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+body.dark .report-quote-author {
+    color: #a1a1aa;
+}
+
+/* 신고 사유 섹션 */
+.report-reason-section {
+    margin-bottom: 1.25rem;
+}
+
+.report-section-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #333;
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+body.dark .report-section-label {
+    color: #e5e7eb;
+}
+
+.report-reason-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.report-reason-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.report-reason-option:hover {
+    border-color: #d1d5db;
+    background-color: #fafafa;
+}
+
+body.dark .report-reason-option {
+    border-color: #3f3f46;
+}
+
+body.dark .report-reason-option:hover {
+    border-color: #52525b;
+    background-color: #27272a;
+}
+
+.report-reason-option:has(input:checked) {
+    border-color: #6d28d9;
+    background-color: #faf5ff;
+}
+
+body.dark .report-reason-option:has(input:checked) {
+    border-color: #8b5cf6;
+    background-color: rgba(139, 92, 246, 0.1);
+}
+
+.report-reason-option input {
+    display: none;
+}
+
+.report-reason-radio {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #d1d5db;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2px;
+    position: relative;
+    transition: all 0.2s;
+}
+
+body.dark .report-reason-radio {
+    border-color: #52525b;
+}
+
+.report-reason-option:has(input:checked) .report-reason-radio {
+    border-color: #6d28d9;
+}
+
+body.dark .report-reason-option:has(input:checked) .report-reason-radio {
+    border-color: #8b5cf6;
+}
+
+.report-reason-option:has(input:checked) .report-reason-radio::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background-color: #6d28d9;
+    border-radius: 50%;
+}
+
+body.dark .report-reason-option:has(input:checked) .report-reason-radio::after {
+    background-color: #8b5cf6;
+}
+
+.report-reason-text {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #333;
+    display: block;
+}
+
+body.dark .report-reason-text {
+    color: #e5e7eb;
+}
+
+.report-reason-desc {
+    font-size: 0.8rem;
+    color: #666;
+    display: block;
+    margin-top: 0.125rem;
+}
+
+body.dark .report-reason-desc {
+    color: #a1a1aa;
+}
+
+/* 상세 설명 */
+.report-detail-section {
+    margin-bottom: 1.5rem;
+}
+
+.report-detail-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-family: inherit;
+    resize: none;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.report-detail-input:focus {
+    border-color: #6d28d9;
+}
+
+body.dark .report-detail-input {
+    background-color: #27272a;
+    border-color: #3f3f46;
+    color: #e5e7eb;
+}
+
+body.dark .report-detail-input:focus {
+    border-color: #8b5cf6;
+}
+
+.report-detail-input::placeholder {
+    color: #999;
+}
+
+body.dark .report-detail-input::placeholder {
+    color: #71717a;
+}
+
+.report-detail-count {
+    display: block;
+    text-align: right;
+    font-size: 0.75rem;
+    color: #999;
+    margin-top: 0.25rem;
+}
+
+body.dark .report-detail-count {
+    color: #71717a;
+}
+
+/* 신고 버튼 */
+.report-popup-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.report-cancel-btn {
+    padding: 0.625rem 1.25rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background-color: transparent;
+    color: #666;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.report-cancel-btn:hover {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+body.dark .report-cancel-btn {
+    border-color: #3f3f46;
+    color: #a1a1aa;
+}
+
+body.dark .report-cancel-btn:hover {
+    background-color: #27272a;
+    color: #e5e7eb;
+}
+
+.report-submit-btn {
+    padding: 0.625rem 1.25rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #ef4444;
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.report-submit-btn:hover {
+    background-color: #dc2626;
+}
+
+.report-submit-btn:disabled {
+    background-color: #fca5a5;
+    cursor: not-allowed;
+}
+
+body.dark .report-submit-btn:disabled {
+    background-color: #7f1d1d;
+    color: #fca5a5;
+}
+
+/* ===== 신고 내역 팝업 ===== */
+.my-reports-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.my-reports-popup {
+    background-color: white;
+    border-radius: 1rem;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+body.dark .my-reports-popup {
+    background-color: #1f1f1f;
+}
+
+.my-reports-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+body.dark .my-reports-header {
+    border-bottom-color: #3f3f46;
+}
+
+.my-reports-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+body.dark .my-reports-title {
+    color: #e5e7eb;
+}
+
+.my-reports-close-btn {
+    border: none;
+    background: none;
+    color: #999;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    transition: color 0.2s;
+}
+
+.my-reports-close-btn:hover {
+    color: #666;
+}
+
+body.dark .my-reports-close-btn {
+    color: #71717a;
+}
+
+body.dark .my-reports-close-btn:hover {
+    color: #a1a1aa;
+}
+
+.my-reports-filters {
+    display: flex;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+body.dark .my-reports-filters {
+    border-bottom-color: #3f3f46;
+}
+
+.my-reports-filter-btn {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 1rem;
+    background-color: transparent;
+    color: #666;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.my-reports-filter-btn:hover {
+    border-color: #d1d5db;
+    background-color: #f9fafb;
+}
+
+.my-reports-filter-btn.active {
+    border-color: #6d28d9;
+    background-color: #6d28d9;
+    color: white;
+}
+
+body.dark .my-reports-filter-btn {
+    border-color: #3f3f46;
+    color: #a1a1aa;
+}
+
+body.dark .my-reports-filter-btn:hover {
+    border-color: #52525b;
+    background-color: #27272a;
+}
+
+body.dark .my-reports-filter-btn.active {
+    border-color: #8b5cf6;
+    background-color: #8b5cf6;
+    color: white;
+}
+
+.my-reports-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.my-report-card {
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1rem;
+}
+
+body.dark .my-report-card {
+    background-color: #27272a;
+    border-color: #3f3f46;
+}
+
+.my-report-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.my-report-badges {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.my-report-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.my-report-badge.reason-modify {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+}
+
+body.dark .my-report-badge.reason-modify {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+}
+
+.my-report-badge.reason-delete {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+body.dark .my-report-badge.reason-delete {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+}
+
+.my-report-badge.status-pending {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+body.dark .my-report-badge.status-pending {
+    background-color: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+}
+
+.my-report-badge.status-processed {
+    background-color: #d1fae5;
+    color: #059669;
+}
+
+body.dark .my-report-badge.status-processed {
+    background-color: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+}
+
+.my-report-date {
+    font-size: 0.75rem;
+    color: #999;
+}
+
+body.dark .my-report-date {
+    color: #71717a;
+}
+
+.my-report-quote {
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    border-left: 3px solid #6d28d9;
+}
+
+body.dark .my-report-quote {
+    background-color: #1f1f1f;
+    border-left-color: #8b5cf6;
+}
+
+.my-report-quote.deleted {
+    opacity: 0.6;
+    border-left-color: #999;
+}
+
+body.dark .my-report-quote.deleted {
+    border-left-color: #52525b;
+}
+
+.my-report-sentence {
+    font-size: 0.9rem;
+    color: #333;
+    margin: 0 0 0.25rem 0;
+    line-height: 1.5;
+}
+
+body.dark .my-report-sentence {
+    color: #e5e7eb;
+}
+
+.my-report-author {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+body.dark .my-report-author {
+    color: #a1a1aa;
+}
+
+.my-report-deleted-text {
+    font-size: 0.8rem;
+    color: #999;
+    font-style: italic;
+}
+
+body.dark .my-report-deleted-text {
+    color: #71717a;
+}
+
+.my-report-detail {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+}
+
+body.dark .my-report-detail {
+    color: #a1a1aa;
+}
+
+.my-report-card-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.my-report-delete-btn {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    background-color: transparent;
+    color: #666;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.my-report-delete-btn:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+    background-color: #fef2f2;
+}
+
+body.dark .my-report-delete-btn {
+    border-color: #3f3f46;
+    color: #a1a1aa;
+}
+
+body.dark .my-report-delete-btn:hover {
+    border-color: #f87171;
+    color: #f87171;
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+.my-reports-loading {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.my-reports-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #e5e7eb;
+    border-top-color: #6d28d9;
+    border-radius: 50%;
+    animation: my-reports-spin 0.8s linear infinite;
+}
+
+body.dark .my-reports-spinner {
+    border-color: #3f3f46;
+    border-top-color: #8b5cf6;
+}
+
+@keyframes my-reports-spin {
+    to { transform: rotate(360deg); }
+}
+
+.my-reports-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    color: #999;
+}
+
+.my-reports-empty i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.my-reports-empty p {
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+body.dark .my-reports-empty {
+    color: #71717a;
 }

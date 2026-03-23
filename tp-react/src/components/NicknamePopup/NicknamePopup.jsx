@@ -10,10 +10,10 @@ const isUuidFormat = (str) => {
     return uuidRegex.test(str);
 };
 
-const NicknamePopup = ({defaultNickname, isNewMember, onSubmit, onClose}) => {
+const NicknamePopup = ({initialNickname, onSubmit}) => {
     const {isDark} = useTheme();
-    // UUID 형식이면 빈 값으로 시작, 아니면 defaultNickname 사용
-    const [nickname, setNickname] = useState(isUuidFormat(defaultNickname) ? '' : (defaultNickname || ''));
+    // UUID 형식이면 빈 값으로 시작, 아니면 initialNickname 사용
+    const [nickname, setNickname] = useState(isUuidFormat(initialNickname) ? '' : (initialNickname || ''));
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isChecking, setIsChecking] = useState(false);
@@ -110,9 +110,6 @@ const NicknamePopup = ({defaultNickname, isNewMember, onSubmit, onClose}) => {
                     닉네임을 설정해주세요. (2-10자)
                 </p>
                 <div className="nickname-input-group">
-                    <label className={`nickname-label ${isDark ? 'dark' : ''}`} htmlFor="nicknameInput">
-                        닉네임
-                    </label>
                     <div className="nickname-input-wrapper">
                         <input
                             type="text"

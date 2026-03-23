@@ -1,0 +1,30 @@
+.input-display {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    line-height: 1.8;
+    z-index: 10;
+    pointer-events: none;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: normal;
+    overflow-wrap: break-word;
+}
+
+.input-char-correct {
+    color: var(--color-correct);
+}
+
+.input-char-incorrect {
+    color: var(--color-error);
+}
+
+.input-char-none {
+    color: var(--color-text-muted);
+}
+
+/* Default 모드 스타일 - InputDisplay 숨김 */
+.default-mode .input-display {
+    display: none;
+}
