@@ -1,5 +1,14 @@
 export const updateHistory = [
     {
+        version: "1.1.2",
+        date: "2026년 3월 23일",
+        showPopup: true,
+        hidden: false,
+        improvements: [
+            "일반 모드에서 입력 시 예문이 변경되지 않고 원본 유지되도록 개선"
+        ]
+    },
+    {
         version: "1.1.1",
         date: "2025년 12월 10일",
         showPopup: false,

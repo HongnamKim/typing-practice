@@ -32,6 +32,10 @@
     color: #d4d4d4;
 }
 
+.input-char-composing {
+    color: transparent;
+}
+
 /* Default 모드 스타일 - InputDisplay 숨김 */
 .default-mode .input-display {
     display: none;
