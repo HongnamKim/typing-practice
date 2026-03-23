@@ -140,4 +140,5 @@
 .quote-upload-entry-error {
     font-size: 0.85rem;
     color: var(--color-error);
+    white-space: pre-line;
 }

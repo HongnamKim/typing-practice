@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import {FaFileCircleQuestion} from 'react-icons/fa6';
 import {useAuth} from '../../Context/AuthContext';
 import {useError} from '../../Context/ErrorContext';
-import {cancelPublishQuote, deleteQuote, getMyQuotes, publishQuote, updateQuote} from '@/utils/quoteApi.ts';
+import {cancelPublishQuote, deleteQuote, getMyQuotes, publishQuote, updateQuote, extractQuoteErrorMessage} from '@/utils/quoteApi.ts';
 import QuoteCard from './components/QuoteCard';
 import QuoteFilters from './components/QuoteFilters';
 import QuoteEditPopup from './components/QuoteEditPopup';
@@ -131,8 +131,7 @@ function MyQuotes() {
             setEditingQuote(null);
         } catch (error) {
             console.error('문장 수정 실패:', error);
-            const message = error.response?.data?.detail || '문장 수정에 실패했습니다.';
-            showError(message);
+            showError(extractQuoteErrorMessage(error, '내 문장 내에 유사한 문장이 존재합니다.', '문장 수정에 실패했습니다.'));
         }
     };
 
@@ -169,8 +168,7 @@ function MyQuotes() {
             ));
         } catch (error) {
             console.error('공개 전환 실패:', error);
-            const message = error.response?.data?.detail || '공개 전환에 실패했습니다.';
-            showError(message);
+            showError(extractQuoteErrorMessage(error, '공개 문장 내에 유사한 문장이 존재합니다.', '공개 전환에 실패했습니다.'));
         }
     };
 

@@ -200,6 +200,7 @@ code {
     margin: 0 0 1.5rem 0;
     line-height: 1.6;
     word-break: keep-all;
+    white-space: pre-line;
 }
 
 .error-popup-btn {
