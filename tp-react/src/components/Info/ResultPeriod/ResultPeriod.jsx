@@ -13,26 +13,17 @@ const ResultPeriod = () => {
   const { resultPeriod, setResultPeriod } = useContext(SettingContext);
 
   const handleResultPeriod = (event) => {
+    const length = resultPeriodDisplaySet.length;
+    let newPeriod;
+
     if (event.target.id === "result-period-up") {
-      setResultPeriod((prev) => {
-        return (prev + 1) % 4;
-      });
-
-      localStorage.setItem(
-        Storage_Result_Period,
-        ((resultPeriod + 1) % 4).toString(),
-      );
+      newPeriod = (resultPeriod + 1) % length;
     } else {
-      setResultPeriod((prev) => {
-        if (prev === 0) return prev + 3;
-        return prev - 1;
-      });
-
-      localStorage.setItem(
-        Storage_Result_Period,
-        ((resultPeriod - 1) % 4).toString(),
-      );
+      newPeriod = (resultPeriod - 1 + length) % length;
     }
+
+    setResultPeriod(newPeriod);
+    localStorage.setItem(Storage_Result_Period, newPeriod.toString());
   };
 
   return (
