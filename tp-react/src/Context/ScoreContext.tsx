@@ -46,6 +46,8 @@ interface ScoreContextType {
     setCpmList: Dispatch<SetStateAction<number[]>>;
     accList: number[];
     setAccList: Dispatch<SetStateAction<number[]>>;
+    resetCount: number;
+    setResetCount: Dispatch<SetStateAction<number>>;
 }
 
 export const ScoreContext = createContext<ScoreContextType | null>(null);
@@ -90,6 +92,7 @@ export const ScoreContextProvider = ({children}: ScoreContextProviderProps) => {
 
     const [cpmList, setCpmList] = useState<number[]>([]);
     const [accList, setAccList] = useState<number[]>([]);
+    const [resetCount, setResetCount] = useState<number>(0);
 
     return (
         <ScoreContext.Provider
@@ -106,6 +109,7 @@ export const ScoreContextProvider = ({children}: ScoreContextProviderProps) => {
                 popupData, setPopupData,
                 cpmList, setCpmList,
                 accList, setAccList,
+                resetCount, setResetCount,
             }}
         >
             {children}
