@@ -349,7 +349,7 @@ document.getElementById('loginBtn').addEventListener('click', () => {
             // 기존 회원은 바로 로그인 처리
             handleLoginSuccess({nickname: "홍남김"});
         }
-    }, 1500);
+    }, 300);
 });
 
 // 닉네임 제출
