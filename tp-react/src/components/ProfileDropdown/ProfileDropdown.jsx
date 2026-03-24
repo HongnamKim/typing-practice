@@ -52,7 +52,7 @@ const ProfileDropdown = () => {
                 navigate('/quote/report');
                 break;
             case 'stats':
-                showError('통계 기능 (준비 중)');
+                navigate('/stats');
                 break;
             case 'settings':
                 setShowProfilePopup(true);
@@ -98,7 +98,7 @@ const ProfileDropdown = () => {
                             onClick={() => handleMenuClick('stats')}
                         >
                             <FaChartBar/>
-                            <span>통계</span>
+                            <span>기록</span>
                         </button>
                         <button
                             className={`dropdown-item ${isDark ? 'dark' : ''}`}
