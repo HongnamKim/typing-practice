@@ -301,7 +301,7 @@ document.getElementById('mysentencesBtn').addEventListener('click', () => {
 });
 
 document.getElementById('statsBtn').addEventListener('click', () => {
-    alert('통계 기능 (준비 중)');
+    // 통계 기능은 prototype4-stats.js에서 처리
     document.getElementById('dropdownMenu').classList.add('display-none');
 });
 
