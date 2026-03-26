@@ -9,6 +9,24 @@ interface UpdateEntry {
 
 export const updateHistory: UpdateEntry[] = [
     {
+        version: "1.2.0",
+        date: "2026년 3월 X일",
+        showPopup: true,
+        hidden: false,
+        features: [
+            "문장 업로드 기능 추가",
+            "내 문장 관리 페이지 추가 (수정, 삭제, 공개전환)",
+            "전체 문장 / 내 문장 전환 기능 추가",
+            "문장 신고 기능 및 신고 내역 페이지 추가",
+            "타이핑 기록 페이지 추가 (종합 통계, 일별 추이, 오타 분석)",
+            "타이핑 연습 완료 시 기록 자동 저장",
+        ],
+        improvements: [
+            "타이핑 채점 색상 표시 방식 개선",
+            "결과 표시 주기 선택 버그 수정",
+        ]
+    },
+    {
         version: "1.1.2",
         date: "2026년 3월 23일",
         showPopup: true,
