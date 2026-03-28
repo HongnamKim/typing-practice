@@ -2,14 +2,18 @@ package com.typingpractice.typing_practice_be.member.service;
 
 import com.typingpractice.typing_practice_be.auth.dto.google.GoogleUserInfo;
 import com.typingpractice.typing_practice_be.auth.repository.RefreshTokenRepository;
+import com.typingpractice.typing_practice_be.member.config.AdminProperties;
 import com.typingpractice.typing_practice_be.member.domain.Member;
+import com.typingpractice.typing_practice_be.member.domain.MemberRole;
 import com.typingpractice.typing_practice_be.member.dto.LoginResult;
 import com.typingpractice.typing_practice_be.member.exception.DuplicateNicknameException;
-import com.typingpractice.typing_practice_be.member.query.MemberCreateQuery;
 import com.typingpractice.typing_practice_be.member.exception.MemberNotFoundException;
+import com.typingpractice.typing_practice_be.member.query.MemberCreateQuery;
 import com.typingpractice.typing_practice_be.member.query.MemberUpdateQuery;
 import com.typingpractice.typing_practice_be.member.repository.MemberRepository;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
   private final MemberRepository memberRepository;
   private final RefreshTokenRepository refreshTokenRepository;
+
+  private final AdminProperties adminProperties;
 
   public Member findMemberById(Long memberId) {
     return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
@@ -39,7 +45,9 @@ public class MemberService {
       // 신규 회원
       MemberCreateQuery memberCreateQuery =
           MemberCreateQuery.of(
-              googleUserInfo.getProviderId(), googleUserInfo.getEmail(), googleUserInfo.getName());
+              googleUserInfo.getProviderId(),
+              googleUserInfo.getEmail(),
+              UUID.randomUUID().toString());
 
       Member member = join(memberCreateQuery);
       return LoginResult.create(member, true);
@@ -52,6 +60,12 @@ public class MemberService {
             memberCreateQuery.getProviderId(),
             memberCreateQuery.getEmail(),
             memberCreateQuery.getNickname());
+
+    List<String> adminEmails = adminProperties.getEmails();
+
+    if (adminEmails.contains(memberCreateQuery.getEmail())) {
+      member.updateRole(MemberRole.ADMIN);
+    }
 
     memberRepository.save(member);
 

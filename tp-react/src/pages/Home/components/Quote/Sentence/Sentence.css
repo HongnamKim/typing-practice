@@ -1,0 +1,43 @@
+.character-container {
+    position: relative;
+    z-index: 1;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: normal;
+    overflow-wrap: break-word;
+}
+
+.character {
+    color: var(--color-text-placeholder);
+    line-height: 1.8;
+}
+
+.character-typed {
+    color: transparent;
+}
+
+.character-incorrect {
+    color: transparent;
+}
+
+.character-correct {
+    color: transparent;
+}
+
+/* Default 모드 - 채점 결과에 따른 색상 */
+.character-correct-visible {
+    color: var(--color-correct);
+}
+
+.character-incorrect-visible {
+    color: var(--color-error);
+}
+
+.character-typing {
+    color: var(--color-text-muted);
+}
+
+/* Default 모드 스타일 */
+.default-mode .character-container {
+    margin-bottom: 1rem;
+}

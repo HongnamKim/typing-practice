@@ -12,3 +12,6 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+
+# PostgreSQL data
+typing-practice-be/postgres-data/

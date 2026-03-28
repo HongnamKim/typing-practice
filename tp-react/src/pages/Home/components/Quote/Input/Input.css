@@ -1,0 +1,40 @@
+.input{
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: none;
+    width: 100%;
+    padding: 0;
+    overflow-y: hidden;
+    resize: none;
+    outline: none;
+    background-color: transparent;
+    color: transparent;
+    caret-color: var(--color-primary);
+    z-index: 20;
+    letter-spacing: normal;
+    word-spacing: normal;
+    font-family: inherit;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: normal;
+    overflow-wrap: break-word;
+}
+
+.input::placeholder{
+    color: transparent;
+}
+
+/* Default 모드 스타일 */
+.default-mode .input {
+    position: relative;
+    background-color: transparent;
+    border-bottom: 2px solid var(--color-primary);
+    color: var(--color-text);
+    caret-color: var(--color-primary);
+    padding-bottom: 0.25rem;
+}
+
+.default-mode .input::placeholder {
+    color: var(--color-text-placeholder);
+}

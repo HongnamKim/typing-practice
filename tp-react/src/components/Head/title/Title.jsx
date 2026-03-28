@@ -1,10 +1,18 @@
+import { useNavigate } from "react-router-dom";
+import { useTheme } from "../../../Context/ThemeContext";
 import "./Title.css";
-import { useContext } from "react";
-import { ThemeContext } from "../../../Context/ThemeContext";
 
 const Title = () => {
-  const { isDark } = useContext(ThemeContext);
-  return <h1 className={`title ${isDark ? "dark" : ""}`}>Typing Practice</h1>;
+  const navigate = useNavigate();
+  const { isDark } = useTheme();
+  return (
+    <h1 
+      className={`title ${isDark ? "dark" : ""}`}
+      onClick={() => navigate("/")}
+    >
+      Typing Practice
+    </h1>
+  );
 };
 
 export default Title;

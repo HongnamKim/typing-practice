@@ -1,0 +1,37 @@
+.report-filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.report-filter-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.report-filter-btn {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.375rem;
+    background-color: transparent;
+    color: var(--color-text-placeholder);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.report-filter-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.report-filter-btn.active {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.report-filter-btn.dark.active {
+    border-color: var(--color-primary-light);
+    background-color: var(--color-primary-light);
+}

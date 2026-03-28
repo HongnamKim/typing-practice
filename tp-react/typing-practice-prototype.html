@@ -4,798 +4,8 @@
     <meta charset="UTF-8">
     <title>Typing Practice</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    <link rel="stylesheet" href="prototype.css">
 
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding-top: 18vh;
-            background-color: #fafafa;
-            color: #333;
-        }
-
-        body.dark {
-            background-color: #0f0f0f;
-            color: #e5e7eb;
-        }
-
-        .display-none {
-            display: none !important;
-        }
-
-        /* 좌측 상단 컨트롤 */
-        .top-left-controls {
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            z-index: 100;
-        }
-
-        /* 폰트 슬라이더 */
-        .font-size-slider-container {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .font-size-label {
-            font-size: 0.75rem;
-            color: #999;
-            cursor: pointer;
-        }
-
-        .font-size-label.dark {
-            color: #666;
-        }
-
-        .font-size-slider {
-            width: 100px;
-            height: 4px;
-            background: #e5e7eb;
-            cursor: pointer;
-        }
-
-        .font-size-slider.dark {
-            background: #3f3f46;
-        }
-
-        /* 모드 토글 */
-        .mode-toggle-container {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .mode-toggle-label {
-            font-size: 0.75rem;
-            color: #999;
-            cursor: pointer;
-        }
-
-        .mode-toggle-label.dark {
-            color: #666;
-        }
-
-        .mode-toggle {
-            position: relative;
-            width: 36px;
-            height: 20px;
-            background: #e5e7eb;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .mode-toggle.dark {
-            background: #3f3f46;
-        }
-
-        .mode-toggle.active {
-            background: #6d28d9;
-        }
-
-        .mode-toggle.active.dark {
-            background: #8b5cf6;
-        }
-
-        .mode-toggle-knob {
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 16px;
-            height: 16px;
-            background: white;
-            border-radius: 50%;
-            transition: transform 0.2s;
-        }
-
-        .mode-toggle.active .mode-toggle-knob {
-            transform: translateX(16px);
-        }
-
-        /* 공지 아이콘 */
-        .notice-icon {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            color: #999;
-            cursor: pointer;
-            font-size: 1.25rem;
-            transition: color 0.2s;
-            z-index: 100;
-        }
-
-        .notice-icon:hover {
-            color: #666;
-        }
-
-        .notice-icon.dark {
-            color: #666;
-        }
-
-        .notice-icon.dark:hover {
-            color: #999;
-        }
-
-        /* 헤더 */
-        .head {
-            width: 80%;
-            max-width: 1000px;
-            min-width: 600px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 3rem;
-        }
-
-        .title-title {
-            font-size: 2rem;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .title-title.dark {
-            color: #e5e7eb;
-        }
-
-        .head-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .header-btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            background-color: transparent;
-            color: #666;
-            border-radius: 0.375rem;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .header-btn:hover {
-            background-color: #f5f5f5;
-            color: #333;
-        }
-
-        .header-btn.dark {
-            color: #999;
-        }
-
-        .header-btn.dark:hover {
-            background-color: #27272a;
-            color: #e5e7eb;
-        }
-
-        .dark-mode-icon {
-            color: #666;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .dark-mode-icon:hover {
-            color: #333;
-        }
-
-        .dark-mode-icon.dark {
-            color: #999;
-        }
-
-        .dark-mode-icon.dark:hover {
-            color: #e5e7eb;
-        }
-
-        /* 프로필 드롭다운 */
-        .profile-container {
-            position: relative;
-        }
-
-        .profile-btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            background-color: transparent;
-            color: #666;
-            border-radius: 0.375rem;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .profile-btn:hover {
-            background-color: #f5f5f5;
-            color: #333;
-        }
-
-        .profile-btn.dark {
-            color: #999;
-        }
-
-        .profile-btn.dark:hover {
-            background-color: #27272a;
-            color: #e5e7eb;
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: calc(100% + 0.5rem);
-            right: 0;
-            background-color: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            min-width: 180px;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .dropdown-menu.dark {
-            background-color: #1f1f1f;
-            border-color: #3f3f46;
-        }
-
-        .dropdown-item {
-            padding: 0.75rem 1rem;
-            color: #666;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            border: none;
-            background: none;
-            width: 100%;
-            text-align: left;
-            font-size: 0.9rem;
-        }
-
-        .dropdown-item:hover {
-            background-color: #f5f5f5;
-            color: #333;
-        }
-
-        .dropdown-item.dark {
-            color: #999;
-        }
-
-        .dropdown-item.dark:hover {
-            background-color: #27272a;
-            color: #e5e7eb;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background-color: #e5e7eb;
-            margin: 0.25rem 0;
-        }
-
-        .dropdown-divider.dark {
-            background-color: #3f3f46;
-        }
-
-        /* 정보 영역 */
-        .info-background {
-            width: 80%;
-            max-width: 1000px;
-            min-width: 600px;
-            padding: 1rem 0 0;
-            margin-bottom: 0.5rem;
-        }
-
-        .info-settings {
-            display: flex;
-            justify-content: flex-end;
-            padding: 0 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .result-period-container {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .result-period-btn {
-            border: none;
-            background: none;
-            color: #666;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .result-period-btn.dark {
-            color: #999;
-        }
-
-        .result-period-value {
-            font-size: 1.3rem;
-            color: #333;
-            min-width: 2rem;
-            text-align: center;
-        }
-
-        .result-period-value.dark {
-            color: #e5e7eb;
-        }
-
-        .info-CPMs {
-            display: flex;
-            justify-content: space-between;
-            padding: 0 1rem;
-            margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-        }
-
-        .CPM-text {
-            color: #666;
-        }
-
-        .CPM-text.dark {
-            color: #999;
-        }
-
-        .CPM-value {
-            margin-left: 2rem;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .CPM-value.dark {
-            color: #ffffff;
-        }
-
-        .info-averages {
-            display: flex;
-            justify-content: space-around;
-            padding: 1.5rem 1rem;
-            border-top: 1px solid #e5e7eb;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .info-averages.dark {
-            border-top-color: #27272a;
-            border-bottom-color: #27272a;
-        }
-
-        .info-averages.collapsed {
-            display: none;
-        }
-
-        .average-label {
-            font-size: 1.1rem;
-            color: #666;
-        }
-
-        .average-label.dark {
-            color: #999;
-        }
-
-        .average-value {
-            margin-left: 1.5rem;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .average-value.dark {
-            color: #e5e7eb;
-        }
-
-        .averages-toggle-container {
-            display: flex;
-            justify-content: center;
-            padding: 0.5rem 0 0 0;
-        }
-
-        .averages-toggle-btn {
-            border: none;
-            background: none;
-            color: #999;
-            cursor: pointer;
-            padding: 0.25rem 0.5rem;
-            font-size: 0.8rem;
-            transition: color 0.2s;
-        }
-
-        .averages-toggle-btn:hover {
-            color: #666;
-        }
-
-        .averages-toggle-btn.dark {
-            color: #666;
-        }
-
-        .averages-toggle-btn.dark:hover {
-            color: #999;
-        }
-
-        /* 타이핑 영역 */
-        .quote-container {
-            width: 80%;
-            max-width: 1000px;
-            min-width: 600px;
-            padding: 0 2rem 2rem;
-        }
-
-        .author-container {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 0.5rem;
-        }
-
-        .author-text {
-            font-size: 0.95rem;
-            color: #999;
-        }
-
-        .author-text.dark {
-            color: #71717a;
-        }
-
-        .sentence-input-wrapper {
-            position: relative;
-            min-height: 100px;
-            line-height: 1.8;
-        }
-
-        .character-container {
-            position: relative;
-            z-index: 1;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-
-        .character {
-            color: #999;
-            line-height: 1.8;
-        }
-
-        .character.dark {
-            color: #a8a8a8;
-        }
-
-        .character-typed {
-            color: transparent;
-        }
-
-        .input-display {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            line-height: 1.8;
-            z-index: 10;
-            pointer-events: none;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-
-        .input-char-correct {
-            color: #333;
-        }
-
-        .input-char-correct.dark {
-            color: #ffffff;
-        }
-
-        .input-char-incorrect {
-            color: #dc2626;
-        }
-
-        .input {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            border: none;
-            padding: 0;
-            overflow-y: hidden;
-            resize: none;
-            outline: none;
-            background-color: transparent;
-            color: transparent;
-            caret-color: #6d28d9;
-            z-index: 20;
-            line-height: 1.8;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-family: inherit;
-        }
-
-        .input.dark {
-            caret-color: #8b5cf6;
-        }
-
-        .input::placeholder {
-            color: transparent;
-        }
-
-        /* Default 모드 스타일 */
-        .quote-container.default-mode .sentence-input-wrapper {
-            min-height: auto;
-        }
-
-        .quote-container.default-mode .character-container {
-            margin-bottom: 1rem;
-        }
-
-        .quote-container.default-mode .input-display {
-            display: none;
-        }
-
-        .quote-container.default-mode .input {
-            position: relative;
-            border-bottom: 2px solid #6d28d9;
-            color: #333;
-            padding-bottom: 0.25rem;
-        }
-
-        .quote-container.default-mode .input.dark {
-            border-bottom-color: #8b5cf6;
-            color: #e5e7eb;
-        }
-
-        .quote-container.default-mode .input::placeholder {
-            color: #999;
-        }
-
-        .quote-container.default-mode .input.dark::placeholder {
-            color: #71717a;
-        }
-
-        .spacer {
-            height: 8rem;
-        }
-
-        .contact {
-            color: #666;
-            font-size: 0.9rem;
-            text-decoration: none;
-            margin-bottom: 2rem;
-        }
-
-        .contact.dark {
-            color: #999;
-        }
-
-        /* 업데이트 공지 팝업 */
-        .update-popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-
-        .update-popup {
-            background-color: white;
-            border-radius: 1rem;
-            padding: 2rem;
-            max-width: 480px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        }
-
-        .update-popup.dark {
-            background-color: #1f1f1f;
-            color: #e5e7eb;
-        }
-
-        .update-popup-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .update-popup-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #6d28d9;
-        }
-
-        .update-popup-version {
-            font-size: 0.85rem;
-            color: #999;
-        }
-
-        .update-popup-version.dark {
-            color: #666;
-        }
-
-        .update-popup-date {
-            font-size: 0.85rem;
-            color: #999;
-            margin-bottom: 1.5rem;
-        }
-
-        .update-popup-date.dark {
-            color: #666;
-        }
-
-        .update-popup-close {
-            width: 100%;
-            padding: 0.75rem;
-            margin-top: 1rem;
-            border: none;
-            border-radius: 0.5rem;
-            background-color: #6d28d9;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .update-popup-close:hover {
-            background-color: #5b21b6;
-        }
-
-        .update-popup-history-btn {
-            width: 100%;
-            padding: 0.5rem;
-            margin-top: 0.5rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            background-color: transparent;
-            color: #666;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .update-popup-history-btn:hover {
-            background-color: #f5f5f5;
-            color: #333;
-        }
-
-        .update-popup-history-btn.dark {
-            border-color: #3f3f46;
-            color: #999;
-        }
-
-        .update-popup-history-btn.dark:hover {
-            background-color: #27272a;
-            color: #e5e7eb;
-        }
-
-        .update-history-item {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .update-history-item.dark {
-            border-bottom-color: #3f3f46;
-        }
-
-        .update-history-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .update-history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.75rem;
-        }
-
-        .update-history-version {
-            font-weight: 600;
-            color: #6d28d9;
-        }
-
-        .update-history-date {
-            font-size: 0.8rem;
-            color: #999;
-        }
-
-        .update-history-date.dark {
-            color: #666;
-        }
-
-        .update-popup-section {
-            margin-bottom: 1.25rem;
-        }
-
-        .update-popup-section-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        .update-popup-section-title.dark {
-            color: #e5e7eb;
-        }
-
-        .update-popup-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .update-popup-list li {
-            position: relative;
-            padding-left: 1.25rem;
-            margin-bottom: 0.5rem;
-            font-size: 0.95rem;
-            color: #555;
-            line-height: 1.5;
-        }
-
-        .update-popup-list li.dark {
-            color: #a1a1aa;
-        }
-
-        .update-popup-list li::before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: #6d28d9;
-        }
-
-        /* 히스토리 모드 (작은 사이즈) */
-        .update-popup.history-mode .update-popup-section {
-            margin-bottom: 0.75rem;
-        }
-
-        .update-popup.history-mode .update-popup-section-title {
-            font-size: 0.9rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .update-popup.history-mode .update-popup-list li {
-            padding-left: 1rem;
-            margin-bottom: 0.25rem;
-            font-size: 0.85rem;
-        }
-    </style>
 </head>
 <body id="body">
 <!-- 좌측 상단 컨트롤 -->
@@ -849,6 +59,10 @@
                 <button class="dropdown-item" id="settingsBtn">
                     <i class="fa-solid fa-gear"></i>
                     <span>설정</span>
+                </button>
+                <button class="dropdown-item" id="myReportsBtn">
+                    <i class="fa-solid fa-flag"></i>
+                    <span>신고 내역</span>
                 </button>
                 <div class="dropdown-divider"></div>
                 <button class="dropdown-item" id="logoutBtn">
@@ -911,8 +125,33 @@
 
 <!-- 타이핑 영역 -->
 <div class="quote-container default-mode" id="quoteContainer">
-    <div class="author-container">
-        <span class="author-text">웰러비</span>
+    <div class="quote-top-row">
+        <!-- 문장 소스 선택 -->
+        <div class="quote-source-selector">
+            <button class="quote-source-btn active" id="quoteSourceAll">
+                <i class="fa-solid fa-globe"></i>
+                <span>전체 문장</span>
+            </button>
+            <button class="quote-source-btn" id="quoteSourceMy">
+                <i class="fa-solid fa-user"></i>
+                <span>내 문장만</span>
+            </button>
+        </div>
+        <div class="author-container">
+            <span class="author-text">웰러비</span>
+            <!-- 더보기 메뉴 -->
+            <div class="quote-more-container">
+                <button class="quote-more-btn" id="quoteMoreBtn">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </button>
+                <div class="quote-more-menu display-none" id="quoteMoreMenu">
+                    <button class="quote-more-item" id="quoteReportBtn">
+                        <i class="fa-solid fa-flag"></i>
+                        <span>신고</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="sentence-input-wrapper">
         <div class="character-container" id="characterContainer">
@@ -951,352 +190,397 @@
     </div>
 </div>
 
-<script>
-    // 폰트 크기
-    let fontSize = 1.5;
+<!-- 로딩 스피너 -->
+<div class="loading-overlay display-none" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+</div>
 
-    function sliderToFontSize(v) {
-        return 0.8 + (v / 100) * 2.7;
-    }
+<!-- 닉네임 설정 팝업 -->
+<div class="nickname-popup-overlay display-none" id="nicknamePopupOverlay">
+    <div class="nickname-popup" id="nicknamePopup">
+        <h2 class="nickname-popup-title">환영합니다! 🎉</h2>
+        <p class="nickname-popup-description">닉네임을 설정해주세요. (2-10자)</p>
+        <div class="nickname-input-group">
+            <label class="nickname-label" for="nicknameInput">닉네임</label>
+            <input
+                    type="text"
+                    class="nickname-input"
+                    id="nicknameInput"
+                    placeholder="닉네임 입력"
+                    maxlength="10"
+            />
+            <div class="nickname-error" id="nicknameError">닉네임은 2-10자여야 합니다.</div>
+            <div class="nickname-helper">한글, 영문, 숫자 사용 가능</div>
+        </div>
+        <button class="nickname-popup-btn" id="nicknameSubmitBtn">시작하기</button>
+    </div>
+</div>
 
-    function fontSizeToSlider(f) {
-        return ((f - 0.8) / 2.7) * 100;
-    }
+<!-- 문장 업로드 팝업 -->
+<div class="upload-popup-overlay display-none" id="uploadPopupOverlay">
+    <div class="upload-popup" id="uploadPopup">
+        <div class="upload-popup-header">
+            <h2 class="upload-popup-title">문장 업로드</h2>
+            <button class="upload-popup-close-btn" id="uploadPopupCloseBtn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
 
-    function updateFontSize(size) {
-        fontSize = size;
-        ['characterContainer', 'inputDisplay', 'quoteInput'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) {
-                el.style.fontSize = size + 'rem';
-                if (id === 'quoteInput') {
-                    el.style.height = 'auto';
-                    el.style.height = el.scrollHeight + 'px';
-                }
-            }
-        });
-        localStorage.setItem('Typing-Practice-fontSize', size);
-    }
+        <div class="upload-type-toggle">
+            <span class="upload-type-hint">각 문장마다 공개/비공개를 선택할 수 있습니다. <span class="upload-type-info"><i
+                    class="fa-solid fa-circle-info"></i><span class="upload-type-tooltip">
+                    <p><strong>공개</strong>: 관리자 승인 후 모든 사용자에게 노출됩니다.</p>
+                    <p><strong>비공개</strong>: 본인만 사용할 수 있습니다.</p>
+                </span></span></span>
+        </div>
 
-    const slider = document.getElementById('fontSizeSlider');
-    const savedFontSize = localStorage.getItem('Typing-Practice-fontSize');
-    if (savedFontSize) {
-        fontSize = parseFloat(savedFontSize);
-        updateFontSize(fontSize);
-        slider.value = fontSizeToSlider(fontSize);
-    } else {
-        updateFontSize(1.5);
-    }
-    slider.addEventListener('input', e => updateFontSize(sliderToFontSize(parseFloat(e.target.value))));
+        <div class="upload-entries" id="uploadEntries">
+            <!-- 입력 필드가 여기에 동적으로 생성됨 -->
+        </div>
 
-    // Font Size 라벨 클릭 시 리셋
-    document.getElementById('fontSizeLabel').addEventListener('click', () => {
-        updateFontSize(1.5);
-        slider.value = fontSizeToSlider(1.5);
-    });
+        <button class="upload-add-btn" id="uploadAddBtn">
+            <i class="fa-solid fa-plus"></i>
+            <span>문장 추가</span>
+        </button>
 
-    // 다크모드
-    function toggleTheme() {
-        document.getElementById('body').classList.toggle('dark');
-        document.getElementById('iconSun').classList.toggle('display-none');
-        document.getElementById('iconMoon').classList.toggle('display-none');
-        document.querySelectorAll('.font-size-label, .font-size-slider, .mode-toggle-label, .mode-toggle, .notice-icon, .title-title, .header-btn, .profile-btn, .dropdown-menu, .dropdown-item, .dropdown-divider, .dark-mode-icon, .result-period-btn, .result-period-value, .CPM-text, .CPM-value, .info-averages, .average-label, .average-value, .averages-toggle-btn, .author-text, .character, .input-char-correct, .input, .contact').forEach(el => el.classList.toggle('dark'));
-        localStorage.setItem('Typing-Practice-darkMode', document.getElementById('body').classList.contains('dark'));
-    }
+        <div class="upload-actions">
+            <button class="upload-cancel-btn" id="uploadCancelBtn">취소</button>
+            <button class="upload-submit-btn" id="uploadSubmitBtn">
+                <i class="fa-solid fa-upload"></i>
+                <span>업로드</span>
+            </button>
+        </div>
+    </div>
+</div>
 
-    document.getElementById('iconSun').addEventListener('click', toggleTheme);
-    document.getElementById('iconMoon').addEventListener('click', toggleTheme);
-    if (localStorage.getItem('Typing-Practice-darkMode') === 'true') toggleTheme();
+<!-- 업로드 확인 팝업 -->
+<div class="confirm-popup-overlay display-none" id="uploadConfirmOverlay">
+    <div class="confirm-popup" id="uploadConfirmPopup">
+        <p class="confirm-popup-message" id="uploadConfirmMessage"></p>
+        <div class="confirm-popup-actions">
+            <button class="confirm-popup-cancel-btn" id="uploadConfirmCancelBtn">취소</button>
+            <button class="confirm-popup-ok-btn" id="uploadConfirmOkBtn">확인</button>
+        </div>
+    </div>
+</div>
 
-    // textarea 높이 자동 조절
-    const textarea = document.getElementById('quoteInput');
-    textarea.addEventListener('input', function () {
-        this.style.height = 'auto';
-        this.style.height = this.scrollHeight + 'px';
-    });
+<!-- 내 문장 팝업 -->
+<div class="my-quotes-popup-overlay display-none" id="myQuotesPopupOverlay">
+    <div class="my-quotes-popup" id="myQuotesPopup">
+        <div class="my-quotes-header">
+            <h2 class="my-quotes-title">내 문장</h2>
+            <button class="my-quotes-close-btn" id="myQuotesCloseBtn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
 
-    // 로그인 관련
-    let isLoggedIn = false;
+        <div class="my-quotes-filters">
+            <div class="my-quotes-filter-group">
+                <button class="my-quotes-filter-btn active" data-type="all">전체</button>
+                <button class="my-quotes-filter-btn" data-type="PUBLIC">공개</button>
+                <button class="my-quotes-filter-btn" data-type="PRIVATE">비공개</button>
+            </div>
+            <div class="my-quotes-filter-group">
+                <button class="my-quotes-filter-btn active" data-status="all">전체</button>
+                <button class="my-quotes-filter-btn" data-status="PENDING">대기중</button>
+                <button class="my-quotes-filter-btn" data-status="ACTIVE">활성</button>
+            </div>
+        </div>
 
-    document.getElementById('loginBtn').addEventListener('click', () => {
-        isLoggedIn = true;
-        document.getElementById('loginBtn').classList.add('display-none');
-        document.getElementById('profileContainer').classList.remove('display-none');
-    });
+        <div class="my-quotes-list" id="myQuotesList">
+            <!-- 문장 카드가 여기에 동적으로 생성됨 -->
+        </div>
 
-    document.getElementById('profileBtn').addEventListener('click', () => {
-        document.getElementById('dropdownMenu').classList.toggle('display-none');
-    });
+        <div class="my-quotes-loading display-none" id="myQuotesLoading">
+            <div class="my-quotes-spinner"></div>
+        </div>
 
-    document.addEventListener('click', (e) => {
-        const profileContainer = document.getElementById('profileContainer');
-        const dropdownMenu = document.getElementById('dropdownMenu');
-        if (!profileContainer.contains(e.target) && !dropdownMenu.classList.contains('display-none')) {
-            dropdownMenu.classList.add('display-none');
-        }
-    });
+        <div class="my-quotes-empty display-none" id="myQuotesEmpty">
+            <i class="fa-solid fa-file-circle-question"></i>
+            <p>등록한 문장이 없습니다.</p>
+        </div>
+    </div>
+</div>
 
-    document.getElementById('uploadBtn').addEventListener('click', () => {
-        if (!isLoggedIn) {
-            alert('로그인이 필요한 기능입니다.');
-            return;
-        }
-        alert('문장 업로드 기능 (준비 중)');
-    });
+<!-- 문장 수정 팝업 -->
+<div class="quote-edit-popup-overlay display-none" id="quoteEditPopupOverlay">
+    <div class="quote-edit-popup" id="quoteEditPopup">
+        <h3 class="quote-edit-title">문장 수정</h3>
+        <div class="quote-edit-content">
+            <div class="quote-edit-field">
+                <label class="quote-edit-label">문장</label>
+                <textarea class="quote-edit-input quote-edit-sentence" id="quoteEditSentence" maxlength="100"
+                          rows="1"></textarea>
+                <span class="quote-edit-char-count" id="quoteEditCharCount">0/100</span>
+            </div>
+            <div class="quote-edit-field">
+                <label class="quote-edit-label">저자 (선택)</label>
+                <input type="text" class="quote-edit-input" id="quoteEditAuthor" maxlength="20"/>
+            </div>
+        </div>
+        <div class="quote-edit-actions">
+            <button class="quote-edit-cancel-btn" id="quoteEditCancelBtn">취소</button>
+            <button class="quote-edit-save-btn" id="quoteEditSaveBtn">저장</button>
+        </div>
+    </div>
+</div>
 
-    document.getElementById('mysentencesBtn').addEventListener('click', () => {
-        alert('내 문장 기능 (준비 중)');
-        document.getElementById('dropdownMenu').classList.add('display-none');
-    });
+<!-- 삭제 확인 팝업 -->
+<div class="confirm-popup-overlay display-none" id="deleteConfirmOverlay">
+    <div class="confirm-popup" id="deleteConfirmPopup">
+        <p class="confirm-popup-message">이 문장을 삭제하시겠습니까?</p>
+        <div class="confirm-popup-actions">
+            <button class="confirm-popup-cancel-btn" id="deleteConfirmCancelBtn">취소</button>
+            <button class="confirm-popup-ok-btn danger" id="deleteConfirmOkBtn">삭제</button>
+        </div>
+    </div>
+</div>
 
-    document.getElementById('statsBtn').addEventListener('click', () => {
-        alert('통계 기능 (준비 중)');
-        document.getElementById('dropdownMenu').classList.add('display-none');
-    });
+<!-- 신고 팝업 -->
+<div class="report-popup-overlay display-none" id="reportPopupOverlay">
+    <div class="report-popup" id="reportPopup">
+        <div class="report-popup-header">
+            <h3 class="report-popup-title">문장 신고</h3>
+            <button class="report-popup-close-btn" id="reportPopupCloseBtn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
 
-    document.getElementById('settingsBtn').addEventListener('click', () => {
-        alert('설정 기능 (준비 중)');
-        document.getElementById('dropdownMenu').classList.add('display-none');
-    });
+        <!-- 신고 대상 문장 -->
+        <div class="report-quote-preview">
+            <span class="report-quote-label">신고 대상</span>
+            <p class="report-quote-sentence" id="reportQuoteSentence">가시에 절리지 않고서는 장미를 모을 수 없다.</p>
+            <span class="report-quote-author" id="reportQuoteAuthor">- 웰러비</span>
+        </div>
 
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-        isLoggedIn = false;
-        document.getElementById('profileContainer').classList.add('display-none');
-        document.getElementById('loginBtn').classList.remove('display-none');
-        document.getElementById('dropdownMenu').classList.add('display-none');
-        alert('로그아웃 되었습니다.');
-    });
+        <!-- 신고 사유 선택 -->
+        <div class="report-reason-section">
+            <span class="report-section-label">신고 사유</span>
+            <div class="report-reason-options">
+                <label class="report-reason-option">
+                    <input type="radio" name="reportReason" value="MODIFY" checked/>
+                    <span class="report-reason-radio"></span>
+                    <span class="report-reason-text">수정 요청</span>
+                    <span class="report-reason-desc">오타, 맞춤법 오류 등</span>
+                </label>
+                <label class="report-reason-option">
+                    <input type="radio" name="reportReason" value="DELETE"/>
+                    <span class="report-reason-radio"></span>
+                    <span class="report-reason-text">삭제 요청</span>
+                    <span class="report-reason-desc">부적절한 내용, 저작권 위반 등</span>
+                </label>
+            </div>
+        </div>
 
-    // 평균점수 토글
-    let averagesVisible = localStorage.getItem('Typing-Practice-averagesVisible') !== 'false';
-    const infoAverages = document.getElementById('infoAverages');
-    const averagesToggleIcon = document.getElementById('averagesToggleIcon');
+        <!-- 상세 설명 -->
+        <div class="report-detail-section">
+            <label class="report-section-label" for="reportDetail">상세 설명</label>
+            <textarea
+                    class="report-detail-input"
+                    id="reportDetail"
+                    placeholder="신고 사유를 자세히 설명해주세요."
+                    maxlength="120"
+                    rows="3"
+            ></textarea>
+            <span class="report-detail-count" id="reportDetailCount">0/120</span>
+        </div>
 
-    function updateAveragesVisibility() {
-        if (averagesVisible) {
-            infoAverages.classList.remove('collapsed');
-            averagesToggleIcon.classList.remove('fa-chevron-down');
-            averagesToggleIcon.classList.add('fa-chevron-up');
-        } else {
-            infoAverages.classList.add('collapsed');
-            averagesToggleIcon.classList.remove('fa-chevron-up');
-            averagesToggleIcon.classList.add('fa-chevron-down');
-        }
-    }
+        <!-- 버튼 -->
+        <div class="report-popup-actions">
+            <button class="report-cancel-btn" id="reportCancelBtn">취소</button>
+            <button class="report-submit-btn" id="reportSubmitBtn">
+                <i class="fa-solid fa-flag"></i>
+                <span>신고</span>
+            </button>
+        </div>
+    </div>
+</div>
 
-    updateAveragesVisibility();
+<!-- 신고 내역 팝업 -->
+<div class="my-reports-popup-overlay display-none" id="myReportsPopupOverlay">
+    <div class="my-reports-popup" id="myReportsPopup">
+        <div class="my-reports-header">
+            <h2 class="my-reports-title">신고 내역</h2>
+            <button class="my-reports-close-btn" id="myReportsCloseBtn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
 
-    document.getElementById('averagesToggleBtn').addEventListener('click', () => {
-        averagesVisible = !averagesVisible;
-        localStorage.setItem('Typing-Practice-averagesVisible', averagesVisible);
-        updateAveragesVisibility();
-    });
+        <div class="my-reports-filters">
+            <button class="my-reports-filter-btn active" data-status="all">전체</button>
+            <button class="my-reports-filter-btn" data-status="PENDING">대기중</button>
+            <button class="my-reports-filter-btn" data-status="PROCESSED">처리완료</button>
+        </div>
 
-    // 모드 토글 (Default / Compact)
-    let isCompactMode = localStorage.getItem('Typing-Practice-compactMode') === 'true';
-    const modeToggle = document.getElementById('modeToggle');
-    const modeLabel = document.getElementById('modeLabel');
-    const quoteContainer = document.getElementById('quoteContainer');
-    const quoteInput = document.getElementById('quoteInput');
+        <div class="my-reports-list" id="myReportsList">
+            <!-- 신고 카드가 여기에 동적으로 생성됨 -->
+        </div>
 
-    function updateMode() {
-        if (isCompactMode) {
-            modeToggle.classList.add('active');
-            quoteContainer.classList.remove('default-mode');
-            quoteInput.placeholder = '';
-        } else {
-            modeToggle.classList.remove('active');
-            quoteContainer.classList.add('default-mode');
-            quoteInput.placeholder = '위 문장을 입력하세요.';
-        }
-    }
+        <div class="my-reports-loading display-none" id="myReportsLoading">
+            <div class="my-reports-spinner"></div>
+        </div>
 
-    updateMode();
+        <div class="my-reports-empty display-none" id="myReportsEmpty">
+            <i class="fa-solid fa-flag"></i>
+            <p>신고 내역이 없습니다.</p>
+        </div>
+    </div>
+</div>
 
-    function toggleMode() {
-        isCompactMode = !isCompactMode;
-        localStorage.setItem('Typing-Practice-compactMode', isCompactMode);
-        updateMode();
-    }
+<!-- 신고 삭제 확인 팝업 -->
+<div class="confirm-popup-overlay display-none" id="reportDeleteConfirmOverlay">
+    <div class="confirm-popup" id="reportDeleteConfirmPopup">
+        <p class="confirm-popup-message">이 신고를 취소하시겠습니까?</p>
+        <div class="confirm-popup-actions">
+            <button class="confirm-popup-cancel-btn" id="reportDeleteConfirmCancelBtn">취소</button>
+            <button class="confirm-popup-ok-btn danger" id="reportDeleteConfirmOkBtn">삭제</button>
+        </div>
+    </div>
+</div>
 
-    modeToggle.addEventListener('click', toggleMode);
-    modeLabel.addEventListener('click', toggleMode);
+<!-- 통계 페이지 -->
+<div class="stats-page display-none" id="statsPage">
+    <div class="stats-container">
+        <div class="stats-header">
+            <h1 class="stats-title">내 타이핑 통계</h1>
+            <button class="stats-refresh-btn" id="statsRefreshBtn">
+                <i class="fa-solid fa-rotate-right"></i>
+                <span>새로고침</span>
+            </button>
+        </div>
 
-    // 업데이트 공지 데이터
-    const updateHistory = [
-        {
-            version: "1.2.0",
-            date: "2024년 11월 27일",
-            features: [
-                "평균점수 영역 접기/펼치기 기능 추가",
-                "Default/Compact 모드 전환 기능 추가"
-            ],
-            improvements: [
-                "문장 셔플 알고리즘 개선 (더 균등한 랜덤 분배)",
-                "예문 101개 추가 (총 1138개)"
-            ]
-        },
-        {
-            version: "1.1.0",
-            date: "2024년 11월 20일",
-            features: [
-                "폰트 크기 조절 슬라이더 추가",
-                "Vercel Analytics 적용"
-            ],
-            improvements: [
-                "한글 IME 입력 안정화",
-                "textarea 높이 자동 조절"
-            ]
-        },
-        {
-            version: "1.0.0",
-            date: "2024년 11월 15일",
-            features: [
-                "타자 연습 서비스 오픈",
-                "실시간 타자 속도(CPM) 측정",
-                "정확도 분석",
-                "다크 모드 지원"
-            ],
-            improvements: []
-        }
-    ];
-
-    const CURRENT_VERSION = updateHistory[0].version;
-    const updatePopupOverlay = document.getElementById('updatePopupOverlay');
-    const updatePopup = document.getElementById('updatePopup');
-    const updatePopupTitle = document.getElementById('updatePopupTitle');
-    const updateContent = document.getElementById('updateContent');
-    const updateHistoryBtn = document.getElementById('updateHistoryBtn');
-
-    // 최신 업데이트 렌더링 (첫 진입 시)
-    function renderLatestUpdate(update) {
-        const isDark = document.getElementById('body').classList.contains('dark');
-        const darkClass = isDark ? ' dark' : '';
-
-        let html = `
-            <div class="update-popup-version${darkClass}">v${update.version}</div>
-            <div class="update-popup-date${darkClass}">${update.date}</div>
-        `;
-
-        if (update.features && update.features.length > 0) {
-            html += `
-                <div class="update-popup-section">
-                    <div class="update-popup-section-title${darkClass}">✨ 새로운 기능</div>
-                    <ul class="update-popup-list">
-                        ${update.features.map(f => `<li class="${darkClass}">${f}</li>`).join('')}
-                    </ul>
+        <!-- 종합 통계 카드 -->
+        <div class="stats-summary">
+            <div class="stats-main-card">
+                <span class="stats-main-label">최근 7일 평균</span>
+                <div class="stats-main-value">
+                    <span id="statsRecentCpm">0</span>
+                    <span class="stats-main-unit">CPM</span>
+                    <span class="stats-trend" id="statsTrend"></span>
                 </div>
-            `;
-        }
-
-        if (update.improvements && update.improvements.length > 0) {
-            html += `
-                <div class="update-popup-section">
-                    <div class="update-popup-section-title${darkClass}">🔧 개선사항</div>
-                    <ul class="update-popup-list">
-                        ${update.improvements.map(i => `<li class="${darkClass}">${i}</li>`).join('')}
-                    </ul>
+                <div class="stats-main-sub">
+                    최고 <span id="statsBestCpm">0</span> CPM · 정확도 <span id="statsAvgAcc">0</span>%
                 </div>
-            `;
-        }
-
-        return html;
-    }
-
-    // 히스토리 아이템 렌더링 (아이콘 클릭 시)
-    function renderHistoryItem(update) {
-        const isDark = document.getElementById('body').classList.contains('dark');
-        const darkClass = isDark ? ' dark' : '';
-
-        let html = `
-            <div class="update-history-item${darkClass}">
-                <div class="update-history-header">
-                    <span class="update-history-version">v${update.version}</span>
-                    <span class="update-history-date${darkClass}">${update.date}</span>
+            </div>
+            <div class="stats-sub-grid">
+                <div class="stats-sub-card">
+                    <span class="stats-sub-label">연습 시간</span>
+                    <div class="stats-sub-value"><span id="statsTotalTime">0분</span></div>
                 </div>
-        `;
-
-        if (update.features && update.features.length > 0) {
-            html += `
-                <div class="update-popup-section">
-                    <div class="update-popup-section-title${darkClass}">✨ 새로운 기능</div>
-                    <ul class="update-popup-list">
-                        ${update.features.map(f => `<li class="${darkClass}">${f}</li>`).join('')}
-                    </ul>
+                <div class="stats-sub-card">
+                    <span class="stats-sub-label">연습 횟수</span>
+                    <div class="stats-sub-value"><span id="statsTotalAttempts">0</span><span class="stats-sub-unit">회</span></div>
                 </div>
-            `;
-        }
-
-        if (update.improvements && update.improvements.length > 0) {
-            html += `
-                <div class="update-popup-section">
-                    <div class="update-popup-section-title${darkClass}">🔧 개선사항</div>
-                    <ul class="update-popup-list">
-                        ${update.improvements.map(i => `<li class="${darkClass}">${i}</li>`).join('')}
-                    </ul>
+                <div class="stats-sub-card">
+                    <span class="stats-sub-label">전체 평균</span>
+                    <div class="stats-sub-value"><span id="statsAvgCpm">0</span><span class="stats-sub-unit">CPM</span></div>
                 </div>
-            `;
-        }
+                <div class="stats-sub-card">
+                    <span class="stats-sub-label">평균 초기화</span>
+                    <div class="stats-sub-value"><span id="statsResetCount">0</span><span class="stats-sub-unit">회</span></div>
+                </div>
+            </div>
+        </div>
 
-        html += '</div>';
-        return html;
-    }
+        <!-- 일별 추이 -->
+        <div class="stats-section">
+            <div class="stats-section-header">
+                <h3 class="stats-section-title">일별 추이</h3>
+                <div class="stats-tabs">
+                    <button class="stats-tab active" data-metric="cpm">CPM</button>
+                    <button class="stats-tab" data-metric="acc">정확도</button>
+                    <span class="stats-tab-divider"></span>
+                    <button class="stats-tab active" data-range="7">7일</button>
+                    <button class="stats-tab" data-range="30">30일</button>
+                </div>
+            </div>
+            <div class="stats-chart" id="statsChart">
+                <!-- JS로 바 차트 렌더링 -->
+            </div>
+            <div class="stats-chart-empty display-none" id="statsChartEmpty">
+                데이터가 없습니다.
+            </div>
+            <!-- 일별 상세 팝업 (차트 위에 오버레이) -->
+            <div class="stats-daily-popup-overlay" id="statsDailyPopupOverlay">
+                <div class="stats-daily-popup">
+                    <div class="stats-daily-popup-header">
+                        <h3 class="stats-daily-popup-title" id="statsDailyPopupTitle">2026년 3월 23일</h3>
+                        <button class="stats-daily-popup-close" id="statsDailyPopupClose">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <div class="stats-daily-popup-grid">
+                        <div class="stats-daily-popup-item">
+                            <span class="stats-daily-popup-label">연습 횟수</span>
+                            <span class="stats-daily-popup-value" id="dailyPopupAttempts">0회</span>
+                        </div>
+                        <div class="stats-daily-popup-item">
+                            <span class="stats-daily-popup-label">연습 시간</span>
+                            <span class="stats-daily-popup-value" id="dailyPopupTime">0분</span>
+                        </div>
+                        <div class="stats-daily-popup-item">
+                            <span class="stats-daily-popup-label">평균 타자 속도</span>
+                            <span class="stats-daily-popup-value" id="dailyPopupAvgCpm">0 CPM</span>
+                        </div>
+                        <div class="stats-daily-popup-item">
+                            <span class="stats-daily-popup-label">최고 타자 속도</span>
+                            <span class="stats-daily-popup-value" id="dailyPopupBestCpm">0 CPM</span>
+                        </div>
+                        <div class="stats-daily-popup-item">
+                            <span class="stats-daily-popup-label">평균 정확도</span>
+                            <span class="stats-daily-popup-value" id="dailyPopupAcc">0%</span>
+                        </div>
+                        <div class="stats-daily-popup-item">
+                            <span class="stats-daily-popup-label">평균 초기화 횟수</span>
+                            <span class="stats-daily-popup-value" id="dailyPopupReset">0회</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    // 모든 업데이트 렌더링
-    function renderAllUpdates() {
-        let html = '';
-        for (const update of updateHistory) {
-            html += renderHistoryItem(update);
-        }
-        return html;
-    }
+        <!-- 오타 통계 -->
+        <div class="stats-typo-area">
+            <div class="stats-section">
+                <div class="stats-section-header">
+                    <h3 class="stats-section-title">자주 틀리는 글자 TOP 10</h3>
+                </div>
+                <div class="stats-typo-list" id="statsTypoList">
+                    <!-- JS로 렌더링 -->
+                </div>
+                <div class="stats-typo-empty display-none" id="statsTypoEmpty">
+                    오타 데이터가 없습니다.
+                </div>
+            </div>
 
-    // 첫 진입 시 최신 업데이트만 표시
-    function openLatestUpdatePopup() {
-        updatePopupOverlay.classList.remove('display-none');
-        updatePopup.classList.remove('history-mode');
-        updatePopupTitle.textContent = '🎉 업데이트 안내';
-        updateContent.innerHTML = renderLatestUpdate(updateHistory[0]);
-        updateHistoryBtn.classList.remove('display-none');
+            <div class="stats-section display-none" id="statsTypoDetailSection">
+                <div class="stats-section-header">
+                    <h3 class="stats-section-title">
+                        '<span id="statsTypoDetailChar">ㅔ</span>' 오타 상세
+                    </h3>
+                </div>
+                <div class="stats-typo-detail-list" id="statsTypoDetailList">
+                    <!-- JS로 렌더링 -->
+                </div>
+            </div>
+        </div>
 
-        if (document.getElementById('body').classList.contains('dark')) {
-            updatePopup.classList.add('dark');
-            updateHistoryBtn.classList.add('dark');
-        }
-    }
+        <!-- 돌아가기 -->
+        <div class="stats-footer">
+            <button class="stats-back-btn" id="statsBackBtn">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>돌아가기</span>
+            </button>
+        </div>
+    </div>
 
-    // 아이콘 클릭 시 모든 업데이트 표시
-    function openAllUpdatesPopup() {
-        updatePopupOverlay.classList.remove('display-none');
-        updatePopup.classList.add('history-mode');
-        updatePopupTitle.textContent = '📋 업데이트 내역';
-        updateContent.innerHTML = renderAllUpdates();
-        updateHistoryBtn.classList.add('display-none');
+    <!-- 일별 상세 팝업 -->
+    <!-- 일별 추이 섹션 내부로 이동됨 -->
+</div>
 
-        if (document.getElementById('body').classList.contains('dark')) {
-            updatePopup.classList.add('dark');
-        }
-    }
-
-    function closeUpdatePopup() {
-        updatePopupOverlay.classList.add('display-none');
-        localStorage.setItem('Typing-Practice-lastSeenVersion', CURRENT_VERSION);
-    }
-
-    // 새 버전이면 자동으로 팝업 표시
-    function showUpdatePopupIfNew() {
-        const lastSeenVersion = localStorage.getItem('Typing-Practice-lastSeenVersion');
-        if (lastSeenVersion !== CURRENT_VERSION) {
-            openLatestUpdatePopup();
-        }
-    }
-
-    document.getElementById('updatePopupClose').addEventListener('click', closeUpdatePopup);
-    document.getElementById('iconNotice').addEventListener('click', openAllUpdatesPopup);
-    updateHistoryBtn.addEventListener('click', openAllUpdatesPopup);
-
-    // 페이지 로드 시 팝업 표시
-    showUpdatePopupIfNew();
-</script>
+<script src="prototype1.js"></script>
+<script src="prototype2.js"></script>
+<script src="prototype3.js"></script>
+<script src="prototype4-stats.js"></script>
 </body>
 </html>
