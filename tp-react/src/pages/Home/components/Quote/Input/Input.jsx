@@ -15,7 +15,7 @@ import {
 } from "@/const/key.const.js";
 import {RESET_COUNT_THRESHOLD_RATIO} from "@/const/config.const.ts";
 import {koreanSeparator} from "@/utils/koreanSeparator.ts";
-import {createTypoEntry} from "@/utils/typoUtils.ts";
+import {createFlatTypoEntry, isLanguageSwitchMistake} from "@/utils/typoUtils.ts";
 import {saveTypingRecord} from "@/utils/typingRecordApi.ts";
 import {areJamoEqual, calculateAccuracy, sum, average, max} from "./InputUtils";
 
@@ -56,6 +56,9 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
     const typedCharCount = useRef([]); // 타이핑한 character 수
     const maxInputLengthRef = useRef(0); // 현재 시도에서 도달한 최대 입력 길이
     const typosRef = useRef([]); // 오타 누적 배열
+    const flatSentenceRef = useRef([]); // 예문 flat 자모 배열
+    const flatInputRef = useRef([]); // 입력 flat 자모 배열
+    const maxCheckedFlatIndexRef = useRef(0); // 체크 완료한 최대 flat 인덱스
     const lastResetTimeRef = useRef(0); // resetCount 중복 증가 방지용 타임스탬프
 
     // resetCount를 안전하게 증가시키는 함수 (50ms 이내 중복 호출 무시)
@@ -66,13 +69,10 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
         setResetCount((prev) => prev + 1);
     };
 
-    // 오답 처리 + typo 기록
-    const markIncorrect = (prevCheck, charIndex, sentenceSeparated, inputSeparated) => {
+    // 오답 처리
+    const markIncorrect = (prevCheck, charIndex) => {
         prevCheck[charIndex] = "incorrect";
         setIncorrectCount((prev) => prev + 1);
-        typosRef.current.push(createTypoEntry(
-            sentence[charIndex], sentenceSeparated, inputSeparated, charIndex,
-        ));
     };
 
     // 문장 이동 (화살표 키)
@@ -101,6 +101,7 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
         separatedSentence.current = sentence.split("").map((character) => {
             return koreanSeparator(character);
         });
+        flatSentenceRef.current = separatedSentence.current.flat();
     }, [sentence]);
 
     // 타자 속도 계산
@@ -144,6 +145,8 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
 
         // 최대 입력 길이 리셋
         maxInputLengthRef.current = 0;
+        flatInputRef.current = [];
+        maxCheckedFlatIndexRef.current = 0;
 
         if (isSubmit) {
             return;
@@ -327,10 +330,30 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
         for (let i = 0; i < newValue.length; i++) {
             separatedInput.current[i] = koreanSeparator(newValue[i]);
         }
+        separatedInput.current.length = newValue.length;
 
         typedCharCount.current = separatedInput.current.map((char) => {
             return char.length;
         });
+
+        // flat 기반 typo 수집
+        const newFlatInput = separatedInput.current.flat();
+        const newLen = newFlatInput.length;
+
+        if (newLen > maxCheckedFlatIndexRef.current) {
+            // 이전에 체크하지 않은 인덱스만 비교
+            for (let i = maxCheckedFlatIndexRef.current; i < newLen; i++) {
+                const exp = flatSentenceRef.current[i];
+                const act = newFlatInput[i];
+                if (exp !== undefined && act !== undefined && exp !== act && !isLanguageSwitchMistake(act)) {
+                    typosRef.current.push(createFlatTypoEntry(
+                        i, exp, act, separatedSentence.current, sentence,
+                    ));
+                }
+            }
+            maxCheckedFlatIndexRef.current = newLen;
+        }
+        flatInputRef.current = newFlatInput;
 
         // 채점 로직 실행
         performGrading(newValue);
@@ -350,7 +373,7 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
 
                 if (!isChecked) {
                     // 채점되지 않은 경우 오답 처리
-                    markIncorrect(prevCheck, prevCharIndex, prevSentenceSeparated, prevInputSeparated);
+                    markIncorrect(prevCheck, prevCharIndex);
                 } else {
                     // 이미 채점된 경우 재채점 (받침 변화 등으로 인한 최종 확정)
                     const isFinalCorrect = areJamoEqual(prevInputSeparated, prevSentenceSeparated);
@@ -358,7 +381,7 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
                     // 이전에 정답이었는데 최종적으로 오답인 경우
                     if (prevCheck[prevCharIndex] === "correct" && !isFinalCorrect) {
                         setCorrectCount((prev) => prev - 1);
-                        markIncorrect(prevCheck, prevCharIndex, prevSentenceSeparated, prevInputSeparated);
+                        markIncorrect(prevCheck, prevCharIndex);
                     }
                     // 이전에 오답이었는데 최종적으로 정답인 경우 (거의 없지만 안전장치)
                     else if (prevCheck[prevCharIndex] === "incorrect" && isFinalCorrect) {
@@ -382,9 +405,6 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
                 );
 
                 // 입력 자모가 예문보다 많을 경우, 추가 자모가 다음 글자의 시작과 일치하는지 확인
-                let isExtraJamoMismatch = false;
-                let extraJamoMismatchInfo = null;
-
                 if (isCorrect && currentInputSeparated.length > currentSentenceSeparated.length) {
                     const extraJamo = currentInputSeparated.slice(currentSentenceSeparated.length);
                     const nextCharIndex = lastCharIndex + 1;
@@ -395,14 +415,6 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
                             extraJamo,
                             nextSentenceSeparated.slice(0, extraJamo.length),
                         );
-                        if (!isCorrect) {
-                            isExtraJamoMismatch = true;
-                            extraJamoMismatchInfo = {
-                                nextCharIndex,
-                                nextSentenceSeparated,
-                                extraJamo,
-                            };
-                        }
                     } else {
                         // 마지막 글자인데 추가 자모가 있으면 오답
                         isCorrect = false;
@@ -418,25 +430,6 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
                     if (prevCheck[lastCharIndex] !== "incorrect") {
                         prevCheck[lastCharIndex] = "incorrect";
                         setIncorrectCount((prev) => prev + 1);
-
-                        if (isExtraJamoMismatch && extraJamoMismatchInfo) {
-                            // 추가 자모 불일치: 다음 글자 기준으로 typo 기록
-                            const {nextCharIndex, nextSentenceSeparated, extraJamo} = extraJamoMismatchInfo;
-                            typosRef.current.push(createTypoEntry(
-                                sentence[nextCharIndex],
-                                nextSentenceSeparated,
-                                extraJamo,
-                                nextCharIndex,
-                            ));
-                        } else {
-                            // 일반 오답: 현재 글자 기준으로 typo 기록
-                            typosRef.current.push(createTypoEntry(
-                                sentence[lastCharIndex],
-                                currentSentenceSeparated,
-                                currentInputSeparated,
-                                lastCharIndex,
-                            ));
-                        }
                     }
                 }
             } else {
@@ -448,7 +441,7 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
 
                 if (!isPartialCorrect) {
                     if (prevCheck[lastCharIndex] !== "incorrect") {
-                        markIncorrect(prevCheck, lastCharIndex, currentSentenceSeparated, currentInputSeparated);
+                        markIncorrect(prevCheck, lastCharIndex);
                     }
                 } else {
                     prevCheck[lastCharIndex] = "none";

@@ -9,7 +9,10 @@ const formatTime = (min) => {
 
 const calcTrend = (recentAvg, totalAvg) => {
     if (!totalAvg || !recentAvg) return {text: '', className: ''};
-    const percent = ((recentAvg - totalAvg) / totalAvg * 100).toFixed(1);
+    const roundedRecent = Math.round(recentAvg);
+    const roundedTotal = Math.round(totalAvg);
+    if (roundedRecent === roundedTotal) return {text: '\u2014 0%', className: 'stats-trend neutral'};
+    const percent = ((roundedRecent - roundedTotal) / roundedTotal * 100).toFixed(1);
     if (percent > 0) return {text: '\u25B2 ' + percent + '%', className: 'stats-trend up'};
     if (percent < 0) return {text: '\u25BC ' + Math.abs(percent) + '%', className: 'stats-trend down'};
     return {text: '\u2014 0%', className: 'stats-trend neutral'};

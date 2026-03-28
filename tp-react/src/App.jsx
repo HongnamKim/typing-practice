@@ -13,6 +13,7 @@ import QuoteUpload from "./pages/QuoteUpload/QuoteUpload";
 import MyQuotes from "./pages/MyQuotes/MyQuotes";
 import MyReports from "./pages/MyReports/MyReports";
 import Stats from "./pages/Stats/Stats";
+import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
 import {Analytics} from "@vercel/analytics/react";
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
                   <Route path="/quote/my" element={<MyQuotes />} />
                   <Route path="/quote/report" element={<MyReports />} />
                   <Route path="/stats" element={<Stats />} />
+                  <Route path="/privacy" element={<PrivacyPolicy />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
                 <Contact />
