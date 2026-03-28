@@ -14,6 +14,7 @@ import {useGoogleLogin} from "@react-oauth/google";
 import {loginWithGoogle} from "@/utils/authApi.ts";
 import {FaPlus} from "react-icons/fa";
 import {t} from "@/utils/i18n.ts";
+import FeatureGuide from "../FeatureGuide/FeatureGuide";
 import "./Head.css";
 
 // UUID 형식 체크 함수
@@ -119,6 +120,7 @@ const Head = () => {
                     </button>
                     {user ? <ProfileDropdown/> : <LoginButton onClick={handleLogin}/>}
                     <DarkModeButton/>
+                    {!user && <FeatureGuide/>}
                 </div>
             </div>
 

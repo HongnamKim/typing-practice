@@ -189,6 +189,13 @@ const translations = {
     noTypoData: isKorean ? '오타 데이터가 없습니다.' : 'No typo data available.',
     typoDetailTitle: isKorean ? '오타 상세' : 'Typo Details',
     noDetailData: isKorean ? '상세 데이터가 없습니다.' : 'No detail data available.',
+
+    // 기능 가이드
+    featureGuideTitle: isKorean ? '이런 기능이 있어요!' : 'Check out these features!',
+    featureGuideDesc: isKorean
+        ? '로그인하면 원하는 문장을 직접 업로드하고, 타이핑 기록과 오타 분석을 확인할 수 있어요.'
+        : 'Sign in to upload your own sentences and track your typing speed, accuracy, and typo patterns.',
+    featureGuideConfirm: isKorean ? '확인' : 'Got it',
 } as const;
 
 type TranslationKey = keyof typeof translations;
