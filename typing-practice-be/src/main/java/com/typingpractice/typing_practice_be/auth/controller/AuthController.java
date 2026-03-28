@@ -1,10 +1,10 @@
 package com.typingpractice.typing_practice_be.auth.controller;
 
+import com.typingpractice.typing_practice_be.auth.dto.*;
 import com.typingpractice.typing_practice_be.auth.dto.google.GoogleLoginRequest;
 import com.typingpractice.typing_practice_be.auth.dto.google.GoogleTokenResponse;
 import com.typingpractice.typing_practice_be.auth.dto.google.GoogleUserInfo;
 import com.typingpractice.typing_practice_be.auth.service.AuthService;
-import com.typingpractice.typing_practice_be.auth.dto.*;
 import com.typingpractice.typing_practice_be.common.ApiResponse;
 import com.typingpractice.typing_practice_be.common.jwt.JwtTokenProvider;
 import com.typingpractice.typing_practice_be.member.domain.Member;
@@ -13,8 +13,6 @@ import com.typingpractice.typing_practice_be.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,28 +23,28 @@ public class AuthController {
   private final MemberService memberService;
   private final JwtTokenProvider jwtTokenProvider;
 
-  @PostMapping("/test")
-  public ApiResponse<LoginResponse> testLogin(@RequestBody TestLoginRequest request) {
-
-    LoginResult loginResult =
-        memberService.loginOrSignIn(
-            GoogleUserInfo.create(
-                request.getProviderId(),
-                "email",
-                "user_" + UUID.randomUUID().toString().substring(0, 8),
-                "picture"));
-
-    Member member = loginResult.getMember();
-
-    String token = jwtTokenProvider.createToken(member.getId(), member.getRole());
-    String refreshToken = authService.createRefreshToken(member);
-
-    return ApiResponse.ok(LoginResponse.from(loginResult, token, refreshToken));
-  }
+  //	@PostMapping("/test")
+  //	public ApiResponse<LoginResponse> testLogin(@RequestBody TestLoginRequest request) {
+  //
+  //		LoginResult loginResult =
+  //						memberService.loginOrSignIn(
+  //										GoogleUserInfo.create(
+  //														request.getProviderId(),
+  //														"email",
+  //														"user_" + UUID.randomUUID().toString().substring(0, 8),
+  //														"picture"));
+  //
+  //		Member member = loginResult.getMember();
+  //
+  //		String token = jwtTokenProvider.createToken(member.getId(), member.getRole());
+  //		String refreshToken = authService.createRefreshToken(member);
+  //
+  //		return ApiResponse.ok(LoginResponse.from(loginResult, token, refreshToken));
+  //	}
 
   @PostMapping("/google")
   public ApiResponse<LoginResponse> googleLogin(@RequestBody GoogleLoginRequest request) {
-    GoogleTokenResponse accessTokenResponse = authService.getAccessToken(request.getCode());
+    GoogleTokenResponse accessTokenResponse = authService.getAccessToken(request);
     String accessToken = accessTokenResponse.getAccessToken();
 
     GoogleUserInfo userInfo = authService.getUserInfo(accessToken);

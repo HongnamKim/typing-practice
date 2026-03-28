@@ -1,9 +1,8 @@
-import { useContext } from "react";
-import { ThemeContext } from "../../Context/ThemeContext";
+import { useTheme } from "../../Context/ThemeContext";
 import "./Contact.css";
 
 const Contact = () => {
-  const { isDark } = useContext(ThemeContext);
+  const { isDark } = useTheme();
 
   return (
     <a
