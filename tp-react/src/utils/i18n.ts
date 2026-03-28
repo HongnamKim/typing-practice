@@ -1,5 +1,5 @@
 const isKorean = navigator.language.startsWith('ko');
-const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 const translations = {
     // 공통
@@ -21,7 +21,7 @@ const translations = {
     backToHome: isKorean ? '홈으로 돌아가기' : 'Back to Home',
 
     // 닉네임
-    welcome: isKorean ? '환영합니다! 🎉' : 'Welcome! 🎉',
+    welcome: isKorean ? '환영합니다!' : 'Welcome!',
     setNickname: isKorean ? '닉네임을 설정해주세요. (2-10자)' : 'Please set your nickname. (2-10 characters)',
     nicknamePlaceholder: isKorean ? '닉네임 입력' : 'Enter nickname',
     nicknameLength: isKorean ? '닉네임은 2-10자여야 합니다.' : 'Nickname must be 2-10 characters.',
