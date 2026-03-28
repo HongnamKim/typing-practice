@@ -18,6 +18,9 @@ const Contact = () => {
       <Link to="/privacy" className={`contact ${isDark && "dark"}`}>
         Privacy Policy
       </Link>
+      <Link to="/terms" className={`contact ${isDark && "dark"}`}>
+        Terms
+      </Link>
     </div>
   );
 };

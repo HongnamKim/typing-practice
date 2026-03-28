@@ -10,7 +10,7 @@ interface UpdateEntry {
 export const updateHistory: UpdateEntry[] = [
     {
         version: "1.2.0",
-        date: "2026년 3월 X일",
+        date: "2026년 3월 29일",
         showPopup: true,
         hidden: false,
         features: [
