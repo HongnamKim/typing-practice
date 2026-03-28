@@ -82,13 +82,13 @@
 .login-required-login-btn {
     flex: 1;
     padding: 0.75rem;
-    border: none;
+    border: 1px solid var(--color-border);
     border-radius: 0.5rem;
-    background-color: var(--color-primary);
-    color: var(--color-white);
+    background-color: transparent;
+    color: var(--color-text);
     font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -96,5 +96,5 @@
 }
 
 .login-required-login-btn:hover {
-    background-color: var(--color-primary-dark);
+    background-color: var(--color-bg-secondary);
 }
