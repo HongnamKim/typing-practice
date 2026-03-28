@@ -9,6 +9,15 @@ const isKoreanChar = (character: string): boolean => {
 };
 
 /**
+ * 한/영 전환 실수 여부를 판별한다.
+ * actual이 영문자이면 오타가 아니라 한/영 전환 실수로 간주한다.
+ */
+export const isLanguageSwitchMistake = (actual: string): boolean => {
+    if (!actual) return false;
+    return /^[a-zA-Z]$/.test(actual);
+};
+
+/**
  * 한글 자모 분리 결과에서 자모 인덱스로 TypoType을 결정한다.
  * - 초성: index 0
  * - 중성: index 1 ~ (종성 시작 전)
@@ -69,30 +78,38 @@ export const determineTypoType = (
 };
 
 /**
- * 오타 엔트리를 생성한다.
+ * flat 자모 인덱스에서 오타 엔트리를 생성한다.
+ * 예문과 입력을 각각 flat 자모 배열로 비교하여 불일치 시 호출.
  */
-export const createTypoEntry = (
-    originalChar: string,
-    separatedSentence: string[],
-    separatedInput: string[],
-    position: number,
+export const createFlatTypoEntry = (
+    flatIndex: number,
+    expected: string,
+    actual: string,
+    separatedSentence: string[][],
+    sentence: string,
 ): TypoEntry => {
-    const type = determineTypoType(originalChar, separatedSentence, separatedInput);
-
-    // 불일치 자모 찾기
-    let expected = originalChar;
-    let actual = '';
-
-    const maxLen = Math.max(separatedSentence.length, separatedInput.length);
-    for (let i = 0; i < maxLen; i++) {
-        const exp = separatedSentence[i] ?? '';
-        const act = separatedInput[i] ?? '';
-        if (exp !== act) {
-            expected = exp || originalChar;
-            actual = act || '';
+    // flat index → charIndex, jamoIndex 계산
+    let accumulated = 0;
+    let charIndex = 0;
+    let jamoIndex = 0;
+    for (let i = 0; i < separatedSentence.length; i++) {
+        if (flatIndex < accumulated + separatedSentence[i].length) {
+            charIndex = i;
+            jamoIndex = flatIndex - accumulated;
             break;
         }
+        accumulated += separatedSentence[i].length;
     }
 
-    return {expected, actual, position, type};
+    const originalChar = sentence[charIndex];
+    let type: TypoType;
+    if (!isKoreanChar(originalChar)) {
+        type = 'LETTER';
+    } else {
+        const midIndex = getMidIndex(originalChar.charCodeAt(0));
+        const medialLength = getMedialLength(midIndex);
+        type = getTypoTypeByJamoIndex(jamoIndex, medialLength);
+    }
+
+    return {expected, actual, position: charIndex, type};
 };

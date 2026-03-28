@@ -7,6 +7,7 @@ export const Storage_Averages_Visible = "Typing-Practice-averagesVisible" as con
 export const Storage_Compact_Mode = "Typing-Practice-compactMode" as const;
 export const Storage_Last_Seen_Version = "Typing-Practice-lastSeenVersion" as const;
 export const Storage_Refresh_Token = "Typing-Practice-refreshToken" as const;
+export const Storage_Consent = "Typing-Practice-storageConsent" as const;
 
 // Quote 관련 상수
 export const MIN_SENTENCE_LENGTH = 5 as const;

@@ -2,7 +2,11 @@ import {useState} from 'react';
 import {getTypoDetailStats} from '@/utils/statsApi.ts';
 import './TypoList.css';
 
-const displayChar = (ch) => ch === ' ' ? '\u2423' : ch;
+const displayChar = (ch) => {
+    if (ch === '') return '\u2205';
+    if (ch === ' ') return '\u2423';
+    return ch;
+};
 
 function TypoList({typoStats}) {
     const [selectedTypo, setSelectedTypo] = useState(null);
