@@ -1,13 +1,14 @@
-import {useTheme} from '../../../Context/ThemeContext';
+import {useTheme} from '@/Context/ThemeContext.tsx';
+import {t} from '@/utils/i18n.ts';
 import './ReportFilters.css';
 
 const ReportFilters = ({statusFilter, onStatusChange}) => {
     const {isDark} = useTheme();
 
     const statusOptions = [
-        {value: 'all', label: '전체'},
-        {value: 'PENDING', label: '대기중'},
-        {value: 'PROCESSED', label: '처리완료'}
+        {value: 'all', label: t('all')},
+        {value: 'PENDING', label: t('pending')},
+        {value: 'PROCESSED', label: t('processed')}
     ];
 
     return (

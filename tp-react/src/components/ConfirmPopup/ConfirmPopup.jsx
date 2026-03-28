@@ -1,7 +1,8 @@
 import {useTheme} from '../../Context/ThemeContext';
+import {t} from '@/utils/i18n.ts';
 import './ConfirmPopup.css';
 
-const ConfirmPopup = ({message, onConfirm, onCancel, confirmText = '확인', cancelText = '취소', isDanger = false, showCancel = true}) => {
+const ConfirmPopup = ({message, onConfirm, onCancel, confirmText = t('confirm'), cancelText = t('cancel'), isDanger = false, showCancel = true}) => {
     const {isDark} = useTheme();
     
     return (

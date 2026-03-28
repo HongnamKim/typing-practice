@@ -4,6 +4,7 @@ import {useAuth} from "./AuthContext";
 import {useError} from "./ErrorContext";
 import {getQuotes} from "../utils/quoteApi";
 import {defaultQuotes} from "../const/default-quotes.const";
+import {t} from "../utils/i18n";
 
 interface Quote {
     quoteId?: number;
@@ -150,7 +151,7 @@ export const QuoteContextProvider = ({children}: QuoteContextProviderProps) => {
                 console.log('서버 연결 실패 - 로컬 문장 사용');
                 loadFallbackQuotes();
             } else {
-                showError('문장을 불러오는데 실패했습니다.');
+                showError(t('sentenceLoadFailed'));
                 if (reset) {
                     setIsEmpty(true);
                 }

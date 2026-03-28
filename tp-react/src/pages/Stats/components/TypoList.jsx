@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {getTypoDetailStats} from '@/utils/statsApi.ts';
+import {t} from '@/utils/i18n.ts';
 import './TypoList.css';
 
 const displayChar = (ch) => {
@@ -17,9 +18,9 @@ function TypoList({typoStats}) {
         return (
             <div className="typo-section">
                 <div className="typo-section-header">
-                    <h3 className="typo-section-title">{'\uC790\uC8FC \uD2C0\uB9AC\uB294 \uAE00\uC790 TOP 10'}</h3>
+                    <h3 className="typo-section-title">{t('typoTop10')}</h3>
                 </div>
-                <div className="typo-empty">{'\uC624\uD0C0 \uB370\uC774\uD130\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4.'}</div>
+                <div className="typo-empty">{t('noTypoData')}</div>
             </div>
         );
     }
@@ -38,7 +39,7 @@ function TypoList({typoStats}) {
             const res = await getTypoDetailStats('KOREAN', expected);
             setTypoDetail(res.data.data.content || []);
         } catch (error) {
-            console.error('\uC624\uD0C0 \uC0C1\uC138 \uB85C\uB4DC \uC2E4\uD328:', error);
+            console.error('typo detail load failed:', error);
             setTypoDetail([]);
         } finally {
             setDetailLoading(false);
@@ -49,7 +50,7 @@ function TypoList({typoStats}) {
         <div className="typo-area">
             <div className="typo-section">
                 <div className="typo-section-header">
-                    <h3 className="typo-section-title">{'\uC790\uC8FC \uD2C0\uB9AC\uB294 \uAE00\uC790 TOP 10'}</h3>
+                    <h3 className="typo-section-title">{t('typoTop10')}</h3>
                 </div>
                 <div className="typo-list">
                     {typoStats.map((item, i) => (
@@ -72,13 +73,13 @@ function TypoList({typoStats}) {
                 <div className="typo-section">
                     <div className="typo-section-header">
                         <h3 className="typo-section-title">
-                            &lsquo;<span className="typo-detail-char">{displayChar(selectedTypo)}</span>&rsquo; {'\uC624\uD0C0 \uC0C1\uC138'}
+                            &lsquo;<span className="typo-detail-char">{displayChar(selectedTypo)}</span>&rsquo; {t('typoDetailTitle')}
                         </h3>
                     </div>
                     {detailLoading ? (
-                        <div className="typo-empty">{'\uB85C\uB529 \uC911...'}</div>
+                        <div className="typo-empty">{t('loading')}</div>
                     ) : typoDetail.length === 0 ? (
-                        <div className="typo-empty">{'\uC0C1\uC138 \uB370\uC774\uD130\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4.'}</div>
+                        <div className="typo-empty">{t('noDetailData')}</div>
                     ) : (
                         <div className="typo-detail-list">
                             {typoDetail.map((d, i) => (
@@ -86,7 +87,7 @@ function TypoList({typoStats}) {
                                     <span className="typo-detail-expected">{displayChar(d.expected)}</span>
                                     <span className="typo-detail-arrow">{'\u2192'}</span>
                                     <span className="typo-detail-actual">{displayChar(d.actual)}</span>
-                                    <span className="typo-detail-count">{d.typoCount + '\uD68C'}</span>
+                                    <span className="typo-detail-count">{d.typoCount + t('countUnit')}</span>
                                 </div>
                             ))}
                         </div>

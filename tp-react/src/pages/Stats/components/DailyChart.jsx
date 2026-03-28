@@ -1,4 +1,5 @@
 import {useState, useRef, useCallback} from 'react';
+import {t} from '@/utils/i18n.ts';
 import './DailyChart.css';
 
 const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -8,17 +9,8 @@ const formatDateLabel = (dateStr) => {
     return MONTH_NAMES[parseInt(parts[1]) - 1] + ' ' + parseInt(parts[2]);
 };
 
-const formatPopupTitle = (dateStr) => {
-    const parts = dateStr.split('-');
-    return parts[0] + '\uB144 ' + parseInt(parts[1]) + '\uC6D4 ' + parseInt(parts[2]) + '\uC77C';
-};
-
-const formatTime = (min) => {
-    if (!min || min <= 0) return '0\uBD84';
-    const h = Math.floor(min / 60);
-    const m = Math.round(min % 60);
-    return h > 0 ? h + '\uC2DC\uAC04 ' + m + '\uBD84' : m + '\uBD84';
-};
+const formatPopupTitle = t('formatPopupTitle');
+const formatTime = t('formatTime');
 
 const SVG_W = 600;
 const SVG_H = 180;
@@ -91,17 +83,17 @@ function DailyChart({dailyStats, dailyRange, onRangeChange}) {
     return (
         <div className="daily-chart-section">
             <div className="daily-chart-header">
-                <h3 className="daily-chart-title">{'\uC77C\uBCC4 \uCD94\uC774'}</h3>
+                <h3 className="daily-chart-title">{t('dailyTrend')}</h3>
                 <div className="daily-chart-tabs">
                     <button className={'daily-chart-tab' + (metric === 'cpm' ? ' active' : '')} onClick={() => setMetric('cpm')}>CPM</button>
-                    <button className={'daily-chart-tab' + (metric === 'acc' ? ' active' : '')} onClick={() => setMetric('acc')}>{'\uC815\uD655\uB3C4'}</button>
+                    <button className={'daily-chart-tab' + (metric === 'acc' ? ' active' : '')} onClick={() => setMetric('acc')}>{t('accuracyTab')}</button>
                     <span className="daily-chart-tab-divider"/>
-                    <button className={'daily-chart-tab' + (dailyRange === 7 ? ' active' : '')} onClick={() => onRangeChange(7)}>7{'\uC77C'}</button>
-                    <button className={'daily-chart-tab' + (dailyRange === 30 ? ' active' : '')} onClick={() => onRangeChange(30)}>30{'\uC77C'}</button>
+                    <button className={'daily-chart-tab' + (dailyRange === 7 ? ' active' : '')} onClick={() => onRangeChange(7)}>{t('days')(7)}</button>
+                    <button className={'daily-chart-tab' + (dailyRange === 30 ? ' active' : '')} onClick={() => onRangeChange(30)}>{t('days')(30)}</button>
                 </div>
             </div>
             {data.length === 0 ? (
-                <div className="daily-chart-empty">{'\uB370\uC774\uD130\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4.'}</div>
+                <div className="daily-chart-empty">{t('noData')}</div>
             ) : (
                 <div className="daily-chart-area" ref={chartRef}>
                     <svg ref={svgRef} width="100%" height={SVG_H} viewBox={'0 0 ' + SVG_W + ' ' + SVG_H}>
@@ -142,28 +134,28 @@ function DailyChart({dailyStats, dailyRange, onRangeChange}) {
                             <div className="daily-chart-popup-title">{formatPopupTitle(popupData.date)}</div>
                             <div className="daily-chart-popup-grid">
                                 <div className="daily-chart-popup-item">
-                                    <span className="daily-chart-popup-label">{'\uC5F0\uC2B5 \uD69F\uC218'}</span>
-                                    <span className="daily-chart-popup-value">{popupData.attempts + '\uD68C'}</span>
+                                    <span className="daily-chart-popup-label">{t('attempts')}</span>
+                                    <span className="daily-chart-popup-value">{popupData.attempts + t('countUnit')}</span>
                                 </div>
                                 <div className="daily-chart-popup-item">
-                                    <span className="daily-chart-popup-label">{'\uC5F0\uC2B5 \uC2DC\uAC04'}</span>
+                                    <span className="daily-chart-popup-label">{t('practiceTime')}</span>
                                     <span className="daily-chart-popup-value">{formatTime(popupData.practiceTimeMin)}</span>
                                 </div>
                                 <div className="daily-chart-popup-item">
-                                    <span className="daily-chart-popup-label">{'\uD3C9\uADE0 \uD0C0\uC790 \uC18D\uB3C4'}</span>
+                                    <span className="daily-chart-popup-label">{t('avgSpeed')}</span>
                                     <span className="daily-chart-popup-value">{Math.round(popupData.avgCpm) + ' CPM'}</span>
                                 </div>
                                 <div className="daily-chart-popup-item">
-                                    <span className="daily-chart-popup-label">{'\uCD5C\uACE0 \uD0C0\uC790 \uC18D\uB3C4'}</span>
+                                    <span className="daily-chart-popup-label">{t('bestSpeed')}</span>
                                     <span className="daily-chart-popup-value">{popupData.bestCpm + ' CPM'}</span>
                                 </div>
                                 <div className="daily-chart-popup-item">
-                                    <span className="daily-chart-popup-label">{'\uD3C9\uADE0 \uC815\uD655\uB3C4'}</span>
+                                    <span className="daily-chart-popup-label">{t('avgAccuracy')}</span>
                                     <span className="daily-chart-popup-value">{Math.round(popupData.avgAcc * 100) + '%'}</span>
                                 </div>
                                 <div className="daily-chart-popup-item">
-                                    <span className="daily-chart-popup-label">{'\uD3C9\uADE0 \uCD08\uAE30\uD654 \uD69F\uC218'}</span>
-                                    <span className="daily-chart-popup-value">{(popupData.attempts > 0 ? (popupData.resetCount / popupData.attempts).toFixed(2) : '0') + '\uD68C'}</span>
+                                    <span className="daily-chart-popup-label">{t('avgResetCount')}</span>
+                                    <span className="daily-chart-popup-value">{(popupData.attempts > 0 ? (popupData.resetCount / popupData.attempts).toFixed(2) : '0') + t('countUnit')}</span>
                                 </div>
                             </div>
                         </div>

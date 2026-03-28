@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {useTheme} from '../../Context/ThemeContext';
-import {checkNickname, updateNickname} from '../../utils/authApi';
+import {checkNickname, updateNickname} from '@/utils/authApi.ts';
+import {t} from '@/utils/i18n.ts';
 import './NicknamePopup.css';
 
 // UUID 형식 체크 함수
@@ -25,7 +26,7 @@ const NicknamePopup = ({initialNickname, onSubmit}) => {
 
         // 유효성 검증
         if (trimmedNickname.length < 2 || trimmedNickname.length > 10) {
-            setError('닉네임은 2-10자여야 합니다.');
+            setError(t('nicknameLength'));
             return;
         }
 
@@ -36,7 +37,7 @@ const NicknamePopup = ({initialNickname, onSubmit}) => {
             const isDuplicate = await checkNickname(trimmedNickname);
 
             if (isDuplicate) {
-                setError('이미 사용 중인 닉네임입니다.');
+                setError(t('nicknameDuplicate'));
                 setIsNicknameAvailable(false);
                 setLastCheckedNickname(''); // 실패 시 초기화
             } else {
@@ -45,7 +46,7 @@ const NicknamePopup = ({initialNickname, onSubmit}) => {
                 setLastCheckedNickname(trimmedNickname); // 통과한 닉네임 저장
             }
         } catch (err) {
-            const errorMessage = err.response?.data?.detail || err.response?.data?.message || '중복 확인에 실패했습니다.';
+            const errorMessage = err.response?.data?.detail || err.response?.data?.message || t('nicknameCheckFailed');
             setError(errorMessage);
             setIsNicknameAvailable(false);
             setLastCheckedNickname(''); // 에러 시 초기화
@@ -56,14 +57,14 @@ const NicknamePopup = ({initialNickname, onSubmit}) => {
 
     const handleSubmit = async () => {
         if (!isNicknameAvailable) {
-            setError('닉네임 중복 확인을 먼저 해주세요.');
+            setError(t('nicknameCheckFirst'));
             return;
         }
 
         const trimmedNickname = nickname.trim();
 
         if (trimmedNickname.length < 2 || trimmedNickname.length > 10) {
-            setError('닉네임은 2-10자여야 합니다.');
+            setError(t('nicknameLength'));
             return;
         }
 
@@ -73,7 +74,7 @@ const NicknamePopup = ({initialNickname, onSubmit}) => {
             onSubmit(trimmedNickname);
         } catch (err) {
             // axios 에러 메시지 파싱
-            const errorMessage = err.response?.data?.detail || err.response?.data?.message || err.message || '닉네임 설정에 실패했습니다.';
+            const errorMessage = err.response?.data?.detail || err.response?.data?.message || err.message || t('nicknameSetFailed');
             setError(errorMessage);
         } finally {
             setIsSubmitting(false);
@@ -105,9 +106,9 @@ const NicknamePopup = ({initialNickname, onSubmit}) => {
     return (
         <div className="nickname-popup-overlay">
             <div className={`nickname-popup ${isDark ? 'dark' : ''}`}>
-                <h2 className="nickname-popup-title">환영합니다! 🎉</h2>
+                <h2 className="nickname-popup-title">{t('welcome')}</h2>
                 <p className={`nickname-popup-description ${isDark ? 'dark' : ''}`}>
-                    닉네임을 설정해주세요. (2-10자)
+                    {t('setNickname')}
                 </p>
                 <div className="nickname-input-group">
                     <div className="nickname-input-wrapper">
@@ -115,7 +116,7 @@ const NicknamePopup = ({initialNickname, onSubmit}) => {
                             type="text"
                             className={`nickname-input ${isDark ? 'dark' : ''}`}
                             id="nicknameInput"
-                            placeholder="닉네임 입력"
+                            placeholder={t('nicknamePlaceholder')}
                             maxLength={10}
                             value={nickname}
                             onChange={handleInputChange}
@@ -125,15 +126,15 @@ const NicknamePopup = ({initialNickname, onSubmit}) => {
                             onClick={handleCheckNickname}
                             disabled={isChecking || !isCheckButtonEnabled}
                         >
-                            {isChecking ? '확인 중...' : '중복확인'}
+                            {isChecking ? t('checking') : t('checkDuplicate')}
                         </button>
                     </div>
                     {error && <div className="nickname-error show">{error}</div>}
                     {isNicknameAvailable && !error && (
-                        <div className="nickname-success">사용 가능한 닉네임입니다.</div>
+                        <div className="nickname-success">{t('nicknameAvailable')}</div>
                     )}
                     <div className={`nickname-helper ${isDark ? 'dark' : ''}`}>
-                        한글, 영문, 숫자 사용 가능
+                        {t('nicknameHelper')}
                     </div>
                 </div>
                 <button
@@ -141,7 +142,7 @@ const NicknamePopup = ({initialNickname, onSubmit}) => {
                     onClick={handleSubmit}
                     disabled={isSubmitting || !isNicknameAvailable}
                 >
-                    {isSubmitting ? '설정 중...' : '시작하기'}
+                    {isSubmitting ? t('setting') : t('start')}
                 </button>
             </div>
         </div>

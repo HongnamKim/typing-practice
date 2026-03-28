@@ -49,35 +49,6 @@ const getMidIndex = (charCode: number): number => {
 };
 
 /**
- * 두 자모 분리 배열을 비교하여 첫 번째 불일치 자모의 TypoType을 반환한다.
- */
-export const determineTypoType = (
-    originalChar: string,
-    separatedSentence: string[],
-    separatedInput: string[],
-): TypoType => {
-    if (!isKoreanChar(originalChar)) {
-        return 'LETTER';
-    }
-
-    const midIndex = getMidIndex(originalChar.charCodeAt(0));
-    const medialLength = getMedialLength(midIndex);
-
-    // 자모 비교하여 첫 번째 불일치 위치 찾기
-    const maxLen = Math.max(separatedSentence.length, separatedInput.length);
-    for (let i = 0; i < maxLen; i++) {
-        const expected = separatedSentence[i] ?? '';
-        const actual = separatedInput[i] ?? '';
-        if (expected !== actual) {
-            return getTypoTypeByJamoIndex(i, medialLength);
-        }
-    }
-
-    // 모든 자모가 일치하는데 호출된 경우 (길이 차이 등) — FINAL로 폴백
-    return 'FINAL';
-};
-
-/**
  * flat 자모 인덱스에서 오타 엔트리를 생성한다.
  * 예문과 입력을 각각 flat 자모 배열로 비교하여 불일치 시 호출.
  */
