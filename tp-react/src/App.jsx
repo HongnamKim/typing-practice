@@ -14,6 +14,7 @@ import MyQuotes from "./pages/MyQuotes/MyQuotes";
 import MyReports from "./pages/MyReports/MyReports";
 import Stats from "./pages/Stats/Stats";
 import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService/TermsOfService";
 import {Analytics} from "@vercel/analytics/react";
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
                   <Route path="/quote/report" element={<MyReports />} />
                   <Route path="/stats" element={<Stats />} />
                   <Route path="/privacy" element={<PrivacyPolicy />} />
+                  <Route path="/terms" element={<TermsOfService />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
                 <Contact />
