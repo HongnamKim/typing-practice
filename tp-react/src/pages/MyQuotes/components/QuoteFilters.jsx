@@ -1,3 +1,4 @@
+import {t} from '@/utils/i18n.ts';
 import './QuoteFilters.css';
 
 const QuoteFilters = ({typeFilter, statusFilter, onTypeChange, onStatusChange}) => {
@@ -8,19 +9,19 @@ const QuoteFilters = ({typeFilter, statusFilter, onTypeChange, onStatusChange}) 
                     className={`my-quotes-filter-btn ${typeFilter === 'all' ? 'active' : ''}`}
                     onClick={() => onTypeChange('all')}
                 >
-                    전체
+                    {t('all')}
                 </button>
                 <button
                     className={`my-quotes-filter-btn ${typeFilter === 'PUBLIC' ? 'active' : ''}`}
                     onClick={() => onTypeChange('PUBLIC')}
                 >
-                    공개
+                    {t('public')}
                 </button>
                 <button
                     className={`my-quotes-filter-btn ${typeFilter === 'PRIVATE' ? 'active' : ''}`}
                     onClick={() => onTypeChange('PRIVATE')}
                 >
-                    비공개
+                    {t('private')}
                 </button>
             </div>
             <div className="my-quotes-filter-group">
@@ -28,19 +29,19 @@ const QuoteFilters = ({typeFilter, statusFilter, onTypeChange, onStatusChange}) 
                     className={`my-quotes-filter-btn ${statusFilter === 'all' ? 'active' : ''}`}
                     onClick={() => onStatusChange('all')}
                 >
-                    전체
+                    {t('all')}
                 </button>
                 <button
                     className={`my-quotes-filter-btn ${statusFilter === 'PENDING' ? 'active' : ''}`}
                     onClick={() => onStatusChange('PENDING')}
                 >
-                    대기중
+                    {t('pending')}
                 </button>
                 <button
                     className={`my-quotes-filter-btn ${statusFilter === 'ACTIVE' ? 'active' : ''}`}
                     onClick={() => onStatusChange('ACTIVE')}
                 >
-                    활성
+                    {t('active')}
                 </button>
             </div>
         </div>

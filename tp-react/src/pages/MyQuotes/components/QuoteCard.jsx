@@ -1,16 +1,17 @@
 import Badge from '../../../components/Badge/Badge';
+import {t} from '@/utils/i18n.ts';
 import './QuoteCard.css';
 
 // 타입 매핑
 const TYPE_MAP = {
-    PUBLIC: {variant: 'type-public', text: '공개'},
-    PRIVATE: {variant: 'type-private', text: '비공개'},
+    PUBLIC: {variant: 'type-public', text: t('public')},
+    PRIVATE: {variant: 'type-private', text: t('private')},
 };
 
 // 상태 매핑
 const STATUS_MAP = {
-    PENDING: {variant: 'status-pending', text: '대기중'},
-    ACTIVE: {variant: 'status-active', text: '활성'},
+    PENDING: {variant: 'status-pending', text: t('pending')},
+    ACTIVE: {variant: 'status-active', text: t('active')},
 };
 
 const QuoteCard = ({quote, onEdit, onDelete, onPublish, onCancelPublish}) => {
@@ -29,19 +30,19 @@ const QuoteCard = ({quote, onEdit, onDelete, onPublish, onCancelPublish}) => {
                 {quote.type === 'PRIVATE' && quote.status === 'ACTIVE' && (
                     <>
                         <button className="my-quote-action-btn" onClick={() => onEdit(quote)}>
-                            수정
+                            {t('edit')}
                         </button>
                         <button className="my-quote-action-btn danger" onClick={() => onDelete(quote.quoteId)}>
-                            삭제
+                            {t('delete')}
                         </button>
                         <button className="my-quote-action-btn primary" onClick={() => onPublish(quote.quoteId)}>
-                            공개전환
+                            {t('makePublic')}
                         </button>
                     </>
                 )}
                 {quote.type === 'PUBLIC' && quote.status === 'PENDING' && (
                     <button className="my-quote-action-btn" onClick={() => onCancelPublish(quote.quoteId)}>
-                        공개취소
+                        {t('cancelPublic')}
                     </button>
                 )}
             </div>

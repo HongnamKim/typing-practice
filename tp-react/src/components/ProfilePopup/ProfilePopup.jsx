@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useTheme} from '../../Context/ThemeContext';
 import {useAuth} from '../../Context/AuthContext';
 import {checkNickname, getMyInfo, updateNickname} from '@/utils/authApi.ts';
+import {t} from '@/utils/i18n.ts';
 import './ProfilePopup.css';
 
 // UUID 형식 체크 함수
@@ -36,7 +37,7 @@ const ProfilePopup = ({onClose}) => {
                 setProfile(data);
                 setNickname(isUuidFormat(data.nickname) ? '' : data.nickname);
             } catch (err) {
-                setError('프로필을 불러오는데 실패했습니다.');
+                setError(t('profileLoadFailed'));
             } finally {
                 setIsLoadingProfile(false);
             }
@@ -51,7 +52,7 @@ const ProfilePopup = ({onClose}) => {
         const trimmedNickname = nickname.trim();
 
         if (trimmedNickname.length < 2 || trimmedNickname.length > 10) {
-            setError('닉네임은 2-10자여야 합니다.');
+            setError(t('nicknameLength'));
             return;
         }
 
@@ -62,7 +63,7 @@ const ProfilePopup = ({onClose}) => {
             const isDuplicate = await checkNickname(trimmedNickname);
 
             if (isDuplicate) {
-                setError('이미 사용 중인 닉네임입니다.');
+                setError(t('nicknameDuplicate'));
                 setIsNicknameAvailable(false);
                 setCheckedNickname('');
             } else {
@@ -71,7 +72,7 @@ const ProfilePopup = ({onClose}) => {
                 setCheckedNickname(trimmedNickname);
             }
         } catch (err) {
-            const errorMessage = err.response?.data?.detail || err.response?.data?.message || '중복 확인에 실패했습니다.';
+            const errorMessage = err.response?.data?.detail || err.response?.data?.message || t('nicknameCheckFailed');
             setError(errorMessage);
             setIsNicknameAvailable(false);
             setCheckedNickname('');
@@ -82,14 +83,14 @@ const ProfilePopup = ({onClose}) => {
 
     const handleSave = async () => {
         if (!isNicknameAvailable) {
-            setError('닉네임 중복 확인을 먼저 해주세요.');
+            setError(t('nicknameCheckFirst'));
             return;
         }
 
         const trimmedNickname = nickname.trim();
 
         if (trimmedNickname.length < 2 || trimmedNickname.length > 10) {
-            setError('닉네임은 2-10자여야 합니다.');
+            setError(t('nicknameLength'));
             return;
         }
 
@@ -108,7 +109,7 @@ const ProfilePopup = ({onClose}) => {
 
             onClose();
         } catch (err) {
-            const errorMessage = err.response?.data?.detail || err.response?.data?.message || err.message || '닉네임 수정에 실패했습니다.';
+            const errorMessage = err.response?.data?.detail || err.response?.data?.message || err.message || t('nicknameEditFailed');
             setError(errorMessage);
         } finally {
             setIsSaving(false);
@@ -138,7 +139,7 @@ const ProfilePopup = ({onClose}) => {
         return (
             <div className="profile-popup-overlay" onClick={onClose}>
                 <div className={`profile-popup ${isDark ? 'dark' : ''}`} onClick={(e) => e.stopPropagation()}>
-                    <div className="profile-loading">로딩 중...</div>
+                    <div className="profile-loading">{t('loading')}</div>
                 </div>
             </div>
         );
@@ -147,21 +148,21 @@ const ProfilePopup = ({onClose}) => {
     return (
         <div className="profile-popup-overlay" onClick={onClose}>
             <div className={`profile-popup ${isDark ? 'dark' : ''}`} onClick={(e) => e.stopPropagation()}>
-                <h2 className="profile-popup-title">프로필</h2>
+                <h2 className="profile-popup-title">{t('profile')}</h2>
 
                 <div className="profile-content">
                     <div className="profile-section">
-                        <label className={`profile-label ${isDark ? 'dark' : ''}`}>이메일</label>
+                        <label className={`profile-label ${isDark ? 'dark' : ''}`}>{t('email')}</label>
                         <div className={`profile-value ${isDark ? 'dark' : ''}`}>{profile?.email || '-'}</div>
                     </div>
 
                     <div className="profile-section">
-                        <label className={`profile-label ${isDark ? 'dark' : ''}`}>닉네임</label>
+                        <label className={`profile-label ${isDark ? 'dark' : ''}`}>{t('nickname')}</label>
                         <div className="nickname-input-wrapper">
                             <input
                                 type="text"
                                 className={`profile-input ${isDark ? 'dark' : ''}`}
-                                placeholder="닉네임 입력"
+                                placeholder={t('nicknamePlaceholder')}
                                 maxLength={10}
                                 value={nickname}
                                 onChange={handleInputChange}
@@ -172,18 +173,18 @@ const ProfilePopup = ({onClose}) => {
                                     onClick={handleCheckNickname}
                                     disabled={isChecking || !isCheckButtonEnabled}
                                 >
-                                    {isChecking ? '확인 중...' : '중복확인'}
+                                    {isChecking ? t('checking') : t('checkDuplicate')}
                                 </button>
                             )}
                         </div>
                         {error && <div className="profile-error">{error}</div>}
                         {isNicknameAvailable && !error && (
-                            <div className="profile-success">사용 가능한 닉네임입니다.</div>
+                            <div className="profile-success">{t('nicknameAvailable')}</div>
                         )}
                     </div>
 
                     <div className="profile-section">
-                        <label className={`profile-label ${isDark ? 'dark' : ''}`}>가입일</label>
+                        <label className={`profile-label ${isDark ? 'dark' : ''}`}>{t('joinDate')}</label>
                         <div className={`profile-value ${isDark ? 'dark' : ''}`}>
                             {profile?.createdAt ? new Date(profile.createdAt).toLocaleDateString() : '-'}
                         </div>
@@ -196,13 +197,13 @@ const ProfilePopup = ({onClose}) => {
                         onClick={handleSave}
                         disabled={!isNicknameChanged || !isNicknameAvailable || isSaving}
                     >
-                        {isSaving ? '저장 중...' : '저장하기'}
+                        {isSaving ? t('saving') : t('saveChanges')}
                     </button>
                     <button
                         className={`profile-btn profile-btn-close ${isDark ? 'dark' : ''}`}
                         onClick={onClose}
                     >
-                        닫기
+                        {t('close')}
                     </button>
                 </div>
             </div>

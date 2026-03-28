@@ -17,6 +17,7 @@ import {RESET_COUNT_THRESHOLD_RATIO} from "@/const/config.const.ts";
 import {koreanSeparator} from "@/utils/koreanSeparator.ts";
 import {createFlatTypoEntry, isLanguageSwitchMistake} from "@/utils/typoUtils.ts";
 import {saveTypingRecord} from "@/utils/typingRecordApi.ts";
+import {t} from "@/utils/i18n.ts";
 import {areJamoEqual, calculateAccuracy, sum, average, max} from "./InputUtils";
 
 const Input = ({onInputChange: onInputChangeCallback}) => {
@@ -459,7 +460,7 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
 
     const preventPaste = (e) => {
         e.preventDefault();
-        showError("붙여넣기가 금지되어 있습니다!");
+        showError(t('pasteBlocked'));
     };
 
     return (
@@ -471,7 +472,7 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
             spellCheck={false}
             value={input}
             rows={1}
-            placeholder={isCompactMode ? "" : "위 문장을 입력하세요."}
+            placeholder={isCompactMode ? "" : t('inputPlaceholder')}
             onInput={onInputChange}
             onKeyDown={handleKeyDown}
             onPaste={preventPaste}

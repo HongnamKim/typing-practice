@@ -1,11 +1,7 @@
+import {t} from '@/utils/i18n.ts';
 import './StatsSummary.css';
 
-const formatTime = (min) => {
-    if (!min || min <= 0) return '0분';
-    const h = Math.floor(min / 60);
-    const m = Math.round(min % 60);
-    return h > 0 ? h + '시간 ' + m + '분' : m + '분';
-};
+const formatTime = t('formatTime');
 
 const calcTrend = (recentAvg, totalAvg) => {
     if (!totalAvg || !recentAvg) return {text: '', className: ''};
@@ -41,37 +37,37 @@ function StatsSummary({typingStats, dailyStats}) {
     return (
         <div className="stats-summary">
             <div className="stats-main-card">
-                <span className="stats-main-label">최근 7일 평균</span>
+                <span className="stats-main-label">{t('recent7DayAvg')}</span>
                 <div className="stats-main-value">
                     <span className="stats-main-number">{recentAvg}</span>
                     <span className="stats-main-unit">CPM</span>
                     {trend.text && <span className={trend.className}>{trend.text}</span>}
                 </div>
                 <div className="stats-main-sub">
-                    최고 {typingStats.bestCpm} CPM · 정확도 {Math.round(typingStats.avgAcc * 100)}%
+                    {t('best')} {typingStats.bestCpm} CPM · {t('accuracy')} {Math.round(typingStats.avgAcc * 100)}%
                 </div>
             </div>
             <div className="stats-sub-grid">
                 <div className="stats-sub-card">
-                    <span className="stats-sub-label">연습 시간</span>
+                    <span className="stats-sub-label">{t('practiceTime')}</span>
                     <div className="stats-sub-value">{formatTime(typingStats.totalPracticeTimeMin)}</div>
                 </div>
                 <div className="stats-sub-card">
-                    <span className="stats-sub-label">연습 횟수</span>
+                    <span className="stats-sub-label">{t('practiceCount')}</span>
                     <div className="stats-sub-value">
-                        {typingStats.totalAttempts}<span className="stats-sub-unit">회</span>
+                        {typingStats.totalAttempts}<span className="stats-sub-unit">{t('times')}</span>
                     </div>
                 </div>
                 <div className="stats-sub-card">
-                    <span className="stats-sub-label">전체 평균</span>
+                    <span className="stats-sub-label">{t('totalAverage')}</span>
                     <div className="stats-sub-value">
                         {Math.round(typingStats.avgCpm)}<span className="stats-sub-unit">CPM</span>
                     </div>
                 </div>
                 <div className="stats-sub-card">
-                    <span className="stats-sub-label">평균 초기화</span>
+                    <span className="stats-sub-label">{t('avgReset')}</span>
                     <div className="stats-sub-value">
-                        {avgReset}<span className="stats-sub-unit">회</span>
+                        {avgReset}<span className="stats-sub-unit">{t('times')}</span>
                     </div>
                 </div>
             </div>

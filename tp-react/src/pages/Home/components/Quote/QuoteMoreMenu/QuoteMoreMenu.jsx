@@ -5,6 +5,7 @@ import './QuoteMoreMenu.css';
 import {useTheme} from "@/Context/ThemeContext.tsx";
 import {useAuth} from "@/Context/AuthContext.tsx";
 import {useQuote} from "@/Context/QuoteContext.tsx";
+import {t} from "@/utils/i18n.ts";
 import LoginRequiredPopup from "@/components/LoginRequiredPopup/LoginRequiredPopup.jsx";
 
 const QuoteMoreMenu = () => {
@@ -74,7 +75,7 @@ const QuoteMoreMenu = () => {
                             onClick={handleReportClick}
                         >
                             <FaFlag/>
-                            <span>신고</span>
+                            <span>{t('report')}</span>
                         </button>
                     </div>
                 )}
@@ -82,7 +83,7 @@ const QuoteMoreMenu = () => {
 
             {showLoginPopup && (
                 <LoginRequiredPopup
-                    message="문장을 신고하려면 로그인이 필요합니다."
+                    message={t('reportLoginRequired')}
                     onClose={() => setShowLoginPopup(false)}
                 />
             )}

@@ -1,6 +1,7 @@
 import {createContext, ReactNode, useContext, useState} from 'react';
 import {FaExclamationCircle} from 'react-icons/fa';
 import {useTheme} from './ThemeContext';
+import {t} from '../utils/i18n';
 
 interface ErrorContextType {
     showError: (message: string) => void;
@@ -45,7 +46,7 @@ export const ErrorProvider = ({children}: ErrorProviderProps) => {
                             <FaExclamationCircle/>
                         </div>
                         <p className="error-popup-message">{errorMessage}</p>
-                        <button className="error-popup-btn" onClick={clearError}>확인</button>
+                        <button className="error-popup-btn" onClick={clearError}>{t('errorConfirm')}</button>
                     </div>
                 </div>
             )}

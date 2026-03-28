@@ -5,11 +5,12 @@ import ReportReasonOption from './ReportReasonOption';
 import './ReportPopup.css';
 import {useTheme} from "@/Context/ThemeContext.tsx";
 import {useError} from "@/Context/ErrorContext.tsx";
+import {t} from "@/utils/i18n.ts";
 import {createReport} from "@/utils/reportApi.ts";
 
 const REASON_OPTIONS = [
-    {value: 'MODIFY', title: '수정 요청', description: '오타, 맞춤법 오류 등'},
-    {value: 'DELETE', title: '삭제 요청', description: '부적절한 내용, 저작권 위반 등'},
+    {value: 'MODIFY', title: t('reportModify'), description: t('reportModifyDesc')},
+    {value: 'DELETE', title: t('reportDelete'), description: t('reportDeleteDesc')},
 ];
 
 const DETAIL_MAX_LENGTH = 120;
@@ -40,7 +41,7 @@ const ReportPopup = ({quote, onClose, onSuccess}) => {
             onClose();
         } catch (error) {
             console.error('신고 실패:', error);
-            const message = error.response?.data?.detail || '신고 접수에 실패했습니다.';
+            const message = error.response?.data?.detail || t('reportFailed');
             showError(message);
         } finally {
             setIsSubmitting(false);
@@ -58,14 +59,14 @@ const ReportPopup = ({quote, onClose, onSuccess}) => {
         <div className="report-popup-overlay" onClick={handleOverlayClick}>
             <div className={`report-popup ${isDark ? 'dark' : ''}`}>
                 <div className="report-popup-header">
-                    <h3 className="report-popup-title">문장 신고</h3>
+                    <h3 className="report-popup-title">{t('reportSentence')}</h3>
                     <button className="report-popup-close-btn" onClick={onClose}>
                         <FaXmark/>
                     </button>
                 </div>
 
                 <div className={`report-quote-preview ${isDark ? 'dark' : ''}`}>
-                    <span className="report-quote-label">신고 대상</span>
+                    <span className="report-quote-label">{t('reportTarget')}</span>
                     <p className="report-quote-sentence">{quote.sentence}</p>
                     {quote.author && (
                         <span className="report-quote-author">- {quote.author}</span>
@@ -73,7 +74,7 @@ const ReportPopup = ({quote, onClose, onSuccess}) => {
                 </div>
 
                 <div className="report-reason-section">
-                    <span className={`report-section-label ${isDark ? 'dark' : ''}`}>신고 사유</span>
+                    <span className={`report-section-label ${isDark ? 'dark' : ''}`}>{t('reportReason')}</span>
                     <div className="report-reason-options">
                         {REASON_OPTIONS.map((option) => (
                             <ReportReasonOption
@@ -90,12 +91,12 @@ const ReportPopup = ({quote, onClose, onSuccess}) => {
 
                 <div className="report-detail-section">
                     <label className={`report-section-label ${isDark ? 'dark' : ''}`} htmlFor="reportDetail">
-                        상세 설명 <span className="report-optional">(선택)</span>
+                        {t('reportDetail')} <span className="report-optional">({t('optional')})</span>
                     </label>
                     <textarea
                         id="reportDetail"
                         className={`report-detail-input ${isDark ? 'dark' : ''}`}
-                        placeholder="신고 사유를 자세히 설명해주세요."
+                        placeholder={t('reportDetailPlaceholder')}
                         maxLength={DETAIL_MAX_LENGTH}
                         rows={3}
                         value={detail}
@@ -112,7 +113,7 @@ const ReportPopup = ({quote, onClose, onSuccess}) => {
                         onClick={onClose}
                         disabled={isSubmitting}
                     >
-                        취소
+                        {t('cancel')}
                     </button>
                     <button
                         className="report-submit-btn"
@@ -120,7 +121,7 @@ const ReportPopup = ({quote, onClose, onSuccess}) => {
                         disabled={isSubmitting}
                     >
                         <FaFlag/>
-                        <span>{isSubmitting ? '신고 중...' : '신고'}</span>
+                        <span>{isSubmitting ? t('reporting') : t('report')}</span>
                     </button>
                 </div>
             </div>

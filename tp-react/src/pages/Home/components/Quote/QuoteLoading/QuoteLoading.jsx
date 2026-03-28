@@ -1,5 +1,6 @@
 import './QuoteLoading.css';
 import {useTheme} from "@/Context/ThemeContext.tsx";
+import {t} from "@/utils/i18n.ts";
 
 const QuoteLoading = () => {
     const {isDark} = useTheme();
@@ -7,7 +8,7 @@ const QuoteLoading = () => {
     return (
         <div className={`quote-loading ${isDark ? 'dark' : ''}`}>
             <div className="quote-loading-spinner"></div>
-            <span>문장을 불러오는 중...</span>
+            <span>{t('loadingSentences')}</span>
         </div>
     );
 };

@@ -4,6 +4,7 @@ import {FaFileCircleQuestion} from 'react-icons/fa6';
 import {useAuth} from '../../Context/AuthContext';
 import {useError} from '../../Context/ErrorContext';
 import {cancelPublishQuote, deleteQuote, getMyQuotes, publishQuote, updateQuote, extractQuoteErrorMessage} from '@/utils/quoteApi.ts';
+import {t} from '@/utils/i18n.ts';
 import QuoteCard from './components/QuoteCard';
 import QuoteFilters from './components/QuoteFilters';
 import QuoteEditPopup from './components/QuoteEditPopup';
@@ -131,7 +132,7 @@ function MyQuotes() {
             setEditingQuote(null);
         } catch (error) {
             console.error('문장 수정 실패:', error);
-            showError(extractQuoteErrorMessage(error, '내 문장 내에 유사한 문장이 존재합니다.', '문장 수정에 실패했습니다.'));
+            showError(extractQuoteErrorMessage(error, t('similarMy'), t('editSentenceFailed')));
         }
     };
 
@@ -150,7 +151,7 @@ function MyQuotes() {
             }
         } catch (error) {
             console.error('문장 삭제 실패:', error);
-            const message = error.response?.data?.detail || '문장 삭제에 실패했습니다.';
+            const message = error.response?.data?.detail || t('deleteSentenceFailed');
             showError(message);
             setDeletingQuoteId(null);
         }
@@ -168,7 +169,7 @@ function MyQuotes() {
             ));
         } catch (error) {
             console.error('공개 전환 실패:', error);
-            showError(extractQuoteErrorMessage(error, '공개 문장 내에 유사한 문장이 존재합니다.', '공개 전환에 실패했습니다.'));
+            showError(extractQuoteErrorMessage(error, t('similarPublic'), t('makePublicFailed')));
         }
     };
 
@@ -184,7 +185,7 @@ function MyQuotes() {
             ));
         } catch (error) {
             console.error('공개 취소 실패:', error);
-            const message = error.response?.data?.detail || '공개 취소에 실패했습니다.';
+            const message = error.response?.data?.detail || t('cancelPublicFailed');
             showError(message);
         }
     };
@@ -199,11 +200,11 @@ function MyQuotes() {
         return (
             <div className="my-quotes-container">
                 <div className="my-quotes-header">
-                    <h1 className="my-quotes-title">내 문장</h1>
+                    <h1 className="my-quotes-title">{t('mySentencesTitle')}</h1>
                 </div>
                 <div className="my-quotes-login-required">
-                    <p>로그인이 필요합니다.</p>
-                    <button onClick={() => navigate('/')}>홈으로 돌아가기</button>
+                    <p>{t('loginRequired')}</p>
+                    <button onClick={() => navigate('/')}>{t('backToHome')}</button>
                 </div>
             </div>
         );
@@ -212,7 +213,7 @@ function MyQuotes() {
     return (
         <div className="my-quotes-container">
             <div className="my-quotes-header">
-                <h1 className="my-quotes-title">내 문장</h1>
+                <h1 className="my-quotes-title">{t('mySentencesTitle')}</h1>
             </div>
 
             <QuoteFilters
@@ -243,7 +244,7 @@ function MyQuotes() {
                 {isEmpty && (
                     <div className="my-quotes-empty">
                         <FaFileCircleQuestion/>
-                        <p>등록한 문장이 없습니다.</p>
+                        <p>{t('noMySentences')}</p>
                     </div>
                 )}
 
@@ -253,10 +254,10 @@ function MyQuotes() {
 
             <div className="my-quotes-actions">
                 <button className="my-quotes-back-btn" onClick={() => navigate('/')}>
-                    돌아가기
+                    {t('back')}
                 </button>
                 <button className="my-quotes-upload-btn" onClick={() => navigate('/quote/upload')}>
-                    문장 업로드
+                    {t('uploadSentence')}
                 </button>
             </div>
 
@@ -272,8 +273,8 @@ function MyQuotes() {
             {/* 삭제 확인 팝업 */}
             {deletingQuoteId && (
                 <ConfirmPopup
-                    message="이 문장을 삭제하시겠습니까?"
-                    confirmText="삭제"
+                    message={t('deleteSentenceConfirm')}
+                    confirmText={t('delete')}
                     onConfirm={handleDelete}
                     onCancel={() => setDeletingQuoteId(null)}
                     isDanger

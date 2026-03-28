@@ -4,6 +4,7 @@ import {FaRotateRight} from 'react-icons/fa6';
 import {useAuth} from '../../Context/AuthContext';
 import {useError} from '../../Context/ErrorContext';
 import {getDailyStats, getTypingStats, getTypoStats, refreshStats} from '@/utils/statsApi.ts';
+import {t} from '@/utils/i18n.ts';
 import StatsSummary from './components/StatsSummary';
 import DailyChart from './components/DailyChart';
 import TypoList from './components/TypoList';
@@ -52,7 +53,7 @@ function Stats() {
             setTypoStats(typoRes.data.data.content || []);
         } catch (error) {
             console.error('통계 로드 실패:', error);
-            showError('기록을 불러오는데 실패했습니다.');
+            showError(t('statsLoadFailed'));
         } finally {
             setIsLoading(false);
         }
@@ -74,9 +75,9 @@ function Stats() {
             await loadAllStats();
         } catch (error) {
             if (error.response?.status === 429) {
-                showError('새로고침은 1분에 한 번만 가능합니다.');
+                showError(t('refreshCooldown'));
             } else {
-                showError('새로고침에 실패했습니다.');
+                showError(t('refreshFailed'));
             }
         }
     };
@@ -87,7 +88,7 @@ function Stats() {
     return (
         <div className="stats-container">
             <div className="stats-header">
-                <h1 className="stats-title">내 타이핑 기록</h1>
+                <h1 className="stats-title">{t('myTypingRecords')}</h1>
                 <button className="stats-refresh-btn" onClick={handleRefresh} title="새로고침">
                     <FaRotateRight/>
                 </button>
@@ -112,7 +113,7 @@ function Stats() {
 
             <div className="stats-footer">
                 <button className="stats-back-btn" onClick={() => navigate('/')}>
-                    돌아가기
+                    {t('back')}
                 </button>
             </div>
         </div>
