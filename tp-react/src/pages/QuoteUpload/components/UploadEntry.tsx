@@ -1,6 +1,7 @@
 import React from 'react';
 import {FaGlobe, FaLock, FaXmark} from 'react-icons/fa6';
 import {MAX_AUTHOR_LENGTH, MAX_SENTENCE_LENGTH, MIN_SENTENCE_LENGTH} from '@/const/config.const.ts';
+import {t} from '@/utils/i18n.ts';
 import './UploadEntry.css';
 
 export interface UploadEntryData {
@@ -48,21 +49,21 @@ const UploadEntry = ({entry, index, showDelete, onUpdate, onRemove}: UploadEntry
                     onClick={() => onUpdate(entry.id, 'type', 'public')}
                 >
                     <FaGlobe/>
-                    <span>공개</span>
+                    <span>{t('public')}</span>
                 </button>
                 <button
                     className={`quote-upload-entry-type-btn ${entry.type === 'private' ? 'active' : ''}`}
                     onClick={() => onUpdate(entry.id, 'type', 'private')}
                 >
                     <FaLock/>
-                    <span>비공개</span>
+                    <span>{t('private')}</span>
                 </button>
             </div>
             <div className="quote-upload-entry-inputs">
                 <div className="quote-upload-sentence-wrapper">
                     <textarea
                         className="quote-upload-input quote-upload-sentence"
-                        placeholder={`문장을 입력하세요 (${MIN_SENTENCE_LENGTH}-${MAX_SENTENCE_LENGTH}자)`}
+                        placeholder={t('sentencePlaceholder')(MIN_SENTENCE_LENGTH, MAX_SENTENCE_LENGTH)}
                         maxLength={MAX_SENTENCE_LENGTH}
                         value={entry.sentence}
                         onChange={(e) => handleTextareaChange(e, 'sentence')}
@@ -76,7 +77,7 @@ const UploadEntry = ({entry, index, showDelete, onUpdate, onRemove}: UploadEntry
                 <div className="quote-upload-author-wrapper">
                     <textarea
                         className="quote-upload-input quote-upload-author"
-                        placeholder="저자 (선택)"
+                        placeholder={t('authorPlaceholder')}
                         maxLength={MAX_AUTHOR_LENGTH}
                         value={entry.author}
                         onChange={(e) => handleTextareaChange(e, 'author')}

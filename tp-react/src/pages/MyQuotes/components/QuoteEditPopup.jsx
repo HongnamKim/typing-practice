@@ -1,6 +1,7 @@
 import {useEffect, useRef, useState} from 'react';
-import {useTheme} from '../../../Context/ThemeContext';
-import {MAX_AUTHOR_LENGTH, MAX_SENTENCE_LENGTH, MIN_SENTENCE_LENGTH} from '../../../const/config.const';
+import {useTheme} from '@/Context/ThemeContext.tsx';
+import {MAX_AUTHOR_LENGTH, MAX_SENTENCE_LENGTH, MIN_SENTENCE_LENGTH} from '@/const/config.const.ts';
+import {t} from '@/utils/i18n.ts';
 import './QuoteEditPopup.css';
 
 const QuoteEditPopup = ({quote, onSave, onClose}) => {
@@ -34,10 +35,10 @@ const QuoteEditPopup = ({quote, onSave, onClose}) => {
     return (
         <div className={`quote-edit-popup-overlay ${isDark ? 'dark' : ''}`} onClick={onClose}>
             <div className="quote-edit-popup" onClick={e => e.stopPropagation()}>
-                <h3 className="quote-edit-title">문장 수정</h3>
+                <h3 className="quote-edit-title">{t('editSentence')}</h3>
                 <div className="quote-edit-content">
                     <div className="quote-edit-field">
-                        <label className="quote-edit-label">문장</label>
+                        <label className="quote-edit-label">{t('sentence')}</label>
                         <textarea
                             ref={textareaRef}
                             className="quote-edit-input quote-edit-sentence"
@@ -56,7 +57,7 @@ const QuoteEditPopup = ({quote, onSave, onClose}) => {
                         </span>
                     </div>
                     <div className="quote-edit-field">
-                        <label className="quote-edit-label">저자 (선택)</label>
+                        <label className="quote-edit-label">{t('authorOptional')}</label>
                         <input
                             type="text"
                             className="quote-edit-input"
@@ -71,13 +72,13 @@ const QuoteEditPopup = ({quote, onSave, onClose}) => {
                     </div>
                 </div>
                 <div className="quote-edit-actions">
-                    <button className="quote-edit-cancel-btn" onClick={onClose}>취소</button>
+                    <button className="quote-edit-cancel-btn" onClick={onClose}>{t('cancel')}</button>
                     <button
                         className="quote-edit-save-btn"
                         onClick={handleSave}
                         disabled={!isValid()}
                     >
-                        저장
+                        {t('save')}
                     </button>
                 </div>
             </div>

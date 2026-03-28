@@ -3,6 +3,7 @@ import {FaGlobe, FaUser} from 'react-icons/fa';
 import './QuoteSourceSelector.css';
 import {useTheme} from "@/Context/ThemeContext.tsx";
 import {useQuote} from "@/Context/QuoteContext.tsx";
+import {t} from "@/utils/i18n.ts";
 import LoginRequiredPopup from "@/components/LoginRequiredPopup/LoginRequiredPopup.jsx";
 
 const QuoteSourceSelector = () => {
@@ -29,20 +30,20 @@ const QuoteSourceSelector = () => {
                     onClick={handleAllClick}
                 >
                     <FaGlobe/>
-                    <span>전체 문장</span>
+                    <span>{t('allSentences')}</span>
                 </button>
                 <button
                     className={`quote-source-btn ${quoteSource === 'my' ? 'active' : ''} ${isDark ? 'dark' : ''}`}
                     onClick={handleMyClick}
                 >
                     <FaUser/>
-                    <span>내 문장만</span>
+                    <span>{t('mySentencesOnly')}</span>
                 </button>
             </div>
 
             {showLoginPopup && (
                 <LoginRequiredPopup
-                    message="내 문장을 사용하려면 로그인이 필요합니다."
+                    message={t('mySentencesLoginRequired')}
                     onClose={() => setShowLoginPopup(false)}
                 />
             )}

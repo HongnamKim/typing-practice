@@ -4,6 +4,7 @@ import {FaFlag} from 'react-icons/fa6';
 import {useAuth} from '../../Context/AuthContext';
 import {useError} from '../../Context/ErrorContext';
 import {deleteReport, getMyReports} from '@/utils/reportApi.ts';
+import {t} from '@/utils/i18n.ts';
 import ReportCard from './components/ReportCard';
 import ReportFilters from './components/ReportFilters';
 import ConfirmPopup from '../../components/ConfirmPopup/ConfirmPopup';
@@ -127,7 +128,7 @@ function MyReports() {
             }
         } catch (error) {
             console.error('신고 삭제 실패:', error);
-            const message = error.response?.data?.detail || '신고 삭제에 실패했습니다.';
+            const message = error.response?.data?.detail || t('deleteReportFailed');
             showError(message);
             setDeletingReportId(null);
         }
@@ -143,11 +144,11 @@ function MyReports() {
         return (
             <div className="my-reports-container">
                 <div className="my-reports-header">
-                    <h1 className="my-reports-title">신고 내역</h1>
+                    <h1 className="my-reports-title">{t('reportHistoryTitle')}</h1>
                 </div>
                 <div className="my-reports-login-required">
-                    <p>로그인이 필요합니다.</p>
-                    <button onClick={() => navigate('/')}>홈으로 돌아가기</button>
+                    <p>{t('loginRequired')}</p>
+                    <button onClick={() => navigate('/')}>{t('backToHome')}</button>
                 </div>
             </div>
         );
@@ -156,7 +157,7 @@ function MyReports() {
     return (
         <div className="my-reports-container">
             <div className="my-reports-header">
-                <h1 className="my-reports-title">신고 내역</h1>
+                <h1 className="my-reports-title">{t('reportHistoryTitle')}</h1>
             </div>
 
             <ReportFilters
@@ -182,7 +183,7 @@ function MyReports() {
                 {isEmpty && (
                     <div className="my-reports-empty">
                         <FaFlag/>
-                        <p>신고 내역이 없습니다.</p>
+                        <p>{t('noReports')}</p>
                     </div>
                 )}
 
@@ -192,15 +193,15 @@ function MyReports() {
 
             <div className="my-reports-actions">
                 <button className="my-reports-back-btn" onClick={() => navigate('/')}>
-                    돌아가기
+                    {t('back')}
                 </button>
             </div>
 
             {/* 삭제 확인 팝업 */}
             {deletingReportId && (
                 <ConfirmPopup
-                    message="이 신고를 취소하시겠습니까?"
-                    confirmText="삭제"
+                    message={t('deleteReportConfirm')}
+                    confirmText={t('delete')}
                     onConfirm={handleDelete}
                     onCancel={() => setDeletingReportId(null)}
                     isDanger

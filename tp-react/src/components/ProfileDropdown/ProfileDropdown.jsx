@@ -2,10 +2,10 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useTheme} from '../../Context/ThemeContext';
 import {useAuth} from '../../Context/AuthContext';
-import {useError} from '../../Context/ErrorContext';
 import {logout as logoutApi} from '../../utils/authApi';
 import ProfilePopup from '../ProfilePopup/ProfilePopup';
 import {FaChartBar, FaChevronDown, FaCog, FaFileAlt, FaFlag, FaSignOutAlt, FaUser} from 'react-icons/fa';
+import {t} from '@/utils/i18n.ts';
 import './ProfileDropdown.css';
 
 // UUID 형식 체크 함수
@@ -19,7 +19,7 @@ const ProfileDropdown = () => {
     const navigate = useNavigate();
     const {isDark} = useTheme();
     const {user, logout} = useAuth();
-    const {showError} = useError();
+    //const {showError} = useError();
     const [isOpen, setIsOpen] = useState(false);
     const [showProfilePopup, setShowProfilePopup] = useState(false);
     const dropdownRef = useRef(null);
@@ -52,7 +52,7 @@ const ProfileDropdown = () => {
                 navigate('/quote/report');
                 break;
             case 'stats':
-                showError('통계 기능 (준비 중)');
+                navigate('/stats');
                 break;
             case 'settings':
                 setShowProfilePopup(true);
@@ -80,7 +80,7 @@ const ProfileDropdown = () => {
                     onClick={toggleDropdown}
                 >
                     <FaUser/>
-                    <span>{isUuidFormat(user?.nickname) ? '닉네임 설정' : (user?.nickname || '사용자')}</span>
+                    <span>{isUuidFormat(user?.nickname) ? t('setNicknameBtn') : (user?.nickname || t('user'))}</span>
                     <FaChevronDown style={{fontSize: '0.7rem'}}/>
                 </button>
 
@@ -91,28 +91,28 @@ const ProfileDropdown = () => {
                             onClick={() => handleMenuClick('my-sentences')}
                         >
                             <FaFileAlt/>
-                            <span>내 문장</span>
+                            <span>{t('mySentences')}</span>
                         </button>
                         <button
                             className={`dropdown-item ${isDark ? 'dark' : ''}`}
                             onClick={() => handleMenuClick('stats')}
                         >
                             <FaChartBar/>
-                            <span>통계</span>
+                            <span>{t('records')}</span>
                         </button>
                         <button
                             className={`dropdown-item ${isDark ? 'dark' : ''}`}
                             onClick={() => handleMenuClick('settings')}
                         >
                             <FaCog/>
-                            <span>프로필</span>
+                            <span>{t('profile')}</span>
                         </button>
                         <button
                             className={`dropdown-item ${isDark ? 'dark' : ''}`}
                             onClick={() => handleMenuClick('my-reports')}
                         >
                             <FaFlag/>
-                            <span>신고 내역</span>
+                            <span>{t('reportHistory')}</span>
                         </button>
                         <div className={`dropdown-divider ${isDark ? 'dark' : ''}`}></div>
                         <button
@@ -120,7 +120,7 @@ const ProfileDropdown = () => {
                             onClick={() => handleMenuClick('logout')}
                         >
                             <FaSignOutAlt/>
-                            <span>로그아웃</span>
+                            <span>{t('logout')}</span>
                         </button>
                     </div>
                 )}

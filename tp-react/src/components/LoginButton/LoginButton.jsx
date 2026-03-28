@@ -1,12 +1,13 @@
 import React from 'react';
-import {FaGoogle} from 'react-icons/fa';
+import {t} from '@/utils/i18n.ts';
+import GoogleLogo from '../GoogleLogo/GoogleLogo';
 import './LoginButton.css';
 
 const LoginButton = ({onClick}) => {
     return (
-        <button className="header-btn" onClick={onClick}>
-            <FaGoogle />
-            <span>구글 로그인</span>
+        <button className="google-login-btn" onClick={onClick}>
+            <GoogleLogo/>
+            <span>{t('googleLogin')}</span>
         </button>
     );
 };

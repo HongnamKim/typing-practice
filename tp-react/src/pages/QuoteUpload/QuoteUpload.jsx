@@ -1,10 +1,11 @@
 import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {FaCircleInfo, FaPlus, FaUpload} from 'react-icons/fa6';
-import {uploadQuote} from '@/utils/quoteApi.ts';
+import {uploadQuote, extractQuoteErrorMessage} from '@/utils/quoteApi.ts';
 import {useAuth} from '../../Context/AuthContext';
 import {useError} from '../../Context/ErrorContext';
 import {MAX_AUTHOR_LENGTH, MAX_SENTENCE_LENGTH, MIN_SENTENCE_LENGTH} from '@/const/config.const.js';
+import {t} from '@/utils/i18n.ts';
 import UploadEntry from './components/UploadEntry';
 import ConfirmPopup from '../../components/ConfirmPopup/ConfirmPopup';
 import './QuoteUpload.css';
@@ -71,13 +72,13 @@ function QuoteUpload() {
         const sentence = entry.sentence.trim();
         if (!sentence) return '';
         if (sentence.length < MIN_SENTENCE_LENGTH) {
-            return `문장은 ${MIN_SENTENCE_LENGTH}자 이상이어야 합니다.`;
+            return t('minSentenceLength')(MIN_SENTENCE_LENGTH);
         }
         if (sentence.length > MAX_SENTENCE_LENGTH) {
-            return `문장은 ${MAX_SENTENCE_LENGTH}자 이하여야 합니다.`;
+            return t('maxSentenceLength')(MAX_SENTENCE_LENGTH);
         }
         if (entry.author && entry.author.length > MAX_AUTHOR_LENGTH) {
-            return `저자는 ${MAX_AUTHOR_LENGTH}자 이하여야 합니다.`;
+            return t('maxAuthorLength')(MAX_AUTHOR_LENGTH);
         }
         return '';
     };
@@ -90,7 +91,7 @@ function QuoteUpload() {
         const validEntries = getValidEntries();
 
         if (validEntries.length === 0) {
-            showError('최소 1개의 문장을 입력해주세요.');
+            showError(t('enterAtLeastOne'));
             return;
         }
 
@@ -112,11 +113,11 @@ function QuoteUpload() {
 
         let message;
         if (publicCount > 0 && privateCount > 0) {
-            message = `공개 ${publicCount}개, 비공개 ${privateCount}개의 문장을 업로드합니다.`;
+            message = t('uploadConfirmBoth')(publicCount, privateCount);
         } else if (publicCount > 0) {
-            message = `${publicCount}개의 문장을 공개로 업로드합니다.`;
+            message = t('uploadConfirmPublic')(publicCount);
         } else {
-            message = `${privateCount}개의 문장을 비공개로 업로드합니다.`;
+            message = t('uploadConfirmPrivate')(privateCount);
         }
 
         setConfirmMessage(message);
@@ -138,7 +139,10 @@ function QuoteUpload() {
                 successCount++;
                 successIds.push(entry.id);
             } catch (error) {
-                const errorMessage = error.response?.data?.message || '업로드에 실패했습니다.';
+                const similarMessage = entry.type === 'public'
+                    ? t('similarPublic')
+                    : t('similarMy');
+                const errorMessage = extractQuoteErrorMessage(error, similarMessage, t('uploadFailed'));
                 setEntries(prev => prev.map(e =>
                     e.id === entry.id ? {...e, error: errorMessage} : e
                 ));
@@ -158,7 +162,7 @@ function QuoteUpload() {
             });
 
             // 결과 팝업
-            setConfirmMessage(`${successCount}개의 문장 업로드에 성공했습니다.`);
+            setConfirmMessage(t('uploadSuccess')(successCount));
             setIsResultPopup(true);
             setShowConfirm(true);
         }
@@ -182,11 +186,11 @@ function QuoteUpload() {
         return (
             <div className="quote-upload-container">
                 <div className="quote-upload-header">
-                    <h1 className="quote-upload-title">문장 업로드</h1>
+                    <h1 className="quote-upload-title">{t('uploadTitle')}</h1>
                 </div>
                 <div className="quote-upload-login-required">
-                    <p>로그인이 필요합니다.</p>
-                    <button onClick={() => navigate('/')}>홈으로 돌아가기</button>
+                    <p>{t('loginRequired')}</p>
+                    <button onClick={() => navigate('/')}>{t('backToHome')}</button>
                 </div>
             </div>
         );
@@ -195,17 +199,17 @@ function QuoteUpload() {
     return (
         <div className="quote-upload-container">
             <div className="quote-upload-header">
-                <h1 className="quote-upload-title">문장 업로드</h1>
+                <h1 className="quote-upload-title">{t('uploadTitle')}</h1>
             </div>
 
             <div className="quote-upload-type-info">
                 <span className="quote-upload-type-hint">
-                    각 문장마다 공개/비공개를 선택할 수 있습니다.
+                    {t('uploadTypeHint')}
                     <span className="quote-upload-tooltip-trigger">
                         <FaCircleInfo/>
                         <span className="quote-upload-tooltip">
-                            <p><strong>공개</strong>: 관리자 승인 후 모든 사용자에게 노출됩니다.</p>
-                            <p><strong>비공개</strong>: 본인만 사용할 수 있습니다.</p>
+                            <p><strong>{t('public')}</strong>: {t('uploadTooltipPublic')}</p>
+                            <p><strong>{t('private')}</strong>: {t('uploadTooltipPrivate')}</p>
                         </span>
                     </span>
                 </span>
@@ -232,14 +236,14 @@ function QuoteUpload() {
                 <FaPlus/>
                 <span>
                     {entries.length >= MAX_ENTRIES
-                        ? `최대 ${MAX_ENTRIES}개`
-                        : `문장 추가 (${entries.length}/${MAX_ENTRIES})`}
+                        ? t('maxEntries')(MAX_ENTRIES)
+                        : t('addSentence')(entries.length, MAX_ENTRIES)}
                 </span>
             </button>
 
             <div className="quote-upload-actions">
                 <button className="quote-upload-cancel-btn" onClick={() => navigate('/')}>
-                    취소
+                    {t('cancel')}
                 </button>
                 <button
                     className="quote-upload-submit-btn"
@@ -249,12 +253,12 @@ function QuoteUpload() {
                     {isUploading ? (
                         <>
                             <span className="quote-upload-spinner"></span>
-                            <span>업로드 중...</span>
+                            <span>{t('uploading')}</span>
                         </>
                     ) : (
                         <>
                             <FaUpload/>
-                            <span>업로드</span>
+                            <span>{t('upload')}</span>
                         </>
                     )}
                 </button>

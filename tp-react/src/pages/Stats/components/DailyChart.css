@@ -1,0 +1,168 @@
+.daily-chart-section {
+    position: relative;
+    background: var(--color-popup-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.daily-chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+
+.daily-chart-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.daily-chart-tabs {
+    display: flex;
+    gap: 0.375rem;
+    align-items: center;
+}
+
+.daily-chart-tab {
+    padding: 0.375rem 0.875rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text-muted);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.daily-chart-tab.active {
+    border-color: var(--color-primary);
+    background: var(--color-primary-bg);
+    color: var(--color-primary);
+}
+
+.daily-chart-tab-divider {
+    width: 1px;
+    height: 1rem;
+    background: var(--color-border);
+    margin: 0 0.25rem;
+}
+
+.daily-chart-area {
+    height: 11.25rem;
+}
+
+.daily-chart-area svg {
+    display: block;
+}
+
+.daily-chart-grid {
+    stroke: var(--color-border);
+    stroke-width: 0.5;
+}
+
+.daily-chart-grid-label {
+    font-size: 0.6875rem;
+    fill: var(--color-text-muted);
+    text-anchor: end;
+}
+
+.daily-chart-fill {
+    fill: var(--color-primary);
+    opacity: 0.08;
+}
+
+.daily-chart-line {
+    fill: none;
+    stroke: var(--color-primary);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+
+.daily-chart-dot {
+    fill: var(--color-primary);
+    stroke: var(--color-popup-bg);
+    stroke-width: 2;
+    transition: r 0.15s;
+}
+
+.daily-chart-tooltip {
+    transition: opacity 0.15s;
+    pointer-events: none;
+}
+
+.daily-chart-tooltip-bg {
+    fill: var(--color-popup-bg);
+    stroke: var(--color-border);
+    stroke-width: 0.5;
+}
+
+.daily-chart-tooltip-text {
+    font-size: 0.875rem;
+    fill: var(--color-text);
+    font-weight: 600;
+    text-anchor: middle;
+}
+
+.daily-chart-date-label {
+    font-size: 0.6875rem;
+    fill: var(--color-text-muted);
+}
+
+.daily-chart-empty {
+    text-align: center;
+    padding: 2rem;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+}
+
+/* Hover popup */
+.daily-chart-popup {
+    position: absolute;
+    z-index: 10;
+    pointer-events: none;
+    background: var(--color-popup-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    padding: 0.875rem;
+    width: 280px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.daily-chart-popup-title {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-primary);
+    margin-bottom: 0.625rem;
+}
+
+.daily-chart-popup-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.daily-chart-popup-item {
+    background: var(--color-bg-secondary);
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.625rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.daily-chart-popup-label {
+    font-size: 0.625rem;
+    color: var(--color-text-muted);
+}
+
+.daily-chart-popup-value {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-text);
+}

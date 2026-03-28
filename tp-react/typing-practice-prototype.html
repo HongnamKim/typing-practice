@@ -438,8 +438,149 @@
     </div>
 </div>
 
+<!-- 통계 페이지 -->
+<div class="stats-page display-none" id="statsPage">
+    <div class="stats-container">
+        <div class="stats-header">
+            <h1 class="stats-title">내 타이핑 통계</h1>
+            <button class="stats-refresh-btn" id="statsRefreshBtn">
+                <i class="fa-solid fa-rotate-right"></i>
+                <span>새로고침</span>
+            </button>
+        </div>
+
+        <!-- 종합 통계 카드 -->
+        <div class="stats-summary">
+            <div class="stats-main-card">
+                <span class="stats-main-label">최근 7일 평균</span>
+                <div class="stats-main-value">
+                    <span id="statsRecentCpm">0</span>
+                    <span class="stats-main-unit">CPM</span>
+                    <span class="stats-trend" id="statsTrend"></span>
+                </div>
+                <div class="stats-main-sub">
+                    최고 <span id="statsBestCpm">0</span> CPM · 정확도 <span id="statsAvgAcc">0</span>%
+                </div>
+            </div>
+            <div class="stats-sub-grid">
+                <div class="stats-sub-card">
+                    <span class="stats-sub-label">연습 시간</span>
+                    <div class="stats-sub-value"><span id="statsTotalTime">0분</span></div>
+                </div>
+                <div class="stats-sub-card">
+                    <span class="stats-sub-label">연습 횟수</span>
+                    <div class="stats-sub-value"><span id="statsTotalAttempts">0</span><span class="stats-sub-unit">회</span></div>
+                </div>
+                <div class="stats-sub-card">
+                    <span class="stats-sub-label">전체 평균</span>
+                    <div class="stats-sub-value"><span id="statsAvgCpm">0</span><span class="stats-sub-unit">CPM</span></div>
+                </div>
+                <div class="stats-sub-card">
+                    <span class="stats-sub-label">평균 초기화</span>
+                    <div class="stats-sub-value"><span id="statsResetCount">0</span><span class="stats-sub-unit">회</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 일별 추이 -->
+        <div class="stats-section">
+            <div class="stats-section-header">
+                <h3 class="stats-section-title">일별 추이</h3>
+                <div class="stats-tabs">
+                    <button class="stats-tab active" data-metric="cpm">CPM</button>
+                    <button class="stats-tab" data-metric="acc">정확도</button>
+                    <span class="stats-tab-divider"></span>
+                    <button class="stats-tab active" data-range="7">7일</button>
+                    <button class="stats-tab" data-range="30">30일</button>
+                </div>
+            </div>
+            <div class="stats-chart" id="statsChart">
+                <!-- JS로 바 차트 렌더링 -->
+            </div>
+            <div class="stats-chart-empty display-none" id="statsChartEmpty">
+                데이터가 없습니다.
+            </div>
+            <!-- 일별 상세 팝업 (차트 위에 오버레이) -->
+            <div class="stats-daily-popup-overlay" id="statsDailyPopupOverlay">
+                <div class="stats-daily-popup">
+                    <div class="stats-daily-popup-header">
+                        <h3 class="stats-daily-popup-title" id="statsDailyPopupTitle">2026년 3월 23일</h3>
+                        <button class="stats-daily-popup-close" id="statsDailyPopupClose">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <div class="stats-daily-popup-grid">
+                        <div class="stats-daily-popup-item">
+                            <span class="stats-daily-popup-label">연습 횟수</span>
+                            <span class="stats-daily-popup-value" id="dailyPopupAttempts">0회</span>
+                        </div>
+                        <div class="stats-daily-popup-item">
+                            <span class="stats-daily-popup-label">연습 시간</span>
+                            <span class="stats-daily-popup-value" id="dailyPopupTime">0분</span>
+                        </div>
+                        <div class="stats-daily-popup-item">
+                            <span class="stats-daily-popup-label">평균 타자 속도</span>
+                            <span class="stats-daily-popup-value" id="dailyPopupAvgCpm">0 CPM</span>
+                        </div>
+                        <div class="stats-daily-popup-item">
+                            <span class="stats-daily-popup-label">최고 타자 속도</span>
+                            <span class="stats-daily-popup-value" id="dailyPopupBestCpm">0 CPM</span>
+                        </div>
+                        <div class="stats-daily-popup-item">
+                            <span class="stats-daily-popup-label">평균 정확도</span>
+                            <span class="stats-daily-popup-value" id="dailyPopupAcc">0%</span>
+                        </div>
+                        <div class="stats-daily-popup-item">
+                            <span class="stats-daily-popup-label">평균 초기화 횟수</span>
+                            <span class="stats-daily-popup-value" id="dailyPopupReset">0회</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 오타 통계 -->
+        <div class="stats-typo-area">
+            <div class="stats-section">
+                <div class="stats-section-header">
+                    <h3 class="stats-section-title">자주 틀리는 글자 TOP 10</h3>
+                </div>
+                <div class="stats-typo-list" id="statsTypoList">
+                    <!-- JS로 렌더링 -->
+                </div>
+                <div class="stats-typo-empty display-none" id="statsTypoEmpty">
+                    오타 데이터가 없습니다.
+                </div>
+            </div>
+
+            <div class="stats-section display-none" id="statsTypoDetailSection">
+                <div class="stats-section-header">
+                    <h3 class="stats-section-title">
+                        '<span id="statsTypoDetailChar">ㅔ</span>' 오타 상세
+                    </h3>
+                </div>
+                <div class="stats-typo-detail-list" id="statsTypoDetailList">
+                    <!-- JS로 렌더링 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 돌아가기 -->
+        <div class="stats-footer">
+            <button class="stats-back-btn" id="statsBackBtn">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>돌아가기</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 일별 상세 팝업 -->
+    <!-- 일별 추이 섹션 내부로 이동됨 -->
+</div>
+
 <script src="prototype1.js"></script>
 <script src="prototype2.js"></script>
 <script src="prototype3.js"></script>
+<script src="prototype4-stats.js"></script>
 </body>
 </html>

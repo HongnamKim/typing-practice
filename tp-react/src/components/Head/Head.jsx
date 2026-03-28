@@ -13,6 +13,8 @@ import {useError} from "../../Context/ErrorContext";
 import {useGoogleLogin} from "@react-oauth/google";
 import {loginWithGoogle} from "@/utils/authApi.ts";
 import {FaPlus} from "react-icons/fa";
+import {t} from "@/utils/i18n.ts";
+import FeatureGuide from "../FeatureGuide/FeatureGuide";
 import "./Head.css";
 
 // UUID 형식 체크 함수
@@ -66,13 +68,13 @@ const Head = () => {
                 setIsLoading(false);
             } catch (error) {
                 console.error('로그인 실패:', error);
-                showError('로그인에 실패했습니다. 다시 시도해주세요.');
+                showError(t('loginFailed'));
                 setIsLoading(false);
             }
         },
         onError: (error) => {
             console.error('구글 로그인 실패:', error);
-            showError('구글 로그인에 실패했습니다.');
+            showError(t('googleLoginFailed'));
         },
     });
 
@@ -114,10 +116,11 @@ const Head = () => {
                         }}
                     >
                         <FaPlus/>
-                        <span>문장 업로드</span>
+                        <span>{t('uploadSentence')}</span>
                     </button>
                     {user ? <ProfileDropdown/> : <LoginButton onClick={handleLogin}/>}
                     <DarkModeButton/>
+                    {!user && <FeatureGuide/>}
                 </div>
             </div>
 
@@ -130,7 +133,7 @@ const Head = () => {
             )}
             {showLoginPopup && (
                 <LoginRequiredPopup
-                    message="문장을 업로드하려면 로그인이 필요합니다."
+                    message={t('uploadLoginRequired')}
                     onClose={() => setShowLoginPopup(false)}
                 />
             )}

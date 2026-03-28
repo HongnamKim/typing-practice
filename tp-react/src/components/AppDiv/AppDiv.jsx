@@ -7,7 +7,7 @@ const AppDiv = ({ children }) => {
   const location = useLocation();
   
   // 상단 여백이 필요 없는 페이지
-  const isCompactPage = location.pathname.startsWith('/quote/');
+  const isCompactPage = location.pathname.startsWith('/quote/') || location.pathname === '/stats' || location.pathname === '/privacy' || location.pathname === '/terms';
   
   return (
     <div className={`background ${isDark ? "dark" : ""} ${isCompactPage ? "compact" : ""}`}>

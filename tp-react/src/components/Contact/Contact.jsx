@@ -1,18 +1,27 @@
 import { useTheme } from "../../Context/ThemeContext";
+import { Link } from "react-router-dom";
 import "./Contact.css";
 
 const Contact = () => {
   const { isDark } = useTheme();
 
   return (
-    <a
-      href={"https://open.kakao.com/o/sMHDrAog"}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`contact ${isDark && "dark"}`}
-    >
-      Contact
-    </a>
+    <div className={`contact-wrapper ${isDark && "dark"}`}>
+      <a
+        href={"https://open.kakao.com/o/sMHDrAog"}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`contact ${isDark && "dark"}`}
+      >
+        Contact
+      </a>
+      <Link to="/privacy" className={`contact ${isDark && "dark"}`}>
+        Privacy Policy
+      </Link>
+      <Link to="/terms" className={`contact ${isDark && "dark"}`}>
+        Terms
+      </Link>
+    </div>
   );
 };
 

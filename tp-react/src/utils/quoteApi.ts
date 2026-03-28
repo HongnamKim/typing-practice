@@ -52,7 +52,7 @@ export const getQuotes = async (params: GetQuotesParams = {}) => {
  * 공개 문장 업로드
  */
 const uploadPublicQuote = async (sentence: string, author?: string) => {
-    const body: { sentence: string; author?: string } = {sentence};
+    const body: { sentence: string; author?: string; language: string } = {sentence, language: 'KOREAN'};
     if (author) {
         body.author = author;
     }
@@ -63,7 +63,7 @@ const uploadPublicQuote = async (sentence: string, author?: string) => {
  * 비공개 문장 업로드
  */
 const uploadPrivateQuote = async (sentence: string, author?: string) => {
-    const body: { sentence: string; author?: string } = {sentence};
+    const body: { sentence: string; author?: string; language: string } = {sentence, language: 'KOREAN'};
     if (author) {
         body.author = author;
     }
@@ -120,4 +120,21 @@ export const publishQuote = async (quoteId: number) => {
  */
 export const cancelPublishQuote = async (quoteId: number) => {
     return apiClient.post<ApiResponse<Quote>>(`/quotes/${quoteId}/cancel-publish`);
+};
+
+/**
+ * 문장 관련 API 에러에서 사용자에게 보여줄 메시지를 추출한다.
+ * 유사 문장 에러(409)인 경우 similarMessage를 반환한다.
+ */
+export const extractQuoteErrorMessage = (error: any, similarMessage: string, fallbackMessage: string): string => {
+    const data = error.response?.data;
+    if (!data?.detail) return fallbackMessage;
+
+    // 유사 문장 에러: 호출측에서 제공한 context 메시지 사용
+    if (data.similarSentence !== undefined) {
+        return similarMessage;
+    }
+
+    // 동일 문장 등 기타 에러: 서버 메시지 사용
+    return data.detail;
 };

@@ -1,6 +1,8 @@
-import {FaExclamationCircle, FaGoogle} from 'react-icons/fa';
+import {FaExclamationCircle} from 'react-icons/fa';
 import {useTheme} from '../../Context/ThemeContext';
 import {useAuth} from '../../Context/AuthContext';
+import {t} from '@/utils/i18n.ts';
+import GoogleLogo from '../GoogleLogo/GoogleLogo';
 import './LoginRequiredPopup.css';
 
 const LoginRequiredPopup = ({message, onClose}) => {
@@ -28,14 +30,14 @@ const LoginRequiredPopup = ({message, onClose}) => {
                         className="login-required-login-btn"
                         onClick={handleLogin}
                     >
-                        <FaGoogle/>
-                        <span>구글 로그인</span>
+                        <GoogleLogo/>
+                        <span>{t('googleLogin')}</span>
                     </button>
                     <button
                         className={`login-required-cancel-btn ${isDark ? 'dark' : ''}`}
                         onClick={onClose}
                     >
-                        취소
+                        {t('cancel')}
                     </button>
                 </div>
             </div>
