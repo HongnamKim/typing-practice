@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://typing-practice-omega.vercel.app/sitemap.xml
+Sitemap: https://typing-practice.com/sitemap.xml
