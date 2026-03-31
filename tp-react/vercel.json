@@ -4,5 +4,18 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "typing-practice-omega.vercel.app"
+        }
+      ],
+      "destination": "https://typing-practice.com/:path*",
+      "permanent": true
+    }
   ]
 }

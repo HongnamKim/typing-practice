@@ -24,27 +24,13 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
     const {isDark} = useTheme();
     const {showError} = useError();
     const {
-        speedCheck, // 타이핑 지속 시간 측정 트리거
-        setSpeedCheck,
-        currentCpm,
         setCurrentCpm, // 현재 타자 속도 state 값의 set 함수
         setLastCpm,
         setInputCheck, // 각 글자 별 정답 체크
-        //totalScore, // 모든 점수들
         setTotalScore, // 접속 후 모든 점수들 set 함수
-        correctCount, // 타이핑 중 정확히 입력한 횟수
-        setCorrectCount, //
-        incorrectCount, // 타이핑 중 틀린 횟수
-        setIncorrectCount,
-        cpmList,
-        setCpmList,
-        accList,
-        setAccList,
         showPopup,
         setShowPopup,
         setPopupData,
-        resetCount,
-        setResetCount,
     } = useScore();
     const {sentence, currentQuote, setQuotesIndex} = useQuote(); // 예문, 예문의 인덱스
     const {resultPeriod, fontSize, isCompactMode} = useSetting();
@@ -62,24 +48,33 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
     const maxCheckedFlatIndexRef = useRef(0); // 체크 완료한 최대 flat 인덱스
     const lastResetTimeRef = useRef(0); // resetCount 중복 증가 방지용 타임스탬프
 
+    // 화면 표시 불필요, 계산/API 전송에만 사용되는 값들 → useRef로 관리하여 불필요한 리렌더링 방지
+    const speedCheckRef = useRef(true);
+    const currentCpmRef = useRef(0);
+    const correctCountRef = useRef(0);
+    const incorrectCountRef = useRef(0);
+    const cpmListRef = useRef([]);
+    const accListRef = useRef([]);
+    const resetCountRef = useRef(0);
+
     // resetCount를 안전하게 증가시키는 함수 (50ms 이내 중복 호출 무시)
     const incrementResetCount = () => {
         const now = Date.now();
         if (now - lastResetTimeRef.current < 50) return;
         lastResetTimeRef.current = now;
-        setResetCount((prev) => prev + 1);
+        resetCountRef.current += 1;
     };
 
     // 오답 처리
     const markIncorrect = (prevCheck, charIndex) => {
         prevCheck[charIndex] = "incorrect";
-        setIncorrectCount((prev) => prev + 1);
+        incorrectCountRef.current += 1;
     };
 
     // 문장 이동 (화살표 키)
     const navigateQuote = (direction) => {
         clearInput();
-        setResetCount(0);
+        resetCountRef.current = 0;
         typosRef.current = [];
         setTimeout(() => {
             setQuotesIndex((prev) => prev + direction);
@@ -110,11 +105,12 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
         // 입력 지속 시간 (초)
         currentTime.current = (new Date() - startTime.current) / 1000;
 
-        const currentCpm = Math.round(
+        const cpm = Math.round(
             (sum(typedCharCount.current) / currentTime.current) * 60,
         );
 
-        setCurrentCpm(currentCpm);
+        currentCpmRef.current = cpm;
+        setCurrentCpm(cpm);
     };
     const speedCheckStart = () => {
         startTime.current = new Date();
@@ -133,8 +129,8 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
         }
 
         // 정확도 초기화
-        setCorrectCount(0);
-        setIncorrectCount(0);
+        correctCountRef.current = 0;
+        incorrectCountRef.current = 0;
 
         // 글자별 정답 체크 초기화
         setInputCheck((prev) => prev.map(() => "none"));
@@ -142,7 +138,7 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
         // 타자 속도 초기화
         typedCharCount.current = [];
         clearInterval(speedInterval.current);
-        setSpeedCheck(true);
+        speedCheckRef.current = true;
 
         // 최대 입력 길이 리셋
         maxInputLengthRef.current = 0;
@@ -152,6 +148,7 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
         if (isSubmit) {
             return;
         }
+        currentCpmRef.current = 0;
         setCurrentCpm(0);
     };
 
@@ -213,17 +210,18 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
         // 정확도 계산
         const newAcc = calculateAccuracy(
             isLastCharCorrect,
-            correctCount,
-            incorrectCount,
+            correctCountRef.current,
+            incorrectCountRef.current,
         );
 
-        setLastCpm(currentCpm);
+        const cpm = currentCpmRef.current;
+        setLastCpm(cpm);
 
         // CPM, ACC 리스트에 추가
-        const newCpmList = [...cpmList, currentCpm];
-        const newAccList = [...accList, newAcc];
-        setCpmList(newCpmList);
-        setAccList(newAccList);
+        cpmListRef.current = [...cpmListRef.current, cpm];
+        accListRef.current = [...accListRef.current, newAcc];
+        const newCpmList = cpmListRef.current;
+        const newAccList = accListRef.current;
 
         setTotalScore((prev) => {
             const newCnt = prev.cnt + 1;
@@ -247,35 +245,35 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
             }
 
             return {
-                highestCpm: prev.highestCpm < currentCpm ? currentCpm : prev.highestCpm,
-                cpms: prev.cpms + currentCpm,
+                highestCpm: prev.highestCpm < cpm ? cpm : prev.highestCpm,
+                cpms: prev.cpms + cpm,
                 accs: prev.accs + newAcc,
                 cnt: newCnt,
             };
         });
 
         clearInterval(speedInterval.current);
-        setSpeedCheck(true);
+        speedCheckRef.current = true;
 
         // 타이핑 기록 저장 API 호출 (fire-and-forget)
         const quoteId = currentQuote?.quoteId;
         if (quoteId) {
-            const accuracy = (correctCount + (isLastCharCorrect ? 1 : 0))
-                / (correctCount + incorrectCount + 1);
+            const accuracy = (correctCountRef.current + (isLastCharCorrect ? 1 : 0))
+                / (correctCountRef.current + incorrectCountRef.current + 1);
 
             saveTypingRecord({
                 quoteId,
-                cpm: currentCpm,
+                cpm,
                 accuracy: Math.round(accuracy * 1000) / 1000,
                 charLength: sentence.length,
-                resetCount,
+                resetCount: resetCountRef.current,
                 typos: typosRef.current,
             }).catch((error) => console.error('타이핑 기록 저장 실패:', error));
         }
 
         // typos, resetCount 초기화
         typosRef.current = [];
-        setResetCount(0);
+        resetCountRef.current = 0;
     };
 
     const onInputChange = (e) => {
@@ -284,9 +282,9 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
             return;
         }
 
-        if (speedCheck) {
+        if (speedCheckRef.current) {
             speedCheckStart();
-            setSpeedCheck(false);
+            speedCheckRef.current = false;
         }
 
         const newValue = e.target.value;
@@ -381,14 +379,14 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
 
                     // 이전에 정답이었는데 최종적으로 오답인 경우
                     if (prevCheck[prevCharIndex] === "correct" && !isFinalCorrect) {
-                        setCorrectCount((prev) => prev - 1);
+                        correctCountRef.current -= 1;
                         markIncorrect(prevCheck, prevCharIndex);
                     }
                     // 이전에 오답이었는데 최종적으로 정답인 경우 (거의 없지만 안전장치)
                     else if (prevCheck[prevCharIndex] === "incorrect" && isFinalCorrect) {
                         prevCheck[prevCharIndex] = "correct";
-                        setCorrectCount((prev) => prev + 1);
-                        setIncorrectCount((prev) => prev - 1);
+                        correctCountRef.current += 1;
+                        incorrectCountRef.current -= 1;
                     }
                 }
             }
@@ -425,12 +423,12 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
                 if (isCorrect) {
                     if (prevCheck[lastCharIndex] !== "correct") {
                         prevCheck[lastCharIndex] = "correct";
-                        setCorrectCount((prev) => prev + 1);
+                        correctCountRef.current += 1;
                     }
                 } else {
                     if (prevCheck[lastCharIndex] !== "incorrect") {
                         prevCheck[lastCharIndex] = "incorrect";
-                        setIncorrectCount((prev) => prev + 1);
+                        incorrectCountRef.current += 1;
                     }
                 }
             } else {
