@@ -1,9 +1,10 @@
 import "./InputDisplay.css";
+import {memo} from "react";
 import {useTheme} from "@/Context/ThemeContext.tsx";
 import {useScore} from "@/Context/ScoreContext.tsx";
 import {useSetting} from "@/Context/SettingContext.tsx";
 
-const InputDisplay = ({input}) => {
+const InputDisplay = memo(({input}) => {
     const {isDark} = useTheme();
     const {inputCheck} = useScore();
     const {fontSize} = useSetting();
@@ -30,6 +31,6 @@ const InputDisplay = ({input}) => {
             })}
         </div>
     );
-};
+});
 
 export default InputDisplay;
