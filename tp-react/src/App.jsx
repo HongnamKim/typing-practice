@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeContextProvider } from "./Context/ThemeContext";
 import { AuthProvider } from "./Context/AuthContext";
 import { ErrorProvider } from "./Context/ErrorContext";
+import { ScoreContextProvider } from "./Context/ScoreContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Head from "./components/Head/Head";
 import AppDiv from "./components/AppDiv/AppDiv";
@@ -24,6 +25,7 @@ function App() {
         <ThemeContextProvider>
           <ErrorProvider>
             <AuthProvider>
+              <ScoreContextProvider>
               <AppDiv>
                 <Head />
                 <Routes>
@@ -39,6 +41,7 @@ function App() {
                 <Contact />
                 <Analytics/>
               </AppDiv>
+              </ScoreContextProvider>
             </AuthProvider>
           </ErrorProvider>
         </ThemeContextProvider>
