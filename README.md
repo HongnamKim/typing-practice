@@ -1,135 +1,186 @@
-# Typing Practice (React)
+# Typing Practice
 
-한글 타자 연습 웹 애플리케이션
+한국어/영어 타자 연습 웹 서비스
 
-## 📋 프로젝트 소개
+🔗 **서비스**: https://typing-practice.com
 
-한글 명언/문장을 활용한 타자 연습 서비스입니다. 실시간 타자 속도(CPM) 측정, 정확도 계산, 다크모드 등의 기능을 제공합니다.
+## 프로젝트 소개
 
-## ✨ 주요 기능
+문장을 타이핑하며 타자 속도(CPM)와 정확도를 측정하는 웹 서비스입니다. 사용자가 직접 문장을 업로드하고, 타이핑 기록을 바탕으로 문장 난이도가 동적으로 보정됩니다.
 
-- 🎯 **타자 연습**: 1000개 이상의 한글 명언/문장
-- 📊 **실시간 통계**: CPM(Characters Per Minute), 정확도, 완료 개수
-- 🌓 **다크 모드**: 라이트/다크 테마 지원
-- 🔤 **폰트 크기 조절**: 0.9rem ~ 3.0rem 범위 조절
-- ⚙️ **결과 주기 설정**: 평균 통계 계산 주기 조절 (1-15개, 비활성화)
-- 💾 **로컬 스토리지**: 사용자 설정 및 기록 저장
+## 주요 기능
 
-## 🚀 시작하기
+- 한국어/영어 문장 타이핑 연습 및 실시간 CPM, 정확도 측정
+- Google OAuth 로그인
+- 문장 업로드 (언어 검증 + 유사 문장 탐지)
+- 데이터 기반 문장 난이도 동적 보정
+- 사용자 타이핑 통계 (일별, 누적, 오타 분석)
+- 어드민 문장 관리 및 승인
 
-### 설치
+## 기술 스택
+
+### Backend
+
+- Java 21, Spring Boot 3.5.8, Gradle
+- Spring Security + JWT (Google OAuth)
+- Spring Data JPA (PostgreSQL)
+- Spring Data MongoDB
+- Spring Data Redis (Lettuce)
+- Micrometer + Prometheus (모니터링)
+
+### Frontend
+
+- React 18, Vite, TypeScript
+- React Router DOM
+- Axios
+
+### Infrastructure
+
+- AWS EC2 (t3.small), Docker Compose
+- AWS RDS (PostgreSQL), MongoDB Atlas, Redis
+- Nginx (리버스 프록시) + Let's Encrypt (HTTPS)
+- Prometheus + Grafana + Redis Exporter
+- Vercel (프론트엔드 배포)
+
+## 아키텍처
+
+### 인프라 구성
+
+![Infrastructure Architecture](docs/infra_architecture.svg)
+
+### Lambda Architecture (통계 파이프라인)
+
+타이핑 기록의 수집, 집계, 조회를 3개의 데이터 소스로 분리하여 처리합니다.
+
+- **MongoDB** — 타이핑 기록 원본 저장 (Source of Truth)
+- **Redis** — 당일 실시간 통계 캐시 (TTL 자정 만료, 증분 업데이트)
+- **PostgreSQL** — 배치 확정 통계 (새벽 3시 배치로 전일치 적재)
+- **Serving Layer** — 조회 시 PostgreSQL(~어제) + Redis(오늘) 합산 응답
+
+### 문장 난이도 산출
+
+1. **정적 난이도 (Seed)**: 자모 복잡도, 겹모음 비율 등 7가지 변수를 z-score 정규화하여 신규 문장의 초기 난이도 산출 (Cold Start 해결)
+2. **동적 보정**: 사용자별 평균 CPM, 정확도, 초기화 횟수를 수집하여 배치 단위로 난이도 보정
+
+### 랜덤 문장 조회 최적화
+
+`ORDER BY RANDOM()` → Redis 기반 ID 캐시 + 애플리케이션 셔플로 전환하여 조회 성능 개선
+
+## 프로젝트 구조
+
+```
+typing-practice/
+├── tp-react/                    # 프론트엔드 (React + Vite + TypeScript)
+└── typing-practice-be/          # 백엔드 (Spring Boot)
+    ├── Dockerfile
+    ├── docker-compose.yaml      # 로컬 개발 환경
+    ├── docker-compose.prod.yaml # 운영 환경
+    ├── prometheus-local.yml
+    ├── prometheus-prod.yml
+    ├── k6/                      # 부하 테스트 스크립트
+    └── src/main/java/.../
+        ├── auth/                # 인증 (Google OAuth, JWT)
+        ├── member/              # 회원 관리
+        ├── quote/               # 문장 (CRUD, 난이도 계산, 유사도 검증)
+        │   ├── service/difficulty/  # 정적/동적 난이도 계산
+        │   ├── statistics/          # 문장별 타이핑 통계
+        │   └── reject/             # 유사 문장 거부 로그
+        ├── typingrecord/        # 타이핑 기록
+        │   ├── statistics/          # 사용자 통계 (일별, 누적, 오타)
+        │   └── event/              # 기록 저장 이벤트
+        ├── statistics/          # 통계 조회 (Serving Layer)
+        ├── report/              # 신고
+        ├── dailylimit/          # 일일 업로드 제한
+        ├── config/              # Security, Swagger 설정
+        └── common/              # JWT, 공통 DTO, 예외 처리
+```
+
+## 로컬 개발 환경 실행
+
+### 사전 준비
+
+- Java 21
+- Docker, Docker Compose
+- Node.js 18+
+
+### 백엔드
 
 ```bash
+cd typing-practice-be
+
+# 로컬 DB 컨테이너 실행 (PostgreSQL, Redis, MongoDB, Prometheus, Grafana)
+docker compose up -d
+
+# .env.local 파일 생성 (아래 환경변수 설정)
+# 앱 실행 (IntelliJ 또는 Gradle)
+```
+
+### 프론트엔드
+
+```bash
+cd tp-react
 npm install
+npm run dev
 ```
 
-### 개발 서버 실행
+### 환경변수 (.env.local / .env.prod)
+
+```
+DB_URL=jdbc:postgresql://localhost:5432/typing
+DB_USERNAME=
+DB_PASSWORD=
+MONGODB_URI=
+JWT_SECRET=           # 최소 32자 이상
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_REDIRECT_URI=
+ADMIN_EMAIL=
+```
+
+## 운영 환경 배포
+
+EC2에서 Docker Compose로 전체 스택을 실행합니다.
 
 ```bash
-npm start
+cd typing-practice-be
+docker compose -f docker-compose.prod.yaml up --build -d
 ```
 
-브라우저에서 [http://localhost:3000](http://localhost:3000) 자동으로 열림
+### 운영 컨테이너 구성
 
-### 프로덕션 빌드
+| 서비스            | 이미지                      | 포트      | 역할              |
+|----------------|--------------------------|---------|-----------------|
+| app            | Dockerfile (멀티 스테이지 빌드)  | 8080    | Spring Boot 앱   |
+| redis          | redis:8                  | 6379    | 캐시 + 실시간 통계     |
+| nginx          | nginx:alpine             | 80, 443 | 리버스 프록시 + HTTPS |
+| certbot        | certbot/certbot          | -       | SSL 인증서 발급/갱신   |
+| prometheus     | prom/prometheus          | 9090    | 메트릭 수집          |
+| grafana        | grafana/grafana          | 7070    | 모니터링 대시보드       |
+| redis-exporter | oliver006/redis_exporter | 9121    | Redis 메트릭 수집    |
 
-```bash
-npm run build
-```
+## 부하 테스트 (k6)
 
-빌드 결과물은 `build/` 폴더에 생성됨
+k6를 사용하여 5종의 부하 테스트를 수행했습니다.
 
-## 🛠️ 기술 스택
+| 테스트       | 시나리오           | 동시 사용자 | 평균 응답  | p95     | 에러율 |
+|-----------|----------------|--------|--------|---------|-----|
+| Load      | 기본 부하          | 10명    | 33.7ms | 45.3ms  | 0%  |
+| Stress    | 점진적 증가         | 150명   | 38.3ms | 63.1ms  | 0%  |
+| Spike     | 급격한 트래픽        | 200명   | 53.7ms | 103.2ms | 0%  |
+| Mixed     | 읽기/쓰기 혼합 스파이크  | 200명   | 1.95s  | 4.93s   | 0%  |
+| Realistic | 실제 사용 패턴 시뮬레이션 | 200명   | 28.3ms | 44.1ms  | 0%  |
 
-- React 18.3.1
-- React Scripts 5.0.1
-- JavaScript (ES6+)
-- CSS3
-- Font Awesome 6.4.0
+- HikariCP pool size 10 → 20 변경 시 오히려 성능 저하 확인 (RDS db.t3.micro CPU 병목)
+- 비현실적 부하(매초 쓰기)에서만 커넥션 풀 병목 발생, 실제 사용 패턴에서는 문제없음
 
-## 📁 프로젝트 구조
+## 모니터링
 
-```
-src/
-├── components/
-│   ├── AppDiv/              # 메인 컨테이너 & 배경
-│   ├── Head/                # 헤더 영역
-│   │   ├── title/           # 타이틀
-│   │   └── themeButton/     # 다크모드 토글
-│   ├── FontSizeSlider/      # 폰트 크기 조절 슬라이더
-│   ├── Info/                # 통계 정보 영역
-│   │   ├── Cpms/            # 현재/최고 CPM 표시
-│   │   ├── AverageScores/   # 평균 CPM, 정확도, 카운트
-│   │   ├── ResultPeriod/    # 결과 주기 선택기
-│   │   └── ToggleDisplayCpm/ # 실시간 CPM 토글
-│   ├── Quote/               # 타이핑 영역
-│   │   ├── Author/          # 작가명 표시
-│   │   ├── Sentence/        # 문장 표시 (회색 텍스트)
-│   │   ├── InputDisplay/    # 입력 결과 표시 (정확/오류)
-│   │   └── Input/           # 투명 textarea (실제 입력)
-│   ├── AverageScorePopUp/   # 결과 팝업 (ESC로 닫기)
-│   └── Contact/             # 하단 연락처 링크
-├── Context/
-│   └── SettingContext.jsx   # 전역 상태 관리 (Context API)
-├── const/
-│   └── config.const.js      # localStorage 키 상수
-├── utils/
-│   └── sentences.js         # 300+ 한글 문장 데이터
-├── App.jsx                   # 메인 앱 컴포넌트
-└── index.js                 # React 엔트리 포인트
-```
+Grafana 대시보드를 통해 실시간 모니터링합니다.
 
-## 🎮 사용 방법
+- JVM (Micrometer) — 힙 메모리, GC, 스레드, CPU
+- Spring Boot 3.x Statistics — HTTP 요청, HikariCP, 응답 시간
+- Redis Dashboard — 메모리, 커넥션, 명령어 처리량
 
-1. **타이핑**: 화면에 표시된 문장을 입력창에 타이핑
-2. **제출**: 문장 완료 후 `Enter` 키로 다음 문장
-3. **통계**: 상단에서 실시간 CPM, 정확도, 완료 개수 확인
-4. **설정**:
-    - 왼쪽 상단: 폰트 크기 슬라이더
-    - 오른쪽 상단: 다크모드 토글
-    - 통계 영역 우측: 결과 주기 조절 (↓ 5 ↑)
-
-## 💾 LocalStorage 키
-
-- `Typing-Practice-darkMode`: 다크모드 설정 (boolean)
-- `Typing-Practice-displayCurrentCpm`: 실시간 CPM 표시 여부 (boolean)
-- `Typing-Practice-resultPeriod`: 결과 주기 (1-10)
-- `Typing-Practice-fontSize`: 폰트 크기 (0.8-3.5)
-
-## 🎨 주요 디자인 특징
-
-- **3레이어 입력 구조**:
-    1. 회색 문장 표시 (Sentence)
-    2. 입력된 텍스트 색상 표시 (InputDisplay)
-    3. 투명 textarea (Input)
-
-- **색상 테마**:
-    - 라이트: `#fafafa` 배경
-    - 다크: `#0f0f0f` 배경
-    - 정확: `#333` (라이트), `#ffffff` (다크)
-    - 오류: `#dc2626`
-    - 캐럿: `#6d28d9` (라이트), `#8b5cf6` (다크)
-
-## 🐛 해결된 이슈
-
-- ✅ 한글 IME 조합 중 엔터키 처리 (`isComposing` 체크)
-- ✅ textarea 높이 자동 조절 (`useEffect` + `scrollHeight`)
-- ✅ localStorage key 관리 일관성 (상수화)
-
-## 🔧 향후 계획
-
-- [ ] 사용자 로그인/회원가입
-- [ ] 문장 업로드 기능
-- [ ] 통계 페이지 (그래프, 기록 추이)
-- [ ] 내 문장 관리
-- [ ] 타이핑 랭킹 시스템
-
-## 📝 라이선스
-
-MIT License
-
-## 👨‍💻 개발자
+## 개발자
 
 HongnamKim
-
----
