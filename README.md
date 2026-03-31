@@ -46,7 +46,7 @@
 
 ### 인프라 구성
 
-![Infrastructure Architecture](docs/infra_architecture.svg)
+![Infrastructure Architecture](docs/infra-architecture.png)
 
 ### Lambda Architecture (통계 파이프라인)
 
