@@ -5,7 +5,6 @@ import AverageScorePopUp from './components/AverageScorePopUp/AverageScorePopUp'
 import Info from './components/Info/Info';
 import Quote from './components/Quote/Quote';
 import {SettingContextProvider} from '../../Context/SettingContext';
-import {ScoreContextProvider} from '../../Context/ScoreContext';
 import {QuoteContextProvider} from '../../Context/QuoteContext';
 
 function Home() {
@@ -16,13 +15,11 @@ function Home() {
                 <ModeToggle/>
             </div>
             <UpdatePopup/>
-            <ScoreContextProvider>
-                <AverageScorePopUp/>
-                <Info/>
-                <QuoteContextProvider>
-                    <Quote/>
-                </QuoteContextProvider>
-            </ScoreContextProvider>
+            <AverageScorePopUp/>
+            <Info/>
+            <QuoteContextProvider>
+                <Quote/>
+            </QuoteContextProvider>
         </SettingContextProvider>
     );
 }
