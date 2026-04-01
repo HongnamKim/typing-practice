@@ -196,6 +196,11 @@ const translations = {
         ? '로그인하면 원하는 문장을 직접 업로드하고, 타이핑 기록과 오타 분석을 확인할 수 있어요.'
         : 'Sign in to upload your own sentences and track your typing speed, accuracy, and typo patterns.',
     featureGuideConfirm: isKorean ? '확인' : 'Got it',
+
+    // 결과 팝업
+    popupLoginPrompt: isKorean ? '이 기록을 저장할까요?' : 'Save this record?',
+    popupCumulativeAvg: isKorean ? 'Overall avg' : 'Overall avg',
+    popupViewStats: isKorean ? '자세한 통계 보기 →' : 'View detailed stats →',
 } as const;
 
 type TranslationKey = keyof typeof translations;
