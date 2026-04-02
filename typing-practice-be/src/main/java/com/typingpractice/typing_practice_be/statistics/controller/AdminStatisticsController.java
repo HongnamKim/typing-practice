@@ -1,13 +1,13 @@
 package com.typingpractice.typing_practice_be.statistics.controller;
 
 import com.typingpractice.typing_practice_be.common.ApiResponse;
-import com.typingpractice.typing_practice_be.quote.service.DifficultyBatchService;
+import com.typingpractice.typing_practice_be.quote.service.difficulty.DifficultyBatchService;
 import com.typingpractice.typing_practice_be.quote.statistics.service.GlobalQuoteStatisticsBatchService;
 import com.typingpractice.typing_practice_be.statistics.dto.MemberStatsDayRequest;
-import com.typingpractice.typing_practice_be.typingrecord.statistics.service.MemberDailyStatsBatchService;
-import com.typingpractice.typing_practice_be.typingrecord.statistics.service.MemberTypingStatsBatchService;
-import com.typingpractice.typing_practice_be.typingrecord.statistics.service.MemberTypoStatsBatchService;
-import com.typingpractice.typing_practice_be.typingrecord.statistics.service.QuoteTypingStatsBatchService;
+import com.typingpractice.typing_practice_be.typingrecord.statistics.service.batch.MemberDailyStatsBatchService;
+import com.typingpractice.typing_practice_be.typingrecord.statistics.service.batch.MemberTypingStatsBatchService;
+import com.typingpractice.typing_practice_be.typingrecord.statistics.service.batch.MemberTypoStatsBatchService;
+import com.typingpractice.typing_practice_be.typingrecord.statistics.service.batch.QuoteTypingStatsBatchService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
