@@ -53,10 +53,11 @@ const UpdatePopup = () => {
             {/* 팝업 */}
             {isOpen && (
                 <div className="update-popup-overlay" onClick={handleClose}>
-                    <div className={`update-popup ${isHistoryMode ? "history-mode" : ""}`} onClick={e => e.stopPropagation()}>
+                    <div className={`update-popup ${isHistoryMode ? "history-mode" : ""}`}
+                         onClick={e => e.stopPropagation()}>
                         <div className="update-popup-header">
                             <span className="update-popup-title">
-                                {isHistoryMode ? "📋 업데이트 내역" : "🎉 업데이트 안내"}
+                                {isHistoryMode ? "업데이트 내역" : "업데이트 안내"}
                             </span>
                         </div>
 

@@ -6,6 +6,18 @@ const UpdateSection = ({update}) => {
 
     return (
         <>
+            {update.notices && update.notices.length > 0 && (
+                <div className="update-popup-section">
+                    <div className={`update-popup-section-title ${isDark ? "dark" : ""}`}>
+                        공지 사항
+                    </div>
+                    <ul className="update-popup-list">
+                        {update.notices.map((feature, index) => (
+                            <li key={index} className={isDark ? "dark" : ""}>{feature}</li>
+                        ))}
+                    </ul>
+                </div>
+            )}
             {update.features && update.features.length > 0 && (
                 <div className="update-popup-section">
                     <div className={`update-popup-section-title ${isDark ? "dark" : ""}`}>

@@ -3,11 +3,23 @@ interface UpdateEntry {
     date: string;
     showPopup: boolean;
     hidden: boolean;
+    notices?: string[];
     features?: string[];
     improvements?: string[];
 }
 
 export const updateHistory: UpdateEntry[] = [
+    {
+        version: "1.2.1",
+        date: "2026년 4월 2일",
+        showPopup: true,
+        hidden: false,
+        notices: [
+            "4월 2일 00:48 ~ 15:00 사이에 서버 문제로 타이핑 기록이 저장되지 않았습니다.",
+            "해당 시간대의 기록은 복구가 불가능합니다.",
+            "불편을 드려 죄송합니다. 현재는 정상 동작 중입니다."
+        ]
+    },
     {
         version: "1.2.0",
         date: "2026년 3월 29일",
