@@ -201,6 +201,16 @@ const translations = {
     popupLoginPrompt: isKorean ? '이 기록을 저장할까요?' : 'Save this record?',
     popupCumulativeAvg: isKorean ? 'Overall avg' : 'Overall avg',
     popupViewStats: isKorean ? '자세한 통계 보기 →' : 'View detailed stats →',
+
+    // 업데이트 팝업
+    updateNotice: isKorean ? '업데이트 안내' : 'Update',
+    updateHistory: isKorean ? '업데이트 내역' : 'Update History',
+    updateClose: isKorean ? '확인' : 'OK',
+    updateViewHistory: isKorean ? '지난 업데이트 보기' : 'View past updates',
+    updateDontShow: isKorean ? '다시 보지 않기' : 'Don\'t show again',
+    updateNotices: isKorean ? '공지 사항' : 'Notices',
+    updateFeatures: isKorean ? '새로운 기능' : 'New features',
+    updateImprovements: isKorean ? '개선사항' : 'Improvements',
 } as const;
 
 type TranslationKey = keyof typeof translations;

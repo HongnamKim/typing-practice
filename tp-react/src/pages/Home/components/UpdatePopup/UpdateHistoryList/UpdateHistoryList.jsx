@@ -1,4 +1,4 @@
-import {updateHistory} from "@/data/updateHistory";
+import {updateHistory, formatUpdateDate} from "@/data/updateHistory";
 import UpdateSection from "../UpdateSection/UpdateSection";
 import "./UpdateHistoryList.css";
 import {useTheme} from "@/Context/ThemeContext.tsx";
@@ -15,7 +15,7 @@ const UpdateHistoryList = () => {
                         <div className="update-history-header">
                             <span className="update-history-version">v{update.version}</span>
                             <span className={`update-history-date ${isDark ? "dark" : ""}`}>
-                                {update.date}
+                            {formatUpdateDate(update.date)}
                             </span>
                         </div>
                         <UpdateSection update={update}/>

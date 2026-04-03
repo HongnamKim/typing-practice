@@ -14,14 +14,19 @@ import com.typingpractice.typing_practice_be.quote.query.QuotePaginationQuery;
 import com.typingpractice.typing_practice_be.quote.query.QuoteUpdateQuery;
 import com.typingpractice.typing_practice_be.quote.reject.service.QuoteSimilarityRejectService;
 import com.typingpractice.typing_practice_be.quote.repository.QuoteRepository;
-import java.util.List;
-
+import com.typingpractice.typing_practice_be.quote.service.difficulty.DifficultySeedCalculator;
+import com.typingpractice.typing_practice_be.quote.service.difficulty.QuoteProfileCalculator;
 import com.typingpractice.typing_practice_be.quote.statistics.domain.GlobalQuoteStatistics;
 import com.typingpractice.typing_practice_be.quote.statistics.service.GlobalQuoteStatisticsService;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -38,14 +43,58 @@ public class QuoteService {
   private final MemberRepository memberRepository;
 
   private final DailyLimitService dailyLimitService;
+  private final QuoteIdCacheService quoteIdCacheService;
 
   public PageResult<Quote> findRandomPublicQuotes(PublicQuoteQuery query) {
-    List<Quote> quotes = quoteRepository.findPublicQuotes(query);
+    // long t1 = System.currentTimeMillis();
 
-    boolean hasNext = quotes.size() > query.getCount();
-    List<Quote> content = hasNext ? quotes.subList(0, query.getCount()) : quotes;
+    QuoteLanguage language = query.getLanguage();
+    Random random = new Random((long) (query.getSeed() * 1_000));
+
+    List<Long> ids;
+    if (query.getOnlyMyQuotes() && query.getMemberId() != null) {
+      // 로그인한 유저의 내 문장만 조회
+      ids = quoteIdCacheService.getIdsByMemberId(query.getMemberId(), language);
+    } else {
+      // 전체 문장 랜덤 조회
+      ids = quoteIdCacheService.getPublicIds(language, QuoteDifficultyTier.ALL);
+    }
+
+    // long t2 = System.currentTimeMillis();
+    // log.info("[성능] 캐시 조회: {}ms", t2 - t1);
+
+    Collections.shuffle(ids, random);
+
+    // long t3 = System.currentTimeMillis();
+    // log.info("[성능] 셔플: {}ms", t3 - t2);
+
+    int from = (query.getPage() - 1) * query.getCount();
+    int to = Math.min(from + query.getCount() + 1, ids.size());
+
+    if (from >= ids.size()) {
+      return new PageResult<>(List.of(), query.getPage(), query.getCount(), false);
+    }
+
+    List<Long> slicedIds = ids.subList(from, to);
+    List<Quote> fetched = quoteRepository.findByIds(slicedIds, language);
+
+    // long t4 = System.currentTimeMillis();
+    // log.info("[성능] DB 조회: {}ms", t4 - t3);
+
+    boolean hasNext = fetched.size() > query.getCount();
+    List<Quote> content = hasNext ? fetched.subList(0, query.getCount()) : fetched;
 
     return new PageResult<>(content, query.getPage(), query.getCount(), hasNext);
+
+    //		long t3 = System.currentTimeMillis();
+    //		List<Quote> quotes = quoteRepository.findPublicQuotes(query);
+    //		long t4 = System.currentTimeMillis();
+    //		log.info("[성능] DB 조회: {}ms", t4 - t3);
+    //
+    //		boolean hasNext = quotes.size() > query.getCount();
+    //		List<Quote> content = hasNext ? quotes.subList(0, query.getCount()) : quotes;
+    //
+    //		return new PageResult<>(content, query.getPage(), query.getCount(), hasNext);
   }
 
   public Quote findById(Long quoteId) {
@@ -127,8 +176,10 @@ public class QuoteService {
             profile,
             seed,
             sentenceHash);
-
+    quote.updateDynamicDifficulty(seed); // 통계 없을 때 초기 난이도
     quoteRepository.save(quote);
+
+    quoteIdCacheService.invalidateMemberIds(memberId, language);
 
     return quote;
   }
@@ -179,6 +230,8 @@ public class QuoteService {
     }
 
     quoteRepository.deleteQuote(quote);
+
+    quoteIdCacheService.invalidateMemberIds(memberId, quote.getLanguage());
   }
 
   public PageResult<Quote> getMyQuotes(Long memberId, QuotePaginationQuery query) {
@@ -228,6 +281,8 @@ public class QuoteService {
     quote.updateType(QuoteType.PUBLIC);
     quote.updateStatus(QuoteStatus.PENDING);
 
+    quoteIdCacheService.invalidateMemberIds(memberId, quote.getLanguage());
+
     return quote;
   }
 
@@ -241,6 +296,8 @@ public class QuoteService {
 
     quote.updateType(QuoteType.PRIVATE);
     quote.updateStatus(QuoteStatus.ACTIVE);
+
+    quoteIdCacheService.invalidateMemberIds(memberId, quote.getLanguage());
 
     return quote;
   }
