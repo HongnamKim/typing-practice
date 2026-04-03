@@ -4,6 +4,7 @@ import {useTheme} from "@/Context/ThemeContext.jsx";
 import {useQuote} from "@/Context/QuoteContext.jsx";
 import {useScore} from "@/Context/ScoreContext.jsx";
 import {useError} from "@/Context/ErrorContext.jsx";
+import {useAuth} from "@/Context/AuthContext.jsx";
 import {resultPeriodSet, useSetting} from "@/Context/SettingContext.jsx";
 import {
     KEY_ARROW_DOWN,
@@ -17,12 +18,14 @@ import {RESET_COUNT_THRESHOLD_RATIO} from "@/const/config.const.ts";
 import {koreanSeparator} from "@/utils/koreanSeparator.ts";
 import {createFlatTypoEntry, isLanguageSwitchMistake} from "@/utils/typoUtils.ts";
 import {saveTypingRecord} from "@/utils/typingRecordApi.ts";
+import {getAnonymousId} from "@/utils/tracking.ts";
 import {t} from "@/utils/i18n.ts";
 import {areJamoEqual, calculateAccuracy, sum, average, max} from "./InputUtils";
 
 const Input = ({onInputChange: onInputChangeCallback}) => {
     const {isDark} = useTheme();
     const {showError} = useError();
+    const {user} = useAuth();
     const {
         setCurrentCpm, // 현재 타자 속도 state 값의 set 함수
         setLastCpm,
@@ -268,6 +271,7 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
                 charLength: sentence.length,
                 resetCount: resetCountRef.current,
                 typos: typosRef.current,
+                anonymousId: user ? null : getAnonymousId(),
             }).catch((error) => console.error('타이핑 기록 저장 실패:', error));
         }
 

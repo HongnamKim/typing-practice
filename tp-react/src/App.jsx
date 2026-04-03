@@ -17,6 +17,7 @@ import Stats from "./pages/Stats/Stats";
 import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService/TermsOfService";
 import {Analytics} from "@vercel/analytics/react";
+import ConsentBanner from "./components/ConsentBanner/ConsentBanner";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
                 <Contact />
+                <ConsentBanner/>
                 <Analytics/>
               </AppDiv>
               </ScoreContextProvider>
