@@ -1,4 +1,5 @@
 import apiClient from './apiClient';
+import {buildTracking, TrackingInfo} from './tracking';
 
 export type TypoType = 'INITIAL' | 'MEDIAL' | 'FINAL' | 'LETTER';
 
@@ -16,6 +17,8 @@ interface TypingRecordRequest {
     charLength: number;
     resetCount: number;
     typos: TypoEntry[];
+    anonymousId?: string | null;
+    tracking?: TrackingInfo;
 }
 
 /**
@@ -23,5 +26,9 @@ interface TypingRecordRequest {
  * 비로그인 사용자도 호출 가능 (로그인 시 개인 통계 반영)
  */
 export const saveTypingRecord = async (request: TypingRecordRequest) => {
-    return apiClient.post('/typing-records', request);
+    const tracking = buildTracking();
+    return apiClient.post('/typing-records', {
+        ...request,
+        ...(tracking && {tracking}),
+    });
 };

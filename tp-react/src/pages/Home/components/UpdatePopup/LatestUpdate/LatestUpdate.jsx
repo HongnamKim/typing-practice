@@ -1,4 +1,4 @@
-import {updateHistory} from "@/data/updateHistory";
+import {updateHistory, formatUpdateDate} from "@/data/updateHistory";
 import UpdateSection from "../UpdateSection/UpdateSection";
 import "./LatestUpdate.css";
 import {useTheme} from "@/Context/ThemeContext.tsx";
@@ -20,7 +20,7 @@ const LatestUpdate = () => {
                 v{latestPopupUpdate.version}
             </div>
             <div className={`update-popup-date ${isDark ? "dark" : ""}`}>
-                {latestPopupUpdate.date}
+                {formatUpdateDate(latestPopupUpdate.date)}
             </div>
             <UpdateSection update={latestPopupUpdate}/>
         </>

@@ -4,6 +4,7 @@ import UpdateHistoryList from "./UpdateHistoryList/UpdateHistoryList";
 import LatestUpdate, {getLatestPopupUpdate} from "./LatestUpdate/LatestUpdate";
 import "./UpdatePopup.css";
 import {Storage_Last_Seen_Version} from "@/const/config.const.ts";
+import {t} from "@/utils/i18n.ts";
 
 const UpdatePopup = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -46,17 +47,18 @@ const UpdatePopup = () => {
             {/* 공지 아이콘 */}
             <CiBullhorn
                 className="notice-icon"
-                title="업데이트 안내"
+                title={t('updateNotice')}
                 onClick={handleIconClick}
             />
 
             {/* 팝업 */}
             {isOpen && (
                 <div className="update-popup-overlay" onClick={handleClose}>
-                    <div className={`update-popup ${isHistoryMode ? "history-mode" : ""}`} onClick={e => e.stopPropagation()}>
+                    <div className={`update-popup ${isHistoryMode ? "history-mode" : ""}`}
+                         onClick={e => e.stopPropagation()}>
                         <div className="update-popup-header">
                             <span className="update-popup-title">
-                                {isHistoryMode ? "📋 업데이트 내역" : "🎉 업데이트 안내"}
+                                {isHistoryMode ? t('updateHistory') : t('updateNotice')}
                             </span>
                         </div>
 
@@ -69,7 +71,7 @@ const UpdatePopup = () => {
                         </div>
 
                         <button className="update-popup-close" onClick={handleClose}>
-                            확인
+                            {t('updateClose')}
                         </button>
                         {!isHistoryMode && (
                             <>
@@ -77,13 +79,13 @@ const UpdatePopup = () => {
                                     className="update-popup-history-btn"
                                     onClick={handleHistoryClick}
                                 >
-                                    지난 업데이트 보기
+                                    {t('updateViewHistory')}
                                 </button>
                                 <button
                                     className="update-popup-dont-show-btn"
                                     onClick={handleDontShowAgain}
                                 >
-                                    다시 보지 않기
+                                    {t('updateDontShow')}
                                 </button>
                             </>
                         )}

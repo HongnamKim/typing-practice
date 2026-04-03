@@ -16,44 +16,130 @@
     transform: translate(-50%, -50%);
     background-color: var(--color-popup-bg);
     color: var(--color-text);
-    width: 25rem;
-    height: 25rem;
-    border-radius: 0.5rem;
+    width: 22rem;
+    border-radius: 1rem;
     display: flex;
     flex-direction: column;
-    padding: 2rem 1.5rem;
+    padding: 2rem;
     z-index: 1000;
     border: 1px solid var(--color-border);
 }
 
-.popup-title {
-    font-size: 1.5rem;
-    color: var(--color-text);
-    margin-bottom: 3rem;
-    text-align: center;
-    font-weight: 600;
-    background-color: transparent;
+/* 메인 영역 */
+.popup-main {
+    margin-bottom: 1.5rem;
 }
 
-.popup-info {
+.popup-main-label {
+    font-size: 0.875rem;
+    color: var(--color-text-placeholder);
+    display: block;
+    margin-bottom: 0.125rem;
+}
+
+.popup-main-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.popup-main-value {
+    font-size: 3rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.popup-main-unit {
+    font-size: 1rem;
+    color: var(--color-text-placeholder);
+}
+
+.popup-main-diff {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    margin-left: auto;
+}
+
+.popup-main-diff.up {
+    color: #22c55e;
+}
+
+.popup-main-diff.down {
+    color: #ef4444;
+}
+
+.popup-main-diff.neutral {
+    color: var(--color-text-placeholder);
+}
+
+/* 보조 통계 리스트 */
+.popup-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    margin-bottom: 1.5rem;
+}
+
+.popup-detail-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 2rem;
-    font-size: 1.5rem;
-    color: var(--color-text-muted);
-    background-color: transparent;
+    font-size: 1rem;
 }
 
-.popup-value {
-    font-weight: 600;
+.popup-detail-label {
+    color: var(--color-text-muted);
+}
+
+.popup-detail-value {
+    font-weight: 500;
     color: var(--color-text);
-    background-color: transparent;
+}
+
+.popup-detail-value.cumulative {
+    font-weight: 400;
+    color: var(--color-text-placeholder);
+}
+
+/* 하단 영역 */
+.popup-bottom {
+    border-top: 1px solid var(--color-border);
+    padding-top: 0.875rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .popup-close {
-    margin-top: auto;
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     color: var(--color-text-placeholder);
-    background-color: transparent;
+}
+
+.popup-stats-link {
+    border: none;
+    background: transparent;
+    color: var(--color-primary);
+    font-size: 0.9375rem;
+    cursor: pointer;
+    padding: 0;
+    transition: opacity 0.15s;
+}
+
+.popup-stats-link:hover {
+    opacity: 0.7;
+}
+
+.popup-login-prompt {
+    border: none;
+    background: transparent;
+    color: var(--color-primary);
+    font-size: 0.9375rem;
+    cursor: pointer;
+    padding: 0;
+    transition: opacity 0.15s;
+}
+
+.popup-login-prompt:hover {
+    opacity: 0.7;
 }

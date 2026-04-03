@@ -9,6 +9,8 @@ export const Storage_Last_Seen_Version = "Typing-Practice-lastSeenVersion" as co
 export const Storage_Refresh_Token = "Typing-Practice-refreshToken" as const;
 export const Storage_Consent = "Typing-Practice-storageConsent" as const;
 export const Storage_Feature_Guide = "Typing-Practice-featureGuide" as const;
+export const Storage_Anonymous_Id = "Typing-Practice-anonymousId" as const;
+export const Storage_Session_Id = "Typing-Practice-sessionId" as const;
 
 // Quote 관련 상수
 export const MIN_SENTENCE_LENGTH = 5 as const;
