@@ -1,12 +1,12 @@
 package com.typingpractice.typing_practice_be.statistics.scheduler;
 
 import com.typingpractice.typing_practice_be.common.utils.TimeUtils;
-import com.typingpractice.typing_practice_be.quote.service.DifficultyBatchService;
+import com.typingpractice.typing_practice_be.quote.service.difficulty.DifficultyBatchService;
 import com.typingpractice.typing_practice_be.quote.statistics.service.GlobalQuoteStatisticsBatchService;
-import com.typingpractice.typing_practice_be.typingrecord.statistics.service.MemberDailyStatsBatchService;
-import com.typingpractice.typing_practice_be.typingrecord.statistics.service.MemberTypingStatsBatchService;
-import com.typingpractice.typing_practice_be.typingrecord.statistics.service.MemberTypoStatsBatchService;
-import com.typingpractice.typing_practice_be.typingrecord.statistics.service.QuoteTypingStatsBatchService;
+import com.typingpractice.typing_practice_be.typingrecord.statistics.service.batch.MemberDailyStatsBatchService;
+import com.typingpractice.typing_practice_be.typingrecord.statistics.service.batch.MemberTypingStatsBatchService;
+import com.typingpractice.typing_practice_be.typingrecord.statistics.service.batch.MemberTypoStatsBatchService;
+import com.typingpractice.typing_practice_be.typingrecord.statistics.service.batch.QuoteTypingStatsBatchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
