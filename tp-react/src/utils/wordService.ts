@@ -4,7 +4,7 @@ import koHard from '@/data/words/ko-hard.json';
 
 export type Difficulty = 'RANDOM' | 'EASY' | 'NORMAL' | 'HARD';
 export const DIFFICULTIES: Difficulty[] = ['RANDOM', 'EASY', 'NORMAL', 'HARD'];
-export const WORD_COUNTS = [10, 25, 50] as const;
+export const WORD_COUNTS = [15, 25, 50] as const;
 export type WordCount = typeof WORD_COUNTS[number];
 
 // Fisher-Yates 셔플
