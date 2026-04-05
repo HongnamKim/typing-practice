@@ -202,6 +202,35 @@ const translations = {
     popupCumulativeAvg: isKorean ? 'Overall avg' : 'Overall avg',
     popupViewStats: isKorean ? '자세한 통계 보기 →' : 'View detailed stats →',
 
+    // 모드 전환 (영어 고정)
+    sentenceMode: 'Sentence',
+    wordMode: 'Word',
+
+    // 단어 모드 설정 (영어 고정)
+    difficulty: 'Difficulty',
+    random: 'Random',
+    easy: 'Easy',
+    normal: 'Normal',
+    hard: 'Hard',
+    wordCountLabel: 'Words',
+
+    // 단어 모드 진행/결과 (영어 고정)
+    wordProgress: (current: number, total: number) => `${current} / ${total}`,
+    elapsedTime: 'Time',
+    wpm: 'WPM',
+    correctWords: 'Correct',
+    totalWords: 'Total',
+    elapsedTimeResult: 'Time',
+    retry: 'Retry',
+    retryHint: 'tab + enter to retry',
+    wordAccuracy: 'Accuracy',
+    formatSeconds: (sec: number) => {
+        const m = Math.floor(sec / 60);
+        const s = Math.floor(sec % 60);
+        if (m > 0) return `${m}m ${s}s`;
+        return `${s}s`;
+    },
+
     // 업데이트 팝업
     updateNotice: isKorean ? '업데이트 안내' : 'Update',
     updateHistory: isKorean ? '업데이트 내역' : 'Update History',
