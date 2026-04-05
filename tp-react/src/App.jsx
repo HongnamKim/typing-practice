@@ -10,6 +10,7 @@ import Head from "./components/Head/Head";
 import AppDiv from "./components/AppDiv/AppDiv";
 import Contact from "./components/Contact/Contact";
 import Home from "./pages/Home/Home";
+import WordMode from "./pages/WordMode/WordMode";
 import QuoteUpload from "./pages/QuoteUpload/QuoteUpload";
 import MyQuotes from "./pages/MyQuotes/MyQuotes";
 import MyReports from "./pages/MyReports/MyReports";
@@ -31,6 +32,7 @@ function App() {
                 <Head />
                 <Routes>
                   <Route path="/" element={<Home />} />
+                  <Route path="/word" element={<WordMode />} />
                   <Route path="/quote/upload" element={<QuoteUpload />} />
                   <Route path="/quote/my" element={<MyQuotes />} />
                   <Route path="/quote/report" element={<MyReports />} />

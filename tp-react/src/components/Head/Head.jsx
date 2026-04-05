@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useLocation} from "react-router-dom";
 import Title from "./title/Title";
 import DarkModeButton from "./themeButton/DarkModeButton";
 import LoginButton from "../LoginButton/LoginButton";
@@ -14,6 +14,7 @@ import {useGoogleLogin} from "@react-oauth/google";
 import {loginWithGoogle} from "@/utils/authApi.ts";
 import {FaPlus} from "react-icons/fa";
 import {t} from "@/utils/i18n.ts";
+import {Storage_Last_Mode} from "@/const/config.const.ts";
 import FeatureGuide from "../FeatureGuide/FeatureGuide";
 import "./Head.css";
 
@@ -26,6 +27,7 @@ const isUuidFormat = (str) => {
 
 const Head = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const {isDark} = useTheme();
     const {showError} = useError();
     const {user, accessToken, refreshToken, isLoading, setIsLoading, login, loginTrigger} = useAuth();
@@ -103,7 +105,24 @@ const Head = () => {
     return (
         <>
             <div className="head">
-                <Title/>
+                <div className="head-left">
+                    <Title/>
+                    <div className="mode-nav">
+                        <button
+                            className={`mode-nav-btn ${location.pathname === '/' ? 'mode-nav-active' : ''} ${isDark ? 'dark' : ''}`}
+                            onClick={() => { localStorage.setItem(Storage_Last_Mode, 'sentence'); navigate('/'); }}
+                        >
+                            {t('sentenceMode')}
+                        </button>
+                        <span className="mode-nav-divider">|</span>
+                        <button
+                            className={`mode-nav-btn ${location.pathname === '/word' ? 'mode-nav-active' : ''} ${isDark ? 'dark' : ''}`}
+                            onClick={() => { localStorage.setItem(Storage_Last_Mode, 'word'); navigate('/word'); }}
+                        >
+                            {t('wordMode')}<span className="mode-nav-beta">beta</span>
+                        </button>
+                    </div>
+                </div>
                 <div className="head-right">
                     <button
                         className={`header-btn ${isDark ? 'dark' : ''}`}

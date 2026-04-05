@@ -1,0 +1,16 @@
+.word-progress {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+}
+
+.word-progress-count {
+    font-variant-numeric: tabular-nums;
+}
+
+.word-progress-time {
+    font-variant-numeric: tabular-nums;
+}
