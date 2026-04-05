@@ -30,6 +30,21 @@ export function localize(item: LocalizedText): string {
 
 export const updateHistory: UpdateEntry[] = [
     {
+        version: "1.3.0",
+        date: "2026-04-06",
+        showPopup: true,
+        hidden: false,
+        features: [
+            {ko: "단어 모드 추가 (beta)", en: "Word mode added (beta)"},
+            {ko: "난이도 선택 (Random, Easy, Normal, Hard)", en: "Difficulty selection (Random, Easy, Normal, Hard)"},
+            {ko: "단어 수 선택 (10, 25, 50)", en: "Word count selection (10, 25, 50)"},
+            {ko: "문장/단어 모드 전환 기능 추가", en: "Sentence/Word mode switch"},
+        ],
+        improvements: [
+            {ko: "마지막 사용 모드 자동 기억", en: "Auto-remember last used mode"},
+        ]
+    },
+    {
         version: "1.2.1",
         date: "2026-04-02",
         showPopup: false,

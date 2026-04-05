@@ -3,7 +3,7 @@ import {useScore} from "./ScoreContext";
 import {useAuth} from "./AuthContext";
 import {useError} from "./ErrorContext";
 import {getQuotes} from "../utils/quoteApi";
-import {defaultQuotes} from "../const/default-quotes.const";
+import {defaultQuotes} from "../data/default-quotes.const.ts";
 import {t} from "../utils/i18n";
 
 interface Quote {
