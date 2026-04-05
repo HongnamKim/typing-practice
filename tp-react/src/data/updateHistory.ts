@@ -37,7 +37,7 @@ export const updateHistory: UpdateEntry[] = [
         features: [
             {ko: "단어 모드 추가 (beta)", en: "Word mode added (beta)"},
             {ko: "난이도 선택 (Random, Easy, Normal, Hard)", en: "Difficulty selection (Random, Easy, Normal, Hard)"},
-            {ko: "단어 수 선택 (10, 25, 50)", en: "Word count selection (10, 25, 50)"},
+            {ko: "단어 수 선택 (15, 25, 50)", en: "Word count selection (10, 25, 50)"},
             {ko: "문장/단어 모드 전환 기능 추가", en: "Sentence/Word mode switch"},
         ],
         improvements: [
