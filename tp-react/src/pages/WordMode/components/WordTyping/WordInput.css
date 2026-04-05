@@ -1,0 +1,9 @@
+/* textarea를 화면 밖에 숨김 — 키보드 입력 캡처 전용 */
+.word-input {
+    position: fixed;
+    left: -9999px;
+    top: 0;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+}

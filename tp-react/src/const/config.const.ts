@@ -17,5 +17,10 @@ export const MIN_SENTENCE_LENGTH = 5 as const;
 export const MAX_SENTENCE_LENGTH = 100 as const;
 export const MAX_AUTHOR_LENGTH = 20 as const;
 
+// Word Mode 관련 상수
+export const Storage_Word_Difficulty = "Typing-Practice-wordDifficulty" as const;
+export const Storage_Word_Count = "Typing-Practice-wordCount" as const;
+export const Storage_Last_Mode = "Typing-Practice-lastMode" as const;
+
 // Typing Record 관련 상수
 export const RESET_COUNT_THRESHOLD_RATIO = 0.3 as const;

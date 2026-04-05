@@ -1,0 +1,62 @@
+.word-setting {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem;
+}
+
+.word-setting-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.word-setting-label {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    min-width: 60px;
+}
+
+.word-setting-options {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.word-setting-chip {
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+    background: transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.word-setting-chip:hover {
+    border-color: var(--color-primary);
+    color: var(--color-text);
+}
+
+.word-setting-chip.active {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+}
+
+.word-start-btn {
+    padding: 0.6rem 2rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--color-primary);
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-top: 0.5rem;
+}
+
+.word-start-btn:hover {
+    opacity: 0.85;
+}

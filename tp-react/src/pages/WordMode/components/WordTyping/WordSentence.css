@@ -1,0 +1,40 @@
+.word-sentence-layer {
+    position: relative;
+    z-index: 1;
+    white-space: pre-wrap;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    word-spacing: 0.25em;
+    cursor: text;
+}
+
+.word-char {
+    line-height: 1.8;
+}
+
+.word-char-placeholder {
+    color: var(--color-text-placeholder);
+}
+
+.word-char-typed {
+    color: transparent;
+}
+
+/* 커스텀 커서 — position: absolute로 레이아웃에 영향 없음 */
+.word-caret {
+    position: absolute;
+    width: 2px;
+    background-color: var(--color-primary);
+    animation: caret-blink 1s step-end infinite;
+    pointer-events: none;
+}
+
+.word-caret-hidden {
+    opacity: 0 !important;
+    animation: none;
+}
+
+@keyframes caret-blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
