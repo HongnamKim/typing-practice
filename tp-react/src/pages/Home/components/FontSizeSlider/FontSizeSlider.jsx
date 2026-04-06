@@ -46,13 +46,13 @@ const FontSizeSlider = () => {
 
     return (
         <div className="font-size-slider-container">
-            <label
-                className="font-size-label"
+            <span
+                className="info-tt-label"
                 onClick={handleReset}
                 title="Click to reset"
             >
-                Font Size
-            </label>
+                Tt
+            </span>
             <input
                 type="range"
                 min="0"
@@ -60,7 +60,7 @@ const FontSizeSlider = () => {
                 step="1"
                 value={fontSizeToSlider(fontSize)}
                 onChange={handleChange}
-                className="font-size-slider"
+                className="info-slider"
             />
         </div>
     );

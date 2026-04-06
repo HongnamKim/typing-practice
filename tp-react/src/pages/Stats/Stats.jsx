@@ -53,7 +53,9 @@ function Stats() {
             setTypoStats(typoRes.data.data.content || []);
         } catch (error) {
             console.error('통계 로드 실패:', error);
-            showError(t('statsLoadFailed'));
+            if (error?.response?.status !== 401) {
+                showError(t('statsLoadFailed'));
+            }
         } finally {
             setIsLoading(false);
         }
@@ -76,7 +78,7 @@ function Stats() {
         } catch (error) {
             if (error.response?.status === 429) {
                 showError(t('refreshCooldown'));
-            } else {
+            } else if (error?.response?.status !== 401) {
                 showError(t('refreshFailed'));
             }
         }

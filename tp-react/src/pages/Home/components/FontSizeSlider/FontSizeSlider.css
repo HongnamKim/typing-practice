@@ -1,46 +1,47 @@
 .font-size-slider-container {
     display: flex;
-    flex-direction: column;
+    align-items: center;
     gap: 0.5rem;
 }
 
-.font-size-label {
-    font-size: 0.75rem;
+.info-tt-label {
+    font-size: 1.125rem;
+    font-weight: 400;
     color: var(--color-text-placeholder);
     cursor: pointer;
-    transition: color 0.2s;
     user-select: none;
+    line-height: 1;
 }
 
-.font-size-label:hover {
-    color: var(--color-text-muted);
-}
-
-.font-size-slider {
-    width: 100px;
+.info-slider {
+    width: 110px;
     height: 4px;
     -webkit-appearance: none;
     appearance: none;
-    background: var(--color-toggle-bg);
+    background: var(--color-bg-tertiary);
     outline: none;
     border-radius: 2px;
+    cursor: pointer;
 }
 
-.font-size-slider::-webkit-slider-thumb {
+.info-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 16px;
-    height: 16px;
-    background: var(--color-primary);
-    cursor: pointer;
-    border-radius: 50%;
-}
-
-.font-size-slider::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     background: var(--color-primary);
     cursor: pointer;
     border-radius: 50%;
     border: none;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.info-slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    background: var(--color-primary);
+    cursor: pointer;
+    border-radius: 50%;
+    border: none;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }

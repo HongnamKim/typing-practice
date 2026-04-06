@@ -61,12 +61,18 @@ var statsSelectedTypo = null;
 function openStatsPage() {
     document.getElementById('statsPage').classList.remove('display-none');
     document.body.style.overflow = 'hidden';
+    // 네비게이션 활성 상태 업데이트
+    document.querySelectorAll('.nav-link').forEach(function(l) { l.classList.remove('active'); });
+    document.getElementById('navStats').classList.add('active');
     renderStats();
 }
 
 function closeStatsPage() {
     document.getElementById('statsPage').classList.add('display-none');
     document.body.style.overflow = '';
+    // 네비게이션 활성 상태 복원
+    document.querySelectorAll('.nav-link').forEach(function(l) { l.classList.remove('active'); });
+    document.getElementById('navSentence').classList.add('active');
 }
 
 function renderStats() {
@@ -252,8 +258,7 @@ function renderTypoDetail(expected) {
 }
 
 // Events
-document.getElementById('statsBtn').addEventListener('click', function () {
-    document.getElementById('dropdownMenu').classList.add('display-none');
+document.getElementById('navStats').addEventListener('click', function () {
     openStatsPage();
 });
 document.getElementById('statsBackBtn').addEventListener('click', closeStatsPage);
