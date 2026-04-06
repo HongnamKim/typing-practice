@@ -128,8 +128,10 @@ function MyReports() {
             }
         } catch (error) {
             console.error('신고 삭제 실패:', error);
-            const message = error.response?.data?.detail || t('deleteReportFailed');
-            showError(message);
+            if (error?.response?.status !== 401) {
+                const message = error.response?.data?.detail || t('deleteReportFailed');
+                showError(message);
+            }
             setDeletingReportId(null);
         }
     };

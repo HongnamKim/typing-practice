@@ -41,8 +41,10 @@ const ReportPopup = ({quote, onClose, onSuccess}) => {
             onClose();
         } catch (error) {
             console.error('신고 실패:', error);
-            const message = error.response?.data?.detail || t('reportFailed');
-            showError(message);
+            if (error?.response?.status !== 401) {
+                const message = error.response?.data?.detail || t('reportFailed');
+                showError(message);
+            }
         } finally {
             setIsSubmitting(false);
         }

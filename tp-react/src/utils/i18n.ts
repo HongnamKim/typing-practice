@@ -203,8 +203,8 @@ const translations = {
     popupViewStats: isKorean ? '자세한 통계 보기 →' : 'View detailed stats →',
 
     // 모드 전환 (영어 고정)
-    sentenceMode: 'Sentence',
-    wordMode: 'Word',
+    sentenceMode: isKorean ? '문장 연습' : 'Sentence',
+    wordMode: isKorean ? '단어 연습' : 'Word',
 
     // 단어 모드 설정 (영어 고정)
     difficulty: 'Difficulty',

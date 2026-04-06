@@ -4,7 +4,7 @@ import {useTheme} from '../../Context/ThemeContext';
 import {useAuth} from '../../Context/AuthContext';
 import {logout as logoutApi} from '../../utils/authApi';
 import ProfilePopup from '../ProfilePopup/ProfilePopup';
-import {FaChartBar, FaChevronDown, FaCog, FaFileAlt, FaFlag, FaSignOutAlt, FaUser} from 'react-icons/fa';
+import {FaChevronDown, FaCog, FaFileAlt, FaFlag, FaSignOutAlt, FaUser} from 'react-icons/fa';
 import {t} from '@/utils/i18n.ts';
 import './ProfileDropdown.css';
 
@@ -51,9 +51,6 @@ const ProfileDropdown = () => {
             case 'my-reports':
                 navigate('/quote/report');
                 break;
-            case 'stats':
-                navigate('/stats');
-                break;
             case 'settings':
                 setShowProfilePopup(true);
                 break;
@@ -92,13 +89,6 @@ const ProfileDropdown = () => {
                         >
                             <FaFileAlt/>
                             <span>{t('mySentences')}</span>
-                        </button>
-                        <button
-                            className={`dropdown-item ${isDark ? 'dark' : ''}`}
-                            onClick={() => handleMenuClick('stats')}
-                        >
-                            <FaChartBar/>
-                            <span>{t('records')}</span>
                         </button>
                         <button
                             className={`dropdown-item ${isDark ? 'dark' : ''}`}

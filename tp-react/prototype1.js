@@ -41,8 +41,8 @@ if (savedFontSize) {
 }
 slider.addEventListener('input', e => updateFontSize(sliderToFontSize(parseFloat(e.target.value))));
 
-// Font Size 라벨 클릭 시 리셋
-document.getElementById('fontSizeLabel').addEventListener('click', () => {
+// Font Size 라벨(Tt) 클릭 시 리셋
+document.querySelector('.info-tt-label').addEventListener('click', () => {
     updateFontSize(1.5);
     slider.value = fontSizeToSlider(1.5);
 });
@@ -50,9 +50,10 @@ document.getElementById('fontSizeLabel').addEventListener('click', () => {
 // 다크모드
 function toggleTheme() {
     document.getElementById('body').classList.toggle('dark');
+    document.documentElement.classList.remove('dark-pending');
     document.getElementById('iconSun').classList.toggle('display-none');
     document.getElementById('iconMoon').classList.toggle('display-none');
-    document.querySelectorAll('.font-size-label, .font-size-slider, .mode-toggle-label, .mode-toggle, .notice-icon, .title-title, .header-btn, .profile-btn, .dropdown-menu, .dropdown-item, .dropdown-divider, .dark-mode-icon, .result-period-btn, .result-period-value, .CPM-text, .CPM-value, .info-averages, .average-label, .average-value, .averages-toggle-btn, .author-text, .character, .input-char-correct, .input, .contact, .upload-popup, .upload-popup-close-btn, .upload-type-hint, .upload-type-info, .upload-type-tooltip, .upload-entry, .upload-input, .upload-entry-delete-btn, .upload-entry-type-btn, .upload-entry-message.success, .upload-add-btn, .upload-cancel-btn, .upload-submit-btn, .confirm-popup, .confirm-popup-message, .confirm-popup-cancel-btn, .confirm-popup-ok-btn').forEach(el => el.classList.toggle('dark'));
+    document.querySelectorAll('.notice-icon, .nav-logo, .header-btn, .profile-btn, .dropdown-menu, .dropdown-item, .dropdown-divider, .dark-mode-icon, .author-text, .character, .input-char-correct, .input, .contact, .upload-popup, .upload-popup-close-btn, .upload-type-hint, .upload-type-info, .upload-type-tooltip, .upload-entry, .upload-input, .upload-entry-delete-btn, .upload-entry-type-btn, .upload-entry-message.success, .upload-add-btn, .upload-cancel-btn, .upload-submit-btn, .confirm-popup, .confirm-popup-message, .confirm-popup-cancel-btn, .confirm-popup-ok-btn').forEach(el => el.classList.toggle('dark'));
     localStorage.setItem('Typing-Practice-darkMode', isDark());
 }
 
@@ -67,30 +68,7 @@ textarea.addEventListener('input', function () {
     this.style.height = this.scrollHeight + 'px';
 });
 
-// 평균점수 토글
-let averagesVisible = localStorage.getItem('Typing-Practice-averagesVisible') !== 'false';
-const infoAverages = document.getElementById('infoAverages');
-const averagesToggleIcon = document.getElementById('averagesToggleIcon');
-
-function updateAveragesVisibility() {
-    if (averagesVisible) {
-        infoAverages.classList.remove('collapsed');
-        averagesToggleIcon.classList.remove('fa-chevron-down');
-        averagesToggleIcon.classList.add('fa-chevron-up');
-    } else {
-        infoAverages.classList.add('collapsed');
-        averagesToggleIcon.classList.remove('fa-chevron-up');
-        averagesToggleIcon.classList.add('fa-chevron-down');
-    }
-}
-
-updateAveragesVisibility();
-
-document.getElementById('averagesToggleBtn').addEventListener('click', () => {
-    averagesVisible = !averagesVisible;
-    localStorage.setItem('Typing-Practice-averagesVisible', averagesVisible);
-    updateAveragesVisibility();
-});
+// 평균점수 토글 (제거됨 - info 영역 통합)
 
 // 모드 토글 (Default / Compact)
 let isCompactMode = localStorage.getItem('Typing-Practice-compactMode') === 'true';
@@ -121,6 +99,63 @@ function toggleMode() {
 
 modeToggle.addEventListener('click', toggleMode);
 modeLabel.addEventListener('click', toggleMode);
+
+// Info 컨트롤 접기/펼치기
+const infoControls = document.getElementById('infoControls');
+const infoControlsToggle = document.getElementById('infoControlsToggle');
+const infoControlsToggleIcon = document.getElementById('infoControlsToggleIcon');
+let userControlsPref = localStorage.getItem('Typing-Practice-controlsCollapsed'); // 'true' | 'false' | null
+let isControlsCollapsed = false;
+let isNarrowMode = false;
+
+function applyControlsState(collapsed) {
+    isControlsCollapsed = collapsed;
+    if (collapsed) {
+        infoControls.classList.add('collapsed');
+        infoControlsToggleIcon.classList.remove('fa-chevron-right');
+        infoControlsToggleIcon.classList.add('fa-chevron-left');
+    } else {
+        infoControls.classList.remove('collapsed');
+        infoControlsToggleIcon.classList.remove('fa-chevron-left');
+        infoControlsToggleIcon.classList.add('fa-chevron-right');
+    }
+    if (isNarrowMode) {
+        infoControls.classList.add('narrow-mode');
+    } else {
+        infoControls.classList.remove('narrow-mode');
+    }
+}
+
+function resolveControlsState() {
+    isNarrowMode = window.innerWidth <= 1080;
+    if (isNarrowMode) {
+        applyControlsState(true);
+    } else if (userControlsPref !== null) {
+        applyControlsState(userControlsPref === 'true');
+    } else {
+        applyControlsState(false);
+    }
+}
+
+resolveControlsState();
+
+infoControlsToggle.addEventListener('click', () => {
+    const next = !isControlsCollapsed;
+    if (!isNarrowMode) {
+        userControlsPref = String(next);
+        localStorage.setItem('Typing-Practice-controlsCollapsed', userControlsPref);
+    }
+    applyControlsState(next);
+});
+
+// overlay 상태에서 외부 클릭 시 닫기
+document.addEventListener('click', (e) => {
+    if (isNarrowMode && !isControlsCollapsed && !infoControls.contains(e.target)) {
+        applyControlsState(true);
+    }
+});
+
+window.addEventListener('resize', resolveControlsState);
 
 // 업데이트 공지 데이터
 const updateHistory = [
@@ -161,139 +196,93 @@ const updateHistory = [
     }
 ];
 
-const CURRENT_VERSION = updateHistory[0].version;
-const updatePopupOverlay = document.getElementById('updatePopupOverlay');
-const updatePopup = document.getElementById('updatePopup');
-const updatePopupTitle = document.getElementById('updatePopupTitle');
-const updateContent = document.getElementById('updateContent');
-const updateHistoryBtn = document.getElementById('updateHistoryBtn');
-
-// 최신 업데이트 렌더링 (첫 진입 시)
-function renderLatestUpdate(update) {
-    const darkClass = isDark() ? ' dark' : '';
-
+// 업데이트 페이지
+function renderUpdateCard(update) {
     let html = `
-            <div class="update-popup-version${darkClass}">v${update.version}</div>
-            <div class="update-popup-date${darkClass}">${update.date}</div>
-        `;
+        <div class="update-card">
+            <div class="update-card-header">
+                <span class="update-card-version">v${update.version}</span>
+                <span class="update-card-date">${update.date}</span>
+            </div>`;
 
     if (update.features && update.features.length > 0) {
         html += `
-                <div class="update-popup-section">
-                    <div class="update-popup-section-title${darkClass}">✨ 새로운 기능</div>
-                    <ul class="update-popup-list">
-                        ${update.features.map(f => `<li class="${darkClass}">${f}</li>`).join('')}
-                    </ul>
-                </div>
-            `;
+            <div class="update-card-section">
+                <div class="update-card-section-title">새로운 기능</div>
+                <ul class="update-card-list">
+                    ${update.features.map(f => `<li>${f}</li>`).join('')}
+                </ul>
+            </div>`;
     }
 
     if (update.improvements && update.improvements.length > 0) {
         html += `
-                <div class="update-popup-section">
-                    <div class="update-popup-section-title${darkClass}">🔧 개선사항</div>
-                    <ul class="update-popup-list">
-                        ${update.improvements.map(i => `<li class="${darkClass}">${i}</li>`).join('')}
-                    </ul>
-                </div>
-            `;
-    }
-
-    return html;
-}
-
-// 히스토리 아이템 렌더링 (아이콘 클릭 시)
-function renderHistoryItem(update) {
-    const darkClass = isDark() ? ' dark' : '';
-
-    let html = `
-            <div class="update-history-item${darkClass}">
-                <div class="update-history-header">
-                    <span class="update-history-version">v${update.version}</span>
-                    <span class="update-history-date${darkClass}">${update.date}</span>
-                </div>
-        `;
-
-    if (update.features && update.features.length > 0) {
-        html += `
-                <div class="update-popup-section">
-                    <div class="update-popup-section-title${darkClass}">✨ 새로운 기능</div>
-                    <ul class="update-popup-list">
-                        ${update.features.map(f => `<li class="${darkClass}">${f}</li>`).join('')}
-                    </ul>
-                </div>
-            `;
-    }
-
-    if (update.improvements && update.improvements.length > 0) {
-        html += `
-                <div class="update-popup-section">
-                    <div class="update-popup-section-title${darkClass}">🔧 개선사항</div>
-                    <ul class="update-popup-list">
-                        ${update.improvements.map(i => `<li class="${darkClass}">${i}</li>`).join('')}
-                    </ul>
-                </div>
-            `;
+            <div class="update-card-section">
+                <div class="update-card-section-title">개선사항</div>
+                <ul class="update-card-list">
+                    ${update.improvements.map(i => `<li>${i}</li>`).join('')}
+                </ul>
+            </div>`;
     }
 
     html += '</div>';
     return html;
 }
 
-// 모든 업데이트 렌더링
-function renderAllUpdates() {
-    let html = '';
-    for (const update of updateHistory) {
-        html += renderHistoryItem(update);
-    }
-    return html;
+function openUpdatesPage() {
+    document.getElementById('updatesPage').classList.remove('display-none');
+    document.body.style.overflow = 'hidden';
+    document.querySelectorAll('.nav-link').forEach(function(l) { l.classList.remove('active'); });
+    document.getElementById('navUpdates').classList.add('active');
+
+    const content = document.getElementById('updatesContent');
+    content.innerHTML = updateHistory.map(u => renderUpdateCard(u)).join('');
 }
 
-// 첫 진입 시 최신 업데이트만 표시
-function openLatestUpdatePopup() {
-    updatePopupOverlay.classList.remove('display-none');
-    updatePopup.classList.remove('history-mode');
-    updatePopupTitle.textContent = '🎉 업데이트 안내';
-    updateContent.innerHTML = renderLatestUpdate(updateHistory[0]);
-    updateHistoryBtn.classList.remove('display-none');
-
-    if (isDark()) {
-        updatePopup.classList.add('dark');
-        updateHistoryBtn.classList.add('dark');
-    }
+function closeUpdatesPage() {
+    document.getElementById('updatesPage').classList.add('display-none');
+    document.body.style.overflow = '';
+    document.querySelectorAll('.nav-link').forEach(function(l) { l.classList.remove('active'); });
+    document.getElementById('navSentence').classList.add('active');
 }
 
-// 아이콘 클릭 시 모든 업데이트 표시
-function openAllUpdatesPopup() {
-    updatePopupOverlay.classList.remove('display-none');
-    updatePopup.classList.add('history-mode');
-    updatePopupTitle.textContent = '📋 업데이트 내역';
-    updateContent.innerHTML = renderAllUpdates();
-    updateHistoryBtn.classList.add('display-none');
+document.getElementById('navUpdates').addEventListener('click', openUpdatesPage);
+document.getElementById('updatesBackBtn').addEventListener('click', closeUpdatesPage);
 
-    if (isDark()) {
-        updatePopup.classList.add('dark');
-    }
-}
+// 첫 진입 시 업데이트 알림 팝업
+const CURRENT_VERSION = updateHistory[0].version;
 
-function closeUpdatePopup() {
-    updatePopupOverlay.classList.add('display-none');
-    localStorage.setItem('Typing-Practice-lastSeenVersion', CURRENT_VERSION);
-}
-
-// 새 버전이면 자동으로 팝업 표시
 function showUpdatePopupIfNew() {
     const lastSeenVersion = localStorage.getItem('Typing-Practice-lastSeenVersion');
     if (lastSeenVersion !== CURRENT_VERSION) {
-        openLatestUpdatePopup();
+        const latest = updateHistory[0];
+        let html = `
+            <div class="update-popup-version">v${latest.version}</div>
+            <div class="update-popup-date">${latest.date}</div>`;
+
+        if (latest.features && latest.features.length > 0) {
+            html += `<div class="update-popup-section">
+                <div class="update-popup-section-title">새로운 기능</div>
+                <ul class="update-popup-list">${latest.features.map(f => `<li>${f}</li>`).join('')}</ul>
+            </div>`;
+        }
+        if (latest.improvements && latest.improvements.length > 0) {
+            html += `<div class="update-popup-section">
+                <div class="update-popup-section-title">개선사항</div>
+                <ul class="update-popup-list">${latest.improvements.map(i => `<li>${i}</li>`).join('')}</ul>
+            </div>`;
+        }
+
+        document.getElementById('updatePopupContent').innerHTML = html;
+        document.getElementById('updatePopupOverlay').classList.remove('display-none');
     }
 }
 
-document.getElementById('updatePopupClose').addEventListener('click', closeUpdatePopup);
-document.getElementById('iconNotice').addEventListener('click', openAllUpdatesPopup);
-updateHistoryBtn.addEventListener('click', openAllUpdatesPopup);
+document.getElementById('updatePopupClose').addEventListener('click', () => {
+    document.getElementById('updatePopupOverlay').classList.add('display-none');
+    localStorage.setItem('Typing-Practice-lastSeenVersion', CURRENT_VERSION);
+});
 
-// 페이지 로드 시 팝업 표시
 showUpdatePopupIfNew();
 
 // ============ 로그인 관련 ============

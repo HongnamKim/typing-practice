@@ -1,7 +1,8 @@
 .title {
-    font-size: 2rem;
+    font-size: 1.75rem;
     color: var(--color-text);
     font-weight: 600;
-    letter-spacing: -0.5px;
     cursor: pointer;
+    white-space: nowrap;
+    margin: 0;
 }
