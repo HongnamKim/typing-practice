@@ -300,11 +300,6 @@ document.getElementById('mysentencesBtn').addEventListener('click', () => {
     openMyQuotesPopup();
 });
 
-document.getElementById('statsBtn').addEventListener('click', () => {
-    // 통계 기능은 prototype4-stats.js에서 처리
-    document.getElementById('dropdownMenu').classList.add('display-none');
-});
-
 document.getElementById('settingsBtn').addEventListener('click', () => {
     alert('설정 기능 (준비 중)');
     document.getElementById('dropdownMenu').classList.add('display-none');

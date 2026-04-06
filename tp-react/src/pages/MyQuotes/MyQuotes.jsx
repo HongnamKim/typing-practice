@@ -132,7 +132,9 @@ function MyQuotes() {
             setEditingQuote(null);
         } catch (error) {
             console.error('문장 수정 실패:', error);
-            showError(extractQuoteErrorMessage(error, t('similarMy'), t('editSentenceFailed')));
+            if (error?.response?.status !== 401) {
+                showError(extractQuoteErrorMessage(error, t('similarMy'), t('editSentenceFailed')));
+            }
         }
     };
 
@@ -151,8 +153,10 @@ function MyQuotes() {
             }
         } catch (error) {
             console.error('문장 삭제 실패:', error);
-            const message = error.response?.data?.detail || t('deleteSentenceFailed');
-            showError(message);
+            if (error?.response?.status !== 401) {
+                const message = error.response?.data?.detail || t('deleteSentenceFailed');
+                showError(message);
+            }
             setDeletingQuoteId(null);
         }
     };
@@ -169,7 +173,9 @@ function MyQuotes() {
             ));
         } catch (error) {
             console.error('공개 전환 실패:', error);
-            showError(extractQuoteErrorMessage(error, t('similarPublic'), t('makePublicFailed')));
+            if (error?.response?.status !== 401) {
+                showError(extractQuoteErrorMessage(error, t('similarPublic'), t('makePublicFailed')));
+            }
         }
     };
 
@@ -185,8 +191,10 @@ function MyQuotes() {
             ));
         } catch (error) {
             console.error('공개 취소 실패:', error);
-            const message = error.response?.data?.detail || t('cancelPublicFailed');
-            showError(message);
+            if (error?.response?.status !== 401) {
+                const message = error.response?.data?.detail || t('cancelPublicFailed');
+                showError(message);
+            }
         }
     };
 

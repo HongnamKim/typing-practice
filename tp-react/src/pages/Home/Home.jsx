@@ -1,7 +1,5 @@
 import {useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
-import FontSizeSlider from './components/FontSizeSlider/FontSizeSlider';
-import ModeToggle from './components/ModeToggle/ModeToggle';
 import UpdatePopup from './components/UpdatePopup/UpdatePopup';
 import AverageScorePopUp from './components/AverageScorePopUp/AverageScorePopUp';
 import Info from './components/Info/Info';
@@ -24,10 +22,6 @@ function Home() {
 
     return (
         <SettingContextProvider>
-            <div className="top-left-controls">
-                <FontSizeSlider/>
-                <ModeToggle/>
-            </div>
             <UpdatePopup/>
             <AverageScorePopUp/>
             <Info/>
