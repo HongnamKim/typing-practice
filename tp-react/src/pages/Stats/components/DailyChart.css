@@ -53,6 +53,7 @@
 }
 
 .daily-chart-area {
+    position: relative;
     height: 11.25rem;
 }
 
