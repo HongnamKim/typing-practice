@@ -15,6 +15,7 @@ import {
     KEY_ESC,
 } from "@/const/key.const.js";
 import {RESET_COUNT_THRESHOLD_RATIO} from "@/const/config.const.ts";
+import {incrementSessionTypingCount} from "@/utils/sessionUtils.ts";
 import {koreanSeparator} from "@/utils/koreanSeparator.ts";
 import {createFlatTypoEntry, isLanguageSwitchMistake} from "@/utils/typoUtils.ts";
 import {saveTypingRecord} from "@/utils/typingRecordApi.ts";
@@ -278,6 +279,9 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
         // typos, resetCount 초기화
         typosRef.current = [];
         resetCountRef.current = 0;
+
+        // 세션 타이핑 카운트 증가 (동의 배너, 로그인 유도에 사용)
+        incrementSessionTypingCount();
     };
 
     const onInputChange = (e) => {

@@ -56,24 +56,18 @@ function DailyChart({dailyStats, dailyRange, onRangeChange}) {
 
     const labelInterval = data.length > 14 ? Math.ceil(data.length / 6) : 1;
 
-    const handleMouseEnter = useCallback((i) => {
+    const handleMouseEnter = useCallback((e, i) => {
         setHoverIndex(i);
         setPopupData(data[i]);
-        if (svgRef.current && chartRef.current) {
-            const svg = svgRef.current;
-            const section = chartRef.current.closest('.daily-chart-section');
-            if (!svg || !section) return;
-            const svgRect = svg.getBoundingClientRect();
-            const sectionRect = section.getBoundingClientRect();
-            const vb = svg.viewBox.baseVal;
-            const sx = svgRect.width / vb.width;
-            const sy = svgRect.height / vb.height;
+        if (chartRef.current) {
+            const circle = e.target.getBoundingClientRect();
+            const area = chartRef.current.getBoundingClientRect();
             setPopupPos({
-                x: svgRect.left - sectionRect.left + points[i].x * sx,
-                y: svgRect.top - sectionRect.top + points[i].y * sy + 16,
+                x: circle.left - area.left + circle.width / 2 + 8,
+                y: circle.top - area.top + circle.height / 2 + 20,
             });
         }
-    }, [data, points]);
+    }, [data]);
 
     const handleMouseLeave = useCallback(() => {
         setHoverIndex(null);
@@ -119,7 +113,7 @@ function DailyChart({dailyStats, dailyRange, onRangeChange}) {
                                         <text x={p.x} y={p.y - 16} className="daily-chart-tooltip-text">{displayVal}</text>
                                     </g>
                                     <circle cx={p.x} cy={p.y} r={16} style={{fill: 'transparent', cursor: 'pointer'}}
-                                        onMouseEnter={() => handleMouseEnter(i)} onMouseLeave={handleMouseLeave}/>
+                                        onMouseEnter={(e) => handleMouseEnter(e, i)} onMouseLeave={handleMouseLeave}/>
                                     {showLabel && (
                                         <text x={p.x} y={PAD.top + CHART_H + 16} className="daily-chart-date-label" textAnchor={textAnchor}>
                                             {formatDateLabel(data[i].date)}

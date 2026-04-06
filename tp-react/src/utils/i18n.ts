@@ -203,6 +203,50 @@ const translations = {
     ),
     featureGuideConfirm: l('확인', 'OK', 'Got it'),
 
+    // 로그인 유도
+    loginPromptTitle: l('타이핑 기록을 저장해보세요', 'タイピング記録を保存しましょう', 'Save your typing records'),
+    loginPromptDesc: l(
+        '로그인하면 타이핑 속도, 정확도, 오타 분석을 확인할 수 있어요.',
+        'ログインすると、タイピング速度・正確度・誤字分析を確認できます。',
+        'Sign in to track your typing speed, accuracy, and typo analysis.'
+    ),
+
+    // 동의 배너
+    consentTitle: l('더 나은 서비스를 위해', 'より良いサービスのために', 'Help us improve'),
+    consentDesc: l(
+        '서비스 개선을 위해 익명 사용 데이터를 수집합니다. 개인을 식별할 수 없습니다.',
+        'サービス改善のため匿名の使用データを収集します。個人を特定することはできません。',
+        'We collect anonymous usage data to improve the service. It cannot identify you personally.'
+    ),
+    consentAnonymousId: l('익명 식별자', '匿名識別子', 'Anonymous ID'),
+    consentAnonymousIdDesc: l(
+        '이름, 이메일 등 개인정보와 연결되지 않습니다.',
+        '名前やメールなどの個人情報とは関連付けられません。',
+        'Not linked to any personal information like name or email.'
+    ),
+    consentDeviceType: l('기기 유형', 'デバイスタイプ', 'Device type'),
+    consentDeviceTypeDesc: l(
+        '모바일 / 태블릿 / 데스크톱 중 어떤 환경인지 확인합니다.',
+        'モバイル/タブレット/デスクトップのどの環境かを確認します。',
+        'Whether you\'re on mobile, tablet, or desktop.'
+    ),
+    consentReferrer: l('유입 경로', '流入経路', 'Referrer'),
+    consentReferrerDesc: l(
+        '어떤 사이트에서 방문했는지 확인합니다.',
+        'どのサイトからアクセスしたかを確認します。',
+        'Which site you came from.'
+    ),
+    consentSession: l('세션 정보', 'セッション情報', 'Session info'),
+    consentSessionDesc: l(
+        '한 번의 방문 동안만 유지되며, 탭을 닫으면 자동으로 삭제됩니다.',
+        '1回の訪問中のみ保持され、タブを閉じると自動的に削除されます。',
+        'Only kept during your visit. Automatically deleted when you close the tab.'
+    ),
+    consentAccept: l('동의', '同意', 'Accept'),
+    consentReject: l('거절', '拒否', 'Reject'),
+    consentMore: l('자세히 보기', '詳しく見る', 'More info'),
+    consentLess: l('접기', '閉じる', 'Less'),
+
     // 결과 팝업
     popupLoginPrompt: l('이 기록을 저장할까요?', 'この記録を保存しますか？', 'Save this record?'),
     popupCumulativeAvg: l('Overall avg', 'Overall avg', 'Overall avg'),

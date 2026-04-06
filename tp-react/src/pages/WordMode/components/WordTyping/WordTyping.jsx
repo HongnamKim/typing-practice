@@ -7,6 +7,7 @@ import {VscDebugRestart} from "react-icons/vsc";
 import WordSentence from "./WordSentence";
 import WordInputDisplay from "./WordInputDisplay";
 import WordInput from "./WordInput";
+import ConsentBanner from "@/components/ConsentBanner/ConsentBanner.jsx";
 import "./WordTyping.css";
 
 const WordTyping = () => {
@@ -79,6 +80,8 @@ const WordTyping = () => {
                 </button>
                 <span className="word-typing-bottom-hint">{t('retryHint')}</span>
             </div>
+
+            <ConsentBanner/>
         </div>
     );
 };

@@ -2,6 +2,7 @@ import {useEffect, useRef, useState, useCallback, forwardRef, useImperativeHandl
 import {useWord} from "../../context/WordContext";
 import {koreanSeparator} from "@/utils/koreanSeparator.ts";
 import {areJamoEqual} from "@/pages/Home/components/Quote/Input/InputUtils";
+import {incrementSessionTypingCount} from "@/utils/sessionUtils.ts";
 import "./WordInput.css";
 
 const WordInput = forwardRef(({onFullInputChange, onCurrentGradesChange, onFocusChange}, ref) => {
@@ -70,7 +71,7 @@ const WordInput = forwardRef(({onFullInputChange, onCurrentGradesChange, onFocus
     }, []);
 
     // 전체 입력에 대한 글자 채점 (InputDisplay용)
-    const computeFullGrades = useCallback((input, confirmedCount) => {
+    const computeFullGrades = useCallback((input) => {
         const segments = input.split(' ');
         const allGrades = [];
 
@@ -105,6 +106,9 @@ const WordInput = forwardRef(({onFullInputChange, onCurrentGradesChange, onFocus
             timeMs: 0,
             elapsedMs,
         });
+
+        // 세션 타이핑 카운트 증가
+        incrementSessionTypingCount();
     }, [dispatch, gradeWord, words, startTimeRef]);
 
     const handleInput = (e) => {
@@ -162,7 +166,7 @@ const WordInput = forwardRef(({onFullInputChange, onCurrentGradesChange, onFocus
         }
 
         // 현재 단어 채점 + 전체 채점
-        const fullGrades = computeFullGrades(newValue, newConfirmedCount);
+        const fullGrades = computeFullGrades(newValue);
         onCurrentGradesChange?.(fullGrades);
         onFullInputChange?.(newValue);
     };
