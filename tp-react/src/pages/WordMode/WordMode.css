@@ -1,6 +1,6 @@
 .word-mode-container {
     width: 80%;
-    max-width: 1100px;
+    max-width: 1200px;
     min-width: 600px;
     display: flex;
     flex-direction: column;

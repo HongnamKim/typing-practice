@@ -1,15 +1,11 @@
-import {useState} from 'react';
-import {FaGlobe, FaUser} from 'react-icons/fa';
 import './QuoteSourceSelector.css';
-import {useTheme} from "@/Context/ThemeContext.tsx";
 import {useQuote} from "@/Context/QuoteContext.tsx";
+import {useAuth} from "@/Context/AuthContext.tsx";
 import {t} from "@/utils/i18n.ts";
-import LoginRequiredPopup from "@/components/LoginRequiredPopup/LoginRequiredPopup.jsx";
 
 const QuoteSourceSelector = () => {
-    const {isDark} = useTheme();
     const {quoteSource, changeQuoteSource} = useQuote();
-    const [showLoginPopup, setShowLoginPopup] = useState(false);
+    const {triggerLogin} = useAuth();
 
     const handleAllClick = () => {
         changeQuoteSource('all');
@@ -18,36 +14,25 @@ const QuoteSourceSelector = () => {
     const handleMyClick = () => {
         const success = changeQuoteSource('my');
         if (!success) {
-            setShowLoginPopup(true);
+            triggerLogin();
         }
     };
 
     return (
-        <>
-            <div className="quote-source-selector">
-                <button
-                    className={`quote-source-btn ${quoteSource === 'all' ? 'active' : ''} ${isDark ? 'dark' : ''}`}
-                    onClick={handleAllClick}
-                >
-                    <FaGlobe/>
-                    <span>{t('allSentences')}</span>
-                </button>
-                <button
-                    className={`quote-source-btn ${quoteSource === 'my' ? 'active' : ''} ${isDark ? 'dark' : ''}`}
-                    onClick={handleMyClick}
-                >
-                    <FaUser/>
-                    <span>{t('mySentencesOnly')}</span>
-                </button>
-            </div>
-
-            {showLoginPopup && (
-                <LoginRequiredPopup
-                    message={t('mySentencesLoginRequired')}
-                    onClose={() => setShowLoginPopup(false)}
-                />
-            )}
-        </>
+        <div className="quote-source-selector">
+            <button
+                className={`quote-source-btn ${quoteSource === 'all' ? 'active' : ''}`}
+                onClick={handleAllClick}
+            >
+                {t('allSentences')}
+            </button>
+            <button
+                className={`quote-source-btn ${quoteSource === 'my' ? 'active' : ''}`}
+                onClick={handleMyClick}
+            >
+                {t('mySentencesOnly')}
+            </button>
+        </div>
     );
 };
 

@@ -6,15 +6,13 @@ import {useTheme} from "@/Context/ThemeContext.tsx";
 import {useAuth} from "@/Context/AuthContext.tsx";
 import {useQuote} from "@/Context/QuoteContext.tsx";
 import {t} from "@/utils/i18n.ts";
-import LoginRequiredPopup from "@/components/LoginRequiredPopup/LoginRequiredPopup.jsx";
 
 const QuoteMoreMenu = () => {
     const {isDark} = useTheme();
-    const {user} = useAuth();
+    const {user, triggerLogin} = useAuth();
     const {currentQuote} = useQuote();
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [showLoginPopup, setShowLoginPopup] = useState(false);
     const [showReportPopup, setShowReportPopup] = useState(false);
 
     const menuRef = useRef(null);
@@ -45,7 +43,7 @@ const QuoteMoreMenu = () => {
         setIsMenuOpen(false);
 
         if (!user) {
-            setShowLoginPopup(true);
+            triggerLogin();
             return;
         }
 
@@ -80,13 +78,6 @@ const QuoteMoreMenu = () => {
                     </div>
                 )}
             </div>
-
-            {showLoginPopup && (
-                <LoginRequiredPopup
-                    message={t('reportLoginRequired')}
-                    onClose={() => setShowLoginPopup(false)}
-                />
-            )}
 
             {showReportPopup && (
                 <ReportPopup

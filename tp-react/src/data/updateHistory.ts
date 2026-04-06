@@ -30,6 +30,26 @@ export function localize(item: LocalizedText): string {
 
 export const updateHistory: UpdateEntry[] = [
     {
+        version: "1.4.0",
+        date: "2026-04-06",
+        showPopup: true,
+        hidden: false,
+        features: [
+            {ko: "상단 네비게이션 바 디자인 변경", en: "Redesigned top navigation bar"},
+            {ko: "업데이트 내역 페이지 추가", en: "Added update history page"},
+            {ko: "타이핑 속도/정확도 표시 및 설정 영역 디자인 변경", en: "Redesigned typing stats and settings area"},
+            {
+                ko: "단어 연습에 실시간 WPM, 난이도, 단어수, 폰트 크기 설정 추가",
+                en: "Added real-time WPM, difficulty, word count, font size settings to word mode"
+            },
+            {ko: "문장 소스 선택 탭 디자인 변경", en: "Redesigned sentence source selector tabs"},
+        ],
+        improvements: [
+            {ko: "다크모드 배경 및 보라색(primary) 색상 개선", en: "Improved dark mode background and primary colors"},
+            {ko: "좁은 화면에서 컨트롤 영역 자동 접기/오버레이 지원", en: "Auto-collapse controls on narrow screens with overlay support"},
+        ]
+    },
+    {
         version: "1.3.0",
         date: "2026-04-06",
         showPopup: true,
@@ -37,7 +57,7 @@ export const updateHistory: UpdateEntry[] = [
         features: [
             {ko: "단어 모드 추가 (beta)", en: "Word mode added (beta)"},
             {ko: "난이도 선택 (Random, Easy, Normal, Hard)", en: "Difficulty selection (Random, Easy, Normal, Hard)"},
-            {ko: "단어 수 선택 (15, 25, 50)", en: "Word count selection (10, 25, 50)"},
+            {ko: "단어 수 선택 (15, 25, 50)", en: "Word count selection (15, 25, 50)"},
             {ko: "문장/단어 모드 전환 기능 추가", en: "Sentence/Word mode switch"},
         ],
         improvements: [

@@ -1,8 +1,8 @@
 import {useEffect} from "react";
 import {WordContextProvider, useWord} from "./context/WordContext";
+import WordInfo from "./components/WordInfo/WordInfo";
 import WordTyping from "./components/WordTyping/WordTyping";
 import WordResult from "./components/WordResult/WordResult";
-import FontSizeSlider from "../Home/components/FontSizeSlider/FontSizeSlider";
 import UpdatePopup from "../Home/components/UpdatePopup/UpdatePopup";
 import {SettingContextProvider} from "@/Context/SettingContext.tsx";
 import {Storage_Last_Mode} from "@/const/config.const.ts";
@@ -13,10 +13,13 @@ const WordModeContent = () => {
     const {phase} = state;
 
     return (
-        <div className="word-mode-container">
-            {phase !== 'result' && <WordTyping/>}
-            {phase === 'result' && <WordResult/>}
-        </div>
+        <>
+            <WordInfo/>
+            <div className="word-mode-container">
+                {phase !== 'result' && <WordTyping/>}
+                {phase === 'result' && <WordResult/>}
+            </div>
+        </>
     );
 };
 
@@ -27,9 +30,6 @@ const WordMode = () => {
 
     return (
         <SettingContextProvider>
-            <div className="top-left-controls">
-                <FontSizeSlider/>
-            </div>
             <UpdatePopup/>
             <WordContextProvider>
                 <WordModeContent/>
