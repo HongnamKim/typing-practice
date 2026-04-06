@@ -43,7 +43,7 @@ const QUOTE_SOURCE = {
     MY: 'my' as const,
 };
 
-const generateSeed = () => Math.round((Math.random() * 2 - 1) * 100) / 100;
+const generateSeed = () => Math.round((Math.random() * 2 - 1) * 1000) / 1000;
 
 const shuffleArray = <T, >(array: T[]): T[] => {
     const shuffled = [...array];
