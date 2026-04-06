@@ -36,9 +36,26 @@ export function localize(item: LocalizedText): string {
 
 export const updateHistory: UpdateEntry[] = [
     {
+        version: "1.4.1",
+        date: "2026-04-07",
+        showPopup: true,
+        hidden: false,
+        features: [
+            {ko: "상단 네비게이션 바 디자인 변경", ja: "上部ナビゲーションバーのデザイン変更", en: "Redesigned top navigation bar"},
+            {ko: "업데이트 내역 페이지 추가", ja: "アップデート履歴ページ追加", en: "Added update history page"},
+            {ko: "타이핑 속도/정확도 표시 및 설정 영역 디자인 변경", ja: "タイピング速度・正確度表示と設定エリアのデザイン変更", en: "Redesigned typing stats and settings area"},
+            {ko: "단어 연습에 실시간 WPM, 난이도, 단어수, 폰트 크기 설정 추가", ja: "単語練習にリアルタイムWPM・難易度・単語数・フォントサイズ設定を追加", en: "Added real-time WPM, difficulty, word count, font size settings to word mode"},
+            {ko: "문장 소스 선택 탭 디자인 변경", ja: "文章ソース選択タブのデザイン変更", en: "Redesigned sentence source selector tabs"},
+        ],
+        improvements: [
+            {ko: "문장 셔플 알고리즘 개선 — 문장 노출 편향 해소", ja: "文章シャッフルアルゴリズム改善 — 文章の偏り解消", en: "Improved sentence shuffle algorithm — resolved exposure bias"},
+            {ko: "다크모드 배경 및 보라색(primary) 색상 개선", ja: "ダークモードの背景とプライマリカラーの改善", en: "Improved dark mode background and primary colors"},
+        ]
+    },
+    {
         version: "1.4.0",
         date: "2026-04-06",
-        showPopup: true,
+        showPopup: false,
         hidden: false,
         features: [
             {ko: "상단 네비게이션 바 디자인 변경", ja: "上部ナビゲーションバーのデザイン変更", en: "Redesigned top navigation bar"},
