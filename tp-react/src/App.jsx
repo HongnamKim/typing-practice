@@ -16,6 +16,7 @@ import MyQuotes from "./pages/MyQuotes/MyQuotes";
 import MyReports from "./pages/MyReports/MyReports";
 import Stats from "./pages/Stats/Stats";
 import Updates from "./pages/Updates/Updates";
+import OAuthCallback from "./pages/OAuthCallback/OAuthCallback";
 import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService/TermsOfService";
 import {Analytics} from "@vercel/analytics/react";
@@ -38,6 +39,7 @@ function App() {
                   <Route path="/quote/report" element={<MyReports />} />
                   <Route path="/stats" element={<Stats />} />
                   <Route path="/updates" element={<Updates />} />
+                  <Route path="/oauth/callback" element={<OAuthCallback />} />
                   <Route path="/privacy" element={<PrivacyPolicy />} />
                   <Route path="/terms" element={<TermsOfService />} />
                   <Route path="*" element={<Navigate to="/" replace />} />

@@ -36,9 +36,18 @@ export function localize(item: LocalizedText): string {
 
 export const updateHistory: UpdateEntry[] = [
     {
-        version: "1.4.1",
+        version: "1.4.2",
         date: "2026-04-07",
         showPopup: true,
+        hidden: false,
+        improvements: [
+            {ko: "일부 브라우저 환경에서 로그인 및 기록 조회가 동작하지 않던 문제 수정", ja: "一部のブラウザ環境でログインと記録照会が動作しなかった問題を修正", en: "Fixed login and stats not working in some browser environments"},
+        ]
+    },
+    {
+        version: "1.4.1",
+        date: "2026-04-07",
+        showPopup: false,
         hidden: false,
         features: [
             {ko: "상단 네비게이션 바 디자인 변경", ja: "上部ナビゲーションバーのデザイン変更", en: "Redesigned top navigation bar"},
