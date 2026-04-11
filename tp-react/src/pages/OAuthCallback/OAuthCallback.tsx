@@ -3,6 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import {useAuth} from '@/Context/AuthContext.tsx';
 import {useError} from '@/Context/ErrorContext';
 import {loginWithGoogle} from '@/utils/authApi.ts';
+import {Session_Login_Redirect} from '@/const/config.const.ts';
 import {t} from '@/utils/i18n.ts';
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 
@@ -46,7 +47,9 @@ const OAuthCallback = () => {
                     isNewMember: userData.newMember,
                 }, userData.accessToken, userData.refreshToken);
 
-                navigate('/', {replace: true});
+                const redirectPath = sessionStorage.getItem(Session_Login_Redirect) || '/';
+                sessionStorage.removeItem(Session_Login_Redirect);
+                navigate(redirectPath, {replace: true});
             } catch (err) {
                 console.error('로그인 실패:', err);
                 showError(t('loginFailed'));

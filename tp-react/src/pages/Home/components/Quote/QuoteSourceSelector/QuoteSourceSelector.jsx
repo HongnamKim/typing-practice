@@ -1,6 +1,7 @@
 import './QuoteSourceSelector.css';
 import {useQuote} from "@/Context/QuoteContext.tsx";
 import {useAuth} from "@/Context/AuthContext.tsx";
+import {Session_Post_Login_Quote_Source} from "@/const/config.const.ts";
 import {t} from "@/utils/i18n.ts";
 
 const QuoteSourceSelector = () => {
@@ -14,6 +15,7 @@ const QuoteSourceSelector = () => {
     const handleMyClick = () => {
         const success = changeQuoteSource('my');
         if (!success) {
+            sessionStorage.setItem(Session_Post_Login_Quote_Source, 'my');
             triggerLogin();
         }
     };
