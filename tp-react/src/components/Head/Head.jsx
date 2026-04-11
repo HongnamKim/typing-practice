@@ -9,7 +9,7 @@ import NicknamePopup from "../NicknamePopup/NicknamePopup";
 import {useAuth} from "../../Context/AuthContext";
 import {useGoogleLogin} from "@react-oauth/google";
 import {t} from "@/utils/i18n.ts";
-import {Storage_Last_Mode} from "@/const/config.const.ts";
+import {Storage_Last_Mode, Session_Login_Redirect} from "@/const/config.const.ts";
 import FeatureGuide from "../FeatureGuide/FeatureGuide";
 import "./Head.css";
 
@@ -86,6 +86,7 @@ const Head = () => {
                                 if (user) {
                                     navigate('/stats');
                                 } else {
+                                    sessionStorage.setItem(Session_Login_Redirect, '/stats');
                                     googleLogin();
                                 }
                             }}

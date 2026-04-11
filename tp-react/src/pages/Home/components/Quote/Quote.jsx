@@ -17,7 +17,7 @@ import {useTheme} from "@/Context/ThemeContext.tsx";
 import {useQuote} from "@/Context/QuoteContext.tsx";
 import {useSetting} from "@/Context/SettingContext.tsx";
 import {useAuth} from "@/Context/AuthContext.tsx";
-import {Session_Typing_Count, LOGIN_PROMPT_THRESHOLD, Session_Login_Prompt_Dismissed} from "@/const/config.const.ts";
+import {Session_Typing_Count, LOGIN_PROMPT_THRESHOLD, Session_Login_Prompt_Dismissed, Session_Login_Redirect} from "@/const/config.const.ts";
 import {t} from "@/utils/i18n.ts";
 
 const Quote = () => {
@@ -59,6 +59,7 @@ const Quote = () => {
         if (user) {
             navigate('/quote/upload');
         } else {
+            sessionStorage.setItem(Session_Login_Redirect, '/quote/upload');
             triggerLogin();
         }
     };

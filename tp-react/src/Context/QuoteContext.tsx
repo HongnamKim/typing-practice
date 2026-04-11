@@ -4,6 +4,7 @@ import {useAuth} from "./AuthContext";
 import {useError} from "./ErrorContext";
 import {getQuotes} from "../utils/quoteApi";
 import {defaultQuotes} from "../data/default-quotes.const.ts";
+import {Session_Post_Login_Quote_Source} from "../const/config.const";
 import {t} from "../utils/i18n";
 
 interface Quote {
@@ -165,6 +166,14 @@ export const QuoteContextProvider = ({children}: QuoteContextProviderProps) => {
     useEffect(() => {
         if (!user && quoteSource === QUOTE_SOURCE.MY) {
             setQuoteSource(QUOTE_SOURCE.ALL);
+        }
+        // 로그인 후 저장된 소스 전환 적용
+        if (user) {
+            const pendingSource = sessionStorage.getItem(Session_Post_Login_Quote_Source);
+            if (pendingSource === 'my') {
+                sessionStorage.removeItem(Session_Post_Login_Quote_Source);
+                setQuoteSource(QUOTE_SOURCE.MY);
+            }
         }
     }, [user, quoteSource]);
 

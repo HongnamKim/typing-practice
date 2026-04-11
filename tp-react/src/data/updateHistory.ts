@@ -36,9 +36,18 @@ export function localize(item: LocalizedText): string {
 
 export const updateHistory: UpdateEntry[] = [
     {
+        version: "1.4.3",
+        date: "2026-04-12",
+        showPopup: true,
+        hidden: false,
+        improvements: [
+            {ko: "일별 추이 그래프가 최근 7개/30개의 일별 통계를 표시하도록 변경", ja: "日別推移グラフが最新7件/30件の日別統計を表示するよう変更", en: "Daily trend chart now shows the latest 7/30 daily entries"},
+        ]
+    },
+    {
         version: "1.4.2",
         date: "2026-04-07",
-        showPopup: true,
+        showPopup: false,
         hidden: false,
         improvements: [
             {ko: "일부 브라우저 환경에서 로그인 및 기록 조회가 동작하지 않던 문제 수정", ja: "一部のブラウザ環境でログインと記録照会が動作しなかった問題を修正", en: "Fixed login and stats not working in some browser environments"},
