@@ -1,28 +1,31 @@
-import { useTheme } from "../../Context/ThemeContext";
-import { Link } from "react-router-dom";
+import {useTheme} from "../../Context/ThemeContext";
+import {Link} from "react-router-dom";
 import "./Contact.css";
 
 const Contact = () => {
-  const { isDark } = useTheme();
+    const {isDark} = useTheme();
 
-  return (
-    <div className={`contact-wrapper ${isDark && "dark"}`}>
-      <a
-        href={"https://open.kakao.com/o/sMHDrAog"}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`contact ${isDark && "dark"}`}
-      >
-        Contact
-      </a>
-      <Link to="/privacy" className={`contact ${isDark && "dark"}`}>
-        Privacy Policy
-      </Link>
-      <Link to="/terms" className={`contact ${isDark && "dark"}`}>
-        Terms
-      </Link>
-    </div>
-  );
+    return (
+        <div className={`contact-wrapper ${isDark && "dark"}`}>
+            <div className="contact-links">
+                <a
+                    href={"https://open.kakao.com/o/sMHDrAog"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`contact ${isDark && "dark"}`}
+                >
+                    Contact
+                </a>
+                <Link to="/privacy" className={`contact ${isDark && "dark"}`}>
+                    Privacy Policy
+                </Link>
+                <Link to="/terms" className={`contact ${isDark && "dark"}`}>
+                    Terms
+                </Link>
+            </div>
+            <span className="contact-copyright">&copy; 2025 typing-practice.com</span>
+        </div>
+    );
 };
 
 export default Contact;

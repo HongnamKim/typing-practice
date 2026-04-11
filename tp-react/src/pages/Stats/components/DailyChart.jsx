@@ -12,8 +12,8 @@ const formatDateLabel = (dateStr) => {
 const formatPopupTitle = t('formatPopupTitle');
 const formatTime = t('formatTime');
 
-const SVG_W = 600;
-const SVG_H = 180;
+const SVG_W = 1200;
+const SVG_H = 200;
 const PAD = {left: 48, right: 16, top: 24, bottom: 28};
 const CHART_W = SVG_W - PAD.left - PAD.right;
 const CHART_H = SVG_H - PAD.top - PAD.bottom;
@@ -90,7 +90,7 @@ function DailyChart({dailyStats, dailyRange, onRangeChange}) {
                 <div className="daily-chart-empty">{t('noData')}</div>
             ) : (
                 <div className="daily-chart-area" ref={chartRef}>
-                    <svg ref={svgRef} width="100%" height={SVG_H} viewBox={'0 0 ' + SVG_W + ' ' + SVG_H}>
+                    <svg ref={svgRef} width="100%" viewBox={'0 0 ' + SVG_W + ' ' + SVG_H}>
                         {gridLines.map((gl, i) => (
                             <g key={i}>
                                 <line x1={PAD.left} y1={gl.y} x2={SVG_W - PAD.right} y2={gl.y} className="daily-chart-grid"/>

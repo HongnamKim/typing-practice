@@ -28,6 +28,8 @@ export const Session_Typing_Count = "Typing-Practice-sessionTypingCount" as cons
 export const LOGIN_PROMPT_THRESHOLD = 3 as const;
 export const CONSENT_BANNER_THRESHOLD = 3 as const;
 export const Session_Login_Prompt_Dismissed = "Typing-Practice-loginPromptDismissed" as const;
+export const Session_Login_Redirect = "Typing-Practice-loginRedirect" as const;
+export const Session_Post_Login_Quote_Source = "Typing-Practice-postLoginQuoteSource" as const;
 
 // Typing Record 관련 상수
 export const RESET_COUNT_THRESHOLD_RATIO = 0.3 as const;
