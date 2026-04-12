@@ -295,6 +295,7 @@ const translations = {
     // 업데이트 팝업
     updateNotice: l('업데이트 안내', 'アップデート情報', 'Update'),
     updateHistory: l('업데이트', 'アップデート', 'Updates'),
+    updateHistoryTitle: l('업데이트 기록', 'アップデート履歴', 'Update History'),
     updateClose: l('확인', '確認', 'OK'),
     updateViewHistory: l('지난 업데이트 보기', '過去のアップデートを見る', 'View past updates'),
     updateDontShow: l('다시 보지 않기', '次から表示しない', 'Don\'t show again'),
