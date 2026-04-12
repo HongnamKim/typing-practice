@@ -1,19 +1,3 @@
-/* 공지 아이콘 */
-.notice-icon {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    color: var(--color-text-placeholder);
-    cursor: pointer;
-    font-size: 1.25rem;
-    transition: color 0.2s;
-    z-index: 100;
-}
-
-.notice-icon:hover {
-    color: var(--color-text-muted);
-}
-
 /* 팝업 오버레이 */
 .update-popup-overlay {
     position: fixed;
@@ -21,7 +5,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.4);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -34,75 +18,65 @@
     color: var(--color-text);
     border-radius: 1rem;
     padding: 2rem;
-    max-width: 480px;
+    max-width: 420px;
     width: 90%;
     max-height: 80vh;
     overflow-y: auto;
+    border: 1px solid var(--color-border);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
-.update-popup-header {
+/* 버튼 영역 */
+.update-popup-actions {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    margin-bottom: 1.5rem;
-}
-
-.update-popup-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--color-primary);
+    gap: 0.75rem;
 }
 
 .update-popup-close {
     width: 100%;
-    padding: 0.75rem;
-    margin-top: 1rem;
+    padding: 0.625rem;
     border: none;
     border-radius: 0.5rem;
     background-color: var(--color-primary);
     color: white;
-    font-size: 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: opacity 0.15s;
 }
 
 .update-popup-close:hover {
-    background-color: var(--color-primary-dark);
+    opacity: 0.85;
 }
 
-.update-popup-dont-show-btn {
-    width: 100%;
-    padding: 0.5rem;
-    margin-top: 0.5rem;
-    border: none;
-    border-radius: 0.5rem;
-    background-color: transparent;
+.update-popup-secondary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.update-popup-separator {
     color: var(--color-text-placeholder);
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s;
+    font-size: 0.75rem;
 }
 
+.update-popup-history-btn,
+.update-popup-dont-show-btn {
+    border: none;
+    background: transparent;
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.15s;
+}
+
+.update-popup-history-btn:hover,
 .update-popup-dont-show-btn:hover {
-    background-color: var(--color-bg-secondary);
-    color: var(--color-text-muted);
-}
-
-.update-popup-history-btn {
-    width: 100%;
-    padding: 0.5rem;
-    margin-top: 0.5rem;
-    border: 1px solid var(--color-border);
-    border-radius: 0.5rem;
-    background-color: transparent;
-    color: var(--color-text-muted);
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.update-popup-history-btn:hover {
-    background-color: var(--color-bg-secondary);
     color: var(--color-text);
 }

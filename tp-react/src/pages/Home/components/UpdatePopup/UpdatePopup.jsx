@@ -40,21 +40,23 @@ const UpdatePopup = () => {
     return (
         <div className="update-popup-overlay" onClick={handleClose}>
             <div className="update-popup" onClick={e => e.stopPropagation()}>
-                <div className="update-popup-header">
-                    <span className="update-popup-title">{t('updateNotice')}</span>
-                </div>
                 <div className="update-content">
                     <LatestUpdate/>
                 </div>
-                <button className="update-popup-close" onClick={handleClose}>
-                    {t('updateClose')}
-                </button>
-                <button className="update-popup-history-btn" onClick={handleViewHistory}>
-                    {t('updateViewHistory')}
-                </button>
-                <button className="update-popup-dont-show-btn" onClick={handleDontShowAgain}>
-                    {t('updateDontShow')}
-                </button>
+                <div className="update-popup-actions">
+                    <button className="update-popup-close" onClick={handleClose}>
+                        {t('updateClose')}
+                    </button>
+                    <div className="update-popup-secondary">
+                        <button className="update-popup-history-btn" onClick={handleViewHistory}>
+                            {t('updateViewHistory')}
+                        </button>
+                        <span className="update-popup-separator">·</span>
+                        <button className="update-popup-dont-show-btn" onClick={handleDontShowAgain}>
+                            {t('updateDontShow')}
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     );
