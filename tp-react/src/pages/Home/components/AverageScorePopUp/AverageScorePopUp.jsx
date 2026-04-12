@@ -6,9 +6,11 @@ import {useTheme} from "@/Context/ThemeContext.tsx";
 import {useAuth} from "@/Context/AuthContext.tsx";
 import {getTypingStats} from "@/utils/statsApi.ts";
 import {t} from "@/utils/i18n.ts";
+import SessionChart from "./SessionChart";
+import KeyboardHeatmap from "@/pages/Stats/components/KeyboardHeatmap";
 
 const AverageScorePopUp = () => {
-    const {showPopup, setShowPopup, popupData} = useScore();
+    const {showPopup, setShowPopup, popupData, popupCpmList, popupAccList, popupTypos, setPopupTypos} = useScore();
     const {isDark} = useTheme();
     const {user, triggerLogin} = useAuth();
     const navigate = useNavigate();
@@ -37,15 +39,18 @@ const AverageScorePopUp = () => {
 
     const handleBackgroundClick = () => {
         setShowPopup(false);
+        setPopupTypos([]);
     };
 
     const handleLoginClick = () => {
         setShowPopup(false);
+        setPopupTypos([]);
         triggerLogin();
     };
 
     const handleViewStats = () => {
         setShowPopup(false);
+        setPopupTypos([]);
         navigate('/stats');
     };
 
@@ -89,6 +94,20 @@ const AverageScorePopUp = () => {
                         </div>
                     )}
                 </div>
+
+                {/* 세션 차트 + 히트맵 */}
+                {popupCpmList.length > 0 && (
+                    <div className="popup-session-data">
+                        <div>
+                            <div className="popup-session-section-title">{t('sessionTrend')}</div>
+                            <SessionChart cpmList={popupCpmList} accList={popupAccList}/>
+                        </div>
+                        <div>
+                            <div className="popup-session-section-title">{t('keyboardHeatmap')}</div>
+                            <KeyboardHeatmap externalTypos={popupTypos} compact/>
+                        </div>
+                    </div>
+                )}
 
                 <div className="popup-bottom">
                     {user && (

@@ -28,7 +28,7 @@ interface MemberInfo {
 export const loginWithGoogle = async (code: string): Promise<ApiResponse<LoginResponse>> => {
     const response = await apiClient.post<ApiResponse<LoginResponse>>('/auth/google', {
         code,
-        redirectUri: import.meta.env.VITE_REDIRECT_URI
+        redirectUri: import.meta.env.VITE_GOOGLE_REDIRECT_URI
     });
     return response.data;
 };

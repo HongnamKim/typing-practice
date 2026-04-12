@@ -1,160 +1,103 @@
-import {useState, useRef, useCallback} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
+import {Area, AreaChart, ResponsiveContainer, XAxis, YAxis} from 'recharts';
 import {t} from '@/utils/i18n.ts';
+import {formatDateLabel, computeAxis} from './dailyChartUtils';
+import DailyChartDot from './DailyChartDot';
+import DailyChartPopup from './DailyChartPopup';
 import './DailyChart.css';
-
-const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-
-const formatDateLabel = (dateStr) => {
-    const parts = dateStr.split('-');
-    return MONTH_NAMES[parseInt(parts[1]) - 1] + ' ' + parseInt(parts[2]);
-};
-
-const formatPopupTitle = t('formatPopupTitle');
-const formatTime = t('formatTime');
-
-const SVG_W = 600;
-const SVG_H = 180;
-const PAD = {left: 48, right: 16, top: 24, bottom: 28};
-const CHART_W = SVG_W - PAD.left - PAD.right;
-const CHART_H = SVG_H - PAD.top - PAD.bottom;
-const GRID_COUNT = 4;
 
 function DailyChart({dailyStats, dailyRange, onRangeChange}) {
     const [metric, setMetric] = useState('cpm');
     const [hoverIndex, setHoverIndex] = useState(null);
-    const [popupData, setPopupData] = useState(null);
+    const [lockedIndex, setLockedIndex] = useState(null);
     const [popupPos, setPopupPos] = useState({x: 0, y: 0});
-    const chartRef = useRef(null);
-    const svgRef = useRef(null);
+    const sectionRef = useRef(null);
+    const activeIndex = lockedIndex ?? hoverIndex;
 
-    const data = dailyStats || [];
-    const values = data.map(d => metric === 'cpm' ? d.avgCpm : Math.round(d.avgAcc * 100));
-    const maxVal = values.length > 0 ? Math.max(...values) : 0;
-    const minVal = values.length > 0 ? Math.min(...values) : 0;
-    const padding = (maxVal - minVal) * 0.1 || 5;
-    const yMax = metric === 'acc' ? Math.min(maxVal + padding, 100) : maxVal + padding;
-    const yMin = minVal - padding;
-    const yRange = yMax - yMin || 1;
+    const data = (dailyStats || []).map((d, i, arr) => ({
+        ...d,
+        displayDate: formatDateLabel(d.date, i > 0 ? arr[i - 1].date : null),
+        value: metric === 'cpm' ? Math.round(d.avgCpm) : Math.round(d.avgAcc * 100),
+    }));
 
-    const points = data.map((d, i) => {
-        const x = data.length > 1 ? PAD.left + (i / (data.length - 1)) * CHART_W : PAD.left + CHART_W / 2;
-        const y = PAD.top + CHART_H - ((values[i] - yMin) / yRange) * CHART_H;
-        return {x, y};
-    });
+    const {domain, ticks} = data.length > 0 ? computeAxis(data, metric) : {domain: [0, 100], ticks: [0, 25, 50, 75, 100]};
 
-    const linePoints = points.map(p => p.x + ',' + p.y).join(' ');
-    const areaPoints = points.length > 0
-        ? PAD.left + ',' + (PAD.top + CHART_H) + ' ' + linePoints + ' ' + points[points.length - 1].x + ',' + (PAD.top + CHART_H)
-        : '';
-
-    const gridLines = [];
-    for (let g = 0; g <= GRID_COUNT; g++) {
-        const gy = PAD.top + (g / GRID_COUNT) * CHART_H;
-        const gVal = Math.round(yMax - (g / GRID_COUNT) * yRange);
-        gridLines.push({y: gy, label: metric === 'cpm' ? gVal : gVal + '%'});
-    }
-
-    const labelInterval = data.length > 14 ? Math.ceil(data.length / 6) : 1;
-
-    const handleMouseEnter = useCallback((e, i) => {
-        setHoverIndex(i);
-        setPopupData(data[i]);
-        if (chartRef.current) {
+    const updatePopupPos = useCallback((e) => {
+        if (sectionRef.current) {
             const circle = e.target.getBoundingClientRect();
-            const area = chartRef.current.getBoundingClientRect();
-            setPopupPos({
-                x: circle.left - area.left + circle.width / 2 + 8,
-                y: circle.top - area.top + circle.height / 2 + 20,
-            });
+            const section = sectionRef.current.getBoundingClientRect();
+            const popupWidth = 280;
+            let x = circle.left - section.left + circle.width / 2 + 8;
+            const y = circle.top - section.top + circle.height / 2 + 20;
+            const overflow = x + popupWidth - section.width;
+            if (overflow > 0) x -= overflow + 16;
+            setPopupPos({x, y});
         }
-    }, [data]);
-
-    const handleMouseLeave = useCallback(() => {
-        setHoverIndex(null);
-        setPopupData(null);
     }, []);
 
+    const handleDotEnter = useCallback((e, index) => {
+        setHoverIndex(index);
+        if (lockedIndex === null) updatePopupPos(e);
+    }, [lockedIndex, updatePopupPos]);
+
+    const handleDotLeave = useCallback(() => {
+        setHoverIndex(null);
+    }, []);
+
+    const handleDotClick = useCallback((e, index) => {
+        if (lockedIndex === index) {
+            setLockedIndex(null);
+        } else {
+            setLockedIndex(index);
+            updatePopupPos(e);
+        }
+    }, [lockedIndex, updatePopupPos]);
+
+    useEffect(() => {
+        if (lockedIndex === null) return;
+        const handleDocClick = () => setLockedIndex(null);
+        document.addEventListener('click', handleDocClick);
+        return () => document.removeEventListener('click', handleDocClick);
+    }, [lockedIndex]);
+
     return (
-        <div className="daily-chart-section">
+        <div className="daily-chart-section" ref={sectionRef}>
             <div className="daily-chart-header">
                 <h3 className="daily-chart-title">{t('dailyTrend')}</h3>
                 <div className="daily-chart-tabs">
-                    <button className={'daily-chart-tab' + (metric === 'cpm' ? ' active' : '')} onClick={() => setMetric('cpm')}>CPM</button>
-                    <button className={'daily-chart-tab' + (metric === 'acc' ? ' active' : '')} onClick={() => setMetric('acc')}>{t('accuracyTab')}</button>
-                    <span className="daily-chart-tab-divider"/>
-                    <button className={'daily-chart-tab' + (dailyRange === 7 ? ' active' : '')} onClick={() => onRangeChange(7)}>{t('days')(7)}</button>
-                    <button className={'daily-chart-tab' + (dailyRange === 30 ? ' active' : '')} onClick={() => onRangeChange(30)}>{t('days')(30)}</button>
+                    <div className="daily-chart-toggle-group">
+                        <button className={'daily-chart-toggle' + (metric === 'cpm' ? ' active' : '')} onClick={() => setMetric('cpm')}>CPM</button>
+                        <button className={'daily-chart-toggle' + (metric === 'acc' ? ' active' : '')} onClick={() => setMetric('acc')}>{t('accuracyTab')}</button>
+                    </div>
+                    <div className="daily-chart-toggle-group">
+                        <button className={'daily-chart-toggle' + (dailyRange === 7 ? ' active' : '')} onClick={() => onRangeChange(7)}>{t('days')(7)}</button>
+                        <button className={'daily-chart-toggle' + (dailyRange === 30 ? ' active' : '')} onClick={() => onRangeChange(30)}>{t('days')(30)}</button>
+                    </div>
                 </div>
             </div>
             {data.length === 0 ? (
                 <div className="daily-chart-empty">{t('noData')}</div>
             ) : (
-                <div className="daily-chart-area" ref={chartRef}>
-                    <svg ref={svgRef} width="100%" height={SVG_H} viewBox={'0 0 ' + SVG_W + ' ' + SVG_H}>
-                        {gridLines.map((gl, i) => (
-                            <g key={i}>
-                                <line x1={PAD.left} y1={gl.y} x2={SVG_W - PAD.right} y2={gl.y} className="daily-chart-grid"/>
-                                <text x={PAD.left - 8} y={gl.y + 4} className="daily-chart-grid-label">{gl.label}</text>
-                            </g>
-                        ))}
-                        {areaPoints && data.length > 1 && <polygon points={areaPoints} className="daily-chart-fill"/>}
-                        {linePoints && data.length > 1 && <polyline points={linePoints} className="daily-chart-line"/>}
-                        {points.map((p, i) => {
-                            const showLabel = (i % labelInterval === 0) || (i === data.length - 1);
-                            let textAnchor = 'middle';
-                            if (showLabel && i === 0) textAnchor = 'start';
-                            else if (showLabel && i === data.length - 1) textAnchor = 'end';
-                            const displayVal = metric === 'cpm' ? Math.round(values[i]) : values[i] + '%';
-                            return (
-                                <g key={i}>
-                                    <circle cx={p.x} cy={p.y} r={hoverIndex === i ? 6 : 4} className="daily-chart-dot"/>
-                                    <g className="daily-chart-tooltip" style={{opacity: hoverIndex === i ? 1 : 0}}>
-                                        <rect x={p.x - 28} y={p.y - 32} width={56} height={24} rx={4} className="daily-chart-tooltip-bg"/>
-                                        <text x={p.x} y={p.y - 16} className="daily-chart-tooltip-text">{displayVal}</text>
-                                    </g>
-                                    <circle cx={p.x} cy={p.y} r={16} style={{fill: 'transparent', cursor: 'pointer'}}
-                                        onMouseEnter={(e) => handleMouseEnter(e, i)} onMouseLeave={handleMouseLeave}/>
-                                    {showLabel && (
-                                        <text x={p.x} y={PAD.top + CHART_H + 16} className="daily-chart-date-label" textAnchor={textAnchor}>
-                                            {formatDateLabel(data[i].date)}
-                                        </text>
-                                    )}
-                                </g>
-                            );
-                        })}
-                    </svg>
-                    {popupData && (
-                        <div className="daily-chart-popup" style={{left: popupPos.x, top: popupPos.y}}>
-                            <div className="daily-chart-popup-title">{formatPopupTitle(popupData.date)}</div>
-                            <div className="daily-chart-popup-grid">
-                                <div className="daily-chart-popup-item">
-                                    <span className="daily-chart-popup-label">{t('attempts')}</span>
-                                    <span className="daily-chart-popup-value">{popupData.attempts + t('countUnit')}</span>
-                                </div>
-                                <div className="daily-chart-popup-item">
-                                    <span className="daily-chart-popup-label">{t('practiceTime')}</span>
-                                    <span className="daily-chart-popup-value">{formatTime(popupData.practiceTimeMin)}</span>
-                                </div>
-                                <div className="daily-chart-popup-item">
-                                    <span className="daily-chart-popup-label">{t('avgSpeed')}</span>
-                                    <span className="daily-chart-popup-value">{Math.round(popupData.avgCpm) + ' CPM'}</span>
-                                </div>
-                                <div className="daily-chart-popup-item">
-                                    <span className="daily-chart-popup-label">{t('bestSpeed')}</span>
-                                    <span className="daily-chart-popup-value">{popupData.bestCpm + ' CPM'}</span>
-                                </div>
-                                <div className="daily-chart-popup-item">
-                                    <span className="daily-chart-popup-label">{t('avgAccuracy')}</span>
-                                    <span className="daily-chart-popup-value">{Math.round(popupData.avgAcc * 100) + '%'}</span>
-                                </div>
-                                <div className="daily-chart-popup-item">
-                                    <span className="daily-chart-popup-label">{t('avgResetCount')}</span>
-                                    <span className="daily-chart-popup-value">{(popupData.attempts > 0 ? (popupData.resetCount / popupData.attempts).toFixed(2) : '0') + t('countUnit')}</span>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
+                <>
+                <ResponsiveContainer width="100%" height={240}>
+                    <AreaChart data={data} margin={{top: 16, right: 16, bottom: 8, left: 0}}>
+                        <defs>
+                            <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="var(--color-primary)" stopOpacity={0.1}/>
+                                <stop offset="100%" stopColor="var(--color-primary)" stopOpacity={0}/>
+                            </linearGradient>
+                        </defs>
+                        <XAxis dataKey="displayDate" tick={{fontSize: 10, fontWeight: 700, fill: 'var(--color-text-placeholder)'}} axisLine={false} tickLine={false} dy={8}/>
+                        <YAxis domain={domain} ticks={ticks} tick={{fontSize: 10, fontWeight: 700, fill: 'var(--color-text-placeholder)'}} axisLine={false} tickLine={false} tickFormatter={v => metric === 'acc' ? v + '%' : v} width={44} allowDecimals={false}/>
+                        <Area type="monotone" dataKey="value" stroke="var(--color-primary)" strokeWidth={1.5} fill="url(#colorValue)"
+                              dot={(props) => <DailyChartDot {...props} activeIndex={activeIndex} metric={metric} onDotEnter={handleDotEnter} onDotLeave={handleDotLeave} onDotClick={handleDotClick}/>}
+                              activeDot={false}/>
+                    </AreaChart>
+                </ResponsiveContainer>
+                {activeIndex !== null && data[activeIndex] && (
+                    <DailyChartPopup data={data[activeIndex]} metric={metric} style={{position: 'absolute', left: popupPos.x, top: popupPos.y}}/>
+                )}
+                </>
             )}
         </div>
     );

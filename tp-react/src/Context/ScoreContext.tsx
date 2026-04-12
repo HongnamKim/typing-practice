@@ -1,4 +1,5 @@
 import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useState} from "react";
+import {TypoEntry} from "@/utils/typingRecordApi";
 
 type InputCheckState = ('none' | 'correct' | 'incorrect')[];
 
@@ -42,6 +43,12 @@ interface ScoreContextType {
     setShowPopup: Dispatch<SetStateAction<boolean>>;
     popupData: PopupData;
     setPopupData: Dispatch<SetStateAction<PopupData>>;
+    popupCpmList: number[];
+    setPopupCpmList: Dispatch<SetStateAction<number[]>>;
+    popupAccList: number[];
+    setPopupAccList: Dispatch<SetStateAction<number[]>>;
+    popupTypos: TypoEntry[];
+    setPopupTypos: Dispatch<SetStateAction<TypoEntry[]>>;
     cpmList: number[];
     setCpmList: Dispatch<SetStateAction<number[]>>;
     accList: number[];
@@ -89,6 +96,9 @@ export const ScoreContextProvider = ({children}: ScoreContextProviderProps) => {
 
     const [showPopup, setShowPopup] = useState<boolean>(false);
     const [popupData, setPopupData] = useState<PopupData>({avgCpm: 0, maxCpm: 0, acc: 0});
+    const [popupCpmList, setPopupCpmList] = useState<number[]>([]);
+    const [popupAccList, setPopupAccList] = useState<number[]>([]);
+    const [popupTypos, setPopupTypos] = useState<TypoEntry[]>([]);
 
     const [cpmList, setCpmList] = useState<number[]>([]);
     const [accList, setAccList] = useState<number[]>([]);
@@ -107,6 +117,9 @@ export const ScoreContextProvider = ({children}: ScoreContextProviderProps) => {
                 incorrectCount, setIncorrectCount,
                 showPopup, setShowPopup,
                 popupData, setPopupData,
+                popupCpmList, setPopupCpmList,
+                popupAccList, setPopupAccList,
+                popupTypos, setPopupTypos,
                 cpmList, setCpmList,
                 accList, setAccList,
                 resetCount, setResetCount,

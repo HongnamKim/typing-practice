@@ -8,6 +8,7 @@ import {t} from '@/utils/i18n.ts';
 import StatsSummary from './components/StatsSummary';
 import DailyChart from './components/DailyChart';
 import TypoList from './components/TypoList';
+import KeyboardHeatmap from './components/KeyboardHeatmap';
 import './Stats.css';
 
 function Stats() {
@@ -108,16 +109,13 @@ function Stats() {
                     {/* 일별 추이 */}
                     <DailyChart dailyStats={dailyStats} dailyRange={dailyRange} onRangeChange={setDailyRange}/>
 
-                    {/* 오타 통계 */}
-                    <TypoList typoStats={typoStats}/>
+                    {/* 오타 통계 + 키보드 히트맵 */}
+                    <div className="stats-bottom-grid">
+                        <TypoList typoStats={typoStats}/>
+                        <KeyboardHeatmap/>
+                    </div>
                 </>
             )}
-
-            <div className="stats-footer">
-                <button className="stats-back-btn" onClick={() => navigate('/')}>
-                    {t('back')}
-                </button>
-            </div>
         </div>
     );
 }

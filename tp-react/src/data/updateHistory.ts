@@ -36,9 +36,43 @@ export function localize(item: LocalizedText): string {
 
 export const updateHistory: UpdateEntry[] = [
     {
+        version: "1.5.0",
+        date: "2026-04-12",
+        showPopup: true,
+        hidden: false,
+        features: [
+            {ko: "기록 페이지 디자인 전면 개편", ja: "記録ページのデザインを全面改修", en: "Complete redesign of the Records page"},
+            {ko: "키보드 에러 히트맵 추가", ja: "キーボードエラーヒートマップ追加", en: "Added keyboard error heatmap"},
+            {ko: "세션 결과 팝업에 CPM/ACC 추이 그래프 및 히트맵 추가", ja: "セッション結果ポップアップにCPM/ACC推移グラフとヒートマップを追加", en: "Added CPM/ACC trend graph and heatmap to session result popup"},
+            {ko: "업데이트 기록 페이지 타임라인 디자인 적용", ja: "アップデート履歴ページにタイムラインデザインを適用", en: "Applied timeline design to the Update History page"},
+        ],
+        improvements: [
+            {ko: "일별 추이 차트 곡선 그래프로 개선", ja: "日別推移チャートを曲線グラフに改善", en: "Improved daily trend chart with curved graph"},
+            {ko: "Pretendard 웹폰트 적용", ja: "Pretendardウェブフォント適用", en: "Applied Pretendard web font"},
+        ]
+    },
+    {
+        version: "1.4.3",
+        date: "2026-04-12",
+        showPopup: false,
+        hidden: false,
+        improvements: [
+            {ko: "일별 추이 그래프가 최근 7개/30개의 일별 통계를 표시하도록 변경", ja: "日別推移グラフが最新7件/30件の日別統計を表示するよう変更", en: "Daily trend chart now shows the latest 7/30 daily entries"},
+        ]
+    },
+    {
+        version: "1.4.2",
+        date: "2026-04-07",
+        showPopup: false,
+        hidden: false,
+        improvements: [
+            {ko: "일부 브라우저 환경에서 로그인 및 기록 조회가 동작하지 않던 문제 수정", ja: "一部のブラウザ環境でログインと記録照会が動作しなかった問題を修正", en: "Fixed login and stats not working in some browser environments"},
+        ]
+    },
+    {
         version: "1.4.1",
         date: "2026-04-07",
-        showPopup: true,
+        showPopup: false,
         hidden: false,
         features: [
             {ko: "상단 네비게이션 바 디자인 변경", ja: "上部ナビゲーションバーのデザイン変更", en: "Redesigned top navigation bar"},

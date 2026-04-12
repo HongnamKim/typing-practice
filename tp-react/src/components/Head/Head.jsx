@@ -7,11 +7,9 @@ import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import NicknamePopup from "../NicknamePopup/NicknamePopup";
 import {useAuth} from "../../Context/AuthContext";
-import {useError} from "../../Context/ErrorContext";
 import {useGoogleLogin} from "@react-oauth/google";
-import {loginWithGoogle} from "@/utils/authApi.ts";
 import {t} from "@/utils/i18n.ts";
-import {Storage_Last_Mode} from "@/const/config.const.ts";
+import {Storage_Last_Mode, Session_Login_Redirect} from "@/const/config.const.ts";
 import FeatureGuide from "../FeatureGuide/FeatureGuide";
 import "./Head.css";
 
@@ -25,8 +23,7 @@ const isUuidFormat = (str) => {
 const Head = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const {showError} = useError();
-    const {user, accessToken, refreshToken, isLoading, setIsLoading, login, loginTrigger} = useAuth();
+    const {user, accessToken, refreshToken, isLoading, login, loginTrigger} = useAuth();
     const [showNicknamePopup, setShowNicknamePopup] = useState(false);
     const prevLoginTriggerRef = useRef(loginTrigger);
 
@@ -40,36 +37,8 @@ const Head = () => {
 
     const googleLogin = useGoogleLogin({
         flow: 'auth-code',
-        onSuccess: async (codeResponse) => {
-            setIsLoading(true);
-            try {
-                const response = await loginWithGoogle(codeResponse.code);
-
-                const userData = response.data;
-
-                login({
-                    nickname: userData.nickname,
-                    email: userData.email,
-                    role: userData.role,
-                    createdAt: userData.createdAt,
-                    isNewMember: userData.newMember,
-                }, userData.accessToken, userData.refreshToken);
-
-                if (isUuidFormat(userData.nickname)) {
-                    setShowNicknamePopup(true);
-                }
-
-                setIsLoading(false);
-            } catch (error) {
-                console.error('로그인 실패:', error);
-                showError(t('loginFailed'));
-                setIsLoading(false);
-            }
-        },
-        onError: (error) => {
-            console.error('구글 로그인 실패:', error);
-            showError(t('googleLoginFailed'));
-        },
+        ux_mode: 'redirect',
+        redirect_uri: import.meta.env.VITE_GOOGLE_REDIRECT_URI,
     });
 
     // 다른 컴포넌트에서 로그인 트리거 시 googleLogin 호출
@@ -117,6 +86,7 @@ const Head = () => {
                                 if (user) {
                                     navigate('/stats');
                                 } else {
+                                    sessionStorage.setItem(Session_Login_Redirect, '/stats');
                                     googleLogin();
                                 }
                             }}
