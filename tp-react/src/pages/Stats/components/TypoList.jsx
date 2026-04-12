@@ -25,6 +25,7 @@ function TypoList({typoStats}) {
         );
     }
 
+    const displayItems = typoStats.slice(0, 4);
     const maxCount = typoStats[0].count;
 
     const handleTypoClick = async (expected) => {
@@ -53,17 +54,19 @@ function TypoList({typoStats}) {
                     <h3 className="typo-section-title">{t('typoTop10')}</h3>
                 </div>
                 <div className="typo-list">
-                    {typoStats.map((item, i) => (
+                    {displayItems.map((item, i) => (
                         <div
                             key={i}
                             className={'typo-item' + (selectedTypo === item.expected ? ' selected' : '')}
                             onClick={() => handleTypoClick(item.expected)}
                         >
-                            <span className="typo-char">{displayChar(item.expected)}</span>
+                            <div className="typo-item-header">
+                                <span className="typo-char">{displayChar(item.expected)}</span>
+                                <span className="typo-count">{item.count} {t('errors')}</span>
+                            </div>
                             <div className="typo-bar-container">
                                 <div className="typo-bar-fill" style={{width: (item.count / maxCount * 100) + '%'}}/>
                             </div>
-                            <span className="typo-count">{item.count}</span>
                         </div>
                     ))}
                 </div>
