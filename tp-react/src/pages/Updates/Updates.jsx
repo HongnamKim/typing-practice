@@ -1,5 +1,6 @@
 import {formatUpdateDate, localize, updateHistory} from '@/data/updateHistory.ts';
 import {t} from '@/utils/i18n.ts';
+import {MdAutoAwesome, MdTune, MdCampaign} from 'react-icons/md';
 import './Updates.css';
 
 function Updates() {
@@ -28,7 +29,10 @@ function Updates() {
                                 <div className="timeline-sections">
                                     {update.notices && update.notices.length > 0 && (
                                         <div className="timeline-section timeline-section-full">
-                                            <h3 className="timeline-section-title">{t('updateNotices')}</h3>
+                                            <div className="timeline-section-header">
+                                                <MdCampaign className="timeline-section-icon primary"/>
+                                                <h3 className="timeline-section-title">{t('updateNotices')}</h3>
+                                            </div>
                                             <ul className="timeline-list">
                                                 {update.notices.map((item, i) => (
                                                     <li key={i}>
@@ -41,7 +45,10 @@ function Updates() {
                                     )}
                                     {update.features && update.features.length > 0 && (
                                         <div className="timeline-section">
-                                            <h3 className="timeline-section-title">{t('updateFeatures')}</h3>
+                                            <div className="timeline-section-header">
+                                                <MdAutoAwesome className="timeline-section-icon primary"/>
+                                                <h3 className="timeline-section-title">{t('updateFeatures')}</h3>
+                                            </div>
                                             <ul className="timeline-list">
                                                 {update.features.map((item, i) => (
                                                     <li key={i}>
@@ -54,7 +61,10 @@ function Updates() {
                                     )}
                                     {update.improvements && update.improvements.length > 0 && (
                                         <div className="timeline-section">
-                                            <h3 className="timeline-section-title">{t('updateImprovements')}</h3>
+                                            <div className="timeline-section-header">
+                                                <MdTune className="timeline-section-icon"/>
+                                                <h3 className="timeline-section-title">{t('updateImprovements')}</h3>
+                                            </div>
                                             <ul className="timeline-list">
                                                 {update.improvements.map((item, i) => (
                                                     <li key={i}>

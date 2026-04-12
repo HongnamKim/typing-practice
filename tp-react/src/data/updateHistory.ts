@@ -43,6 +43,7 @@ export const updateHistory: UpdateEntry[] = [
         features: [
             {ko: "기록 페이지 디자인 전면 개편", ja: "記録ページのデザインを全面改修", en: "Complete redesign of the Records page"},
             {ko: "키보드 에러 히트맵 추가", ja: "キーボードエラーヒートマップ追加", en: "Added keyboard error heatmap"},
+            {ko: "세션 결과 팝업에 CPM/ACC 추이 그래프 및 히트맵 추가", ja: "セッション結果ポップアップにCPM/ACC推移グラフとヒートマップを追加", en: "Added CPM/ACC trend graph and heatmap to session result popup"},
             {ko: "업데이트 기록 페이지 타임라인 디자인 적용", ja: "アップデート履歴ページにタイムラインデザインを適用", en: "Applied timeline design to the Update History page"},
         ],
         improvements: [

@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {getTypoDetailStats} from '@/utils/statsApi.ts';
 import {t} from '@/utils/i18n.ts';
 import './KeyboardHeatmap.css';
@@ -51,13 +51,32 @@ const getKeyColor = (count, maxCount) => {
     return {bg: 'var(--color-bg-secondary)', text: 'var(--color-text-muted)'};
 };
 
-function KeyboardHeatmap() {
+function KeyboardHeatmap({externalTypos, compact}) {
     const [keyData, setKeyData] = useState({});
     const [keyCounts, setKeyCounts] = useState({});
     const [selectedKey, setSelectedKey] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(!externalTypos);
+
+    // externalTypos가 있으면 useMemo로 즉시 계산
+    const externalCounts = useMemo(() => {
+        if (!externalTypos) return null;
+        const data = {};
+        const counts = {};
+        for (const typo of externalTypos) {
+            const ch = typo.expected;
+            if (!data[ch]) data[ch] = [];
+            data[ch].push(typo);
+            counts[ch] = (counts[ch] || 0) + 1;
+        }
+        return {data, counts};
+    }, [externalTypos]);
+
+    const activeKeyData = externalTypos ? (externalCounts?.data || {}) : keyData;
+    const activeKeyCounts = externalTypos ? (externalCounts?.counts || {}) : keyCounts;
 
     useEffect(() => {
+        if (externalTypos) return;
+        // API 호출 (Stats 페이지용)
         const fetchAll = async () => {
             setIsLoading(true);
             const data = {};
@@ -82,14 +101,24 @@ function KeyboardHeatmap() {
             setIsLoading(false);
         };
         fetchAll();
-    }, []);
+    }, [externalTypos]);
 
     const getKeyCount = (key) => {
-        return key.variants.reduce((sum, v) => sum + (keyCounts[v] || 0), 0);
+        return key.variants.reduce((sum, v) => sum + (activeKeyCounts[v] || 0), 0);
     };
 
     const getKeyDetails = (key) => {
-        const entries = key.variants.flatMap(v => keyData[v] || []);
+        const entries = key.variants.flatMap(v => activeKeyData[v] || []);
+        if (externalTypos) {
+            // 외부 데이터: (expected, actual) 쌍별로 집계
+            const grouped = {};
+            for (const e of entries) {
+                const k = e.expected + '→' + e.actual;
+                if (!grouped[k]) grouped[k] = {expected: e.expected, actual: e.actual, typoCount: 0};
+                grouped[k].typoCount += 1;
+            }
+            return Object.values(grouped).sort((a, b) => b.typoCount - a.typoCount);
+        }
         return entries.sort((a, b) => b.typoCount - a.typoCount);
     };
 
@@ -112,12 +141,13 @@ function KeyboardHeatmap() {
     };
 
     const allCounts = KEYBOARD_ROWS.flat().map(getKeyCount);
-    const spaceCount = keyCounts[SPACE_CHAR] || 0;
+    const spaceCount = activeKeyCounts[SPACE_CHAR] || 0;
     const maxCount = Math.max(...allCounts, spaceCount, 1);
 
     return (
-        <div className="heatmap-section">
-            <div className="heatmap-header">
+        <div className={`heatmap-section${compact ? ' compact' : ''}`}>
+            {!compact && (
+                <div className="heatmap-header">
                 <h3 className="heatmap-title">{t('keyboardHeatmap')}</h3>
                 <div className="heatmap-legend">
                     <span className="heatmap-legend-label">{t('accurate')}</span>
@@ -130,7 +160,8 @@ function KeyboardHeatmap() {
                     </div>
                     <span className="heatmap-legend-label">{t('errorsLabel')}</span>
                 </div>
-            </div>
+                </div>
+            )}
             {isLoading ? (
                 <div className="heatmap-loading">{t('loading')}</div>
             ) : (
@@ -146,9 +177,7 @@ function KeyboardHeatmap() {
                                          style={{background: color.bg, color: color.text}}
                                          onClick={() => handleKeyClick(key)}>
                                         {key.label}
-                                        {count > 0 && (
-                                            <span className="heatmap-key-tooltip">{count}{t('errors')}</span>
-                                        )}
+                                        <span className="heatmap-key-tooltip">{count}{t('errors')}</span>
                                     </div>
                                 );
                             })}
@@ -162,9 +191,7 @@ function KeyboardHeatmap() {
                                      style={{background: color.bg, color: color.text}}
                                      onClick={handleSpaceClick}>
                                     Space
-                                    {spaceCount > 0 && (
-                                        <span className="heatmap-key-tooltip">{spaceCount}{t('errors')}</span>
-                                    )}
+                                    <span className="heatmap-key-tooltip">{spaceCount}{t('errors')}</span>
                                 </div>
                             );
                         })()}

@@ -201,6 +201,7 @@ const translations = {
     keyboardHeatmap: l('키보드 에러 히트맵', 'キーボードエラーヒートマップ', 'Keyboard Error Heatmap'),
     accurate: l('정확', '正確', 'Accurate'),
     errorsLabel: l('오류', 'エラー', 'Errors'),
+    sessionTrend: l('세션 추이', 'セッション推移', 'Session Trend'),
     noTypoData: l('오타 데이터가 없습니다.', '誤字データがありません。', 'No typo data available.'),
     typoDetailTitle: l('오타 상세', '誤字の詳細', 'Typo Details'),
     noDetailData: l('상세 데이터가 없습니다.', '詳細データがありません。', 'No detail data available.'),

@@ -45,33 +45,34 @@
 /* 공개/비공개 토글 */
 .quote-upload-entry-type-toggle {
     display: flex;
-    gap: 0.5rem;
+    background: var(--color-bg-secondary);
+    padding: 0.125rem;
+    border-radius: 0.5rem;
+    width: fit-content;
     margin-bottom: 0.5rem;
 }
 
 .quote-upload-entry-type-btn {
-    padding: 0.25rem 0.5rem;
-    border: 1px solid var(--color-border);
-    border-radius: 0.25rem;
-    background-color: transparent;
-    color: var(--color-text-placeholder);
+    padding: 0.25rem 0.75rem;
+    border: none;
+    background: transparent;
+    color: var(--color-text-muted);
     font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     cursor: pointer;
-    transition: all 0.2s;
+    border-radius: 0.375rem;
+    transition: all 0.15s;
     display: flex;
     align-items: center;
     gap: 0.25rem;
 }
 
-.quote-upload-entry-type-btn:hover {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-}
-
 .quote-upload-entry-type-btn.active {
-    border-color: var(--color-primary);
-    background-color: var(--color-primary);
-    color: var(--color-white);
+    background: var(--color-popup-bg);
+    color: var(--color-primary);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 /* 입력 필드 */
