@@ -1,5 +1,6 @@
 import {formatUpdateDate, localize, updateHistory} from '@/data/updateHistory.ts';
 import {t} from '@/utils/i18n.ts';
+import {MdAutoAwesome, MdTune, MdCampaign} from 'react-icons/md';
 import './Updates.css';
 
 function Updates() {
@@ -7,34 +8,78 @@ function Updates() {
 
     return (
         <div className="updates-container">
-            <div className="updates-header">
-                <h1 className="updates-title">{t('updateHistory')}</h1>
-            </div>
-            <div className="updates-list">
-                {visibleUpdates.map((update) => (
-                    <div className="update-card" key={update.version}>
-                        <div className="update-card-header">
-                            <span className="update-card-version">v{update.version}</span>
-                            <span className="update-card-date">{formatUpdateDate(update.date)}</span>
-                        </div>
-                        {update.features && update.features.length > 0 && (
-                            <div className="update-card-section">
-                                <div className="update-card-section-title">{t('updateFeatures')}</div>
-                                <ul className="update-card-list">
-                                    {update.features.map((item, i) => <li key={i}>{localize(item)}</li>)}
-                                </ul>
+            <header className="updates-header">
+                <span className="updates-latest-badge">v{visibleUpdates[0]?.version} Released</span>
+                <h1 className="updates-title">{t('updateHistoryTitle')}</h1>
+            </header>
+            <div className="updates-timeline">
+                <div className="timeline-line"/>
+                {visibleUpdates.map((update, idx) => {
+                    const isLatest = idx === 0;
+                    return (
+                        <section className={`timeline-entry${isLatest ? '' : ' past'}`} key={update.version}>
+                            <div className={`timeline-dot${isLatest ? ' latest' : ''}`}>
+                                <div className="timeline-dot-inner"/>
                             </div>
-                        )}
-                        {update.improvements && update.improvements.length > 0 && (
-                            <div className="update-card-section">
-                                <div className="update-card-section-title">{t('updateImprovements')}</div>
-                                <ul className="update-card-list">
-                                    {update.improvements.map((item, i) => <li key={i}>{localize(item)}</li>)}
-                                </ul>
+                            <div className="timeline-content">
+                                <div className="timeline-version-row">
+                                    <h2 className="timeline-version">v{update.version}</h2>
+                                    <time className="timeline-date">{formatUpdateDate(update.date)}</time>
+                                </div>
+                                <div className="timeline-sections">
+                                    {update.notices && update.notices.length > 0 && (
+                                        <div className="timeline-section timeline-section-full">
+                                            <div className="timeline-section-header">
+                                                <MdCampaign className="timeline-section-icon primary"/>
+                                                <h3 className="timeline-section-title">{t('updateNotices')}</h3>
+                                            </div>
+                                            <ul className="timeline-list">
+                                                {update.notices.map((item, i) => (
+                                                    <li key={i}>
+                                                        <span className="timeline-bullet primary"/>
+                                                        <span>{localize(item)}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    {update.features && update.features.length > 0 && (
+                                        <div className="timeline-section">
+                                            <div className="timeline-section-header">
+                                                <MdAutoAwesome className="timeline-section-icon primary"/>
+                                                <h3 className="timeline-section-title">{t('updateFeatures')}</h3>
+                                            </div>
+                                            <ul className="timeline-list">
+                                                {update.features.map((item, i) => (
+                                                    <li key={i}>
+                                                        <span className={`timeline-bullet${isLatest ? ' primary' : ''}`}/>
+                                                        <span>{localize(item)}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    {update.improvements && update.improvements.length > 0 && (
+                                        <div className="timeline-section">
+                                            <div className="timeline-section-header">
+                                                <MdTune className="timeline-section-icon"/>
+                                                <h3 className="timeline-section-title">{t('updateImprovements')}</h3>
+                                            </div>
+                                            <ul className="timeline-list">
+                                                {update.improvements.map((item, i) => (
+                                                    <li key={i}>
+                                                        <span className="timeline-bullet"/>
+                                                        <span>{localize(item)}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                        )}
-                    </div>
-                ))}
+                        </section>
+                    );
+                })}
             </div>
         </div>
     );

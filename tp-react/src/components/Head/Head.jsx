@@ -23,7 +23,7 @@ const isUuidFormat = (str) => {
 const Head = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const {user, accessToken, refreshToken, isLoading, setIsLoading, login, loginTrigger} = useAuth();
+    const {user, accessToken, refreshToken, isLoading, login, loginTrigger} = useAuth();
     const [showNicknamePopup, setShowNicknamePopup] = useState(false);
     const prevLoginTriggerRef = useRef(loginTrigger);
 

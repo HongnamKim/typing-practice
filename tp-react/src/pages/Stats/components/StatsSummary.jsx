@@ -34,41 +34,40 @@ function StatsSummary({typingStats, dailyStats}) {
         ? (typingStats.totalResetCount / typingStats.totalAttempts).toFixed(2)
         : '0';
 
+    const trendText = trend.text ? trend.text.replace('▲ ', '+').replace('▼ ', '-') + ' ' + t('vsOverall') : '';
+
     return (
         <div className="stats-summary">
-            <div className="stats-main-card">
-                <span className="stats-main-label">{t('recent7DayAvg')}</span>
-                <div className="stats-main-value">
-                    <span className="stats-main-number">{recentAvg}</span>
-                    <span className="stats-main-unit">CPM</span>
-                    {trend.text && <span className={trend.className}>{trend.text}</span>}
-                </div>
-                <div className="stats-main-sub">
-                    {t('best')} {typingStats.bestCpm} CPM · {t('accuracy')} {Math.round(typingStats.avgAcc * 100)}%
+            <div className="stats-item">
+                <span className="stats-label">{t('recent7DayAvg')}</span>
+                <div className="stats-value">
+                    <span className="stats-number">{recentAvg}</span>
+                    {trendText && <span className={trend.className}>{trendText}</span>}
                 </div>
             </div>
-            <div className="stats-sub-grid">
-                <div className="stats-sub-card">
-                    <span className="stats-sub-label">{t('practiceTime')}</span>
-                    <div className="stats-sub-value">{formatTime(typingStats.totalPracticeTimeMin)}</div>
+            <div className="stats-item">
+                <span className="stats-label">{t('totalAverage')}</span>
+                <div className="stats-value">
+                    <span className="stats-number">{Math.round(typingStats.avgCpm)}</span>
+                    <span className="stats-unit">CPM</span>
                 </div>
-                <div className="stats-sub-card">
-                    <span className="stats-sub-label">{t('practiceCount')}</span>
-                    <div className="stats-sub-value">
-                        {typingStats.totalAttempts}<span className="stats-sub-unit">{t('times')}</span>
-                    </div>
+            </div>
+            <div className="stats-item">
+                <span className="stats-label">{t('practiceCount')}</span>
+                <div className="stats-value">
+                    <span className="stats-number">{typingStats.totalAttempts}</span>
                 </div>
-                <div className="stats-sub-card">
-                    <span className="stats-sub-label">{t('totalAverage')}</span>
-                    <div className="stats-sub-value">
-                        {Math.round(typingStats.avgCpm)}<span className="stats-sub-unit">CPM</span>
-                    </div>
+            </div>
+            <div className="stats-item">
+                <span className="stats-label">{t('practiceTime')}</span>
+                <div className="stats-value">
+                    <span className="stats-number">{formatTime(typingStats.totalPracticeTimeMin)}</span>
                 </div>
-                <div className="stats-sub-card">
-                    <span className="stats-sub-label">{t('avgReset')}</span>
-                    <div className="stats-sub-value">
-                        {avgReset}<span className="stats-sub-unit">{t('times')}</span>
-                    </div>
+            </div>
+            <div className="stats-item">
+                <span className="stats-label">{t('avgReset')}</span>
+                <div className="stats-value">
+                    <span className="stats-number">{avgReset}</span>
                 </div>
             </div>
         </div>
