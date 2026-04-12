@@ -1,5 +1,6 @@
 type Lang = 'ko' | 'ja' | 'en';
 const lang: Lang = navigator.language.startsWith('ko') ? 'ko' : navigator.language.startsWith('ja') ? 'ja' : 'en';
+document.documentElement.lang = lang;
 const l = (ko: string, ja: string, en: string) => lang === 'ko' ? ko : lang === 'ja' ? ja : en;
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -145,26 +146,31 @@ const translations = {
 
     // 기록 페이지
     myTypingRecords: l('내 타이핑 기록', 'マイタイピング記録', 'My Typing Records'),
+    statsSubtitle: l('연습 기록을 확인하고 개선할 부분을 찾아보세요.', '練習記録を確認し、改善点を見つけましょう。', 'Review your progress and identify areas for improvement.'),
     statsLoadFailed: l('기록을 불러오는데 실패했습니다.', '記録の読み込みに失敗しました。', 'Failed to load records.'),
     refreshCooldown: l('새로고침은 1분에 한 번만 가능합니다.', '更新は1分に1回のみ可能です。', 'Refresh is available once per minute.'),
     refreshFailed: l('새로고침에 실패했습니다.', '更新に失敗しました。', 'Refresh failed.'),
 
     // 종합 통계
-    recent7DayAvg: l('최근 7일 평균', '直近7日間の平均', '7-Day Average'),
+    recent7DayAvg: l('7일 평균 CPM', '7日間平均CPM', '7D Avg CPM'),
     best: l('최고', '最高', 'Best'),
     accuracy: l('정확도', '正確度', 'Accuracy'),
     practiceTime: l('연습 시간', '練習時間', 'Practice Time'),
     practiceCount: l('연습 횟수', '練習回数', 'Practices'),
     totalAverage: l('전체 평균', '全体平均', 'Overall Avg'),
     avgReset: l('평균 초기화', '平均リセット', 'Avg Resets'),
+    vsOverall: l('vs 전체', 'vs 全体', 'vs overall'),
     times: l('회', '回', ''),
     formatTime: (min: number) => {
         if (!min || min <= 0) return l('0분', '0分', '0m');
-        const h = Math.floor(min / 60);
-        const m = Math.round(min % 60);
-        if (lang === 'ko') return h > 0 ? `${h}시간 ${m}분` : `${m}분`;
-        if (lang === 'ja') return h > 0 ? `${h}時間${m}分` : `${m}分`;
-        return h > 0 ? `${h}h ${m}m` : `${m}m`;
+        const h = min / 60;
+        if (h >= 1) {
+            const rounded = Math.round(h * 10) / 10;
+            const display = Number.isInteger(rounded) ? rounded.toString() : rounded.toFixed(1);
+            return l(`${display}시간`, `${display}時間`, `${display}h`);
+        }
+        const m = Math.round(min);
+        return l(`${m}분`, `${m}分`, `${m}m`);
     },
 
     // 에러 컨텍스트
@@ -189,7 +195,13 @@ const translations = {
     countUnit: l('회', '回', ''),
 
     // 오타 통계
-    typoTop10: l('자주 틀리는 글자 TOP 10', 'よく間違える文字 TOP 10', 'Most Missed Characters TOP 10'),
+    typoTop10: l('자주 틀리는 글자', 'よく間違える文字', 'Most Missed'),
+    typoSubtitle: l('타이핑 흐름을 방해하는 글자들', 'タイピングの流れを妨げる文字', 'Characters causing friction in flow.'),
+    errors: l('회', '回', 'errors'),
+    keyboardHeatmap: l('키보드 에러 히트맵', 'キーボードエラーヒートマップ', 'Keyboard Error Heatmap'),
+    accurate: l('정확', '正確', 'Accurate'),
+    errorsLabel: l('오류', 'エラー', 'Errors'),
+    sessionTrend: l('세션 추이', 'セッション推移', 'Session Trend'),
     noTypoData: l('오타 데이터가 없습니다.', '誤字データがありません。', 'No typo data available.'),
     typoDetailTitle: l('오타 상세', '誤字の詳細', 'Typo Details'),
     noDetailData: l('상세 데이터가 없습니다.', '詳細データがありません。', 'No detail data available.'),
@@ -284,6 +296,7 @@ const translations = {
     // 업데이트 팝업
     updateNotice: l('업데이트 안내', 'アップデート情報', 'Update'),
     updateHistory: l('업데이트', 'アップデート', 'Updates'),
+    updateHistoryTitle: l('업데이트 기록', 'アップデート履歴', 'Update History'),
     updateClose: l('확인', '確認', 'OK'),
     updateViewHistory: l('지난 업데이트 보기', '過去のアップデートを見る', 'View past updates'),
     updateDontShow: l('다시 보지 않기', '次から表示しない', 'Don\'t show again'),

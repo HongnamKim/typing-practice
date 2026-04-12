@@ -1,0 +1,222 @@
+.heatmap-section {
+    padding: 0;
+}
+
+.heatmap-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.heatmap-title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.heatmap-legend {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.heatmap-legend-label {
+    font-size: 0.625rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.heatmap-legend-colors {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.heatmap-legend-swatch {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 0.125rem;
+}
+
+.heatmap-keyboard {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.heatmap-row {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 0.5rem;
+}
+
+.heatmap-row-2 {
+    padding-left: 1rem;
+}
+
+.heatmap-row-3 {
+    padding-left: 2rem;
+}
+
+.heatmap-key {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 0.25rem;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.heatmap-key:hover .heatmap-key-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+.heatmap-key-tooltip {
+    position: absolute;
+    bottom: calc(100% + 0.375rem);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-text);
+    color: var(--color-popup-bg);
+    font-size: 0.625rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.15s;
+    pointer-events: none;
+}
+
+.heatmap-spacebar {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.25rem;
+}
+
+.heatmap-space-key {
+    height: 2.5rem;
+    width: 66%;
+    background: var(--color-bg-secondary);
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.625rem;
+    font-weight: 700;
+    color: var(--color-text-placeholder);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    position: relative;
+}
+
+.heatmap-space-key:hover .heatmap-key-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+.heatmap-loading {
+    text-align: center;
+    padding: 2rem;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+}
+
+/* Compact 모드 (팝업용) */
+.heatmap-section.compact .heatmap-keyboard {
+    gap: 0.25rem;
+}
+
+.heatmap-section.compact .heatmap-row {
+    gap: 0.25rem;
+}
+
+.heatmap-section.compact .heatmap-key {
+    font-size: 0.75rem;
+}
+
+.heatmap-key.clickable,
+.heatmap-space-key.clickable {
+    cursor: pointer;
+}
+
+.heatmap-key.selected {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 1px;
+}
+
+.heatmap-space-key.selected {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 1px;
+}
+
+.heatmap-detail {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.heatmap-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.heatmap-detail-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.heatmap-detail-total {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+}
+
+.heatmap-detail-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.heatmap-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    background: var(--color-bg-secondary);
+    border-radius: 0.375rem;
+    font-size: 0.8125rem;
+}
+
+.heatmap-detail-expected {
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.heatmap-detail-arrow {
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+}
+
+.heatmap-detail-actual {
+    font-weight: 700;
+    color: var(--color-error);
+}
+
+.heatmap-detail-count {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    margin-left: 0.25rem;
+}

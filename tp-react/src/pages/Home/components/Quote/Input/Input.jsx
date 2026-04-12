@@ -35,6 +35,9 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
         showPopup,
         setShowPopup,
         setPopupData,
+        setPopupCpmList,
+        setPopupAccList,
+        setPopupTypos,
     } = useScore();
     const {sentence, currentQuote, setQuotesIndex} = useQuote(); // 예문, 예문의 인덱스
     const {resultPeriod, fontSize, isCompactMode} = useSetting();
@@ -185,6 +188,7 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
             // 팝업이 열려있으면 팝업 닫기
             if (showPopup) {
                 setShowPopup(false);
+                setPopupTypos([]);
                 return;
             }
 
@@ -221,6 +225,12 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
         const cpm = currentCpmRef.current;
         setLastCpm(cpm);
 
+        // 서버에 보내는 typo를 context에도 누적 (ref는 나중에 초기화되므로 값을 복사)
+        const currentTypos = [...typosRef.current];
+        if (currentTypos.length > 0) {
+            setPopupTypos(prev => [...prev, ...currentTypos]);
+        }
+
         // CPM, ACC 리스트에 추가
         cpmListRef.current = [...cpmListRef.current, cpm];
         accListRef.current = [...accListRef.current, newAcc];
@@ -245,6 +255,8 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
                     maxCpm: Math.round(max(recentCpmList)),
                     acc: Math.round(average(recentAccList)),
                 });
+                setPopupCpmList(recentCpmList);
+                setPopupAccList(recentAccList);
                 setShowPopup(true);
             }
 
