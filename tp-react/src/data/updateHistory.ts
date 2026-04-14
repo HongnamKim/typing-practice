@@ -41,7 +41,7 @@ export const updateHistory: UpdateEntry[] = [
         showPopup: true,
         hidden: false,
         features: [
-            {ko: "도전 모드 추가 — 실력에 맞는 문장을 자동으로 제공", ja: "チャレンジモード追加 — 実力に合った文章を自動提供", en: "Added Challenge mode — sentences matched to your skill level"},
+            {ko: "맞춤 난이도 모드 추가 — 실력에 맞는 문장을 자동으로 제공", ja: "レベル別モード追加 — 実力に合った文章を自動提供", en: "Added Adaptive mode — sentences matched to your skill level"},
         ],
     },
     {
