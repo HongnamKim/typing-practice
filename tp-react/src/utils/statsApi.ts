@@ -103,3 +103,17 @@ export const refreshStats = async (language: Language) => {
         `/members/me/stats/refresh?language=${language}`
     );
 };
+
+/**
+ * 타이핑 프로필 조회 (적응형 서빙 기반 실력 추정)
+ */
+export interface TypingProfile {
+    mu: number;
+    sigma: number;
+}
+
+export const getTypingProfile = async (language: Language) => {
+    return apiClient.get<ApiResponse<TypingProfile>>(
+        `/members/me/typing-profile?language=${language}`
+    );
+};

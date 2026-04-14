@@ -22,6 +22,7 @@ export const MAX_AUTHOR_LENGTH = 20 as const;
 export const Storage_Word_Difficulty = "Typing-Practice-wordDifficulty" as const;
 export const Storage_Word_Count = "Typing-Practice-wordCount" as const;
 export const Storage_Last_Mode = "Typing-Practice-lastMode" as const;
+export const Storage_Quote_Source = "Typing-Practice-quoteSource" as const;
 
 // 로그인 유도
 export const Session_Typing_Count = "Typing-Practice-sessionTypingCount" as const;
