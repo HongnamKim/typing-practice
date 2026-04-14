@@ -67,7 +67,7 @@ const translations = {
     // 문장 소스
     allSentences: l('전체 문장', 'すべての文章', 'All'),
     mySentencesOnly: l('내 문장만', 'マイ文章のみ', 'Mine'),
-    adaptiveSentences: l('도전 모드', 'チャレンジ', 'Challenge'),
+    adaptiveSentences: l('맞춤 난이도', 'レベル別', 'Adaptive'),
     mySentencesLoginRequired: l('내 문장을 사용하려면 로그인이 필요합니다.', 'マイ文章を使用するにはログインが必要です。', 'Login required to use your sentences.'),
 
     // 문장 로딩/비어있음
