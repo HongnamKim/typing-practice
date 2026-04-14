@@ -39,7 +39,7 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
         setPopupAccList,
         setPopupTypos,
     } = useScore();
-    const {sentence, currentQuote, setQuotesIndex} = useQuote(); // 예문, 예문의 인덱스
+    const {sentence, currentQuote, setQuotesIndex, prefetchAdaptiveQuotes} = useQuote();
     const {resultPeriod, fontSize, isCompactMode} = useSetting();
     const [input, setInput] = useState(""); // 사용자 입력값
     const speedInterval = useRef(null); // setInterval 을 참조하기 위함
@@ -258,6 +258,7 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
                 setPopupCpmList(recentCpmList);
                 setPopupAccList(recentAccList);
                 setShowPopup(true);
+                prefetchAdaptiveQuotes();
             }
 
             return {
@@ -284,6 +285,7 @@ const Input = ({onInputChange: onInputChangeCallback}) => {
                 charLength: sentence.length,
                 resetCount: resetCountRef.current,
                 typos: typosRef.current,
+                servingType: currentQuote?.servingType || 'RANDOM',
                 anonymousId: user ? null : getAnonymousId(),
             }).catch((error) => console.error('타이핑 기록 저장 실패:', error));
         }

@@ -2,6 +2,8 @@ import apiClient from './apiClient';
 import {ApiResponse, PageResponse} from '../types/api.types';
 
 // 문장 타입
+export type ServingType = 'ADAPTIVE' | 'RANDOM';
+
 interface Quote {
     id: number;
     sentence: string;
@@ -10,6 +12,7 @@ interface Quote {
     status: 'PENDING' | 'ACTIVE';
     createdAt: string;
     updatedAt: string;
+    servingType?: ServingType;
 }
 
 // 파라미터 타입
@@ -46,6 +49,19 @@ export const getQuotes = async (params: GetQuotesParams = {}) => {
 
     const queryString = queryParams.toString();
     return apiClient.get<ApiResponse<PageResponse<Quote>>>(`/quotes${queryString ? `?${queryString}` : ''}`);
+};
+
+/**
+ * 적응형 문장 조회 (회원 전용)
+ */
+export const getAdaptiveQuotes = async (language: string, count: number, excludeIds?: number[]) => {
+    const queryParams = new URLSearchParams();
+    queryParams.append('language', language);
+    queryParams.append('count', String(count));
+    if (excludeIds && excludeIds.length > 0) {
+        queryParams.append('excludeIds', excludeIds.join(','));
+    }
+    return apiClient.get<ApiResponse<Quote[]>>(`/quotes/adaptive?${queryParams.toString()}`);
 };
 
 /**

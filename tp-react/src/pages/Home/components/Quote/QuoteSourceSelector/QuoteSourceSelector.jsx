@@ -20,6 +20,14 @@ const QuoteSourceSelector = () => {
         }
     };
 
+    const handleAdaptiveClick = () => {
+        const success = changeQuoteSource('adaptive');
+        if (!success) {
+            sessionStorage.setItem(Session_Post_Login_Quote_Source, 'adaptive');
+            triggerLogin();
+        }
+    };
+
     return (
         <div className="quote-source-selector">
             <button
@@ -33,6 +41,12 @@ const QuoteSourceSelector = () => {
                 onClick={handleMyClick}
             >
                 {t('mySentencesOnly')}
+            </button>
+            <button
+                className={`quote-source-btn ${quoteSource === 'adaptive' ? 'active' : ''}`}
+                onClick={handleAdaptiveClick}
+            >
+                {t('adaptiveSentences')}
             </button>
         </div>
     );

@@ -36,9 +36,18 @@ export function localize(item: LocalizedText): string {
 
 export const updateHistory: UpdateEntry[] = [
     {
+        version: "1.6.0",
+        date: "2026-04-14",
+        showPopup: true,
+        hidden: false,
+        features: [
+            {ko: "도전 모드 추가 — 실력에 맞는 문장을 자동으로 제공", ja: "チャレンジモード追加 — 実力に合った文章を自動提供", en: "Added Challenge mode — sentences matched to your skill level"},
+        ],
+    },
+    {
         version: "1.5.0",
         date: "2026-04-12",
-        showPopup: true,
+        showPopup: false,
         hidden: false,
         features: [
             {ko: "기록 페이지 디자인 전면 개편", ja: "記録ページのデザインを全面改修", en: "Complete redesign of the Records page"},
