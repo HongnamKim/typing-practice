@@ -1,5 +1,6 @@
 import apiClient from './apiClient';
 import {ApiResponse, PageResponse} from '../types/api.types';
+import {LANGUAGE} from '@/const/config.const';
 
 // 문장 타입
 export type ServingType = 'ADAPTIVE' | 'RANDOM';
@@ -68,7 +69,7 @@ export const getAdaptiveQuotes = async (language: string, count: number, exclude
  * 공개 문장 업로드
  */
 const uploadPublicQuote = async (sentence: string, author?: string) => {
-    const body: { sentence: string; author?: string; language: string } = {sentence, language: 'KOREAN'};
+    const body: { sentence: string; author?: string; language: string } = {sentence, language: LANGUAGE.KOREAN};
     if (author) {
         body.author = author;
     }
@@ -79,7 +80,7 @@ const uploadPublicQuote = async (sentence: string, author?: string) => {
  * 비공개 문장 업로드
  */
 const uploadPrivateQuote = async (sentence: string, author?: string) => {
-    const body: { sentence: string; author?: string; language: string } = {sentence, language: 'KOREAN'};
+    const body: { sentence: string; author?: string; language: string } = {sentence, language: LANGUAGE.KOREAN};
     if (author) {
         body.author = author;
     }

@@ -1,6 +1,7 @@
 import {createContext, ReactNode, useContext, useReducer, useRef} from "react";
 import {Difficulty, WordCount, WORD_COUNTS} from "@/utils/wordService";
 import {Storage_Word_Difficulty, Storage_Word_Count} from "@/const/config.const";
+import type {TypoEntry} from "@/utils/typingRecordApi";
 
 // === Types ===
 
@@ -28,6 +29,12 @@ interface WordState {
     wordGrades: CharGrade[];      // 단어별 판정
     charGrades: CharGrade[][];    // 단어별 글자별 판정 (확정된 단어)
 
+    // 세션 데이터 (서버 전송 대비)
+    typos: TypoEntry[];           // 전체 typo 누적 (히트맵용)
+    wordCpms: number[];           // 단어별 CPM
+    wordAccs: number[];           // 단어별 정확도 %
+    wordTimesMs: number[];        // 단어별 소요 시간
+
     // 결과
     wpm: number;
     accuracy: number;
@@ -40,9 +47,9 @@ type WordAction =
     | { type: 'SET_DIFFICULTY'; difficulty: Difficulty }
     | { type: 'SET_WORD_COUNT'; wordCount: WordCount }
     | { type: 'START_TYPING'; words: string[] }
-    | { type: 'CONFIRM_WORD'; input: string; charGrades: CharGrade[]; timeMs: number }
+    | { type: 'CONFIRM_WORD'; input: string; charGrades: CharGrade[]; timeMs: number; cpm: number; acc: number; typos: TypoEntry[] }
     | { type: 'GO_BACK_WORD' }
-    | { type: 'FINISH'; input: string; charGrades: CharGrade[]; timeMs: number; elapsedMs: number }
+    | { type: 'FINISH'; input: string; charGrades: CharGrade[]; timeMs: number; elapsedMs: number; cpm: number; acc: number; typos: TypoEntry[] }
     | { type: 'RETRY'; words: string[] }
     | { type: 'RESET' };
 
@@ -81,6 +88,10 @@ const createInitialState = (): WordState => ({
     wordInputs: [],
     wordGrades: [],
     charGrades: [],
+    typos: [],
+    wordCpms: [],
+    wordAccs: [],
+    wordTimesMs: [],
     wpm: 0,
     accuracy: 0,
     correctWordCount: 0,
@@ -96,27 +107,25 @@ function calculateResult(state: WordState): Pick<WordState, 'wpm' | 'accuracy' |
     const elapsedSec = elapsedMs / 1000;
     const wpm = elapsedSec > 0 ? Math.round(correctWordCount / (elapsedSec / 60)) : 0;
 
-    // 글자 기준 정확도
-    let totalChars = 0;
-    let correctChars = 0;
+    // 글자 기준 정확도 (문장 모드와 동일: correct / (correct + incorrect))
+    let totalCorrect = 0;
+    let totalIncorrect = 0;
     for (let i = 0; i < words.length; i++) {
         const word = words[i];
         const wordCharGrades = state.charGrades[i] || [];
-        // 원본 단어 길이 기준
         for (let j = 0; j < word.length; j++) {
-            totalChars++;
-            if (wordCharGrades[j] === 'correct') {
-                correctChars++;
-            }
+            if (wordCharGrades[j] === 'correct') totalCorrect++;
+            else if (wordCharGrades[j] === 'incorrect') totalIncorrect++;
         }
     }
-    const accuracy = totalChars > 0 ? Math.round((correctChars / totalChars) * 100) : 0;
+    const checked = totalCorrect + totalIncorrect;
+    const accuracy = checked > 0 ? Math.round((totalCorrect / checked) * 100) : 0;
 
     const wordDetails: WordDetail[] = words.map((word, i) => ({
         word,
         typed: wordInputs[i] || '',
         correct: wordGrades[i] === 'correct',
-        timeMs: 0, // Phase 1에서는 개별 단어 시간 미수집
+        timeMs: state.wordTimesMs[i] || 0,
     }));
 
     return {wpm, accuracy, correctWordCount, wordDetails, elapsedMs};
@@ -141,6 +150,10 @@ function wordReducer(state: WordState, action: WordAction): WordState {
                 wordInputs: new Array(action.words.length).fill(''),
                 wordGrades: new Array(action.words.length).fill('none'),
                 charGrades: new Array(action.words.length).fill([]),
+                typos: [],
+                wordCpms: [],
+                wordAccs: [],
+                wordTimesMs: [],
                 wpm: 0,
                 accuracy: 0,
                 correctWordCount: 0,
@@ -170,6 +183,10 @@ function wordReducer(state: WordState, action: WordAction): WordState {
                 wordGrades: newWordGrades,
                 charGrades: newCharGrades,
                 currentWordIndex: currentWordIndex + 1,
+                typos: [...state.typos, ...action.typos],
+                wordCpms: [...state.wordCpms, action.cpm],
+                wordAccs: [...state.wordAccs, action.acc],
+                wordTimesMs: [...state.wordTimesMs, action.timeMs],
             };
         }
 
@@ -211,6 +228,10 @@ function wordReducer(state: WordState, action: WordAction): WordState {
                 charGrades: newCharGrades,
                 currentWordIndex: currentWordIndex + 1,
                 elapsedMs: action.elapsedMs,
+                typos: [...state.typos, ...action.typos],
+                wordCpms: [...state.wordCpms, action.cpm],
+                wordAccs: [...state.wordAccs, action.acc],
+                wordTimesMs: [...state.wordTimesMs, action.timeMs],
             };
 
             const result = calculateResult(updatedState);
@@ -231,6 +252,10 @@ function wordReducer(state: WordState, action: WordAction): WordState {
                 wordInputs: new Array(action.words.length).fill(''),
                 wordGrades: new Array(action.words.length).fill('none'),
                 charGrades: new Array(action.words.length).fill([]),
+                typos: [],
+                wordCpms: [],
+                wordAccs: [],
+                wordTimesMs: [],
                 wpm: 0,
                 accuracy: 0,
                 correctWordCount: 0,

@@ -24,6 +24,13 @@ export const Storage_Word_Count = "Typing-Practice-wordCount" as const;
 export const Storage_Last_Mode = "Typing-Practice-lastMode" as const;
 export const Storage_Quote_Source = "Typing-Practice-quoteSource" as const;
 
+// 언어
+export type Language = 'KOREAN' | 'ENGLISH';
+export const LANGUAGE = {
+    KOREAN: 'KOREAN' as const,
+    ENGLISH: 'ENGLISH' as const,
+};
+
 // 로그인 유도
 export const Session_Typing_Count = "Typing-Practice-sessionTypingCount" as const;
 export const LOGIN_PROMPT_THRESHOLD = 3 as const;

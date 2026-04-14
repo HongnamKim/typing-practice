@@ -9,6 +9,7 @@ export interface TypoEntry {
     actual: string;
     position: number;
     type: TypoType;
+    wordIndex?: number;
 }
 
 interface TypingRecordRequest {

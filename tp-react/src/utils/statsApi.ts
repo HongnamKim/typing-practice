@@ -1,5 +1,6 @@
 import apiClient from './apiClient';
 import {ApiResponse} from '../types/api.types';
+import {Language} from '@/const/config.const';
 
 // 종합 통계 응답
 export interface TypingStatsResponse {
@@ -57,7 +58,6 @@ export interface TypoDetailStatsResponse {
     content: TypoDetailEntry[];
 }
 
-type Language = 'KOREAN' | 'ENGLISH';
 
 /**
  * 종합 타이핑 통계 조회

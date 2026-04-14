@@ -1,23 +1,27 @@
-import {useEffect, useRef, useState, useCallback, forwardRef, useImperativeHandle} from "react";
+import {forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState} from "react";
 import {useWord} from "../../context/WordContext";
 import {koreanSeparator} from "@/utils/koreanSeparator.ts";
+import {createFlatTypoEntry, isLanguageSwitchMistake} from "@/utils/typoUtils.ts";
 import {areJamoEqual} from "@/pages/Home/components/Quote/Input/InputUtils";
 import {incrementSessionTypingCount} from "@/utils/sessionUtils.ts";
 import "./WordInput.css";
 
 const WordInput = forwardRef(({onFullInputChange, onCurrentGradesChange, onFocusChange}, ref) => {
-    const {state, dispatch, startTimeRef} = useWord();
+    const {state, dispatch, startTimeRef, wordStartTimeRef} = useWord();
     const {words, phase} = state;
 
     const [fullInput, setFullInput] = useState("");
     const textareaRef = useRef(null);
-    const goBackBlockedRef = useRef(false); // 현재 단어에 2글자 이상 입력 시 이전 단어 복귀 차단
+    const goBackBlockedRef = useRef(false);
 
-    // 부모에서 focus() 호출 가능하도록 ref 노출
     useImperativeHandle(ref, () => ({
         focus: () => textareaRef.current?.focus(),
     }));
     const confirmedCountRef = useRef(0);
+
+    // 실시간 typo 수집용 refs
+    const wordTyposRef = useRef([]);
+    const maxCheckedJamoRef = useRef(0);
 
     // phase 또는 words 변경 시 초기화
     useEffect(() => {
@@ -25,6 +29,8 @@ const WordInput = forwardRef(({onFullInputChange, onCurrentGradesChange, onFocus
             setFullInput("");
             confirmedCountRef.current = 0;
             goBackBlockedRef.current = false;
+            wordTyposRef.current = [];
+            maxCheckedJamoRef.current = 0;
             onFullInputChange?.("");
             onCurrentGradesChange?.([]);
             setTimeout(() => textareaRef.current?.focus(), 50);
@@ -36,19 +42,15 @@ const WordInput = forwardRef(({onFullInputChange, onCurrentGradesChange, onFocus
         const grades = [];
         for (let i = 0; i < Math.max(input.length, word.length); i++) {
             if (i >= input.length) {
-                grades.push('none'); // 미입력
+                grades.push('none');
             } else if (i >= word.length) {
-                grades.push('incorrect'); // 초과
+                grades.push('incorrect');
             } else {
                 const inputSep = koreanSeparator(input[i]);
                 const wordSep = koreanSeparator(word[i]);
                 if (inputSep.length >= wordSep.length) {
-                    const isCorrect = areJamoEqual(
-                        inputSep.slice(0, wordSep.length),
-                        wordSep
-                    );
+                    const isCorrect = areJamoEqual(inputSep.slice(0, wordSep.length), wordSep);
                     if (isCorrect && inputSep.length > wordSep.length) {
-                        // 초과 자모 확인
                         const nextIdx = i + 1;
                         if (nextIdx < word.length) {
                             const nextWordSep = koreanSeparator(word[nextIdx]);
@@ -74,119 +76,189 @@ const WordInput = forwardRef(({onFullInputChange, onCurrentGradesChange, onFocus
     const computeFullGrades = useCallback((input) => {
         const segments = input.split(' ');
         const allGrades = [];
-
         for (let segIdx = 0; segIdx < segments.length; segIdx++) {
             const segment = segments[segIdx];
             const word = words[segIdx] || '';
-
-            if (segment.length === 0 && segIdx === segments.length - 1) {
-                // 마지막 빈 세그먼트 (스페이스 직후)
-                break;
-            }
-
+            if (segment.length === 0 && segIdx === segments.length - 1) break;
             const wordGrades = gradeWord(segment, word);
-            allGrades.push(...wordGrades);
-
-            // 단어 사이 스페이스
-            if (segIdx < segments.length - 1) {
-                allGrades.push('correct');
+            // 확정된 단어는 미완성('none')을 오답 처리
+            const isConfirmed = segIdx < segments.length - 1;
+            if (isConfirmed) {
+                allGrades.push(...wordGrades.map(g => g === 'none' ? 'incorrect' : g));
+            } else {
+                allGrades.push(...wordGrades);
             }
+            if (isConfirmed) allGrades.push('correct');
         }
-
         return allGrades;
     }, [words, gradeWord]);
 
-    const finishTyping = useCallback((lastWordInput) => {
-        const grades = gradeWord(lastWordInput, words[words.length - 1]);
+    // 현재 단어 실시간 typo 감지 (일반 함수)
+    const runTypoDetection = (inputSegment, wordIdx) => {
+        const word = words[wordIdx];
+        if (!word) return;
+        const separatedWord = word.split('').map(ch => koreanSeparator(ch));
+        const flatWord = separatedWord.flat();
+        const flatInput = inputSegment.split('').map(ch => koreanSeparator(ch)).flat();
+        const newLen = flatInput.length;
+
+        if (newLen > maxCheckedJamoRef.current) {
+            for (let i = maxCheckedJamoRef.current; i < newLen; i++) {
+                const exp = flatWord[i];
+                const act = flatInput[i];
+                if (exp !== undefined && act !== undefined && exp !== act && !isLanguageSwitchMistake(act)) {
+                    wordTyposRef.current.push(createFlatTypoEntry(i, exp, act, separatedWord, word));
+                }
+            }
+            maxCheckedJamoRef.current = newLen;
+        }
+    };
+
+    // 단어 확정 시 typo 수집 + stats 계산 공통 로직
+    const collectWordData = (wordText, word, wordIdx) => {
+        const grades = gradeWord(wordText, word);
+        const finalGrades = grades.map(g => g === 'none' ? 'incorrect' : g);
+        const wordTimeMs = wordStartTimeRef.current ? Date.now() - wordStartTimeRef.current : 0;
+        const jamoCount = word.split('').reduce((sum, ch) => sum + koreanSeparator(ch).length, 0);
+        const cpm = wordTimeMs > 0 ? Math.round(jamoCount / (wordTimeMs / 1000) * 60) : 0;
+        const correctCount = finalGrades.slice(0, word.length).filter(g => g === 'correct').length;
+        const acc = word.length > 0 ? Math.round(correctCount / word.length * 100) : 0;
+
+        // fallback: 실시간 감지에서 놓친 typo 보완 + 부족 자모
+        const separatedWord = word.split('').map(ch => koreanSeparator(ch));
+        const flatWord = separatedWord.flat();
+        const flatInput = wordText.split('').map(ch => koreanSeparator(ch)).flat();
+        const existingKeys = new Set(wordTyposRef.current.map(t => `${t.position}-${t.type}`));
+        for (let i = 0; i < flatWord.length; i++) {
+            const exp = flatWord[i];
+            const act = flatInput[i];
+            if (act !== undefined) {
+                if (exp !== act && !isLanguageSwitchMistake(act)) {
+                    const entry = createFlatTypoEntry(i, exp, act, separatedWord, word);
+                    const key = `${entry.position}-${entry.type}`;
+                    if (!existingKeys.has(key)) {
+                        wordTyposRef.current.push({...entry, wordIndex: wordIdx});
+                        existingKeys.add(key);
+                    }
+                }
+            } else {
+                // 부족한 자모 (expected: 자모, actual: "")
+                const entry = createFlatTypoEntry(i, exp, '', separatedWord, word);
+                const key = `${entry.position}-${entry.type}`;
+                if (!existingKeys.has(key)) {
+                    wordTyposRef.current.push({...entry, wordIndex: wordIdx});
+                    existingKeys.add(key);
+                }
+            }
+        }
+
+        const typos = wordTyposRef.current.map(t => ({...t, wordIndex: wordIdx}));
+        return {finalGrades, wordTimeMs, cpm, acc, typos};
+    };
+
+    // 단어 확정 시 dispatch
+    const confirmWord = (wordText, wordIdx) => {
+        const {finalGrades, wordTimeMs, cpm, acc, typos} = collectWordData(wordText, words[wordIdx], wordIdx);
+
+        dispatch({
+            type: 'CONFIRM_WORD',
+            input: wordText,
+            charGrades: finalGrades,
+            timeMs: wordTimeMs,
+            cpm,
+            acc,
+            typos
+        });
+
+        wordStartTimeRef.current = Date.now();
+        wordTyposRef.current = [];
+        maxCheckedJamoRef.current = 0;
+    };
+
+    const finishTyping = (lastWordInput) => {
+        const lastWordIdx = words.length - 1;
+        const {finalGrades, wordTimeMs, cpm, acc, typos} = collectWordData(lastWordInput, words[lastWordIdx], lastWordIdx);
         const elapsedMs = startTimeRef.current ? Date.now() - startTimeRef.current : 0;
+
         dispatch({
             type: 'FINISH',
             input: lastWordInput,
-            charGrades: grades,
-            timeMs: 0,
+            charGrades: finalGrades,
+            timeMs: wordTimeMs,
             elapsedMs,
+            cpm,
+            acc,
+            typos,
         });
-
-        // 세션 타이핑 카운트 증가
         incrementSessionTypingCount();
-    }, [dispatch, gradeWord, words, startTimeRef]);
+    };
 
     const handleInput = (e) => {
         const newValue = e.target.value;
 
-        // 타이머 시작
         if (!startTimeRef.current && newValue.length > 0) {
             startTimeRef.current = Date.now();
+            wordStartTimeRef.current = Date.now();
         }
 
-        // 스페이스로 분할하여 단어 세그먼트 파악
         const segments = newValue.split(' ');
         const newConfirmedCount = segments.length - 1;
         const oldConfirmedCount = confirmedCountRef.current;
 
-        // 마지막 단어 이후 스페이스 → 완료 처리
+        // 마지막 단어 이후 스페이스 → 완료
         if (newConfirmedCount >= words.length) {
             const lastWordInput = segments[words.length - 1] || '';
-
-            // 마지막 단어 이전까지의 모든 미확정 단어 확정
             for (let i = oldConfirmedCount; i < words.length - 1; i++) {
-                const wordText = segments[i];
-                const grades = gradeWord(wordText, words[i]);
-                dispatch({type: 'CONFIRM_WORD', input: wordText, charGrades: grades, timeMs: 0});
+                confirmWord(segments[i], i);
             }
-
             finishTyping(lastWordInput);
             return;
         }
 
         setFullInput(newValue);
 
-        // 현재 단어 글자수가 2 이상이면 복귀 차단 플래그 활성화
         const currentSegment = segments[segments.length - 1];
         if (currentSegment.length >= 2) {
             goBackBlockedRef.current = true;
         }
 
-        // 새로 확정된 단어 처리 (스페이스 수 증가)
+        // 새로 확정된 단어
         if (newConfirmedCount > oldConfirmedCount) {
             for (let i = oldConfirmedCount; i < newConfirmedCount; i++) {
-                const wordText = segments[i];
-                const grades = gradeWord(wordText, words[i]);
-                dispatch({type: 'CONFIRM_WORD', input: wordText, charGrades: grades, timeMs: 0});
+                confirmWord(segments[i], i);
             }
             confirmedCountRef.current = newConfirmedCount;
-            goBackBlockedRef.current = false; // 새 단어 시작, 플래그 리셋
+            goBackBlockedRef.current = false;
         }
-        // 이전 단어로 복귀 (스페이스 수 감소 = 백스페이스로 스페이스 삭제)
+        // 이전 단어로 복귀
         else if (newConfirmedCount < oldConfirmedCount) {
             for (let i = oldConfirmedCount; i > newConfirmedCount; i--) {
                 dispatch({type: 'GO_BACK_WORD'});
             }
             confirmedCountRef.current = newConfirmedCount;
+            wordTyposRef.current = [];
+            maxCheckedJamoRef.current = 0;
         }
 
-        // 현재 단어 채점 + 전체 채점
+        // 현재 단어 실시간 typo 감지
+        runTypoDetection(currentSegment, newConfirmedCount);
+
         const fullGrades = computeFullGrades(newValue);
         onCurrentGradesChange?.(fullGrades);
         onFullInputChange?.(newValue);
     };
 
     const handleKeyDown = (e) => {
-        // Tab → retry 버튼으로 포커스
         if (e.key === 'Tab') {
             e.preventDefault();
             const retryBtn = document.querySelector('.word-retry-btn');
             if (retryBtn) retryBtn.focus();
             return;
         }
-
-        // Enter, Escape — 완전 차단
         if (e.key === 'Enter' || e.key === 'Escape') {
             e.preventDefault();
             return;
         }
-
-        // Backspace — 플래그 활성화 시 이전 단어 복귀 차단
         if (e.key === 'Backspace') {
             const segments = fullInput.split(' ');
             const currentSegment = segments[segments.length - 1];
