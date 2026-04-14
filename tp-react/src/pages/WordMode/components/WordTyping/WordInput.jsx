@@ -170,7 +170,7 @@ const WordInput = forwardRef(({onFullInputChange, onCurrentGradesChange, onFocus
             typos
         });
 
-        wordStartTimeRef.current = Date.now();
+        wordStartTimeRef.current = null;
         wordTyposRef.current = [];
         maxCheckedJamoRef.current = 0;
     };
@@ -198,7 +198,7 @@ const WordInput = forwardRef(({onFullInputChange, onCurrentGradesChange, onFocus
 
         if (!startTimeRef.current && newValue.length > 0) {
             startTimeRef.current = Date.now();
-            wordStartTimeRef.current = Date.now();
+            wordStartTimeRef.current = null;
         }
 
         const segments = newValue.split(' ');
@@ -240,6 +240,11 @@ const WordInput = forwardRef(({onFullInputChange, onCurrentGradesChange, onFocus
             maxCheckedJamoRef.current = 0;
         }
 
+        // 현재 단어 첫 입력 시 타이머 시작
+        if (currentSegment.length > 0 && wordStartTimeRef.current === null) {
+            wordStartTimeRef.current = Date.now();
+        }
+
         // 현재 단어 실시간 typo 감지
         runTypoDetection(currentSegment, newConfirmedCount);
 
@@ -258,6 +263,15 @@ const WordInput = forwardRef(({onFullInputChange, onCurrentGradesChange, onFocus
         if (e.key === 'Enter' || e.key === 'Escape') {
             e.preventDefault();
             return;
+        }
+        if (e.key === ' ') {
+            const segments = fullInput.split(' ');
+            const currentSegment = segments[segments.length - 1];
+            const currentWord = words[confirmedCountRef.current];
+            if (currentWord && currentSegment.length < currentWord.length) {
+                e.preventDefault();
+                return;
+            }
         }
         if (e.key === 'Backspace') {
             const segments = fullInput.split(' ');
