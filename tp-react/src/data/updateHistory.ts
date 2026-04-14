@@ -44,6 +44,7 @@ export const updateHistory: UpdateEntry[] = [
             {ko: "단어 모드 결과 화면에 CPM/ACC 추이 그래프 및 키보드 히트맵 추가", ja: "単語モード結果画面にCPM/ACC推移グラフとキーボードヒートマップを追加", en: "Added CPM/ACC trend graph and keyboard heatmap to word mode results"},
         ],
         improvements: [
+            {ko: "단어 모드에서 글자 수가 부족할 때 다음 단어로 넘어가지 않도록 변경", ja: "単語モードで文字数が不足している場合、次の単語に進めないように変更", en: "Prevented moving to the next word when input is shorter than the word length"},
             {ko: "맞춤 난이도 모드에서 로그아웃 후 재진입 시 문장 로드 오류 수정", ja: "レベル別モードでログアウト後の再入時に文章読み込みエラーを修正", en: "Fixed sentence loading error when re-entering after logout in Adaptive mode"},
         ],
     },
