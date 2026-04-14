@@ -36,9 +36,21 @@ export function localize(item: LocalizedText): string {
 
 export const updateHistory: UpdateEntry[] = [
     {
-        version: "1.6.0",
+        version: "1.7.1",
         date: "2026-04-14",
         showPopup: true,
+        hidden: false,
+        features: [
+            {ko: "단어 모드 결과 화면에 CPM/ACC 추이 그래프 및 키보드 히트맵 추가", ja: "単語モード結果画面にCPM/ACC推移グラフとキーボードヒートマップを追加", en: "Added CPM/ACC trend graph and keyboard heatmap to word mode results"},
+        ],
+        improvements: [
+            {ko: "맞춤 난이도 모드에서 로그아웃 후 재진입 시 문장 로드 오류 수정", ja: "レベル別モードでログアウト後の再入時に文章読み込みエラーを修正", en: "Fixed sentence loading error when re-entering after logout in Adaptive mode"},
+        ],
+    },
+    {
+        version: "1.6.0",
+        date: "2026-04-14",
+        showPopup: false,
         hidden: false,
         features: [
             {ko: "맞춤 난이도 모드 추가 — 실력에 맞는 문장을 자동으로 제공", ja: "レベル別モード追加 — 実力に合った文章を自動提供", en: "Added Adaptive mode — sentences matched to your skill level"},

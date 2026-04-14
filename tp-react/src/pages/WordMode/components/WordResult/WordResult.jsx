@@ -1,27 +1,58 @@
 import {useEffect, useRef, useCallback} from "react";
 import {useTheme} from "@/Context/ThemeContext.tsx";
+import {useAuth} from "@/Context/AuthContext.tsx";
 import {useWord} from "../../context/WordContext";
 import {fetchWords} from "@/utils/wordService";
 import {koreanSeparator} from "@/utils/koreanSeparator.ts";
+import {getAnonymousId} from "@/utils/tracking.ts";
 import {t} from "@/utils/i18n.ts";
 import {VscDebugRestart} from "react-icons/vsc";
+import SessionChart from "@/pages/Home/components/AverageScorePopUp/SessionChart";
+import KeyboardHeatmap from "@/pages/Stats/components/KeyboardHeatmap";
 import "./WordResult.css";
-
-const difficultyLabels = {
-    RANDOM: () => t('random'),
-    EASY: () => t('easy'),
-    NORMAL: () => t('normal'),
-    HARD: () => t('hard'),
-};
 
 const WordResult = () => {
     const {isDark} = useTheme();
+    const {user} = useAuth();
     const {state, dispatch, startTimeRef} = useWord();
-    const {wpm, accuracy, correctWordCount, words, difficulty, wordCount, elapsedMs} = state;
+    const {wpm, accuracy, correctWordCount, words, difficulty, wordCount, elapsedMs, wordCpms, wordAccs, typos, wordDetails} = state;
     const retryBtnRef = useRef(null);
 
     const totalWords = words.length;
     const elapsedSec = elapsedMs / 1000;
+
+    // 서버 전송용 WordTypingRecord 출력
+    useEffect(() => {
+        if (state.phase !== 'result') return;
+
+        // flat typos → wordDetails[].typos 로 재구성
+        const record = {
+            mode: 'WORD',
+            language: 'KOREAN',
+            difficulty,
+            wordCount,
+            timestamp: new Date().toISOString(),
+            memberId: null,
+            anonymousId: user ? null : getAnonymousId(),
+            wpm,
+            accuracy: accuracy / 100,
+            correctWordCount,
+            incorrectWordCount: totalWords - correctWordCount,
+            elapsedTimeMs: elapsedMs,
+            wordIds: null,
+            wordDetails: wordDetails.map((wd, i) => ({
+                wordIndex: i,
+                word: wd.word,
+                typed: wd.typed,
+                correct: wd.correct,
+                timeMs: wd.timeMs,
+                typos: typos
+                    .filter(t => t.wordIndex === i)
+                    .map(({wordIndex, ...rest}) => rest),
+            })),
+        };
+        console.log('[WordTypingRecord]', JSON.stringify(record, null, 2));
+    }, [state.phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // CPM 계산: 자모 분리 기준 타수 + 스페이스(단어 수 - 1) / 소요 시간(분)
     const totalJamo = words.reduce((sum, word) => {
@@ -35,9 +66,14 @@ const WordResult = () => {
         dispatch({type: 'RETRY', words: newWords});
     }, [difficulty, wordCount, dispatch, startTimeRef]);
 
-    // Tab → Enter로 retry (자동 포커스 없음)
+    // Tab → retry 버튼으로 직접 포커스, Enter → retry 실행
     useEffect(() => {
         const handleKeyDown = (e) => {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                retryBtnRef.current?.focus();
+                return;
+            }
             if (e.key === 'Enter' && document.activeElement === retryBtnRef.current) {
                 e.preventDefault();
                 handleRetry();
@@ -77,6 +113,20 @@ const WordResult = () => {
                     <span className="word-result-detail-value">{elapsedSec.toFixed(1)}s</span>
                 </div>
             </div>
+
+            {/* 세션 차트 + 히트맵 */}
+            {wordCpms.length > 0 && (
+                <div className="word-result-session">
+                    <div>
+                        <div className="word-result-section-title">{t('sessionTrend')}</div>
+                        <SessionChart cpmList={wordCpms} accList={wordAccs}/>
+                    </div>
+                    <div>
+                        <div className="word-result-section-title">{t('keyboardHeatmap')}</div>
+                        <KeyboardHeatmap externalTypos={typos} compact/>
+                    </div>
+                </div>
+            )}
 
             {/* 하단 */}
             <div className="word-result-bottom">
