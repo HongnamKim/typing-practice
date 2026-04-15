@@ -1,5 +1,6 @@
 import apiClient from './apiClient';
 import {buildTracking, TrackingInfo} from './tracking';
+import {ServingType} from './quoteApi';
 
 export type TypoType = 'INITIAL' | 'MEDIAL' | 'FINAL' | 'LETTER';
 
@@ -8,6 +9,7 @@ export interface TypoEntry {
     actual: string;
     position: number;
     type: TypoType;
+    wordIndex?: number;
 }
 
 interface TypingRecordRequest {
@@ -17,6 +19,7 @@ interface TypingRecordRequest {
     charLength: number;
     resetCount: number;
     typos: TypoEntry[];
+    servingType: ServingType;
     anonymousId?: string | null;
     tracking?: TrackingInfo;
 }

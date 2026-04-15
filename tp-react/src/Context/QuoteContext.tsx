@@ -2,18 +2,20 @@ import {createContext, ReactNode, useCallback, useContext, useEffect, useRef, us
 import {useScore} from "./ScoreContext";
 import {useAuth} from "./AuthContext";
 import {useError} from "./ErrorContext";
-import {getQuotes} from "../utils/quoteApi";
+import {getQuotes, getAdaptiveQuotes} from "../utils/quoteApi";
+import type {ServingType} from "../utils/quoteApi";
 import {defaultQuotes} from "../data/default-quotes.const.ts";
-import {Session_Post_Login_Quote_Source} from "../const/config.const";
+import {Session_Post_Login_Quote_Source, Storage_Quote_Source, LANGUAGE} from "../const/config.const";
 import {t} from "../utils/i18n";
 
 interface Quote {
     quoteId?: number;
     sentence: string;
     author?: string;
+    servingType?: ServingType;
 }
 
-type QuoteSourceType = 'all' | 'my';
+type QuoteSourceType = 'all' | 'my' | 'adaptive';
 
 interface QuoteContextType {
     sentence: string;
@@ -26,6 +28,7 @@ interface QuoteContextType {
     isLoading: boolean;
     isEmpty: boolean;
     isOffline: boolean;
+    prefetchAdaptiveQuotes: () => void;
 }
 
 export const QuoteContext = createContext<QuoteContextType | null>(null);
@@ -39,9 +42,11 @@ export const useQuote = (): QuoteContextType => {
 };
 
 const QUOTES_PER_PAGE = 100;
+const ADAPTIVE_COUNT = 50;
 const QUOTE_SOURCE = {
     ALL: 'all' as const,
     MY: 'my' as const,
+    ADAPTIVE: 'adaptive' as const,
 };
 
 const generateSeed = () => Math.floor(Math.random() * 1_999_999_999) - 999_999_999;
@@ -61,15 +66,22 @@ interface QuoteContextProviderProps {
 
 export const QuoteContextProvider = ({children}: QuoteContextProviderProps) => {
     const {setInputCheck} = useScore();
-    const {user} = useAuth();
+    const {user, isInitialized} = useAuth();
     const {showError} = useError();
 
     const seedRef = useRef<number>(generateSeed());
     const currentPageRef = useRef<number>(1);
     const hasNextRef = useRef<boolean>(true);
     const isLoadingRef = useRef<boolean>(false);
+    const excludeIdsRef = useRef<number[]>([]);
 
-    const [quoteSource, setQuoteSource] = useState<QuoteSourceType>(QUOTE_SOURCE.ALL);
+    const getInitialQuoteSource = (): QuoteSourceType => {
+        const stored = localStorage.getItem(Storage_Quote_Source);
+        if (stored === 'all' || stored === 'my' || stored === 'adaptive') return stored;
+        return QUOTE_SOURCE.ALL;
+    };
+
+    const [quoteSource, setQuoteSource] = useState<QuoteSourceType>(getInitialQuoteSource);
     const [quotes, setQuotes] = useState<Quote[]>([]);
     const [quotesIndex, setQuotesIndex] = useState<number>(0);
     const [sentence, setSentence] = useState<string>("");
@@ -86,6 +98,7 @@ export const QuoteContextProvider = ({children}: QuoteContextProviderProps) => {
         setAuthor("");
         currentPageRef.current = 1;
         hasNextRef.current = true;
+        excludeIdsRef.current = [];
         setIsEmpty(false);
     }, []);
 
@@ -109,7 +122,55 @@ export const QuoteContextProvider = ({children}: QuoteContextProviderProps) => {
         }
     }, [setCurrentQuote]);
 
-    const loadQuotes = useCallback(async (page = 1, reset = false, source = quoteSource) => {
+    const loadAdaptiveQuotes = useCallback(async (reset = false) => {
+        if (isLoadingRef.current) return;
+
+        isLoadingRef.current = true;
+        setIsLoading(true);
+
+        try {
+            const response = await getAdaptiveQuotes(LANGUAGE.KOREAN, ADAPTIVE_COUNT, excludeIdsRef.current);
+            const rawContent = response.data.data;
+            const contentArray = Array.isArray(rawContent) ? rawContent : (rawContent as any).content || [];
+            const content = contentArray.map((q: any) => ({
+                ...q,
+                servingType: q.servingType || 'ADAPTIVE',
+            }));
+
+            if (reset) {
+                setQuotes(content);
+                setQuotesIndex(0);
+            } else {
+                setQuotes(prev => [...prev, ...content]);
+            }
+
+            // excludeIds 관리
+            const newIds = content.map((q: any) => q.quoteId || q.id).filter(Boolean);
+            const randomCount = content.filter((q: any) => q.servingType === 'RANDOM').length;
+            if (randomCount >= Math.ceil(ADAPTIVE_COUNT / 2)) {
+                excludeIdsRef.current = [];
+            } else {
+                excludeIdsRef.current = [...excludeIdsRef.current, ...newIds];
+            }
+
+            hasNextRef.current = content.length > 0;
+            setIsEmpty(reset && content.length === 0);
+            setIsOffline(false);
+
+            if (reset && content.length > 0) {
+                setCurrentQuote(content[0]);
+            }
+        } catch (error) {
+            console.error('적응형 문장 로드 실패:', error);
+            showError(t('sentenceLoadFailed'));
+            if (reset) setIsEmpty(true);
+        } finally {
+            isLoadingRef.current = false;
+            setIsLoading(false);
+        }
+    }, [setCurrentQuote, showError]);
+
+    const loadPagedQuotes = useCallback(async (page = 1, reset = false, source = quoteSource) => {
         if (isLoadingRef.current) return;
 
         isLoadingRef.current = true;
@@ -123,11 +184,13 @@ export const QuoteContextProvider = ({children}: QuoteContextProviderProps) => {
                 onlyMyQuotes: source === QUOTE_SOURCE.MY,
             });
             const data = response.data.data;
-            const content = data.content || [];
+            const content = (data.content || []).map((q: any) => ({
+                ...q,
+                servingType: 'RANDOM' as ServingType,
+            }));
 
             if (reset) {
                 if (content.length === 0 && source === QUOTE_SOURCE.ALL) {
-                    // 서버 응답은 왔지만 공개 문장이 없는 경우 로컬 문장 사용
                     loadFallbackQuotes();
                     return;
                 }
@@ -153,9 +216,7 @@ export const QuoteContextProvider = ({children}: QuoteContextProviderProps) => {
                 loadFallbackQuotes();
             } else {
                 showError(t('sentenceLoadFailed'));
-                if (reset) {
-                    setIsEmpty(true);
-                }
+                if (reset) setIsEmpty(true);
             }
         } finally {
             isLoadingRef.current = false;
@@ -164,23 +225,34 @@ export const QuoteContextProvider = ({children}: QuoteContextProviderProps) => {
     }, [quoteSource, setCurrentQuote, showError, loadFallbackQuotes]);
 
     useEffect(() => {
-        if (!user && quoteSource === QUOTE_SOURCE.MY) {
+        if (!isInitialized) return;
+        if (!user && (quoteSource === QUOTE_SOURCE.MY || quoteSource === QUOTE_SOURCE.ADAPTIVE)) {
             setQuoteSource(QUOTE_SOURCE.ALL);
         }
         // 로그인 후 저장된 소스 전환 적용
         if (user) {
             const pendingSource = sessionStorage.getItem(Session_Post_Login_Quote_Source);
-            if (pendingSource === 'my') {
+            if (pendingSource === 'my' || pendingSource === 'adaptive') {
                 sessionStorage.removeItem(Session_Post_Login_Quote_Source);
-                setQuoteSource(QUOTE_SOURCE.MY);
+                setQuoteSource(pendingSource as QuoteSourceType);
             }
         }
-    }, [user, quoteSource]);
+    }, [user, isInitialized, quoteSource]);
 
     useEffect(() => {
+        // 로그인 필요한 소스는 인증 초기화 후 로드
+        if ((quoteSource === QUOTE_SOURCE.MY || quoteSource === QUOTE_SOURCE.ADAPTIVE) && !isInitialized) return;
+        // 비로그인 상태에서 로그인 필요한 소스는 로드하지 않음 (다른 effect에서 'all'로 전환됨)
+        if ((quoteSource === QUOTE_SOURCE.MY || quoteSource === QUOTE_SOURCE.ADAPTIVE) && !user) return;
+
         resetState();
-        loadQuotes(1, true, quoteSource);
-    }, [quoteSource]); // eslint-disable-line react-hooks/exhaustive-deps
+        if (quoteSource === QUOTE_SOURCE.ADAPTIVE) {
+            loadAdaptiveQuotes(true);
+        } else {
+            loadPagedQuotes(1, true, quoteSource);
+        }
+        localStorage.setItem(Storage_Quote_Source, quoteSource);
+    }, [quoteSource, isInitialized]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (quotes.length === 0) return;
@@ -191,8 +263,12 @@ export const QuoteContextProvider = ({children}: QuoteContextProviderProps) => {
         }
 
         if (quotesIndex >= quotes.length) {
-            if (hasNextRef.current && !isLoadingRef.current) {
-                loadQuotes(currentPageRef.current + 1, false, quoteSource);
+            if (quoteSource === QUOTE_SOURCE.ADAPTIVE) {
+                if (hasNextRef.current && !isLoadingRef.current) {
+                    loadAdaptiveQuotes(false);
+                }
+            } else if (hasNextRef.current && !isLoadingRef.current) {
+                loadPagedQuotes(currentPageRef.current + 1, false, quoteSource);
             } else {
                 if (isOffline) {
                     const shuffled = shuffleArray(quotes);
@@ -202,7 +278,7 @@ export const QuoteContextProvider = ({children}: QuoteContextProviderProps) => {
                 } else {
                     seedRef.current = generateSeed();
                     resetState();
-                    loadQuotes(1, true, quoteSource);
+                    loadPagedQuotes(1, true, quoteSource);
                 }
             }
             return;
@@ -214,12 +290,17 @@ export const QuoteContextProvider = ({children}: QuoteContextProviderProps) => {
     const currentQuote = quotes[quotesIndex] || null;
 
     const changeQuoteSource = useCallback((source: QuoteSourceType): boolean => {
-        if (source === QUOTE_SOURCE.MY && !user) {
+        if ((source === QUOTE_SOURCE.MY || source === QUOTE_SOURCE.ADAPTIVE) && !user) {
             return false;
         }
         setQuoteSource(source);
         return true;
     }, [user]);
+
+    const prefetchAdaptiveQuotes = useCallback(() => {
+        if (quoteSource !== QUOTE_SOURCE.ADAPTIVE) return;
+        loadAdaptiveQuotes(false);
+    }, [quoteSource, loadAdaptiveQuotes]);
 
     return (
         <QuoteContext.Provider
@@ -234,6 +315,7 @@ export const QuoteContextProvider = ({children}: QuoteContextProviderProps) => {
                 isLoading,
                 isEmpty,
                 isOffline,
+                prefetchAdaptiveQuotes,
             }}
         >
             {children}

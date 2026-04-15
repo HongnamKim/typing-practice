@@ -1,7 +1,10 @@
 import apiClient from './apiClient';
 import {ApiResponse, PageResponse} from '../types/api.types';
+import {LANGUAGE} from '@/const/config.const';
 
 // 문장 타입
+export type ServingType = 'ADAPTIVE' | 'RANDOM';
+
 interface Quote {
     id: number;
     sentence: string;
@@ -10,6 +13,7 @@ interface Quote {
     status: 'PENDING' | 'ACTIVE';
     createdAt: string;
     updatedAt: string;
+    servingType?: ServingType;
 }
 
 // 파라미터 타입
@@ -49,10 +53,23 @@ export const getQuotes = async (params: GetQuotesParams = {}) => {
 };
 
 /**
+ * 적응형 문장 조회 (회원 전용)
+ */
+export const getAdaptiveQuotes = async (language: string, count: number, excludeIds?: number[]) => {
+    const queryParams = new URLSearchParams();
+    queryParams.append('language', language);
+    queryParams.append('count', String(count));
+    if (excludeIds && excludeIds.length > 0) {
+        queryParams.append('excludeIds', excludeIds.join(','));
+    }
+    return apiClient.get<ApiResponse<Quote[]>>(`/quotes/adaptive?${queryParams.toString()}`);
+};
+
+/**
  * 공개 문장 업로드
  */
 const uploadPublicQuote = async (sentence: string, author?: string) => {
-    const body: { sentence: string; author?: string; language: string } = {sentence, language: 'KOREAN'};
+    const body: { sentence: string; author?: string; language: string } = {sentence, language: LANGUAGE.KOREAN};
     if (author) {
         body.author = author;
     }
@@ -63,7 +80,7 @@ const uploadPublicQuote = async (sentence: string, author?: string) => {
  * 비공개 문장 업로드
  */
 const uploadPrivateQuote = async (sentence: string, author?: string) => {
-    const body: { sentence: string; author?: string; language: string } = {sentence, language: 'KOREAN'};
+    const body: { sentence: string; author?: string; language: string } = {sentence, language: LANGUAGE.KOREAN};
     if (author) {
         body.author = author;
     }

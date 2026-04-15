@@ -1,5 +1,6 @@
 import apiClient from './apiClient';
 import {ApiResponse} from '../types/api.types';
+import {Language} from '@/const/config.const';
 
 // 종합 통계 응답
 export interface TypingStatsResponse {
@@ -57,7 +58,6 @@ export interface TypoDetailStatsResponse {
     content: TypoDetailEntry[];
 }
 
-type Language = 'KOREAN' | 'ENGLISH';
 
 /**
  * 종합 타이핑 통계 조회
@@ -101,5 +101,19 @@ export const getTypoDetailStats = async (language: Language, expected: string) =
 export const refreshStats = async (language: Language) => {
     return apiClient.post<ApiResponse<TypingStatsResponse>>(
         `/members/me/stats/refresh?language=${language}`
+    );
+};
+
+/**
+ * 타이핑 프로필 조회 (적응형 서빙 기반 실력 추정)
+ */
+export interface TypingProfile {
+    mu: number;
+    sigma: number;
+}
+
+export const getTypingProfile = async (language: Language) => {
+    return apiClient.get<ApiResponse<TypingProfile>>(
+        `/members/me/typing-profile?language=${language}`
     );
 };
