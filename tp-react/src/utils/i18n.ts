@@ -74,6 +74,7 @@ const translations = {
     loadingSentences: l('문장을 불러오는 중...', '文章を読み込み中...', 'Loading sentences...'),
     noSentences: l('등록된 문장이 없습니다.', '登録された文章がありません。', 'No sentences found.'),
     sentenceLoadFailed: l('문장을 불러오는데 실패했습니다.', '文章の読み込みに失敗しました。', 'Failed to load sentences.'),
+    adaptiveLoadFailedFallback: l('맞춤 난이도 문장을 불러올 수 없어 전체 문장으로 전환했습니다.', 'レベル別文章を読み込めず、全体の文章に切り替えました。', 'Could not load adaptive sentences. Switched to all sentences.'),
 
     // 신고
     report: l('신고', '報告', 'Report'),
@@ -158,6 +159,10 @@ const translations = {
     accuracy: l('정확도', '正確度', 'Accuracy'),
     practiceTime: l('연습 시간', '練習時間', 'Practice Time'),
     practiceCount: l('연습 횟수', '練習回数', 'Practices'),
+    wordsAttempted: l('단어 수', '単語数', 'Words'),
+    totalWordsAttempted: l('누적 단어', '累積単語', 'Total Words'),
+    sentenceMode: l('문장', '文章', 'Sentence'),
+    wordMode: l('단어', '単語', 'Word'),
     totalAverage: l('전체 평균', '全体平均', 'Overall Avg'),
     avgReset: l('평균 초기화', '平均リセット', 'Avg Resets'),
     vsOverall: l('vs 전체', 'vs 全体', 'vs overall'),

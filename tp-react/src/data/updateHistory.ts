@@ -36,16 +36,46 @@ export function localize(item: LocalizedText): string {
 
 export const updateHistory: UpdateEntry[] = [
     {
-        version: "1.7.1",
-        date: "2026-04-14",
+        version: "1.8.0",
+        date: "2026-04-27",
         showPopup: true,
         hidden: false,
         features: [
-            {ko: "단어 모드 결과 화면에 CPM/ACC 추이 그래프 및 키보드 히트맵 추가", ja: "単語モード結果画面にCPM/ACC推移グラフとキーボードヒートマップを追加", en: "Added CPM/ACC trend graph and keyboard heatmap to word mode results"},
+            {
+                ko: "단어 모드 정식 출시 (beta 종료)",
+                ja: "単語モード正式リリース（beta終了）",
+                en: "Word mode officially released (beta ended)"
+            },
+            {
+                ko: "단어 모드 통계 페이지 추가 — 기록 페이지에서 모드 전환 가능",
+                ja: "単語モード統計ページ追加 — 記録ページでモード切替可能",
+                en: "Added word mode statistics page — toggle between modes on records page"
+            },
+        ],
+    },
+    {
+        version: "1.7.1",
+        date: "2026-04-14",
+        showPopup: false,
+        hidden: false,
+        features: [
+            {
+                ko: "단어 모드 결과 화면에 CPM/ACC 추이 그래프 및 키보드 히트맵 추가",
+                ja: "単語モード結果画面にCPM/ACC推移グラフとキーボードヒートマップを追加",
+                en: "Added CPM/ACC trend graph and keyboard heatmap to word mode results"
+            },
         ],
         improvements: [
-            {ko: "단어 모드에서 글자 수가 부족할 때 다음 단어로 넘어가지 않도록 변경", ja: "単語モードで文字数が不足している場合、次の単語に進めないように変更", en: "Prevented moving to the next word when input is shorter than the word length"},
-            {ko: "맞춤 난이도 모드에서 로그아웃 후 재진입 시 문장 로드 오류 수정", ja: "レベル別モードでログアウト後の再入時に文章読み込みエラーを修正", en: "Fixed sentence loading error when re-entering after logout in Adaptive mode"},
+            {
+                ko: "단어 모드에서 글자 수가 부족할 때 다음 단어로 넘어가지 않도록 변경",
+                ja: "単語モードで文字数が不足している場合、次の単語に進めないように変更",
+                en: "Prevented moving to the next word when input is shorter than the word length"
+            },
+            {
+                ko: "맞춤 난이도 모드에서 로그아웃 후 재진입 시 문장 로드 오류 수정",
+                ja: "レベル別モードでログアウト後の再入時に文章読み込みエラーを修正",
+                en: "Fixed sentence loading error when re-entering after logout in Adaptive mode"
+            },
         ],
     },
     {
@@ -54,7 +84,11 @@ export const updateHistory: UpdateEntry[] = [
         showPopup: false,
         hidden: false,
         features: [
-            {ko: "맞춤 난이도 모드 추가 — 실력에 맞는 문장을 자동으로 제공", ja: "レベル別モード追加 — 実力に合った文章を自動提供", en: "Added Adaptive mode — sentences matched to your skill level"},
+            {
+                ko: "맞춤 난이도 모드 추가 — 실력에 맞는 문장을 자동으로 제공",
+                ja: "レベル別モード追加 — 実力に合った文章を自動提供",
+                en: "Added Adaptive mode — sentences matched to your skill level"
+            },
         ],
     },
     {
@@ -65,11 +99,23 @@ export const updateHistory: UpdateEntry[] = [
         features: [
             {ko: "기록 페이지 디자인 전면 개편", ja: "記録ページのデザインを全面改修", en: "Complete redesign of the Records page"},
             {ko: "키보드 에러 히트맵 추가", ja: "キーボードエラーヒートマップ追加", en: "Added keyboard error heatmap"},
-            {ko: "세션 결과 팝업에 CPM/ACC 추이 그래프 및 히트맵 추가", ja: "セッション結果ポップアップにCPM/ACC推移グラフとヒートマップを追加", en: "Added CPM/ACC trend graph and heatmap to session result popup"},
-            {ko: "업데이트 기록 페이지 타임라인 디자인 적용", ja: "アップデート履歴ページにタイムラインデザインを適用", en: "Applied timeline design to the Update History page"},
+            {
+                ko: "세션 결과 팝업에 CPM/ACC 추이 그래프 및 히트맵 추가",
+                ja: "セッション結果ポップアップにCPM/ACC推移グラフとヒートマップを追加",
+                en: "Added CPM/ACC trend graph and heatmap to session result popup"
+            },
+            {
+                ko: "업데이트 기록 페이지 타임라인 디자인 적용",
+                ja: "アップデート履歴ページにタイムラインデザインを適用",
+                en: "Applied timeline design to the Update History page"
+            },
         ],
         improvements: [
-            {ko: "일별 추이 차트 곡선 그래프로 개선", ja: "日別推移チャートを曲線グラフに改善", en: "Improved daily trend chart with curved graph"},
+            {
+                ko: "일별 추이 차트 곡선 그래프로 개선",
+                ja: "日別推移チャートを曲線グラフに改善",
+                en: "Improved daily trend chart with curved graph"
+            },
             {ko: "Pretendard 웹폰트 적용", ja: "Pretendardウェブフォント適用", en: "Applied Pretendard web font"},
         ]
     },
@@ -79,7 +125,11 @@ export const updateHistory: UpdateEntry[] = [
         showPopup: false,
         hidden: false,
         improvements: [
-            {ko: "일별 추이 그래프가 최근 7개/30개의 일별 통계를 표시하도록 변경", ja: "日別推移グラフが最新7件/30件の日別統計を表示するよう変更", en: "Daily trend chart now shows the latest 7/30 daily entries"},
+            {
+                ko: "일별 추이 그래프가 최근 7개/30개의 일별 통계를 표시하도록 변경",
+                ja: "日別推移グラフが最新7件/30件の日別統計を表示するよう変更",
+                en: "Daily trend chart now shows the latest 7/30 daily entries"
+            },
         ]
     },
     {
@@ -88,7 +138,11 @@ export const updateHistory: UpdateEntry[] = [
         showPopup: false,
         hidden: false,
         improvements: [
-            {ko: "일부 브라우저 환경에서 로그인 및 기록 조회가 동작하지 않던 문제 수정", ja: "一部のブラウザ環境でログインと記録照会が動作しなかった問題を修正", en: "Fixed login and stats not working in some browser environments"},
+            {
+                ko: "일부 브라우저 환경에서 로그인 및 기록 조회가 동작하지 않던 문제 수정",
+                ja: "一部のブラウザ環境でログインと記録照会が動作しなかった問題を修正",
+                en: "Fixed login and stats not working in some browser environments"
+            },
         ]
     },
     {
@@ -99,13 +153,33 @@ export const updateHistory: UpdateEntry[] = [
         features: [
             {ko: "상단 네비게이션 바 디자인 변경", ja: "上部ナビゲーションバーのデザイン変更", en: "Redesigned top navigation bar"},
             {ko: "업데이트 내역 페이지 추가", ja: "アップデート履歴ページ追加", en: "Added update history page"},
-            {ko: "타이핑 속도/정확도 표시 및 설정 영역 디자인 변경", ja: "タイピング速度・正確度表示と設定エリアのデザイン変更", en: "Redesigned typing stats and settings area"},
-            {ko: "단어 연습에 실시간 WPM, 난이도, 단어수, 폰트 크기 설정 추가", ja: "単語練習にリアルタイムWPM・難易度・単語数・フォントサイズ設定を追加", en: "Added real-time WPM, difficulty, word count, font size settings to word mode"},
-            {ko: "문장 소스 선택 탭 디자인 변경", ja: "文章ソース選択タブのデザイン変更", en: "Redesigned sentence source selector tabs"},
+            {
+                ko: "타이핑 속도/정확도 표시 및 설정 영역 디자인 변경",
+                ja: "タイピング速度・正確度表示と設定エリアのデザイン変更",
+                en: "Redesigned typing stats and settings area"
+            },
+            {
+                ko: "단어 연습에 실시간 WPM, 난이도, 단어수, 폰트 크기 설정 추가",
+                ja: "単語練習にリアルタイムWPM・難易度・単語数・フォントサイズ設定を追加",
+                en: "Added real-time WPM, difficulty, word count, font size settings to word mode"
+            },
+            {
+                ko: "문장 소스 선택 탭 디자인 변경",
+                ja: "文章ソース選択タブのデザイン変更",
+                en: "Redesigned sentence source selector tabs"
+            },
         ],
         improvements: [
-            {ko: "문장 셔플 알고리즘 개선 — 문장 노출 편향 해소", ja: "文章シャッフルアルゴリズム改善 — 文章の偏り解消", en: "Improved sentence shuffle algorithm — resolved exposure bias"},
-            {ko: "다크모드 배경 및 보라색(primary) 색상 개선", ja: "ダークモードの背景とプライマリカラーの改善", en: "Improved dark mode background and primary colors"},
+            {
+                ko: "문장 셔플 알고리즘 개선 — 문장 노출 편향 해소",
+                ja: "文章シャッフルアルゴリズム改善 — 文章の偏り解消",
+                en: "Improved sentence shuffle algorithm — resolved exposure bias"
+            },
+            {
+                ko: "다크모드 배경 및 보라색(primary) 색상 개선",
+                ja: "ダークモードの背景とプライマリカラーの改善",
+                en: "Improved dark mode background and primary colors"
+            },
         ]
     },
     {
@@ -116,13 +190,33 @@ export const updateHistory: UpdateEntry[] = [
         features: [
             {ko: "상단 네비게이션 바 디자인 변경", ja: "上部ナビゲーションバーのデザイン変更", en: "Redesigned top navigation bar"},
             {ko: "업데이트 내역 페이지 추가", ja: "アップデート履歴ページ追加", en: "Added update history page"},
-            {ko: "타이핑 속도/정확도 표시 및 설정 영역 디자인 변경", ja: "タイピング速度・正確度表示と設定エリアのデザイン変更", en: "Redesigned typing stats and settings area"},
-            {ko: "단어 연습에 실시간 WPM, 난이도, 단어수, 폰트 크기 설정 추가", ja: "単語練習にリアルタイムWPM・難易度・単語数・フォントサイズ設定を追加", en: "Added real-time WPM, difficulty, word count, font size settings to word mode"},
-            {ko: "문장 소스 선택 탭 디자인 변경", ja: "文章ソース選択タブのデザイン変更", en: "Redesigned sentence source selector tabs"},
+            {
+                ko: "타이핑 속도/정확도 표시 및 설정 영역 디자인 변경",
+                ja: "タイピング速度・正確度表示と設定エリアのデザイン変更",
+                en: "Redesigned typing stats and settings area"
+            },
+            {
+                ko: "단어 연습에 실시간 WPM, 난이도, 단어수, 폰트 크기 설정 추가",
+                ja: "単語練習にリアルタイムWPM・難易度・単語数・フォントサイズ設定を追加",
+                en: "Added real-time WPM, difficulty, word count, font size settings to word mode"
+            },
+            {
+                ko: "문장 소스 선택 탭 디자인 변경",
+                ja: "文章ソース選択タブのデザイン変更",
+                en: "Redesigned sentence source selector tabs"
+            },
         ],
         improvements: [
-            {ko: "다크모드 배경 및 보라색(primary) 색상 개선", ja: "ダークモードの背景とプライマリカラーの改善", en: "Improved dark mode background and primary colors"},
-            {ko: "좁은 화면에서 컨트롤 영역 자동 접기/오버레이 지원", ja: "狭い画面でコントロールエリアの自動折りたたみ・オーバーレイ対応", en: "Auto-collapse controls on narrow screens with overlay support"},
+            {
+                ko: "다크모드 배경 및 보라색(primary) 색상 개선",
+                ja: "ダークモードの背景とプライマリカラーの改善",
+                en: "Improved dark mode background and primary colors"
+            },
+            {
+                ko: "좁은 화면에서 컨트롤 영역 자동 접기/오버레이 지원",
+                ja: "狭い画面でコントロールエリアの自動折りたたみ・オーバーレイ対応",
+                en: "Auto-collapse controls on narrow screens with overlay support"
+            },
         ]
     },
     {
@@ -132,7 +226,11 @@ export const updateHistory: UpdateEntry[] = [
         hidden: false,
         features: [
             {ko: "단어 모드 추가 (beta)", ja: "単語モード追加（beta）", en: "Word mode added (beta)"},
-            {ko: "난이도 선택 (Random, Easy, Normal, Hard)", ja: "難易度選択（Random, Easy, Normal, Hard）", en: "Difficulty selection (Random, Easy, Normal, Hard)"},
+            {
+                ko: "난이도 선택 (Random, Easy, Normal, Hard)",
+                ja: "難易度選択（Random, Easy, Normal, Hard）",
+                en: "Difficulty selection (Random, Easy, Normal, Hard)"
+            },
             {ko: "단어 수 선택 (15, 25, 50)", ja: "単語数選択（15, 25, 50）", en: "Word count selection (15, 25, 50)"},
             {ko: "문장/단어 모드 전환 기능 추가", ja: "文章・単語モード切り替え機能追加", en: "Sentence/Word mode switch"},
         ],
@@ -146,9 +244,21 @@ export const updateHistory: UpdateEntry[] = [
         showPopup: false,
         hidden: true,
         notices: [
-            {ko: "4월 2일 00:48 ~ 15:00 사이에 서버 문제로 타이핑 기록이 저장되지 않았습니다.", ja: "4月2日 00:48〜15:00の間、サーバーの問題によりタイピング記録が保存されませんでした。", en: "Due to a server issue, typing records were not saved between Apr 2, 00:48 – 15:00 KST."},
-            {ko: "해당 시간대의 기록은 복구가 불가능합니다.", ja: "該当時間帯の記録は復旧できません。", en: "Records from that period cannot be recovered."},
-            {ko: "불편을 드려 죄송합니다. 현재는 정상 동작 중입니다.", ja: "ご不便をおかけして申し訳ございません。現在は正常に動作しています。", en: "We apologize for the inconvenience. The service is now operating normally."}
+            {
+                ko: "4월 2일 00:48 ~ 15:00 사이에 서버 문제로 타이핑 기록이 저장되지 않았습니다.",
+                ja: "4月2日 00:48〜15:00の間、サーバーの問題によりタイピング記録が保存されませんでした。",
+                en: "Due to a server issue, typing records were not saved between Apr 2, 00:48 – 15:00 KST."
+            },
+            {
+                ko: "해당 시간대의 기록은 복구가 불가능합니다.",
+                ja: "該当時間帯の記録は復旧できません。",
+                en: "Records from that period cannot be recovered."
+            },
+            {
+                ko: "불편을 드려 죄송합니다. 현재는 정상 동작 중입니다.",
+                ja: "ご不便をおかけして申し訳ございません。現在は正常に動作しています。",
+                en: "We apologize for the inconvenience. The service is now operating normally."
+            }
         ]
     },
     {
@@ -158,15 +268,43 @@ export const updateHistory: UpdateEntry[] = [
         hidden: false,
         features: [
             {ko: "문장 업로드 기능 추가", ja: "文章アップロード機能追加", en: "Upload your own sentences"},
-            {ko: "내 문장 관리 페이지 추가 (수정, 삭제, 공개전환)", ja: "マイ文章管理ページ追加（編集・削除・公開切替）", en: "My sentences page (edit, delete, toggle visibility)"},
-            {ko: "전체 문장 / 내 문장 전환 기능 추가", ja: "すべての文章・マイ文章の切り替え機能追加", en: "Switch between all sentences and my sentences"},
-            {ko: "문장 신고 기능 및 신고 내역 페이지 추가", ja: "文章の報告機能と報告履歴ページ追加", en: "Report sentences and view report history"},
-            {ko: "타이핑 기록 페이지 추가 (종합 통계, 일별 추이, 오타 분석)", ja: "タイピング記録ページ追加（総合統計・日別推移・誤字分析）", en: "Typing stats page (summary, daily trends, typo analysis)"},
-            {ko: "타이핑 연습 완료 시 기록 자동 저장", ja: "タイピング練習完了時に記録を自動保存", en: "Auto-save typing records on completion"},
+            {
+                ko: "내 문장 관리 페이지 추가 (수정, 삭제, 공개전환)",
+                ja: "マイ文章管理ページ追加（編集・削除・公開切替）",
+                en: "My sentences page (edit, delete, toggle visibility)"
+            },
+            {
+                ko: "전체 문장 / 내 문장 전환 기능 추가",
+                ja: "すべての文章・マイ文章の切り替え機能追加",
+                en: "Switch between all sentences and my sentences"
+            },
+            {
+                ko: "문장 신고 기능 및 신고 내역 페이지 추가",
+                ja: "文章の報告機能と報告履歴ページ追加",
+                en: "Report sentences and view report history"
+            },
+            {
+                ko: "타이핑 기록 페이지 추가 (종합 통계, 일별 추이, 오타 분석)",
+                ja: "タイピング記録ページ追加（総合統計・日別推移・誤字分析）",
+                en: "Typing stats page (summary, daily trends, typo analysis)"
+            },
+            {
+                ko: "타이핑 연습 완료 시 기록 자동 저장",
+                ja: "タイピング練習完了時に記録を自動保存",
+                en: "Auto-save typing records on completion"
+            },
         ],
         improvements: [
-            {ko: "타이핑 채점 색상 표시 방식 개선", ja: "タイピング採点の色表示方法を改善", en: "Improved typing grading color display"},
-            {ko: "결과 표시 주기 선택 버그 수정", ja: "結果表示間隔の選択バグを修正", en: "Fixed result display interval selection bug"},
+            {
+                ko: "타이핑 채점 색상 표시 방식 개선",
+                ja: "タイピング採点の色表示方法を改善",
+                en: "Improved typing grading color display"
+            },
+            {
+                ko: "결과 표시 주기 선택 버그 수정",
+                ja: "結果表示間隔の選択バグを修正",
+                en: "Fixed result display interval selection bug"
+            },
         ]
     },
     {
@@ -175,7 +313,11 @@ export const updateHistory: UpdateEntry[] = [
         showPopup: true,
         hidden: false,
         improvements: [
-            {ko: "일반 모드에서 입력 시 예문이 변경되지 않고 원본 유지되도록 개선", ja: "通常モードで入力中に例文が変わらず原文を維持するよう改善", en: "Fixed sentence changing during input in normal mode"}
+            {
+                ko: "일반 모드에서 입력 시 예문이 변경되지 않고 원본 유지되도록 개선",
+                ja: "通常モードで入力中に例文が変わらず原文を維持するよう改善",
+                en: "Fixed sentence changing during input in normal mode"
+            }
         ]
     },
     {
@@ -184,7 +326,11 @@ export const updateHistory: UpdateEntry[] = [
         showPopup: false,
         hidden: false,
         improvements: [
-            {ko: "브라우저 높이가 낮을 때 예문과 Contact가 겹치는 문제 수정", ja: "ブラウザの高さが低い時に例文とContactが重なる問題を修正", en: "Fixed sentence and contact section overlap on short browser windows"}
+            {
+                ko: "브라우저 높이가 낮을 때 예문과 Contact가 겹치는 문제 수정",
+                ja: "ブラウザの高さが低い時に例文とContactが重なる問題を修正",
+                en: "Fixed sentence and contact section overlap on short browser windows"
+            }
         ]
     },
     {
@@ -193,10 +339,22 @@ export const updateHistory: UpdateEntry[] = [
         showPopup: true,
         hidden: false,
         features: [
-            {ko: "평균점수 영역 접기/펼치기 기능 추가", ja: "平均スコアエリアの折りたたみ・展開機能追加", en: "Collapsible average score section"},
-            {ko: "Default/Compact 모드 전환 기능 추가", ja: "Default/Compactモード切り替え機能追加", en: "Default/Compact mode toggle"},
+            {
+                ko: "평균점수 영역 접기/펼치기 기능 추가",
+                ja: "平均スコアエリアの折りたたみ・展開機能追加",
+                en: "Collapsible average score section"
+            },
+            {
+                ko: "Default/Compact 모드 전환 기능 추가",
+                ja: "Default/Compactモード切り替え機能追加",
+                en: "Default/Compact mode toggle"
+            },
             {ko: "업데이트 알림 팝업 추가", ja: "アップデート通知ポップアップ追加", en: "Update notification popup"},
-            {ko: "업데이트 내역 보기 기능 추가 (우측 상단)", ja: "アップデート履歴表示機能追加（右上）", en: "Update history viewer (top right)"}
+            {
+                ko: "업데이트 내역 보기 기능 추가 (우측 상단)",
+                ja: "アップデート履歴表示機能追加（右上）",
+                en: "Update history viewer (top right)"
+            }
         ],
         improvements: [
             {ko: "문장 셔플 알고리즘 개선", ja: "文章シャッフルアルゴリズム改善", en: "Improved sentence shuffle algorithm"},
@@ -214,7 +372,11 @@ export const updateHistory: UpdateEntry[] = [
             {ko: "예문과 입력 영역 통합", ja: "例文と入力エリアを統合", en: "Unified sentence and input area"}
         ],
         improvements: [
-            {ko: "타이핑 중인 글자까지 실시간 채점", ja: "タイピング中の文字までリアルタイム採点", en: "Real-time grading while typing"}
+            {
+                ko: "타이핑 중인 글자까지 실시간 채점",
+                ja: "タイピング中の文字までリアルタイム採点",
+                en: "Real-time grading while typing"
+            }
         ]
     }
 ];

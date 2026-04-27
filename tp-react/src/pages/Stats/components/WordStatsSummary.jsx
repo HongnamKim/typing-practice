@@ -14,18 +14,18 @@ const calcTrend = (recentAvg, totalAvg) => {
     return {text: '\u2014 0%', className: 'stats-trend neutral'};
 };
 
-const calcRecentAvgCpm = (dailyStats) => {
+const calcRecentAvgWpm = (dailyStats) => {
     if (!dailyStats || dailyStats.length === 0) return 0;
     let totalWeighted = 0;
     let totalAttempts = 0;
     for (let i = 0; i < dailyStats.length; i++) {
-        totalWeighted += dailyStats[i].avgCpm * dailyStats[i].attempts;
+        totalWeighted += dailyStats[i].avgWpm * dailyStats[i].attempts;
         totalAttempts += dailyStats[i].attempts;
     }
     return totalAttempts > 0 ? Math.round(totalWeighted / totalAttempts) : 0;
 };
 
-function StatsSummary({typingStats, dailyStats, isLoading}) {
+function WordStatsSummary({typingStats, dailyStats, isLoading}) {
     const Skeleton = () => <span className="stats-number-skeleton"/>;
 
     if (isLoading || !typingStats) {
@@ -37,7 +37,11 @@ function StatsSummary({typingStats, dailyStats, isLoading}) {
                 </div>
                 <div className="stats-item">
                     <span className="stats-label">{t('totalAverage')}</span>
-                    <div className="stats-value"><Skeleton/><span className="stats-unit">CPM</span></div>
+                    <div className="stats-value"><Skeleton/><span className="stats-unit">WPM</span></div>
+                </div>
+                <div className="stats-item">
+                    <span className="stats-label">{t('totalWordsAttempted')}</span>
+                    <div className="stats-value"><Skeleton/></div>
                 </div>
                 <div className="stats-item">
                     <span className="stats-label">{t('practiceCount')}</span>
@@ -47,20 +51,12 @@ function StatsSummary({typingStats, dailyStats, isLoading}) {
                     <span className="stats-label">{t('practiceTime')}</span>
                     <div className="stats-value"><Skeleton/></div>
                 </div>
-                <div className="stats-item">
-                    <span className="stats-label">{t('avgReset')}</span>
-                    <div className="stats-value"><Skeleton/></div>
-                </div>
             </div>
         );
     }
 
-    const recentAvg = calcRecentAvgCpm(dailyStats);
-    const trend = calcTrend(recentAvg, typingStats.avgCpm);
-    const avgReset = typingStats.totalAttempts > 0
-        ? (typingStats.totalResetCount / typingStats.totalAttempts).toFixed(2)
-        : '0';
-
+    const recentAvg = calcRecentAvgWpm(dailyStats);
+    const trend = calcTrend(recentAvg, typingStats.avgWpm);
     const trendText = trend.text ? trend.text.replace('▲ ', '+').replace('▼ ', '-') + ' ' + t('vsOverall') : '';
 
     return (
@@ -75,8 +71,14 @@ function StatsSummary({typingStats, dailyStats, isLoading}) {
             <div className="stats-item">
                 <span className="stats-label">{t('totalAverage')}</span>
                 <div className="stats-value">
-                    <span className="stats-number">{Math.round(typingStats.avgCpm)}</span>
-                    <span className="stats-unit">CPM</span>
+                    <span className="stats-number">{Math.round(typingStats.avgWpm)}</span>
+                    <span className="stats-unit">WPM</span>
+                </div>
+            </div>
+            <div className="stats-item">
+                <span className="stats-label">{t('totalWordsAttempted')}</span>
+                <div className="stats-value">
+                    <span className="stats-number">{typingStats.totalWordsAttempted}</span>
                 </div>
             </div>
             <div className="stats-item">
@@ -91,14 +93,8 @@ function StatsSummary({typingStats, dailyStats, isLoading}) {
                     <span className="stats-number">{formatTime(typingStats.totalPracticeTimeMin)}</span>
                 </div>
             </div>
-            <div className="stats-item">
-                <span className="stats-label">{t('avgReset')}</span>
-                <div className="stats-value">
-                    <span className="stats-number">{avgReset}</span>
-                </div>
-            </div>
         </div>
     );
 }
 
-export default StatsSummary;
+export default WordStatsSummary;

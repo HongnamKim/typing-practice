@@ -3,11 +3,11 @@ import {Area, AreaChart, ResponsiveContainer, XAxis, YAxis} from 'recharts';
 import {t} from '@/utils/i18n.ts';
 import {formatDateLabel, computeAxis} from './dailyChartUtils';
 import DailyChartDot from './DailyChartDot';
-import DailyChartPopup from './DailyChartPopup';
+import WordDailyChartPopup from './WordDailyChartPopup';
 import './DailyChart.css';
 
-function DailyChart({dailyStats, dailyRange, onRangeChange, isLoading}) {
-    const [metric, setMetric] = useState('cpm');
+function WordDailyChart({dailyStats, dailyRange, onRangeChange, isLoading}) {
+    const [metric, setMetric] = useState('wpm');
     const [hoverIndex, setHoverIndex] = useState(null);
     const [lockedIndex, setLockedIndex] = useState(null);
     const [popupPos, setPopupPos] = useState({x: 0, y: 0});
@@ -17,7 +17,7 @@ function DailyChart({dailyStats, dailyRange, onRangeChange, isLoading}) {
     const data = (dailyStats || []).map((d, i, arr) => ({
         ...d,
         displayDate: formatDateLabel(d.date, i > 0 ? arr[i - 1].date : null),
-        value: metric === 'cpm' ? Math.round(d.avgCpm) : Math.round(d.avgAcc * 100),
+        value: metric === 'wpm' ? Math.round(d.avgWpm) : Math.round(d.avgAcc * 100),
     }));
 
     const {domain, ticks} = data.length > 0 ? computeAxis(data, metric) : {domain: [0, 100], ticks: [0, 25, 50, 75, 100]};
@@ -66,7 +66,7 @@ function DailyChart({dailyStats, dailyRange, onRangeChange, isLoading}) {
                 <h3 className="daily-chart-title">{t('dailyTrend')}</h3>
                 <div className="daily-chart-tabs">
                     <div className="daily-chart-toggle-group">
-                        <button className={'daily-chart-toggle' + (metric === 'cpm' ? ' active' : '')} onClick={() => setMetric('cpm')}>CPM</button>
+                        <button className={'daily-chart-toggle' + (metric === 'wpm' ? ' active' : '')} onClick={() => setMetric('wpm')}>WPM</button>
                         <button className={'daily-chart-toggle' + (metric === 'acc' ? ' active' : '')} onClick={() => setMetric('acc')}>{t('accuracyTab')}</button>
                     </div>
                     <div className="daily-chart-toggle-group">
@@ -84,20 +84,20 @@ function DailyChart({dailyStats, dailyRange, onRangeChange, isLoading}) {
                 <ResponsiveContainer width="100%" height={240}>
                     <AreaChart data={data} margin={{top: 16, right: 16, bottom: 8, left: 0}}>
                         <defs>
-                            <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                            <linearGradient id="colorValueWord" x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="0%" stopColor="var(--color-primary)" stopOpacity={0.1}/>
                                 <stop offset="100%" stopColor="var(--color-primary)" stopOpacity={0}/>
                             </linearGradient>
                         </defs>
                         <XAxis dataKey="displayDate" tick={{fontSize: 10, fontWeight: 700, fill: 'var(--color-text-placeholder)'}} axisLine={false} tickLine={false} dy={8}/>
                         <YAxis domain={domain} ticks={ticks} tick={{fontSize: 10, fontWeight: 700, fill: 'var(--color-text-placeholder)'}} axisLine={false} tickLine={false} tickFormatter={v => metric === 'acc' ? v + '%' : v} width={44} allowDecimals={false}/>
-                        <Area type="monotone" dataKey="value" stroke="var(--color-primary)" strokeWidth={1.5} fill="url(#colorValue)"
+                        <Area type="monotone" dataKey="value" stroke="var(--color-primary)" strokeWidth={1.5} fill="url(#colorValueWord)"
                               dot={(props) => <DailyChartDot {...props} activeIndex={activeIndex} metric={metric} onDotEnter={handleDotEnter} onDotLeave={handleDotLeave} onDotClick={handleDotClick}/>}
                               activeDot={false}/>
                     </AreaChart>
                 </ResponsiveContainer>
                 {activeIndex !== null && data[activeIndex] && (
-                    <DailyChartPopup data={data[activeIndex]} metric={metric} style={{position: 'absolute', left: popupPos.x, top: popupPos.y}}/>
+                    <WordDailyChartPopup data={data[activeIndex]} metric={metric} style={{position: 'absolute', left: popupPos.x, top: popupPos.y}}/>
                 )}
                 </>
             )}
@@ -105,4 +105,4 @@ function DailyChart({dailyStats, dailyRange, onRangeChange, isLoading}) {
     );
 }
 
-export default DailyChart;
+export default WordDailyChart;

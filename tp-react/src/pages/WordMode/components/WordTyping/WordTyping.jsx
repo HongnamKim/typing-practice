@@ -19,17 +19,22 @@ const WordTyping = () => {
     const [fullGrades, setFullGrades] = useState([]);
     const [isFocused, setIsFocused] = useState(true);
     const inputRef = useRef(null);
+    const initialLoadRef = useRef(false);
 
     useEffect(() => {
+        if (initialLoadRef.current) return;
         if (words.length === 0 && phase === 'typing') {
+            initialLoadRef.current = true;
             loadWords(difficulty, wordCount);
         }
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const loadWords = async (diff, count) => {
-        const newWords = await fetchWords(diff, count);
+        // fetchWords 대기 중 이전 단어가 보이지 않도록 즉시 초기화
+        dispatch({type: 'START_TYPING', words: [], wordIds: []});
+        const result = await fetchWords(diff, count);
         startTimeRef.current = null;
-        dispatch({type: 'START_TYPING', words: newWords});
+        dispatch({type: 'START_TYPING', words: result.words, wordIds: result.wordIds});
         setFullInput("");
         setFullGrades([]);
         setTimeout(() => inputRef.current?.focus(), 50);

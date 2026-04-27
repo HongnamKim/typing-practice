@@ -49,7 +49,10 @@ export const getQuotes = async (params: GetQuotesParams = {}) => {
     if (params.onlyMyQuotes) queryParams.append('onlyMyQuotes', String(params.onlyMyQuotes));
 
     const queryString = queryParams.toString();
-    return apiClient.get<ApiResponse<PageResponse<Quote>>>(`/quotes${queryString ? `?${queryString}` : ''}`);
+    return apiClient.get<ApiResponse<PageResponse<Quote>>>(
+        `/quotes${queryString ? `?${queryString}` : ''}`,
+        {timeout: 2000}
+    );
 };
 
 /**
@@ -62,7 +65,10 @@ export const getAdaptiveQuotes = async (language: string, count: number, exclude
     if (excludeIds && excludeIds.length > 0) {
         queryParams.append('excludeIds', excludeIds.join(','));
     }
-    return apiClient.get<ApiResponse<Quote[]>>(`/quotes/adaptive?${queryParams.toString()}`);
+    return apiClient.get<ApiResponse<Quote[]>>(
+        `/quotes/adaptive?${queryParams.toString()}`,
+        {timeout: 2000}
+    );
 };
 
 /**

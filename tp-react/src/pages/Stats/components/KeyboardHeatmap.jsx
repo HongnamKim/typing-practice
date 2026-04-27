@@ -51,7 +51,7 @@ const getKeyColor = (count, maxCount) => {
     return {bg: 'var(--color-bg-secondary)', text: 'var(--color-text-muted)'};
 };
 
-function KeyboardHeatmap({externalTypos, compact}) {
+function KeyboardHeatmap({externalTypos, compact, fetchTypoDetail}) {
     const [keyData, setKeyData] = useState({});
     const [keyCounts, setKeyCounts] = useState({});
     const [selectedKey, setSelectedKey] = useState(null);
@@ -83,11 +83,12 @@ function KeyboardHeatmap({externalTypos, compact}) {
             const counts = {};
             try {
                 const results = await Promise.all(
-                    [...ALL_CHARS, SPACE_CHAR].map(ch =>
-                        getTypoDetailStats('KOREAN', ch)
+                    [...ALL_CHARS, SPACE_CHAR].map(ch => {
+                        const fetcher = fetchTypoDetail || ((c) => getTypoDetailStats('KOREAN', c));
+                        return fetcher(ch)
                             .then(res => ({ch, data: res.data.data.content || []}))
-                            .catch(() => ({ch, data: []}))
-                    )
+                            .catch(() => ({ch, data: []}));
+                    })
                 );
                 for (const {ch, data: entries} of results) {
                     data[ch] = entries;
@@ -101,7 +102,7 @@ function KeyboardHeatmap({externalTypos, compact}) {
             setIsLoading(false);
         };
         fetchAll();
-    }, [externalTypos]);
+    }, [externalTypos, fetchTypoDetail]);
 
     const getKeyCount = (key) => {
         return key.variants.reduce((sum, v) => sum + (activeKeyCounts[v] || 0), 0);
@@ -162,41 +163,47 @@ function KeyboardHeatmap({externalTypos, compact}) {
                 </div>
                 </div>
             )}
-            {isLoading ? (
-                <div className="heatmap-loading">{t('loading')}</div>
-            ) : (
-                <div className="heatmap-keyboard">
-                    {KEYBOARD_ROWS.map((row, ri) => (
-                        <div key={ri} className={`heatmap-row${ri > 0 ? ` heatmap-row-${ri + 1}` : ''}`}>
-                            {row.map((key) => {
-                                const count = getKeyCount(key);
-                                const color = getKeyColor(count, maxCount);
+            <div className="heatmap-keyboard">
+                {KEYBOARD_ROWS.map((row, ri) => (
+                    <div key={ri} className={`heatmap-row${ri > 0 ? ` heatmap-row-${ri + 1}` : ''}`}>
+                        {row.map((key) => {
+                            if (isLoading) {
                                 return (
-                                    <div key={key.label}
-                                         className={`heatmap-key${selectedKey?.label === key.label ? ' selected' : ''}${count > 0 ? ' clickable' : ''}`}
-                                         style={{background: color.bg, color: color.text}}
-                                         onClick={() => handleKeyClick(key)}>
+                                    <div key={key.label} className="heatmap-key heatmap-key-skeleton">
                                         {key.label}
-                                        <span className="heatmap-key-tooltip">{count}{t('errors')}</span>
                                     </div>
                                 );
-                            })}
-                        </div>
-                    ))}
-                    <div className="heatmap-spacebar">
-                        {(() => {
-                            const color = getKeyColor(spaceCount, maxCount);
+                            }
+                            const count = getKeyCount(key);
+                            const color = getKeyColor(count, maxCount);
                             return (
-                                <div className={`heatmap-space-key${selectedKey?.label === 'Space' ? ' selected' : ''}${spaceCount > 0 ? ' clickable' : ''}`}
+                                <div key={key.label}
+                                     className={`heatmap-key${selectedKey?.label === key.label ? ' selected' : ''}${count > 0 ? ' clickable' : ''}`}
                                      style={{background: color.bg, color: color.text}}
-                                     onClick={handleSpaceClick}>
-                                    Space
-                                    <span className="heatmap-key-tooltip">{spaceCount}{t('errors')}</span>
+                                     onClick={() => handleKeyClick(key)}>
+                                    {key.label}
+                                    <span className="heatmap-key-tooltip">{count}{t('errors')}</span>
                                 </div>
                             );
-                        })()}
+                        })}
                     </div>
-                    {selectedKey && (
+                ))}
+                <div className="heatmap-spacebar">
+                    {isLoading ? (
+                        <div className="heatmap-space-key heatmap-key-skeleton">Space</div>
+                    ) : (() => {
+                        const color = getKeyColor(spaceCount, maxCount);
+                        return (
+                            <div className={`heatmap-space-key${selectedKey?.label === 'Space' ? ' selected' : ''}${spaceCount > 0 ? ' clickable' : ''}`}
+                                 style={{background: color.bg, color: color.text}}
+                                 onClick={handleSpaceClick}>
+                                Space
+                                <span className="heatmap-key-tooltip">{spaceCount}{t('errors')}</span>
+                            </div>
+                        );
+                    })()}
+                </div>
+                {selectedKey && (
                         <div className="heatmap-detail">
                             <div className="heatmap-detail-header">
                                 <span className="heatmap-detail-title">
@@ -217,7 +224,6 @@ function KeyboardHeatmap({externalTypos, compact}) {
                         </div>
                     )}
                 </div>
-            )}
         </div>
     );
 }
