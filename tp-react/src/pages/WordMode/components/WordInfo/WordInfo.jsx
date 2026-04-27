@@ -80,9 +80,9 @@ const WordInfo = () => {
     };
 
     const loadWords = async (diff, count) => {
-        const w = await fetchWords(diff, count);
+        const result = await fetchWords(diff, count);
         startTimeRef.current = null;
-        dispatch({type: 'START_TYPING', words: w});
+        dispatch({type: 'START_TYPING', words: result.words, wordIds: result.wordIds});
     };
     const handleDifficultyChange = (d) => {
         dispatch({type: 'SET_DIFFICULTY', difficulty: d});

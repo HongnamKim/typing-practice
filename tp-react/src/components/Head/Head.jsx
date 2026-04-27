@@ -78,7 +78,7 @@ const Head = () => {
                             className={`nav-link ${location.pathname === '/word' ? 'nav-active' : ''}`}
                             onClick={() => { localStorage.setItem(Storage_Last_Mode, 'word'); navigate('/word'); }}
                         >
-                            {t('wordMode')}<span className="nav-beta">beta</span>
+                            {t('wordMode')}
                         </button>
                         <button
                             className={`nav-link ${location.pathname === '/stats' ? 'nav-active' : ''}`}

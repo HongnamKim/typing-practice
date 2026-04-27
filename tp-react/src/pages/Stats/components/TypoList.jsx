@@ -7,7 +7,30 @@ const displayChar = (ch) => {
     return ch;
 };
 
-function TypoList({typoStats}) {
+function TypoList({typoStats, isLoading}) {
+    if (isLoading) {
+        return (
+            <div className="typo-section">
+                <div className="typo-section-header">
+                    <h3 className="typo-section-title">{t('typoTop10')}</h3>
+                </div>
+                <div className="typo-list">
+                    {[0, 1, 2, 3].map(i => (
+                        <div key={i} className="typo-item">
+                            <div className="typo-item-header">
+                                <span className="typo-char-skeleton"/>
+                                <span className="typo-count-skeleton"/>
+                            </div>
+                            <div className="typo-bar-container">
+                                <div className="typo-bar-skeleton"/>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
     if (!typoStats || typoStats.length === 0) {
         return (
             <div className="typo-section">

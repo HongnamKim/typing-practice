@@ -23,6 +23,9 @@ const apiClient = axios.create({
 // accessToken을 저장할 변수 (메모리)
 let currentAccessToken: string | null = null;
 
+// 동시 refresh 요청 방지용 — 진행 중인 refresh Promise를 공유
+let refreshPromise: Promise<string> | null = null;
+
 // accessToken 설정 함수
 export const setAccessToken = (token: string | null): void => {
     currentAccessToken = token;
@@ -68,16 +71,22 @@ apiClient.interceptors.response.use(
             }
 
             try {
-                // refreshToken으로 새 accessToken 발급
-                const response = await axios.post<ApiResponse<RefreshTokenData>>(`${API_BASE_URL}/auth/refresh`, {
-                    refreshToken,
-                });
+                // 동시 refresh 방지: 이미 진행 중인 refresh가 있으면 재사용
+                if (!refreshPromise) {
+                    refreshPromise = axios.post<ApiResponse<RefreshTokenData>>(
+                        `${API_BASE_URL}/auth/refresh`,
+                        {refreshToken}
+                    ).then((response) => {
+                        const {accessToken: newAccessToken, refreshToken: newRefreshToken} = response.data.data;
+                        currentAccessToken = newAccessToken;
+                        localStorage.setItem(Storage_Refresh_Token, newRefreshToken);
+                        return newAccessToken;
+                    }).finally(() => {
+                        refreshPromise = null;
+                    });
+                }
 
-                const {accessToken: newAccessToken, refreshToken: newRefreshToken} = response.data.data;
-
-                // 새 토큰 저장
-                currentAccessToken = newAccessToken;
-                localStorage.setItem(Storage_Refresh_Token, newRefreshToken);
+                const newAccessToken = await refreshPromise;
 
                 // 원래 요청의 헤더 업데이트
                 originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;

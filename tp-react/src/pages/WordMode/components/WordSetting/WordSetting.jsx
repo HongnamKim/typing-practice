@@ -17,9 +17,9 @@ const WordSetting = () => {
     const {difficulty, wordCount} = state;
 
     const handleStart = async () => {
-        const words = await fetchWords(difficulty, wordCount);
+        const result = await fetchWords(difficulty, wordCount);
         startTimeRef.current = null;
-        dispatch({type: 'START_TYPING', words});
+        dispatch({type: 'START_TYPING', words: result.words, wordIds: result.wordIds});
     };
 
     return (
