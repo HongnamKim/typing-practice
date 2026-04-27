@@ -21,6 +21,7 @@ interface WordState {
 
     // 단어 데이터
     words: string[];
+    wordIds: (number | null)[];
 
     // 타이핑 진행
     phase: 'setting' | 'typing' | 'result';
@@ -46,11 +47,11 @@ interface WordState {
 type WordAction =
     | { type: 'SET_DIFFICULTY'; difficulty: Difficulty }
     | { type: 'SET_WORD_COUNT'; wordCount: WordCount }
-    | { type: 'START_TYPING'; words: string[] }
+    | { type: 'START_TYPING'; words: string[]; wordIds: (number | null)[] }
     | { type: 'CONFIRM_WORD'; input: string; charGrades: CharGrade[]; timeMs: number; cpm: number; acc: number; typos: TypoEntry[] }
     | { type: 'GO_BACK_WORD' }
     | { type: 'FINISH'; input: string; charGrades: CharGrade[]; timeMs: number; elapsedMs: number; cpm: number; acc: number; typos: TypoEntry[] }
-    | { type: 'RETRY'; words: string[] }
+    | { type: 'RETRY'; words: string[]; wordIds: (number | null)[] }
     | { type: 'RESET' };
 
 interface WordContextType {
@@ -83,6 +84,7 @@ const createInitialState = (): WordState => ({
     difficulty: loadInitialDifficulty(),
     wordCount: loadInitialWordCount(),
     words: [],
+    wordIds: [],
     phase: 'typing',
     currentWordIndex: 0,
     wordInputs: [],
@@ -145,6 +147,7 @@ function wordReducer(state: WordState, action: WordAction): WordState {
             return {
                 ...state,
                 words: action.words,
+                wordIds: action.wordIds,
                 phase: 'typing',
                 currentWordIndex: 0,
                 wordInputs: new Array(action.words.length).fill(''),
@@ -247,6 +250,7 @@ function wordReducer(state: WordState, action: WordAction): WordState {
             return {
                 ...state,
                 words: action.words,
+                wordIds: action.wordIds,
                 phase: 'typing',
                 currentWordIndex: 0,
                 wordInputs: new Array(action.words.length).fill(''),

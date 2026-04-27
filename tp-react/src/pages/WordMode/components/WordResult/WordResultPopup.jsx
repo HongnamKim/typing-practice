@@ -21,9 +21,9 @@ const WordResultPopup = () => {
     const elapsedSec = elapsedMs / 1000;
 
     const handleClose = useCallback(async () => {
-        const newWords = await fetchWords(difficulty, wordCount);
+        const result = await fetchWords(difficulty, wordCount);
         startTimeRef.current = null;
-        dispatch({type: 'RETRY', words: newWords});
+        dispatch({type: 'RETRY', words: result.words, wordIds: result.wordIds});
     }, [difficulty, wordCount, dispatch, startTimeRef]);
 
     // ESC로 닫기 (= retry)

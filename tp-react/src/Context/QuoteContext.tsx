@@ -162,8 +162,8 @@ export const QuoteContextProvider = ({children}: QuoteContextProviderProps) => {
             }
         } catch (error) {
             console.error('적응형 문장 로드 실패:', error);
-            showError(t('sentenceLoadFailed'));
-            if (reset) setIsEmpty(true);
+            showError(t('adaptiveLoadFailedFallback'));
+            setQuoteSource(QUOTE_SOURCE.ALL);
         } finally {
             isLoadingRef.current = false;
             setIsLoading(false);

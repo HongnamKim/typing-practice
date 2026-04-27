@@ -27,9 +27,9 @@ const WordTyping = () => {
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const loadWords = async (diff, count) => {
-        const newWords = await fetchWords(diff, count);
+        const result = await fetchWords(diff, count);
         startTimeRef.current = null;
-        dispatch({type: 'START_TYPING', words: newWords});
+        dispatch({type: 'START_TYPING', words: result.words, wordIds: result.wordIds});
         setFullInput("");
         setFullGrades([]);
         setTimeout(() => inputRef.current?.focus(), 50);

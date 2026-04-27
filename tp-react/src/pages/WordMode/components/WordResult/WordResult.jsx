@@ -5,6 +5,8 @@ import {useWord} from "../../context/WordContext";
 import {fetchWords} from "@/utils/wordService";
 import {koreanSeparator} from "@/utils/koreanSeparator.ts";
 import {getAnonymousId} from "@/utils/tracking.ts";
+import {saveWordTypingRecord} from "@/utils/wordTypingRecordApi";
+import {LANGUAGE} from "@/const/config.const";
 import {t} from "@/utils/i18n.ts";
 import {VscDebugRestart} from "react-icons/vsc";
 import SessionChart from "@/pages/Home/components/AverageScorePopUp/SessionChart";
@@ -15,43 +17,52 @@ const WordResult = () => {
     const {isDark} = useTheme();
     const {user} = useAuth();
     const {state, dispatch, startTimeRef} = useWord();
-    const {wpm, accuracy, correctWordCount, words, difficulty, wordCount, elapsedMs, wordCpms, wordAccs, typos, wordDetails} = state;
+    const {wpm, accuracy, correctWordCount, words, wordIds, difficulty, wordCount, elapsedMs, wordCpms, wordAccs, typos, wordDetails} = state;
     const retryBtnRef = useRef(null);
 
     const totalWords = words.length;
     const elapsedSec = elapsedMs / 1000;
+    const recordSentRef = useRef(false);
 
-    // 서버 전송용 WordTypingRecord 출력
+    // 서버에 WordTypingRecord 전송
     useEffect(() => {
         if (state.phase !== 'result') return;
+        if (recordSentRef.current) return;
+        recordSentRef.current = true;
 
-        // flat typos → wordDetails[].typos 로 재구성
-        const record = {
-            mode: 'WORD',
-            language: 'KOREAN',
+        // wordId가 있는 단어들만 wordIds/wordDetails에 포함 (로컬 fallback인 경우 제외)
+        const validWordIds = wordIds.filter(id => id !== null);
+        const allHaveIds = validWordIds.length === wordIds.length;
+
+        const payload = {
+            language: LANGUAGE.KOREAN,
             difficulty,
             wordCount,
-            timestamp: new Date().toISOString(),
-            memberId: null,
             anonymousId: user ? null : getAnonymousId(),
             wpm,
             accuracy: accuracy / 100,
             correctWordCount,
             incorrectWordCount: totalWords - correctWordCount,
             elapsedTimeMs: elapsedMs,
-            wordIds: null,
-            wordDetails: wordDetails.map((wd, i) => ({
-                wordIndex: i,
-                word: wd.word,
-                typed: wd.typed,
-                correct: wd.correct,
-                timeMs: wd.timeMs,
-                typos: typos
-                    .filter(t => t.wordIndex === i)
-                    .map(({wordIndex, ...rest}) => rest),
-            })),
+            ...(allHaveIds && {
+                wordIds: validWordIds,
+                wordDetails: wordDetails.map((wd, i) => ({
+                    wordIndex: i,
+                    wordId: wordIds[i],
+                    word: wd.word,
+                    typed: wd.typed,
+                    correct: wd.correct,
+                    timeMs: wd.timeMs,
+                    typos: typos
+                        .filter(t => t.wordIndex === i)
+                        .map(({wordIndex, ...rest}) => rest),
+                })),
+            }),
         };
-        console.log('[WordTypingRecord]', JSON.stringify(record, null, 2));
+
+        saveWordTypingRecord(payload).catch((error) => {
+            console.error('단어 타이핑 기록 저장 실패:', error);
+        });
     }, [state.phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // CPM 계산: 자모 분리 기준 타수 + 스페이스(단어 수 - 1) / 소요 시간(분)
@@ -61,9 +72,10 @@ const WordResult = () => {
     const cpm = elapsedSec > 0 ? Math.round(totalJamo / (elapsedSec / 60)) : 0;
 
     const handleRetry = useCallback(async () => {
-        const newWords = await fetchWords(difficulty, wordCount);
+        const result = await fetchWords(difficulty, wordCount);
         startTimeRef.current = null;
-        dispatch({type: 'RETRY', words: newWords});
+        recordSentRef.current = false;
+        dispatch({type: 'RETRY', words: result.words, wordIds: result.wordIds});
     }, [difficulty, wordCount, dispatch, startTimeRef]);
 
     // Tab → retry 버튼으로 직접 포커스, Enter → retry 실행
