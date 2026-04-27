@@ -11,6 +11,37 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 3rem;
+    gap: 1rem;
+}
+
+.stats-mode-toggle {
+    display: inline-flex;
+    background: var(--color-bg-secondary);
+    border-radius: 999px;
+    padding: 0.25rem;
+    margin-left: auto;
+}
+
+.stats-mode-btn {
+    padding: 0.5rem 1.25rem;
+    border: none;
+    background: transparent;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.stats-mode-btn.active {
+    background: var(--color-bg);
+    color: var(--color-text);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.stats-mode-btn:hover:not(.active) {
+    color: var(--color-text);
 }
 
 .stats-title {

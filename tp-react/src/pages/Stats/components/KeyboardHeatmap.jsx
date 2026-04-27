@@ -51,7 +51,7 @@ const getKeyColor = (count, maxCount) => {
     return {bg: 'var(--color-bg-secondary)', text: 'var(--color-text-muted)'};
 };
 
-function KeyboardHeatmap({externalTypos, compact}) {
+function KeyboardHeatmap({externalTypos, compact, fetchTypoDetail}) {
     const [keyData, setKeyData] = useState({});
     const [keyCounts, setKeyCounts] = useState({});
     const [selectedKey, setSelectedKey] = useState(null);
@@ -83,11 +83,12 @@ function KeyboardHeatmap({externalTypos, compact}) {
             const counts = {};
             try {
                 const results = await Promise.all(
-                    [...ALL_CHARS, SPACE_CHAR].map(ch =>
-                        getTypoDetailStats('KOREAN', ch)
+                    [...ALL_CHARS, SPACE_CHAR].map(ch => {
+                        const fetcher = fetchTypoDetail || ((c) => getTypoDetailStats('KOREAN', c));
+                        return fetcher(ch)
                             .then(res => ({ch, data: res.data.data.content || []}))
-                            .catch(() => ({ch, data: []}))
-                    )
+                            .catch(() => ({ch, data: []}));
+                    })
                 );
                 for (const {ch, data: entries} of results) {
                     data[ch] = entries;
@@ -101,7 +102,7 @@ function KeyboardHeatmap({externalTypos, compact}) {
             setIsLoading(false);
         };
         fetchAll();
-    }, [externalTypos]);
+    }, [externalTypos, fetchTypoDetail]);
 
     const getKeyCount = (key) => {
         return key.variants.reduce((sum, v) => sum + (activeKeyCounts[v] || 0), 0);

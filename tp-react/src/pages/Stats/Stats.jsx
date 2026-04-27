@@ -4,9 +4,20 @@ import {FaRotateRight} from 'react-icons/fa6';
 import {useAuth} from '../../Context/AuthContext';
 import {useError} from '../../Context/ErrorContext';
 import {getDailyStats, getTypingStats, getTypoStats, refreshStats} from '@/utils/statsApi.ts';
+import {
+    getWordDailyStats,
+    getWordTypingStats,
+    getWordTypoStats,
+    getWordTypoDetailStats,
+    refreshWordStats,
+} from '@/utils/wordStatsApi.ts';
+import {LANGUAGE} from '@/const/config.const';
+import {Storage_Last_Mode} from '@/const/config.const.ts';
 import {t} from '@/utils/i18n.ts';
 import StatsSummary from './components/StatsSummary';
+import WordStatsSummary from './components/WordStatsSummary';
 import DailyChart from './components/DailyChart';
+import WordDailyChart from './components/WordDailyChart';
 import TypoList from './components/TypoList';
 import KeyboardHeatmap from './components/KeyboardHeatmap';
 import './Stats.css';
@@ -16,6 +27,10 @@ function Stats() {
     const {user, isInitialized} = useAuth();
     const {showError} = useError();
 
+    const [mode, setMode] = useState(() => {
+        const lastMode = localStorage.getItem(Storage_Last_Mode);
+        return lastMode === 'word' ? 'word' : 'sentence';
+    });
     const [typingStats, setTypingStats] = useState(null);
     const [dailyStats, setDailyStats] = useState([]);
     const [typoStats, setTypoStats] = useState([]);
@@ -29,29 +44,40 @@ function Stats() {
         }
     }, [user, isInitialized, navigate]);
 
-    // 데이터 로드
+    // 데이터 로드 (mode 변경 시 재조회)
     useEffect(() => {
         if (!user) return;
         loadAllStats();
-    }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [user, mode]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // dailyRange 변경 시 일별 통계 재조회
     useEffect(() => {
         if (!user) return;
         loadDailyStats();
-    }, [dailyRange]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [dailyRange, mode]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const loadAllStats = async () => {
         setIsLoading(true);
         try {
-            const [typingRes, dailyRes, typoRes] = await Promise.all([
-                getTypingStats('KOREAN'),
-                getDailyStats('KOREAN', dailyRange),
-                getTypoStats('KOREAN'),
-            ]);
-            setTypingStats(typingRes.data.data);
-            setDailyStats(dailyRes.data.data.content || []);
-            setTypoStats(typoRes.data.data.content || []);
+            if (mode === 'word') {
+                const [typingRes, dailyRes, typoRes] = await Promise.all([
+                    getWordTypingStats(LANGUAGE.KOREAN),
+                    getWordDailyStats(LANGUAGE.KOREAN, dailyRange),
+                    getWordTypoStats(LANGUAGE.KOREAN),
+                ]);
+                setTypingStats(typingRes.data.data);
+                setDailyStats(dailyRes.data.data.content || []);
+                setTypoStats(typoRes.data.data.content || []);
+            } else {
+                const [typingRes, dailyRes, typoRes] = await Promise.all([
+                    getTypingStats(LANGUAGE.KOREAN),
+                    getDailyStats(LANGUAGE.KOREAN, dailyRange),
+                    getTypoStats(LANGUAGE.KOREAN),
+                ]);
+                setTypingStats(typingRes.data.data);
+                setDailyStats(dailyRes.data.data.content || []);
+                setTypoStats(typoRes.data.data.content || []);
+            }
         } catch (error) {
             console.error('통계 로드 실패:', error);
             if (error?.response?.status !== 401) {
@@ -64,8 +90,13 @@ function Stats() {
 
     const loadDailyStats = async () => {
         try {
-            const res = await getDailyStats('KOREAN', dailyRange);
-            setDailyStats(res.data.data.content || []);
+            if (mode === 'word') {
+                const res = await getWordDailyStats(LANGUAGE.KOREAN, dailyRange);
+                setDailyStats(res.data.data.content || []);
+            } else {
+                const res = await getDailyStats(LANGUAGE.KOREAN, dailyRange);
+                setDailyStats(res.data.data.content || []);
+            }
         } catch (error) {
             console.error('일별 통계 로드 실패:', error);
         }
@@ -73,7 +104,8 @@ function Stats() {
 
     const handleRefresh = async () => {
         try {
-            const res = await refreshStats('KOREAN');
+            const refreshFn = mode === 'word' ? refreshWordStats : refreshStats;
+            const res = await refreshFn(LANGUAGE.KOREAN);
             setTypingStats(res.data.data);
             await loadAllStats();
         } catch (error) {
@@ -92,6 +124,20 @@ function Stats() {
         <div className="stats-container">
             <div className="stats-header">
                 <h1 className="stats-title">{t('myTypingRecords')}</h1>
+                <div className="stats-mode-toggle">
+                    <button
+                        className={`stats-mode-btn ${mode === 'sentence' ? 'active' : ''}`}
+                        onClick={() => setMode('sentence')}
+                    >
+                        {t('sentenceMode')}
+                    </button>
+                    <button
+                        className={`stats-mode-btn ${mode === 'word' ? 'active' : ''}`}
+                        onClick={() => setMode('word')}
+                    >
+                        {t('wordMode')}
+                    </button>
+                </div>
                 <button className="stats-refresh-btn" onClick={handleRefresh} title="새로고침">
                     <FaRotateRight/>
                 </button>
@@ -104,15 +150,26 @@ function Stats() {
             ) : (
                 <>
                     {/* 종합 통계 */}
-                    <StatsSummary typingStats={typingStats} dailyStats={dailyStats}/>
+                    {mode === 'word' ? (
+                        <WordStatsSummary typingStats={typingStats} dailyStats={dailyStats}/>
+                    ) : (
+                        <StatsSummary typingStats={typingStats} dailyStats={dailyStats}/>
+                    )}
 
                     {/* 일별 추이 */}
-                    <DailyChart dailyStats={dailyStats} dailyRange={dailyRange} onRangeChange={setDailyRange}/>
+                    {mode === 'word' ? (
+                        <WordDailyChart dailyStats={dailyStats} dailyRange={dailyRange} onRangeChange={setDailyRange}/>
+                    ) : (
+                        <DailyChart dailyStats={dailyStats} dailyRange={dailyRange} onRangeChange={setDailyRange}/>
+                    )}
 
                     {/* 오타 통계 + 키보드 히트맵 */}
                     <div className="stats-bottom-grid">
                         <TypoList typoStats={typoStats}/>
-                        <KeyboardHeatmap/>
+                        <KeyboardHeatmap
+                            fetchTypoDetail={mode === 'word' ? (ch) => getWordTypoDetailStats(LANGUAGE.KOREAN, ch) : undefined}
+                            key={mode}
+                        />
                     </div>
                 </>
             )}
