@@ -72,6 +72,8 @@ const WordResult = () => {
     const cpm = elapsedSec > 0 ? Math.round(totalJamo / (elapsedSec / 60)) : 0;
 
     const handleRetry = useCallback(async () => {
+        // fetchWords 대기 중 이전 단어가 보이지 않도록 즉시 초기화
+        dispatch({type: 'RETRY', words: [], wordIds: []});
         const result = await fetchWords(difficulty, wordCount);
         startTimeRef.current = null;
         recordSentRef.current = false;

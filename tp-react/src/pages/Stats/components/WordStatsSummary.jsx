@@ -25,8 +25,35 @@ const calcRecentAvgWpm = (dailyStats) => {
     return totalAttempts > 0 ? Math.round(totalWeighted / totalAttempts) : 0;
 };
 
-function WordStatsSummary({typingStats, dailyStats}) {
-    if (!typingStats) return null;
+function WordStatsSummary({typingStats, dailyStats, isLoading}) {
+    const Skeleton = () => <span className="stats-number-skeleton"/>;
+
+    if (isLoading || !typingStats) {
+        return (
+            <div className="stats-summary">
+                <div className="stats-item">
+                    <span className="stats-label">{t('recent7DayAvg')}</span>
+                    <div className="stats-value"><Skeleton/></div>
+                </div>
+                <div className="stats-item">
+                    <span className="stats-label">{t('totalAverage')}</span>
+                    <div className="stats-value"><Skeleton/><span className="stats-unit">WPM</span></div>
+                </div>
+                <div className="stats-item">
+                    <span className="stats-label">{t('totalWordsAttempted')}</span>
+                    <div className="stats-value"><Skeleton/></div>
+                </div>
+                <div className="stats-item">
+                    <span className="stats-label">{t('practiceCount')}</span>
+                    <div className="stats-value"><Skeleton/></div>
+                </div>
+                <div className="stats-item">
+                    <span className="stats-label">{t('practiceTime')}</span>
+                    <div className="stats-value"><Skeleton/></div>
+                </div>
+            </div>
+        );
+    }
 
     const recentAvg = calcRecentAvgWpm(dailyStats);
     const trend = calcTrend(recentAvg, typingStats.avgWpm);

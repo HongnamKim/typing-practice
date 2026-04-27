@@ -6,7 +6,7 @@ import DailyChartDot from './DailyChartDot';
 import DailyChartPopup from './DailyChartPopup';
 import './DailyChart.css';
 
-function DailyChart({dailyStats, dailyRange, onRangeChange}) {
+function DailyChart({dailyStats, dailyRange, onRangeChange, isLoading}) {
     const [metric, setMetric] = useState('cpm');
     const [hoverIndex, setHoverIndex] = useState(null);
     const [lockedIndex, setLockedIndex] = useState(null);
@@ -75,7 +75,9 @@ function DailyChart({dailyStats, dailyRange, onRangeChange}) {
                     </div>
                 </div>
             </div>
-            {data.length === 0 ? (
+            {isLoading ? (
+                <div className="daily-chart-skeleton-area"/>
+            ) : data.length === 0 ? (
                 <div className="daily-chart-empty">{t('noData')}</div>
             ) : (
                 <>

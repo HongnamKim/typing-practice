@@ -34,7 +34,9 @@ function Stats() {
     const [typingStats, setTypingStats] = useState(null);
     const [dailyStats, setDailyStats] = useState([]);
     const [typoStats, setTypoStats] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingTyping, setIsLoadingTyping] = useState(true);
+    const [isLoadingDaily, setIsLoadingDaily] = useState(true);
+    const [isLoadingTypo, setIsLoadingTypo] = useState(true);
     const [dailyRange, setDailyRange] = useState(7);
 
     // 비로그인 시 홈으로
@@ -47,6 +49,10 @@ function Stats() {
     // 데이터 로드 (mode 변경 시 재조회)
     useEffect(() => {
         if (!user) return;
+        // mode 변경 시 이전 데이터 초기화 (mode 간 데이터 구조 차이로 인한 NaN 방지)
+        setTypingStats(null);
+        setDailyStats([]);
+        setTypoStats([]);
         loadAllStats();
     }, [user, mode]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -56,49 +62,51 @@ function Stats() {
         loadDailyStats();
     }, [dailyRange, mode]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const loadAllStats = async () => {
-        setIsLoading(true);
+    const loadAllStats = () => {
+        loadTypingStats();
+        loadDailyStats();
+        loadTypoStats();
+    };
+
+    const loadTypingStats = async () => {
+        setIsLoadingTyping(true);
         try {
-            if (mode === 'word') {
-                const [typingRes, dailyRes, typoRes] = await Promise.all([
-                    getWordTypingStats(LANGUAGE.KOREAN),
-                    getWordDailyStats(LANGUAGE.KOREAN, dailyRange),
-                    getWordTypoStats(LANGUAGE.KOREAN),
-                ]);
-                setTypingStats(typingRes.data.data);
-                setDailyStats(dailyRes.data.data.content || []);
-                setTypoStats(typoRes.data.data.content || []);
-            } else {
-                const [typingRes, dailyRes, typoRes] = await Promise.all([
-                    getTypingStats(LANGUAGE.KOREAN),
-                    getDailyStats(LANGUAGE.KOREAN, dailyRange),
-                    getTypoStats(LANGUAGE.KOREAN),
-                ]);
-                setTypingStats(typingRes.data.data);
-                setDailyStats(dailyRes.data.data.content || []);
-                setTypoStats(typoRes.data.data.content || []);
-            }
+            const fetcher = mode === 'word' ? getWordTypingStats : getTypingStats;
+            const res = await fetcher(LANGUAGE.KOREAN);
+            setTypingStats(res.data.data);
         } catch (error) {
-            console.error('통계 로드 실패:', error);
+            console.error('누적 통계 로드 실패:', error);
             if (error?.response?.status !== 401) {
                 showError(t('statsLoadFailed'));
             }
         } finally {
-            setIsLoading(false);
+            setIsLoadingTyping(false);
         }
     };
 
     const loadDailyStats = async () => {
+        setIsLoadingDaily(true);
         try {
-            if (mode === 'word') {
-                const res = await getWordDailyStats(LANGUAGE.KOREAN, dailyRange);
-                setDailyStats(res.data.data.content || []);
-            } else {
-                const res = await getDailyStats(LANGUAGE.KOREAN, dailyRange);
-                setDailyStats(res.data.data.content || []);
-            }
+            const fetcher = mode === 'word' ? getWordDailyStats : getDailyStats;
+            const res = await fetcher(LANGUAGE.KOREAN, dailyRange);
+            setDailyStats(res.data.data.content || []);
         } catch (error) {
             console.error('일별 통계 로드 실패:', error);
+        } finally {
+            setIsLoadingDaily(false);
+        }
+    };
+
+    const loadTypoStats = async () => {
+        setIsLoadingTypo(true);
+        try {
+            const fetcher = mode === 'word' ? getWordTypoStats : getTypoStats;
+            const res = await fetcher(LANGUAGE.KOREAN);
+            setTypoStats(res.data.data.content || []);
+        } catch (error) {
+            console.error('오타 통계 로드 실패:', error);
+        } finally {
+            setIsLoadingTypo(false);
         }
     };
 
@@ -107,7 +115,7 @@ function Stats() {
             const refreshFn = mode === 'word' ? refreshWordStats : refreshStats;
             const res = await refreshFn(LANGUAGE.KOREAN);
             setTypingStats(res.data.data);
-            await loadAllStats();
+            loadAllStats();
         } catch (error) {
             if (error.response?.status === 429) {
                 showError(t('refreshCooldown'));
@@ -143,36 +151,28 @@ function Stats() {
                 </button>
             </div>
 
-            {isLoading ? (
-                <div className="stats-loading">
-                    <div className="stats-spinner"></div>
-                </div>
+            {/* 종합 통계 */}
+            {mode === 'word' ? (
+                <WordStatsSummary typingStats={typingStats} dailyStats={dailyStats} isLoading={isLoadingTyping}/>
             ) : (
-                <>
-                    {/* 종합 통계 */}
-                    {mode === 'word' ? (
-                        <WordStatsSummary typingStats={typingStats} dailyStats={dailyStats}/>
-                    ) : (
-                        <StatsSummary typingStats={typingStats} dailyStats={dailyStats}/>
-                    )}
-
-                    {/* 일별 추이 */}
-                    {mode === 'word' ? (
-                        <WordDailyChart dailyStats={dailyStats} dailyRange={dailyRange} onRangeChange={setDailyRange}/>
-                    ) : (
-                        <DailyChart dailyStats={dailyStats} dailyRange={dailyRange} onRangeChange={setDailyRange}/>
-                    )}
-
-                    {/* 오타 통계 + 키보드 히트맵 */}
-                    <div className="stats-bottom-grid">
-                        <TypoList typoStats={typoStats}/>
-                        <KeyboardHeatmap
-                            fetchTypoDetail={mode === 'word' ? (ch) => getWordTypoDetailStats(LANGUAGE.KOREAN, ch) : undefined}
-                            key={mode}
-                        />
-                    </div>
-                </>
+                <StatsSummary typingStats={typingStats} dailyStats={dailyStats} isLoading={isLoadingTyping}/>
             )}
+
+            {/* 일별 추이 */}
+            {mode === 'word' ? (
+                <WordDailyChart dailyStats={dailyStats} dailyRange={dailyRange} onRangeChange={setDailyRange} isLoading={isLoadingDaily}/>
+            ) : (
+                <DailyChart dailyStats={dailyStats} dailyRange={dailyRange} onRangeChange={setDailyRange} isLoading={isLoadingDaily}/>
+            )}
+
+            {/* 오타 통계 + 키보드 히트맵 */}
+            <div className="stats-bottom-grid">
+                <TypoList typoStats={typoStats} isLoading={isLoadingTypo}/>
+                <KeyboardHeatmap
+                    fetchTypoDetail={mode === 'word' ? (ch) => getWordTypoDetailStats(LANGUAGE.KOREAN, ch) : undefined}
+                    key={mode}
+                />
+            </div>
         </div>
     );
 }

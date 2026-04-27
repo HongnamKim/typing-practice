@@ -6,7 +6,7 @@ import DailyChartDot from './DailyChartDot';
 import WordDailyChartPopup from './WordDailyChartPopup';
 import './DailyChart.css';
 
-function WordDailyChart({dailyStats, dailyRange, onRangeChange}) {
+function WordDailyChart({dailyStats, dailyRange, onRangeChange, isLoading}) {
     const [metric, setMetric] = useState('wpm');
     const [hoverIndex, setHoverIndex] = useState(null);
     const [lockedIndex, setLockedIndex] = useState(null);
@@ -75,7 +75,9 @@ function WordDailyChart({dailyStats, dailyRange, onRangeChange}) {
                     </div>
                 </div>
             </div>
-            {data.length === 0 ? (
+            {isLoading ? (
+                <div className="daily-chart-skeleton-area"/>
+            ) : data.length === 0 ? (
                 <div className="daily-chart-empty">{t('noData')}</div>
             ) : (
                 <>
