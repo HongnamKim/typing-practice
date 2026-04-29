@@ -1,7 +1,6 @@
 import {useEffect, useCallback} from "react";
 import {useTheme} from "@/Context/ThemeContext.tsx";
 import {useWord} from "../../context/WordContext";
-import {fetchWords} from "@/utils/wordService";
 import {t} from "@/utils/i18n.ts";
 import "./WordResultPopup.css";
 
@@ -14,17 +13,17 @@ const difficultyLabels = {
 
 const WordResultPopup = () => {
     const {isDark} = useTheme();
-    const {state, dispatch, startTimeRef} = useWord();
+    const {state, dispatch} = useWord();
     const {phase, wpm, accuracy, correctWordCount, words, difficulty, wordCount, elapsedMs} = state;
 
     const totalWords = words.length;
     const elapsedSec = elapsedMs / 1000;
 
-    const handleClose = useCallback(async () => {
-        const result = await fetchWords(difficulty, wordCount);
-        startTimeRef.current = null;
-        dispatch({type: 'RETRY', words: result.words, wordIds: result.wordIds});
-    }, [difficulty, wordCount, dispatch, startTimeRef]);
+    const handleClose = useCallback(() => {
+        // dispatch RETRY로 phase를 'typing'으로 전환
+        // → WordTyping이 마운트되며 자체적으로 fetchWords 호출
+        dispatch({type: 'RETRY', words: [], wordIds: []});
+    }, [dispatch]);
 
     // ESC로 닫기 (= retry)
     useEffect(() => {
