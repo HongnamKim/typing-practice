@@ -90,6 +90,22 @@
     gap: 0.5rem;
 }
 
+.word-result-stats-link,
+.word-result-login-prompt {
+    border: none;
+    background: transparent;
+    color: var(--color-primary);
+    font-size: 0.9375rem;
+    cursor: pointer;
+    padding: 0;
+    transition: opacity 0.15s;
+}
+
+.word-result-stats-link:hover,
+.word-result-login-prompt:hover {
+    opacity: 0.7;
+}
+
 .word-result-retry-btn {
     display: flex;
     align-items: center;

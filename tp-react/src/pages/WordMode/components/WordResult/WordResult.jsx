@@ -1,8 +1,8 @@
 import {useEffect, useRef, useCallback} from "react";
+import {useNavigate} from "react-router-dom";
 import {useTheme} from "@/Context/ThemeContext.tsx";
 import {useAuth} from "@/Context/AuthContext.tsx";
 import {useWord} from "../../context/WordContext";
-import {fetchWords} from "@/utils/wordService";
 import {koreanSeparator} from "@/utils/koreanSeparator.ts";
 import {getAnonymousId} from "@/utils/tracking.ts";
 import {saveWordTypingRecord} from "@/utils/wordTypingRecordApi";
@@ -15,8 +15,9 @@ import "./WordResult.css";
 
 const WordResult = () => {
     const {isDark} = useTheme();
-    const {user} = useAuth();
-    const {state, dispatch, startTimeRef} = useWord();
+    const {user, triggerLogin} = useAuth();
+    const navigate = useNavigate();
+    const {state, dispatch} = useWord();
     const {wpm, accuracy, correctWordCount, words, wordIds, difficulty, wordCount, elapsedMs, wordCpms, wordAccs, typos, wordDetails} = state;
     const retryBtnRef = useRef(null);
 
@@ -71,14 +72,12 @@ const WordResult = () => {
     }, 0) + (words.length - 1); // 단어 사이 스페이스
     const cpm = elapsedSec > 0 ? Math.round(totalJamo / (elapsedSec / 60)) : 0;
 
-    const handleRetry = useCallback(async () => {
-        // fetchWords 대기 중 이전 단어가 보이지 않도록 즉시 초기화
+    const handleRetry = useCallback(() => {
+        // dispatch RETRY로 phase를 'typing'으로 전환
+        // → WordTyping이 마운트되며 자체적으로 fetchWords 호출
         dispatch({type: 'RETRY', words: [], wordIds: []});
-        const result = await fetchWords(difficulty, wordCount);
-        startTimeRef.current = null;
         recordSentRef.current = false;
-        dispatch({type: 'RETRY', words: result.words, wordIds: result.wordIds});
-    }, [difficulty, wordCount, dispatch, startTimeRef]);
+    }, [dispatch]);
 
     // Tab → retry 버튼으로 직접 포커스, Enter → retry 실행
     useEffect(() => {
@@ -144,6 +143,16 @@ const WordResult = () => {
 
             {/* 하단 */}
             <div className="word-result-bottom">
+                {user && (
+                    <button className="word-result-stats-link" onClick={() => navigate('/stats')}>
+                        {t('popupViewStats')}
+                    </button>
+                )}
+                {!user && (
+                    <button className="word-result-login-prompt" onClick={() => triggerLogin()}>
+                        {t('popupLoginPrompt')}
+                    </button>
+                )}
                 <button
                     ref={retryBtnRef}
                     className="word-result-retry-btn"
