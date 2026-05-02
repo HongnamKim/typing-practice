@@ -11,7 +11,7 @@ function PrivacyPolicy() {
     return (
         <div className={`privacy-container ${isDark ? 'dark' : ''}`}>
             <h1 className="privacy-title">{isKorean ? '개인정보 처리방침' : 'Privacy Policy'}</h1>
-            <p className="privacy-updated">{isKorean ? '최종 수정일: 2026년 3월 29일' : 'Last updated: March 29, 2026'}</p>
+            <p className="privacy-updated">{isKorean ? '최종 수정일: 2026년 5월 2일' : 'Last updated: May 2, 2026'}</p>
 
             <section className="privacy-section">
                 <h2>{isKorean ? '1. 개요' : '1. Overview'}</h2>
@@ -33,8 +33,24 @@ function PrivacyPolicy() {
                 <h3>{isKorean ? '타이핑 기록' : 'Typing Records'}</h3>
                 <p>
                     {isKorean
-                        ? '로그인 상태에서 타이핑 결과(속도, 정확도, 초기화 횟수, 오타 패턴)를 서버에 저장합니다. 이 데이터는 개인 통계 및 진행 상황 추적에 사용됩니다.'
-                        : 'When you are logged in, we store your typing results including speed (CPM), accuracy, reset count, and typo patterns. This data is used to provide your personal statistics and track your progress.'}
+                        ? '타이핑 결과(속도, 정확도, 초기화 횟수, 오타 패턴)를 서버에 저장합니다. 이 데이터는 개인 통계 및 진행 상황 추적, 그리고 익명의 집계 통계 산출에 사용됩니다.'
+                        : 'We store your typing results including speed (CPM), accuracy, reset count, and typo patterns. This data is used for personal statistics, progress tracking, and aggregated anonymous statistics.'}
+                </p>
+                <h3>{isKorean ? '비회원 식별자 및 세션 정보' : 'Anonymous Identifiers and Session Information'}</h3>
+                <p>
+                    {isKorean
+                        ? '비로그인 사용자가 GDPR 동의 후 서비스를 이용하는 경우, 브라우저 로컬 저장소에 익명 식별자(UUID)를 생성하여 타이핑 기록과 함께 저장합니다. 또한 다음 정보를 함께 수집합니다:'
+                        : 'For non-logged-in users who have consented under GDPR, we generate an anonymous identifier (UUID) in the browser\'s local storage and store it with your typing records. We also collect the following:'}
+                </p>
+                <ul>
+                    <li>{isKorean ? '세션 식별자(sessionId): 브라우저 세션 동안만 유지되며, 사용자 행동 분석에 사용됩니다.' : 'Session identifier (sessionId): retained only during the browser session, used for behavior analysis.'}</li>
+                    <li>{isKorean ? '리퍼러(referrer): 어떤 경로로 서비스에 접속했는지를 파악합니다.' : 'Referrer: identifies how users arrived at the service.'}</li>
+                    <li>{isKorean ? '디바이스 유형(deviceType): 모바일/데스크톱 등 환경별 사용 패턴 분석에 사용됩니다.' : 'Device type: used to analyze usage patterns across mobile/desktop environments.'}</li>
+                </ul>
+                <p>
+                    {isKorean
+                        ? '이 정보는 서비스 개선과 익명 집계 통계 목적으로만 사용되며, 개인을 식별하는 데 사용되지 않습니다. GDPR 동의를 거부한 경우 익명 식별자는 생성되지 않습니다.'
+                        : 'This information is used solely for service improvement and aggregated anonymous statistics, and is not used to identify individuals. If you decline GDPR consent, no anonymous identifier is generated.'}
                 </p>
                 <h3>{isKorean ? '사용자 등록 문장' : 'User-Submitted Sentences'}</h3>
                 <p>
@@ -91,8 +107,8 @@ function PrivacyPolicy() {
                 </ul>
                 <p>
                     {isKorean
-                        ? <>권리 행사를 원하시면 <a href="https://open.kakao.com/o/sMHDrAog" target="_blank" rel="noopener noreferrer">카카오톡</a>으로 문의해 주세요.</>
-                        : <>To exercise these rights, please contact us at <a href="https://open.kakao.com/o/sMHDrAog" target="_blank" rel="noopener noreferrer">KakaoTalk</a>.</>}
+                        ? <>권리 행사를 원하시면 이메일(<a href="mailto:khn4636@gmail.com">khn4636@gmail.com</a>) 또는 <a href="https://open.kakao.com/o/sMHDrAog" target="_blank" rel="noopener noreferrer">카카오톡</a>으로 문의해 주세요.</>
+                        : <>To exercise these rights, please contact us via email (<a href="mailto:khn4636@gmail.com">khn4636@gmail.com</a>) or <a href="https://open.kakao.com/o/sMHDrAog" target="_blank" rel="noopener noreferrer">KakaoTalk</a>.</>}
                 </p>
             </section>
 
