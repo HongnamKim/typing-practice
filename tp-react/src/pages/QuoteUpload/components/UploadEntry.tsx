@@ -26,9 +26,18 @@ const UploadEntry = ({entry, index, showDelete, onUpdate, onRemove}: UploadEntry
         e: React.ChangeEvent<HTMLTextAreaElement>,
         field: 'sentence' | 'author',
     ) => {
+        // 줄바꿈 제거 (붙여넣기로 들어온 경우 포함)
+        const value = e.target.value.replace(/[\r\n]+/g, '');
+        e.target.value = value;
         e.target.style.height = 'auto';
         e.target.style.height = e.target.scrollHeight + 'px';
-        onUpdate(entry.id, field, e.target.value);
+        onUpdate(entry.id, field, value);
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+        }
     };
 
     return (
@@ -67,6 +76,7 @@ const UploadEntry = ({entry, index, showDelete, onUpdate, onRemove}: UploadEntry
                         maxLength={MAX_SENTENCE_LENGTH}
                         value={entry.sentence}
                         onChange={(e) => handleTextareaChange(e, 'sentence')}
+                        onKeyDown={handleKeyDown}
                         rows={1}
                     />
                     <span
@@ -81,6 +91,7 @@ const UploadEntry = ({entry, index, showDelete, onUpdate, onRemove}: UploadEntry
                         maxLength={MAX_AUTHOR_LENGTH}
                         value={entry.author}
                         onChange={(e) => handleTextareaChange(e, 'author')}
+                        onKeyDown={handleKeyDown}
                         rows={1}
                     />
                 </div>

@@ -9,12 +9,18 @@ const Contact = () => {
         <div className={`contact-wrapper ${isDark && "dark"}`}>
             <div className="contact-links">
                 <a
+                    href={"mailto:khn4636@gmail.com"}
+                    className={`contact ${isDark && "dark"}`}
+                >
+                    Email
+                </a>
+                <a
                     href={"https://open.kakao.com/o/sMHDrAog"}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`contact ${isDark && "dark"}`}
                 >
-                    Contact
+                    KakaoTalk
                 </a>
                 <Link to="/privacy" className={`contact ${isDark && "dark"}`}>
                     Privacy Policy

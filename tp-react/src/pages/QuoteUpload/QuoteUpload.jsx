@@ -21,6 +21,7 @@ function QuoteUpload() {
     const [showConfirm, setShowConfirm] = useState(false);
     const [confirmMessage, setConfirmMessage] = useState('');
     const [isResultPopup, setIsResultPopup] = useState(false);
+    const [agreedToTerms, setAgreedToTerms] = useState(false);
 
     // 초기화 완료 후 로그인 안 되어 있으면 홈으로 이동
     useEffect(() => {
@@ -92,6 +93,12 @@ function QuoteUpload() {
 
         if (validEntries.length === 0) {
             showError(t('enterAtLeastOne'));
+            return;
+        }
+
+        // 약관 동의 필수 (공개/비공개 무관)
+        if (!agreedToTerms) {
+            showError(t('mustAgreeCopyrightPolicy'));
             return;
         }
 
@@ -215,6 +222,10 @@ function QuoteUpload() {
                 </span>
             </div>
 
+            <div className="quote-upload-copyright-warning">
+                {t('uploadCopyrightWarning')}
+            </div>
+
             <div className="quote-upload-entries">
                 {entries.map((entry, index) => (
                     <UploadEntry
@@ -241,6 +252,15 @@ function QuoteUpload() {
                 </span>
             </button>
 
+            <label className="quote-upload-agreement">
+                <input
+                    type="checkbox"
+                    checked={agreedToTerms}
+                    onChange={(e) => setAgreedToTerms(e.target.checked)}
+                />
+                <span>{t('uploadAgreement')}</span>
+            </label>
+
             <div className="quote-upload-actions">
                 <button className="quote-upload-cancel-btn" onClick={() => navigate('/')}>
                     {t('cancel')}
@@ -248,7 +268,7 @@ function QuoteUpload() {
                 <button
                     className="quote-upload-submit-btn"
                     onClick={handleUploadClick}
-                    disabled={isUploading}
+                    disabled={isUploading || !agreedToTerms || getValidEntries().length === 0}
                 >
                     {isUploading ? (
                         <>

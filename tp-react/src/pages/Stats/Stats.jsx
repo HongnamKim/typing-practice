@@ -137,13 +137,13 @@ function Stats() {
                         className={`stats-mode-btn ${mode === 'sentence' ? 'active' : ''}`}
                         onClick={() => setMode('sentence')}
                     >
-                        {t('sentenceMode')}
+                        {t('statsSentenceMode')}
                     </button>
                     <button
                         className={`stats-mode-btn ${mode === 'word' ? 'active' : ''}`}
                         onClick={() => setMode('word')}
                     >
-                        {t('wordMode')}
+                        {t('statsWordMode')}
                     </button>
                 </div>
                 <button className="stats-refresh-btn" onClick={handleRefresh} title="새로고침">
