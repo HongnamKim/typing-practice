@@ -150,6 +150,38 @@
     opacity: 0.6;
 }
 
+/* 저작권 경고 박스 */
+.quote-upload-copyright-warning {
+    margin-bottom: 1.5rem;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--color-border);
+    border-left: 3px solid #f59e0b;
+    border-radius: 0.5rem;
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    white-space: pre-line;
+}
+
+/* 약관 동의 체크박스 */
+.quote-upload-agreement {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    user-select: none;
+}
+
+.quote-upload-agreement input[type="checkbox"] {
+    margin-top: 0.2rem;
+    cursor: pointer;
+    accent-color: var(--color-primary);
+}
+
 /* 하단 버튼 */
 .quote-upload-actions {
     display: flex;
@@ -192,7 +224,8 @@
 }
 
 .quote-upload-submit-btn:disabled {
-    background-color: var(--color-border);
+    background-color: var(--color-primary);
+    opacity: 0.4;
     cursor: not-allowed;
 }
 

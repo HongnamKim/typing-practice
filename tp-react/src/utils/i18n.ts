@@ -1,5 +1,5 @@
-type Lang = 'ko' | 'ja' | 'en';
-const lang: Lang = navigator.language.startsWith('ko') ? 'ko' : navigator.language.startsWith('ja') ? 'ja' : 'en';
+export type Lang = 'ko' | 'ja' | 'en';
+export const lang: Lang = navigator.language.startsWith('ko') ? 'ko' : navigator.language.startsWith('ja') ? 'ja' : 'en';
 document.documentElement.lang = lang;
 const l = (ko: string, ja: string, en: string) => lang === 'ko' ? ko : lang === 'ja' ? ja : en;
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -121,6 +121,21 @@ const translations = {
     // 업로드 페이지
     uploadTitle: l('문장 업로드', '文章アップロード', 'Upload Sentences'),
     uploadTypeHint: l('각 문장마다 공개/비공개를 선택할 수 있습니다.', '各文章ごとに公開/非公開を選択できます。', 'You can set each sentence as public or private.'),
+    uploadCopyrightWarning: l(
+        '⚠️ 노래 가사, 시, 소설, 기사 등 타인의 저작권이 있는 콘텐츠는 출처를 표시하더라도 무단 업로드 시 권리 침해에 해당합니다.\n업로드한 콘텐츠로 인한 모든 법적 책임은 업로드한 본인에게 있습니다.\n* 입력 시 줄바꿈은 적용되지 않습니다.',
+        '⚠️ 歌詞、詩、小説、記事など他人の著作権がある内容は、出典を表示しても無断アップロードは権利侵害に該当します。\nアップロードした内容による法的責任はすべてアップロードした本人にあります。\n* 入力時、改行は適用されません。',
+        '⚠️ Copyrighted content (lyrics, poems, novels, articles, etc.) is considered infringement when uploaded without permission, even if the source is cited.\nYou are solely responsible for any legal consequences arising from the content you upload.\n* Line breaks are not applied to inputs.'
+    ),
+    uploadAgreement: l(
+        '저작권 정책에 동의하며, 업로드한 콘텐츠로 인한 모든 책임이 본인에게 있음을 확인합니다.',
+        '著作権ポリシーに同意し、アップロードした内容に対するすべての責任が本人にあることを確認します。',
+        'I agree to the copyright policy and acknowledge that I am solely responsible for the content I upload.'
+    ),
+    mustAgreeCopyrightPolicy: l(
+        '공개 문장 업로드를 위해 저작권 정책에 동의해주세요.',
+        '公開文章アップロードのために著作権ポリシーに同意してください。',
+        'Please agree to the copyright policy to upload public sentences.'
+    ),
     uploadTooltipPublic: l('관리자 승인 후 모든 사용자에게 노출됩니다.', '管理者の承認後、すべてのユーザーに公開されます。', 'Visible to all users after admin approval.'),
     uploadTooltipPrivate: l('본인만 사용할 수 있습니다.', '自分だけが使用できます。', 'Only visible to you.'),
     sentencePlaceholder: (min: number, max: number) => l(`문장을 입력하세요 (${min}-${max}자)`, `文章を入力してください（${min}〜${max}文字）`, `Enter a sentence (${min}-${max} characters)`),
@@ -161,8 +176,8 @@ const translations = {
     practiceCount: l('연습 횟수', '練習回数', 'Practices'),
     wordsAttempted: l('단어 수', '単語数', 'Words'),
     totalWordsAttempted: l('누적 단어', '累積単語', 'Total Words'),
-    sentenceMode: l('문장', '文章', 'Sentence'),
-    wordMode: l('단어', '単語', 'Word'),
+    statsSentenceMode: l('문장', '文章', 'Sentence'),
+    statsWordMode: l('단어', '単語', 'Word'),
     totalAverage: l('전체 평균', '全体平均', 'Overall Avg'),
     avgReset: l('평균 초기화', '平均リセット', 'Avg Resets'),
     vsOverall: l('vs 전체', 'vs 全体', 'vs overall'),

@@ -36,9 +36,34 @@ export function localize(item: LocalizedText): string {
 
 export const updateHistory: UpdateEntry[] = [
     {
+        version: "1.8.1",
+        date: "2026-05-02",
+        showPopup: true,
+        hidden: false,
+        features: [
+            {
+                ko: "Footer에 이메일 문의 채널 추가 (해외 사용자 대상)",
+                ja: "フッターにメール問い合わせチャネル追加（海外ユーザー向け）",
+                en: "Added email contact channel in footer (for international users)"
+            },
+            {
+                ko: "약관 및 개인정보처리방침에 저작권 정책과 신고 절차 안내 추가",
+                ja: "利用規約およびプライバシーポリシーに著作権ポリシーと通報手続きの案内を追加",
+                en: "Added copyright policy and reporting procedure to Terms and Privacy Policy"
+            },
+        ],
+        improvements: [
+            {
+                ko: "문장 업로드 시 입력 줄바꿈은 무시하고, 저작권 정책 동의 체크가 필요하도록 변경",
+                ja: "文章アップロード時、入力の改行は無視し、著作権ポリシーへの同意チェックを必須に変更",
+                en: "Line breaks are ignored when uploading sentences, and copyright policy agreement is now required"
+            },
+        ],
+    },
+    {
         version: "1.8.0",
         date: "2026-04-27",
-        showPopup: true,
+        showPopup: false,
         hidden: false,
         features: [
             {

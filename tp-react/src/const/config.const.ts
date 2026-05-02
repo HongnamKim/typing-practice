@@ -6,6 +6,7 @@ export const Storage_Font_Size = "Typing-Practice-fontSize" as const;
 export const Storage_Averages_Visible = "Typing-Practice-averagesVisible" as const;
 export const Storage_Compact_Mode = "Typing-Practice-compactMode" as const;
 export const Storage_Last_Seen_Version = "Typing-Practice-lastSeenVersion" as const;
+export const Storage_Read_Notices = "Typing-Practice-readNotices" as const;
 export const Storage_Refresh_Token = "Typing-Practice-refreshToken" as const;
 export const Storage_Consent = "Typing-Practice-storageConsent" as const;
 export const Storage_Feature_Guide = "Typing-Practice-featureGuide" as const;
