@@ -42,9 +42,9 @@ export const updateHistory: UpdateEntry[] = [
         hidden: false,
         features: [
             {
-                ko: "Footer에 이메일 문의 채널 추가 (해외 사용자 대상)",
-                ja: "フッターにメール問い合わせチャネル追加（海外ユーザー向け）",
-                en: "Added email contact channel in footer (for international users)"
+                ko: "Footer에 이메일 문의 채널 추가",
+                ja: "フッターにメール問い合わせチャネル追加",
+                en: "Added email contact channel in footer"
             },
             {
                 ko: "약관 및 개인정보처리방침에 저작권 정책과 신고 절차 안내 추가",
