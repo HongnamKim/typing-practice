@@ -2,7 +2,7 @@ export type Lang = 'ko' | 'ja' | 'en';
 export const lang: Lang = navigator.language.startsWith('ko') ? 'ko' : navigator.language.startsWith('ja') ? 'ja' : 'en';
 document.documentElement.lang = lang;
 const l = (ko: string, ja: string, en: string) => lang === 'ko' ? ko : lang === 'ja' ? ja : en;
-const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+export const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 const translations = {
     // 공통
@@ -313,6 +313,19 @@ const translations = {
         if (m > 0) return `${m}m ${s}s`;
         return `${s}s`;
     },
+
+    // 공지사항
+    noticeMenu: l('공지', 'お知らせ', 'Notices'),
+    noticesTitle: l('공지사항', 'お知らせ', 'Notices'),
+    noticesEmpty: l('등록된 공지가 없습니다.', '登録されたお知らせがありません。', 'No notices available.'),
+    noticeBack: l('목록으로', '一覧へ', 'Back to list'),
+    noticeNotFound: l('공지를 찾을 수 없습니다.', 'お知らせが見つかりません。', 'Notice not found.'),
+    pinned: l('고정', '固定', 'Pinned'),
+
+    // 통합 에러
+    errorTemporary: l('일시적인 문제가 발생했습니다. 다시 시도해주세요.', '一時的な問題が発生しました。もう一度お試しください。', 'A temporary error occurred. Please try again.'),
+    errorNetwork: l('인터넷 연결을 확인해주세요.', 'インターネット接続を確認してください。', 'Please check your internet connection.'),
+    errorRetry: l('다시 시도', '再試行', 'Retry'),
 
     // 업데이트 팝업
     updateNotice: l('업데이트 안내', 'アップデート情報', 'Update'),
