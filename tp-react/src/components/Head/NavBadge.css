@@ -1,0 +1,10 @@
+.nav-badge-dot {
+    position: absolute;
+    top: 1.25rem;
+    right: 0.4rem;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #ef4444;
+    pointer-events: none;
+}
