@@ -1,7 +1,5 @@
 import {useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
-import UpdatePopup from './components/UpdatePopup/UpdatePopup';
-import NoticePopup from '../../components/NoticePopup/NoticePopup';
 import SessionResult from './components/SessionResult/SessionResult';
 import Info from './components/Info/Info';
 import Quote from './components/Quote/Quote';
@@ -30,8 +28,6 @@ function Home() {
 
     return (
         <SettingContextProvider>
-            <UpdatePopup/>
-            <NoticePopup/>
             <Info/>
             <QuoteContextProvider>
                 {showPopup ? (
