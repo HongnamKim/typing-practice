@@ -13,6 +13,8 @@ export const Storage_Feature_Guide = "Typing-Practice-featureGuide" as const;
 export const Storage_Controls_Collapsed = "Typing-Practice-controlsCollapsed" as const;
 export const Storage_Anonymous_Id = "Typing-Practice-anonymousId" as const;
 export const Storage_Session_Id = "Typing-Practice-sessionId" as const;
+export const Storage_Last_Seen_Notice_Id = "Typing-Practice-lastSeenNoticeId" as const;
+export const Storage_Last_Seen_Update_Note_Id = "Typing-Practice-lastSeenUpdateNoteId" as const;
 
 // Quote 관련 상수
 export const MIN_SENTENCE_LENGTH = 5 as const;
