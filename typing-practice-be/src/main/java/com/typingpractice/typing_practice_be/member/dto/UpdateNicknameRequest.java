@@ -2,14 +2,14 @@ package com.typingpractice.typing_practice_be.member.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
-import org.hibernate.validator.constraints.Length;
 
 @Getter
 public class UpdateNicknameRequest {
   @NotNull
   @NotBlank
-  @Length(min = 2, max = 10)
+  @Pattern(regexp = "\\X{2,10}", message = "닉네임은 2-10자여야 합니다.")
   private String nickname;
 
   public static UpdateNicknameRequest create(String nickname) {

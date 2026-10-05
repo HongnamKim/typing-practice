@@ -32,7 +32,7 @@ const translations = {
     nicknameCheckFailed: l('중복 확인에 실패했습니다.', '確認に失敗しました。', 'Failed to check nickname.'),
     nicknameCheckFirst: l('닉네임 중복 확인을 먼저 해주세요.', '先にニックネームの重複確認をしてください。', 'Please check nickname availability first.'),
     nicknameAvailable: l('사용 가능한 닉네임입니다.', '使用可能なニックネームです。', 'Nickname is available.'),
-    nicknameHelper: l('한글, 영문, 숫자 사용 가능', '韓国語、英語、数字が使用可能', 'Korean, English, numbers allowed'),
+    nicknameHelper: l('한글, 일본어, 영문, 숫자 사용 가능', '日本語、韓国語、英字、数字が使用可能', 'Korean, Japanese, English letters and numbers allowed'),
     checkDuplicate: l('중복확인', '確認', 'Check'),
     checking: l('확인 중...', '確認中...', 'Checking...'),
     nicknameSetFailed: l('닉네임 설정에 실패했습니다.', 'ニックネームの設定に失敗しました。', 'Failed to set nickname.'),
