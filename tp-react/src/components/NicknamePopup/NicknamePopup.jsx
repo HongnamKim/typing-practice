@@ -2,9 +2,8 @@ import React, {useState} from 'react';
 import {useTheme} from '../../Context/ThemeContext';
 import {checkNickname, updateNickname} from '@/utils/authApi.ts';
 import {t} from '@/utils/i18n.ts';
+import {getNicknameLength, validateNickname} from '@/utils/nicknameValidation.ts';
 import './NicknamePopup.css';
-
-const nicknameSegmenter = new Intl.Segmenter(undefined, {granularity: 'grapheme'});
 
 // UUID 형식 체크 함수
 const isUuidFormat = (str) => {
@@ -22,15 +21,15 @@ const NicknamePopup = ({initialNickname, onSubmit}) => {
     const [isChecking, setIsChecking] = useState(false);
     const [isNicknameAvailable, setIsNicknameAvailable] = useState(false);
     const [lastCheckedNickname, setLastCheckedNickname] = useState(''); // 마지막으로 중복확인 통과한 닉네임
-    const nicknameLength = Array.from(nicknameSegmenter.segment(nickname.trim())).length;
-    const isNicknameLengthValid = nicknameLength >= 2 && nicknameLength <= 10;
+    const nicknameLength = getNicknameLength(nickname);
+    const nicknameError = validateNickname(nickname); // 규칙 위반 시 안내 문구 키, 통과 시 null
 
     const handleCheckNickname = async () => {
         const trimmedNickname = nickname.trim();
 
         // 유효성 검증
-        if (!isNicknameLengthValid) {
-            setError(t('nicknameLength'));
+        if (nicknameError) {
+            setError(t(nicknameError));
             return;
         }
 
@@ -66,8 +65,8 @@ const NicknamePopup = ({initialNickname, onSubmit}) => {
 
         const trimmedNickname = nickname.trim();
 
-        if (!isNicknameLengthValid) {
-            setError(t('nicknameLength'));
+        if (nicknameError) {
+            setError(t(nicknameError));
             return;
         }
 
@@ -101,8 +100,9 @@ const NicknamePopup = ({initialNickname, onSubmit}) => {
         }
     };
 
-    // 중복확인 버튼 활성화 조건: 현재 입력값이 마지막 중복확인 통과한 닉네임과 다름
-    const isCheckButtonEnabled = isNicknameLengthValid && nickname.trim() !== lastCheckedNickname;
+    // 중복확인 버튼 활성화 조건: 길이가 맞고, 현재 입력값이 마지막 중복확인 통과한 닉네임과 다름
+    // 자음·모음 낱자는 버튼을 눌렀을 때 안내 문구로 알려주도록 여기서 막지 않음
+    const isCheckButtonEnabled = nicknameError !== 'nicknameLength' && nickname.trim() !== lastCheckedNickname;
 
     return (
         <div className="nickname-popup-overlay">
@@ -132,7 +132,7 @@ const NicknamePopup = ({initialNickname, onSubmit}) => {
                     {(error || nicknameLength > 10) && (
                         <div className="nickname-error show">{error || t('nicknameLength')}</div>
                     )}
-                    {isNicknameAvailable && isNicknameLengthValid && !error && (
+                    {isNicknameAvailable && !nicknameError && !error && (
                         <div className="nickname-success">{t('nicknameAvailable')}</div>
                     )}
                     <div className={`nickname-helper ${isDark ? 'dark' : ''}`}>
@@ -142,7 +142,7 @@ const NicknamePopup = ({initialNickname, onSubmit}) => {
                 <button
                     className="nickname-popup-btn"
                     onClick={handleSubmit}
-                    disabled={isSubmitting || !isNicknameAvailable || !isNicknameLengthValid}
+                    disabled={isSubmitting || !isNicknameAvailable || nicknameError !== null}
                 >
                     {isSubmitting ? t('setting') : t('start')}
                 </button>
