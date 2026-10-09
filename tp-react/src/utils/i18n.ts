@@ -28,6 +28,7 @@ const translations = {
     setNickname: l('닉네임을 설정해주세요. (2-10자)', 'ニックネームを設定してください（2〜10文字）', 'Please set your nickname. (2-10 characters)'),
     nicknamePlaceholder: l('닉네임 입력', 'ニックネーム入力', 'Enter nickname'),
     nicknameLength: l('닉네임은 2-10자여야 합니다.', 'ニックネームは2〜10文字です。', 'Nickname must be 2-10 characters.'),
+    nicknameStandaloneJamo: l('한글은 자음이나 모음만 따로 쓸 수 없습니다.', 'ハングルの子音・母音を単独で使うことはできません。', 'Standalone Korean consonants or vowels are not allowed.'),
     nicknameDuplicate: l('이미 사용 중인 닉네임입니다.', 'このニックネームは既に使用されています。', 'This nickname is already taken.'),
     nicknameCheckFailed: l('중복 확인에 실패했습니다.', '確認に失敗しました。', 'Failed to check nickname.'),
     nicknameCheckFirst: l('닉네임 중복 확인을 먼저 해주세요.', '先にニックネームの重複確認をしてください。', 'Please check nickname availability first.'),

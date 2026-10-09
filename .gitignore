@@ -15,3 +15,6 @@
 
 # PostgreSQL data
 typing-practice-be/postgres-data/
+
+# Claude Code 미리보기 설정 (로컬 전용)
+.claude/launch.json
