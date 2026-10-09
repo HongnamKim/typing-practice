@@ -3,7 +3,6 @@ import {WordContextProvider, useWord} from "./context/WordContext";
 import WordInfo from "./components/WordInfo/WordInfo";
 import WordTyping from "./components/WordTyping/WordTyping";
 import WordResult from "./components/WordResult/WordResult";
-import UpdatePopup from "../Home/components/UpdatePopup/UpdatePopup";
 import {SettingContextProvider} from "@/Context/SettingContext.tsx";
 import {Storage_Last_Mode} from "@/const/config.const.ts";
 import "./WordMode.css";
@@ -30,7 +29,6 @@ const WordMode = () => {
 
     return (
         <SettingContextProvider>
-            <UpdatePopup/>
             <WordContextProvider>
                 <WordModeContent/>
             </WordContextProvider>
