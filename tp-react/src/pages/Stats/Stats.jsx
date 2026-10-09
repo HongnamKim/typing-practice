@@ -22,6 +22,9 @@ import TypoList from './components/TypoList';
 import KeyboardHeatmap from './components/KeyboardHeatmap';
 import './Stats.css';
 
+// 렌더링마다 새 함수를 만들면 KeyboardHeatmap 이펙트가 재실행되어 34개 요청이 반복되므로 모듈 레벨로 고정
+const fetchWordTypoDetail = (ch) => getWordTypoDetailStats(LANGUAGE.KOREAN, ch);
+
 function Stats() {
     const navigate = useNavigate();
     const {user, isInitialized} = useAuth();
@@ -46,21 +49,22 @@ function Stats() {
         }
     }, [user, isInitialized, navigate]);
 
-    // 데이터 로드 (mode 변경 시 재조회)
+    // 누적/오타 통계 로드 (mode 변경 시 재조회). 일별 통계는 아래 이펙트에서 로드
     useEffect(() => {
         if (!user) return;
         // mode 변경 시 이전 데이터 초기화 (mode 간 데이터 구조 차이로 인한 NaN 방지)
         setTypingStats(null);
         setDailyStats([]);
         setTypoStats([]);
-        loadAllStats();
+        loadTypingStats();
+        loadTypoStats();
     }, [user, mode]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // dailyRange 변경 시 일별 통계 재조회
+    // 일별 통계 로드 (user, mode, dailyRange 변경 시)
     useEffect(() => {
         if (!user) return;
         loadDailyStats();
-    }, [dailyRange, mode]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [user, dailyRange, mode]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const loadAllStats = () => {
         loadTypingStats();
@@ -169,7 +173,7 @@ function Stats() {
             <div className="stats-bottom-grid">
                 <TypoList typoStats={typoStats} isLoading={isLoadingTypo}/>
                 <KeyboardHeatmap
-                    fetchTypoDetail={mode === 'word' ? (ch) => getWordTypoDetailStats(LANGUAGE.KOREAN, ch) : undefined}
+                    fetchTypoDetail={mode === 'word' ? fetchWordTypoDetail : undefined}
                     key={mode}
                 />
             </div>
