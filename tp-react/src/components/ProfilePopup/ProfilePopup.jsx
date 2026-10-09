@@ -3,6 +3,7 @@ import {useTheme} from '../../Context/ThemeContext';
 import {useAuth} from '../../Context/AuthContext';
 import {checkNickname, getMyInfo, updateNickname} from '@/utils/authApi.ts';
 import {t} from '@/utils/i18n.ts';
+import {getNicknameLength, validateNickname} from '@/utils/nicknameValidation.ts';
 import './ProfilePopup.css';
 
 // UUID 형식 체크 함수
@@ -47,12 +48,14 @@ const ProfilePopup = ({onClose}) => {
 
     // UUID 형식이면 항상 변경된 것으로 간주
     const isNicknameChanged = profile && (isUuidFormat(profile.nickname) || nickname.trim() !== profile.nickname);
+    const nicknameLength = getNicknameLength(nickname);
+    const nicknameError = validateNickname(nickname); // 규칙 위반 시 안내 문구 키, 통과 시 null
 
     const handleCheckNickname = async () => {
         const trimmedNickname = nickname.trim();
 
-        if (trimmedNickname.length < 2 || trimmedNickname.length > 10) {
-            setError(t('nicknameLength'));
+        if (nicknameError) {
+            setError(t(nicknameError));
             return;
         }
 
@@ -71,9 +74,8 @@ const ProfilePopup = ({onClose}) => {
                 setIsNicknameAvailable(true);
                 setCheckedNickname(trimmedNickname);
             }
-        } catch (err) {
-            const errorMessage = err.response?.data?.detail || err.response?.data?.message || t('nicknameCheckFailed');
-            setError(errorMessage);
+        } catch {
+            setError(t('nicknameCheckFailed'));
             setIsNicknameAvailable(false);
             setCheckedNickname('');
         } finally {
@@ -89,8 +91,8 @@ const ProfilePopup = ({onClose}) => {
 
         const trimmedNickname = nickname.trim();
 
-        if (trimmedNickname.length < 2 || trimmedNickname.length > 10) {
-            setError(t('nicknameLength'));
+        if (nicknameError) {
+            setError(t(nicknameError));
             return;
         }
 
@@ -109,8 +111,7 @@ const ProfilePopup = ({onClose}) => {
 
             onClose();
         } catch (err) {
-            const errorMessage = err.response?.data?.detail || err.response?.data?.message || err.message || t('nicknameEditFailed');
-            setError(errorMessage);
+            setError(t(err.response?.status === 409 ? 'nicknameDuplicate' : 'nicknameEditFailed'));
         } finally {
             setIsSaving(false);
         }
@@ -133,7 +134,8 @@ const ProfilePopup = ({onClose}) => {
         }
     };
 
-    const isCheckButtonEnabled = nickname.trim().length >= 2 && nickname.trim() !== checkedNickname;
+    // 자음·모음 낱자는 버튼을 눌렀을 때 안내 문구로 알려주도록 여기서 막지 않음
+    const isCheckButtonEnabled = nicknameError !== 'nicknameLength' && nickname.trim() !== checkedNickname;
 
     if (isLoadingProfile) {
         return (
@@ -163,7 +165,6 @@ const ProfilePopup = ({onClose}) => {
                                 type="text"
                                 className={`profile-input ${isDark ? 'dark' : ''}`}
                                 placeholder={t('nicknamePlaceholder')}
-                                maxLength={10}
                                 value={nickname}
                                 onChange={handleInputChange}
                             />
@@ -177,8 +178,10 @@ const ProfilePopup = ({onClose}) => {
                                 </button>
                             )}
                         </div>
-                        {error && <div className="profile-error">{error}</div>}
-                        {isNicknameAvailable && !error && (
+                        {(error || nicknameLength > 10) && (
+                            <div className="profile-error">{error || t('nicknameLength')}</div>
+                        )}
+                        {isNicknameAvailable && !nicknameError && !error && (
                             <div className="profile-success">{t('nicknameAvailable')}</div>
                         )}
                     </div>
@@ -195,7 +198,7 @@ const ProfilePopup = ({onClose}) => {
                     <button
                         className={`profile-btn profile-btn-save ${isDark ? 'dark' : ''}`}
                         onClick={handleSave}
-                        disabled={!isNicknameChanged || !isNicknameAvailable || isSaving}
+                        disabled={!isNicknameChanged || !isNicknameAvailable || nicknameError !== null || isSaving}
                     >
                         {isSaving ? t('saving') : t('saveChanges')}
                     </button>
