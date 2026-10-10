@@ -3,11 +3,11 @@ import {useNavigate} from 'react-router-dom';
 import {FaRotateRight} from 'react-icons/fa6';
 import {useAuth} from '../../Context/AuthContext';
 import {useError} from '../../Context/ErrorContext';
-import {getDailyStats, getTypingStats, getTypoStats, refreshStats} from '@/utils/statsApi.ts';
+import {getAllTypoStats, getDailyStats, getTypingStats, refreshStats} from '@/utils/statsApi.ts';
 import {
     getWordDailyStats,
     getWordTypingStats,
-    getWordTypoStats,
+    getAllWordTypoStats,
     getWordTypoDetailStats,
     refreshWordStats,
 } from '@/utils/wordStatsApi.ts';
@@ -22,7 +22,7 @@ import TypoList from './components/TypoList';
 import KeyboardHeatmap from './components/KeyboardHeatmap';
 import './Stats.css';
 
-// 렌더링마다 새 함수를 만들면 KeyboardHeatmap 이펙트가 재실행되어 34개 요청이 반복되므로 모듈 레벨로 고정
+// 단어 모드 히트맵에서 키를 눌렀을 때 쓰는 글자별 상세 조회
 const fetchWordTypoDetail = (ch) => getWordTypoDetailStats(LANGUAGE.KOREAN, ch);
 
 function Stats() {
@@ -104,9 +104,10 @@ function Stats() {
     const loadTypoStats = async () => {
         setIsLoadingTypo(true);
         try {
-            const fetcher = mode === 'word' ? getWordTypoStats : getTypoStats;
+            // 자주 틀리는 글자 목록과 키보드 히트맵이 같은 데이터를 쓴다
+            const fetcher = mode === 'word' ? getAllWordTypoStats : getAllTypoStats;
             const res = await fetcher(LANGUAGE.KOREAN);
-            setTypoStats(res.data.data.content || []);
+            setTypoStats(res.data.data.content.typos || []);
         } catch (error) {
             console.error('오타 통계 로드 실패:', error);
         } finally {
@@ -173,6 +174,8 @@ function Stats() {
             <div className="stats-bottom-grid">
                 <TypoList typoStats={typoStats} isLoading={isLoadingTypo}/>
                 <KeyboardHeatmap
+                    typoStats={typoStats}
+                    isLoading={isLoadingTypo}
                     fetchTypoDetail={mode === 'word' ? fetchWordTypoDetail : undefined}
                     key={mode}
                 />
