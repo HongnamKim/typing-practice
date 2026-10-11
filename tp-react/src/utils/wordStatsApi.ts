@@ -28,15 +28,18 @@ export interface WordDailyStatsResponse {
     content: WordDailyStatsEntry[];
 }
 
-// 자주 틀리는 글자
+// 글자별 오타 횟수
 export interface WordTypoStatsEntry {
-    language: Language;
     expected: string;
     count: number;
 }
 
-export interface WordTypoStatsResponse {
-    content: WordTypoStatsEntry[];
+// 글자별 오타 횟수 전체 (count 내림차순)
+export interface AllWordTypoStatsResponse {
+    content: {
+        language: Language;
+        typos: WordTypoStatsEntry[];
+    };
 }
 
 // 특정 글자 오타 분포
@@ -74,11 +77,11 @@ export const getWordDailyStats = async (language: Language, days: number = 7) =>
 };
 
 /**
- * 자주 틀리는 글자 Top 10
+ * 글자별 오타 횟수 전체 조회 (자주 틀리는 글자, 키보드 히트맵)
  */
-export const getWordTypoStats = async (language: Language) => {
-    return apiClient.get<ApiResponse<WordTypoStatsResponse>>(
-        `/members/me/word-stats/typos?language=${language}`
+export const getAllWordTypoStats = async (language: Language) => {
+    return apiClient.get<ApiResponse<AllWordTypoStatsResponse>>(
+        `/members/me/word-stats/typos/all?language=${language}`
     );
 };
 
