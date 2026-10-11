@@ -29,16 +29,18 @@ export interface DailyStatsResponse {
     content: DayEntry[];
 }
 
-// 오타 항목
+// 글자별 오타 횟수
 export interface TypoStatsEntry {
-    language: string;
     expected: string;
     count: number;
 }
 
-// 오타 통계 응답
-export interface TypoStatsResponse {
-    content: TypoStatsEntry[];
+// 글자별 오타 횟수 전체 응답 (count 내림차순)
+export interface AllTypoStatsResponse {
+    content: {
+        language: string;
+        typos: TypoStatsEntry[];
+    };
 }
 
 // 오타 상세 항목
@@ -78,11 +80,11 @@ export const getDailyStats = async (language: Language, days: number = 7) => {
 };
 
 /**
- * 오타 상위 10개 조회
+ * 글자별 오타 횟수 전체 조회 (자주 틀리는 글자, 키보드 히트맵)
  */
-export const getTypoStats = async (language: Language) => {
-    return apiClient.get<ApiResponse<TypoStatsResponse>>(
-        `/members/me/stats/typos?language=${language}`
+export const getAllTypoStats = async (language: Language) => {
+    return apiClient.get<ApiResponse<AllTypoStatsResponse>>(
+        `/members/me/stats/typos/all?language=${language}`
     );
 };
 

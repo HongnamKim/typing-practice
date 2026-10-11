@@ -38,7 +38,6 @@ const KEYBOARD_ROWS = [
     ],
 ];
 
-const ALL_CHARS = KEYBOARD_ROWS.flat().flatMap(k => k.variants);
 const SPACE_CHAR = ' ';
 
 const getKeyColor = (count, maxCount) => {
@@ -51,11 +50,10 @@ const getKeyColor = (count, maxCount) => {
     return {bg: 'var(--color-bg-secondary)', text: 'var(--color-text-muted)'};
 };
 
-function KeyboardHeatmap({externalTypos, compact, fetchTypoDetail}) {
+function KeyboardHeatmap({externalTypos, compact, typoStats, isLoading, fetchTypoDetail}) {
+    // 통계 페이지에서 키를 눌러 받아온 글자별 상세
     const [keyData, setKeyData] = useState({});
-    const [keyCounts, setKeyCounts] = useState({});
     const [selectedKey, setSelectedKey] = useState(null);
-    const [isLoading, setIsLoading] = useState(!externalTypos);
 
     // externalTypos가 있으면 useMemo로 즉시 계산
     const externalCounts = useMemo(() => {
@@ -71,38 +69,42 @@ function KeyboardHeatmap({externalTypos, compact, fetchTypoDetail}) {
         return {data, counts};
     }, [externalTypos]);
 
+    // 통계 페이지: 글자별 오타 횟수 (/typos/all)
+    const keyCounts = useMemo(() => {
+        const counts = {};
+        for (const entry of typoStats || []) {
+            counts[entry.expected] = entry.count;
+        }
+        return counts;
+    }, [typoStats]);
+
+    // 새로고침으로 횟수가 바뀌면 받아둔 상세를 버리고 열린 상세를 닫는다
+    useEffect(() => {
+        setKeyData({});
+        setSelectedKey(null);
+    }, [typoStats]);
+
     const activeKeyData = externalTypos ? (externalCounts?.data || {}) : keyData;
     const activeKeyCounts = externalTypos ? (externalCounts?.counts || {}) : keyCounts;
 
-    useEffect(() => {
-        if (externalTypos) return;
-        // API 호출 (Stats 페이지용)
-        const fetchAll = async () => {
-            setIsLoading(true);
-            const data = {};
-            const counts = {};
-            try {
-                const results = await Promise.all(
-                    [...ALL_CHARS, SPACE_CHAR].map(ch => {
-                        const fetcher = fetchTypoDetail || ((c) => getTypoDetailStats('KOREAN', c));
-                        return fetcher(ch)
-                            .then(res => ({ch, data: res.data.data.content || []}))
-                            .catch(() => ({ch, data: []}));
-                    })
-                );
-                for (const {ch, data: entries} of results) {
-                    data[ch] = entries;
-                    counts[ch] = entries.reduce((sum, entry) => sum + entry.typoCount, 0);
-                }
-            } catch (e) {
-                console.error('Heatmap data load failed:', e);
-            }
-            setKeyData(data);
-            setKeyCounts(counts);
-            setIsLoading(false);
-        };
-        fetchAll();
-    }, [externalTypos, fetchTypoDetail]);
+    // 오타가 있는데 아직 상세를 받지 않은 글자
+    const getPendingChars = (key) => key.variants.filter(v => activeKeyCounts[v] > 0 && !activeKeyData[v]);
+
+    // 통계 페이지: 키를 처음 열 때 그 키 글자들의 상세를 조회
+    const loadKeyDetails = async (key) => {
+        const pending = getPendingChars(key);
+        if (pending.length === 0) return;
+        const fetcher = fetchTypoDetail || ((c) => getTypoDetailStats('KOREAN', c));
+        const results = await Promise.all(
+            pending.map(ch => fetcher(ch)
+                .then(res => [ch, res.data.data.content || []])
+                .catch(e => {
+                    console.error('Heatmap detail load failed:', e);
+                    return [ch, []];
+                }))
+        );
+        setKeyData(prev => ({...prev, ...Object.fromEntries(results)}));
+    };
 
     const getKeyCount = (key) => {
         return key.variants.reduce((sum, v) => sum + (activeKeyCounts[v] || 0), 0);
@@ -123,16 +125,24 @@ function KeyboardHeatmap({externalTypos, compact, fetchTypoDetail}) {
         return entries.sort((a, b) => b.typoCount - a.typoCount);
     };
 
+    const toggleKey = (key) => {
+        if (selectedKey?.label === key.label) {
+            setSelectedKey(null);
+            return;
+        }
+        setSelectedKey(key);
+        if (!externalTypos) loadKeyDetails(key);
+    };
+
     const handleKeyClick = (key) => {
         const count = getKeyCount(key);
         if (count === 0) return;
-        setSelectedKey(selectedKey?.label === key.label ? null : key);
+        toggleKey(key);
     };
 
     const handleSpaceClick = () => {
         if (!spaceCount) return;
-        const spaceKey = {label: 'Space', variants: [SPACE_CHAR]};
-        setSelectedKey(selectedKey?.label === 'Space' ? null : spaceKey);
+        toggleKey({label: 'Space', variants: [SPACE_CHAR]});
     };
 
     const displayChar = (ch) => {
@@ -212,7 +222,9 @@ function KeyboardHeatmap({externalTypos, compact, fetchTypoDetail}) {
                                 <span className="heatmap-detail-total">{getKeyCount(selectedKey)}{t('errors')}</span>
                             </div>
                             <div className="heatmap-detail-list">
-                                {getKeyDetails(selectedKey).map((entry, i) => (
+                                {getPendingChars(selectedKey).length > 0 ? (
+                                    <div className="heatmap-detail-loading">{t('loading')}</div>
+                                ) : getKeyDetails(selectedKey).map((entry, i) => (
                                     <div key={i} className="heatmap-detail-item">
                                         <span className="heatmap-detail-expected">{displayChar(entry.expected)}</span>
                                         <span className="heatmap-detail-arrow">{'\u2192'}</span>
